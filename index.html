@@ -314,7 +314,7 @@
       <div class="star-label" id="starLabel">&nbsp;</div>
 
       <div class="tags-section" id="tagsSection">
-        <p class="tags-heading">¿Algo que destacar? (opcional)</p>
+        <p class="tags-heading">¿Qué destacarías? (elige al menos una)</p>
         <div class="tags-wrap" id="tagsWrap"></div>
       </div>
 
@@ -339,7 +339,10 @@
 
 <script>
   // ---------------------------------------------------------------
-  // CONFIG: URL de tu Google Apps Script Web App
+  // CONFIG: reemplaza esta URL por la de tu Google Apps Script Web App
+  // (ver guía de backend). Debe responder:
+  //   GET  ?code=XXXX          -> {mesero, restaurante}
+  //   POST {code, estrellas, comentario} -> {ok:true}
   // ---------------------------------------------------------------
   const API_URL = "https://script.google.com/macros/s/AKfycbyceYJH0H3BpUOeWO8unGUshJih83SDo96LAfnqxDjuSeJScdhpLsNomisT0d3OZxp8/exec";
 
@@ -369,8 +372,12 @@
   const tagsSection = document.getElementById("tagsSection");
   const tagsWrap = document.getElementById("tagsWrap");
 
+  function updateSubmitState() {
+    els.submitBtn.disabled = !(rating > 0 && selectedTags.length > 0);
+  }
+
   function renderTags(forRating) {
-    const list = forRating >= 4 ? TAGS_POSITIVE : TAGS_CONSTRUCTIVE;
+    const list = forRating >= 3 ? TAGS_POSITIVE : TAGS_CONSTRUCTIVE;
     selectedTags = [];
     tagsWrap.innerHTML = "";
     list.forEach((tag) => {
@@ -385,6 +392,7 @@
         } else {
           selectedTags.push(tag);
         }
+        updateSubmitState();
       });
       tagsWrap.appendChild(chip);
     });
@@ -428,8 +436,8 @@
       s.classList.toggle("filled", i < rating);
     });
     els.starLabel.textContent = labels[rating];
-    els.submitBtn.disabled = false;
     renderTags(rating);
+    updateSubmitState();
   });
 
   els.submitBtn.addEventListener("click", async () => {
