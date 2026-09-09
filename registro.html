@@ -201,8 +201,7 @@
       <div class="field">
         <label for="restaurante">Restaurante</label>
         <select id="restaurante">
-          <option value="">Selecciona un restaurante</option>
-          <option value="Los Calamares">Los Calamares</option>
+          <option value="">Cargando restaurantes…</option>
         </select>
         <div class="field-error" id="restauranteError">Elige un restaurante.</div>
       </div>
@@ -347,6 +346,34 @@
         submitBtn.textContent = "Registrar";
       }
     });
+
+    // Carga la lista de restaurantes desde el Sheet (hoja "Config")
+    // apenas se abre la página, así el desplegable siempre está al día.
+    async function cargarRestaurantes() {
+      const select = document.getElementById("restaurante");
+      try {
+        const res = await fetch(`${ENDPOINT}?accion=restaurantes`);
+        const data = await res.json();
+        const lista = (data.restaurantes || []).slice().sort();
+
+        select.innerHTML = "";
+        const optVacia = document.createElement("option");
+        optVacia.value = "";
+        optVacia.textContent = "Selecciona un restaurante";
+        select.appendChild(optVacia);
+
+        lista.forEach((nombre) => {
+          const opt = document.createElement("option");
+          opt.value = nombre;
+          opt.textContent = nombre;
+          select.appendChild(opt);
+        });
+      } catch (err) {
+        select.innerHTML = '<option value="">No se pudo cargar la lista</option>';
+      }
+    }
+
+    cargarRestaurantes();
   </script>
 </body>
 </html>
