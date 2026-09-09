@@ -199,6 +199,24 @@
       <div class="field-error" id="fotoError">La foto es obligatoria.</div>
 
       <div class="field">
+        <label for="email">Correo electrónico</label>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" style="flex:1;" />
+          <button type="button" id="enviarCodigoBtn" style="white-space:nowrap; border:1.5px solid var(--line); background:#FAFAFB; border-radius:8px; padding:0 14px; font-size:13px; font-weight:600; color:var(--ink); cursor:pointer;">Enviar código</button>
+        </div>
+        <div class="field-error" id="emailError">Ingresa un correo válido.</div>
+      </div>
+
+      <div class="field" id="codigoField" style="display:none;">
+        <label for="codigoVerificacion">Código que te llegó al correo</label>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="codigoVerificacion" placeholder="123456" inputmode="numeric" maxlength="6" style="flex:1;" />
+          <button type="button" id="verificarCodigoBtn" style="white-space:nowrap; border:none; background:var(--accent); color:#fff; border-radius:8px; padding:0 14px; font-size:13px; font-weight:600; cursor:pointer;">Verificar</button>
+        </div>
+        <div id="verifStatus" style="font-size:12.5px; margin-top:6px; font-weight:600;"></div>
+      </div>
+
+      <div class="field">
         <label for="restaurante">Restaurante</label>
         <select id="restaurante">
           <option value="">Cargando restaurantes…</option>
@@ -256,6 +274,8 @@
     const statusMsg = document.getElementById("statusMsg");
 
     let fotoBase64 = null;
+    let emailVerificado = false;
+    let emailVerificadoPara = "";
 
     photoCircle.addEventListener("click", () => fotoInput.click());
 
@@ -273,6 +293,96 @@
       reader.readAsDataURL(file);
     });
 
+    // --- Verificación de correo ---
+    const emailInput = document.getElementById("email");
+    const enviarCodigoBtn = document.getElementById("enviarCodigoBtn");
+    const codigoField = document.getElementById("codigoField");
+    const codigoInput = document.getElementById("codigoVerificacion");
+    const verificarCodigoBtn = document.getElementById("verificarCodigoBtn");
+    const verifStatus = document.getElementById("verifStatus");
+
+    function emailValido(v) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    }
+
+    enviarCodigoBtn.addEventListener("click", async () => {
+      const email = emailInput.value.trim();
+      if (!emailValido(email)) {
+        setFieldError("email", true);
+        return;
+      }
+      setFieldError("email", false);
+
+      emailVerificado = false;
+      enviarCodigoBtn.disabled = true;
+      enviarCodigoBtn.textContent = "Enviando…";
+
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "enviar_codigo_verificacion", email })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          codigoField.style.display = "block";
+          verifStatus.style.color = "var(--ink-soft)";
+          verifStatus.textContent = "Te enviamos un código a " + email + ". Revisa tu correo (y la carpeta de spam).";
+          enviarCodigoBtn.textContent = "Reenviar código";
+        } else {
+          verifStatus.style.color = "var(--error)";
+          verifStatus.textContent = data.error || "No se pudo enviar el código.";
+          codigoField.style.display = "block";
+          enviarCodigoBtn.textContent = "Enviar código";
+        }
+      } catch (err) {
+        verifStatus.style.color = "var(--error)";
+        verifStatus.textContent = "Error de conexión. Intenta de nuevo.";
+        codigoField.style.display = "block";
+        enviarCodigoBtn.textContent = "Enviar código";
+      } finally {
+        enviarCodigoBtn.disabled = false;
+      }
+    });
+
+    verificarCodigoBtn.addEventListener("click", async () => {
+      const email = emailInput.value.trim();
+      const codigo = codigoInput.value.trim();
+      if (!codigo) return;
+
+      verificarCodigoBtn.disabled = true;
+      verificarCodigoBtn.textContent = "Verificando…";
+
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "verificar_codigo", email, codigo })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          emailVerificado = true;
+          emailVerificadoPara = email;
+          verifStatus.style.color = "var(--accent)";
+          verifStatus.textContent = "✓ Correo verificado";
+          emailInput.disabled = true;
+          codigoInput.disabled = true;
+          enviarCodigoBtn.style.display = "none";
+          verificarCodigoBtn.style.display = "none";
+        } else {
+          emailVerificado = false;
+          verifStatus.style.color = "var(--error)";
+          verifStatus.textContent = data.error || "Código incorrecto.";
+        }
+      } catch (err) {
+        verifStatus.style.color = "var(--error)";
+        verifStatus.textContent = "Error de conexión. Intenta de nuevo.";
+      } finally {
+        verificarCodigoBtn.disabled = false;
+        verificarCodigoBtn.textContent = "Verificar";
+      }
+    });
+
     function setFieldError(field, show) {
       const el = document.getElementById(field + "Error");
       if (el) el.classList.toggle("show", show);
@@ -285,10 +395,17 @@
       const telefono = document.getElementById("telefono").value.trim();
       const edad = document.getElementById("edad").value.trim();
       const dni = document.getElementById("dni").value.trim();
+      const email = emailInput.value.trim();
 
       const restaurante = document.getElementById("restaurante").value;
 
       if (!fotoBase64) { setFieldError("foto", true); ok = false; }
+      if (!emailValido(email)) { setFieldError("email", true); ok = false; } else setFieldError("email", false);
+      if (!emailVerificado || emailVerificadoPara !== email) {
+        verifStatus.style.color = "var(--error)";
+        verifStatus.textContent = "Verifica tu correo antes de registrarte.";
+        ok = false;
+      }
       if (!restaurante) { setFieldError("restaurante", true); ok = false; } else setFieldError("restaurante", false);
       if (!nombre) { setFieldError("nombre", true); ok = false; } else setFieldError("nombre", false);
       if (!apellido) { setFieldError("apellido", true); ok = false; } else setFieldError("apellido", false);
@@ -315,6 +432,7 @@
         telefono: document.getElementById("telefono").value.trim(),
         edad: document.getElementById("edad").value.trim(),
         dni: document.getElementById("dni").value.trim(),
+        email: emailInput.value.trim(),
         foto_base64: fotoBase64
       };
 
@@ -335,6 +453,15 @@
           photoPreview.style.display = "none";
           photoPlaceholder.style.display = "block";
           fotoBase64 = null;
+          emailVerificado = false;
+          emailVerificadoPara = "";
+          emailInput.disabled = false;
+          codigoInput.disabled = false;
+          codigoField.style.display = "none";
+          verifStatus.textContent = "";
+          enviarCodigoBtn.style.display = "inline-block";
+          enviarCodigoBtn.textContent = "Enviar código";
+          verificarCodigoBtn.style.display = "inline-block";
         } else {
           throw new Error(data.error || "Error desconocido");
         }
