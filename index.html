@@ -152,6 +152,46 @@
     font-weight: 600;
   }
 
+  .tags-section {
+    display: none;
+    margin-bottom: 20px;
+  }
+  .tags-section.show { display: block; }
+
+  .tags-heading {
+    font-size: 13px;
+    color: var(--slate);
+    font-weight: 600;
+    margin: 0 0 10px;
+    text-align: center;
+  }
+
+  .tags-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .tag-chip {
+    border: 1.5px solid var(--line);
+    background: #FAFAFB;
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+  .tag-chip:active { transform: scale(0.97); }
+  .tag-chip.selected {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+  }
+
   textarea {
     width: 100%;
     min-height: 84px;
@@ -273,6 +313,11 @@
       </div>
       <div class="star-label" id="starLabel">&nbsp;</div>
 
+      <div class="tags-section" id="tagsSection">
+        <p class="tags-heading">¿Algo que destacar? (opcional)</p>
+        <div class="tags-wrap" id="tagsWrap"></div>
+      </div>
+
       <textarea id="comment" placeholder="Cuéntanos algo más (opcional)" maxlength="400"></textarea>
 
       <button class="submit" id="submitBtn" disabled>Enviar calificación</button>
@@ -294,10 +339,7 @@
 
 <script>
   // ---------------------------------------------------------------
-  // CONFIG: reemplaza esta URL por la de tu Google Apps Script Web App
-  // (ver guía de backend). Debe responder:
-  //   GET  ?code=XXXX          -> {mesero, restaurante}
-  //   POST {code, estrellas, comentario} -> {ok:true}
+  // CONFIG: URL de tu Google Apps Script Web App
   // ---------------------------------------------------------------
   const API_URL = "https://script.google.com/macros/s/AKfycbyceYJH0H3BpUOeWO8unGUshJih83SDo96LAfnqxDjuSeJScdhpLsNomisT0d3OZxp8/exec";
 
@@ -318,7 +360,36 @@
   };
 
   let rating = 0;
+  let selectedTags = [];
   const labels = ["", "Muy mala", "Mala", "Buena", "Muy buena", "Excelente"];
+
+  const TAGS_POSITIVE = ["Muy servicial", "Rápido", "Simpático", "Conoce el menú", "Tuvo paciencia"];
+  const TAGS_CONSTRUCTIVE = ["Faltó atención", "Se demoró mucho", "Fue cortante", "Poco conocimiento del menú", "Se puso impaciente"];
+
+  const tagsSection = document.getElementById("tagsSection");
+  const tagsWrap = document.getElementById("tagsWrap");
+
+  function renderTags(forRating) {
+    const list = forRating >= 4 ? TAGS_POSITIVE : TAGS_CONSTRUCTIVE;
+    selectedTags = [];
+    tagsWrap.innerHTML = "";
+    list.forEach((tag) => {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "tag-chip";
+      chip.textContent = tag;
+      chip.addEventListener("click", () => {
+        chip.classList.toggle("selected");
+        if (selectedTags.includes(tag)) {
+          selectedTags = selectedTags.filter((t) => t !== tag);
+        } else {
+          selectedTags.push(tag);
+        }
+      });
+      tagsWrap.appendChild(chip);
+    });
+    tagsSection.classList.add("show");
+  }
 
   function initials(name) {
     return name.split(" ").filter(Boolean).slice(0,2).map(w => w[0].toUpperCase()).join("");
@@ -358,6 +429,7 @@
     });
     els.starLabel.textContent = labels[rating];
     els.submitBtn.disabled = false;
+    renderTags(rating);
   });
 
   els.submitBtn.addEventListener("click", async () => {
@@ -371,6 +443,7 @@
         body: JSON.stringify({
           code,
           estrellas: rating,
+          tags: selectedTags.join(", "),
           comentario: els.comment.value.trim(),
         }),
       });
