@@ -229,6 +229,21 @@
   }
   .powered b { color: var(--slate); }
 
+  .cta-link {
+    display: block;
+    width: 100%;
+    text-align: center;
+    border-radius: 14px;
+    padding: 15px 18px;
+    background: var(--ink);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    margin-top: 18px;
+    box-sizing: border-box;
+  }
+
   /* success state */
   .success {
     display: none;
@@ -321,6 +336,9 @@
       </div>
       <h2>¡Gracias por tu calificación!</h2>
       <p id="successSub">Tu opinión ayuda a que este mesero construya su reputación.</p>
+
+      <a href="directorio.html" id="verDirectorioBtn" class="cta-link">Conoce más de nuestro personal</a>
+
       <div class="powered">Powered by <b>Tapport</b></div>
     </div>
   </div>
@@ -333,6 +351,7 @@
   //   POST {code, estrellas, comentario} -> {ok:true}
   // ---------------------------------------------------------------
   const API_URL = "https://script.google.com/macros/s/AKfycbx9nTiQEr_2AvK0bc3hIyJPao5PqtADFeRQKuhR6_XFV_rR0FG0UsZ5sexFrkyJIdJW/exec";
+  const DIRECTORIO_URL = "directorio.html";
 
   const params = new URLSearchParams(window.location.search);
   const code = params.get("code");
@@ -348,7 +367,14 @@
     submitBtn: document.getElementById("submitBtn"),
     errorBanner: document.getElementById("errorBanner"),
     success: document.getElementById("successState"),
+    verDirectorioBtn: document.getElementById("verDirectorioBtn"),
   };
+
+  // Apunta el botón de "Conoce más de nuestro personal" directo al perfil
+  // de este mesero en el directorio (o al directorio general si no hay code).
+  els.verDirectorioBtn.href = code
+    ? `${DIRECTORIO_URL}?code=${encodeURIComponent(code)}`
+    : DIRECTORIO_URL;
 
   let rating = 0;
   let selectedTags = [];
