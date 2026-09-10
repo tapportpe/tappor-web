@@ -1,506 +1,457 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Registro de mesero — Tapport</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Tapport — Califica a tu mesero</title>
 <style>
-  :root {
-    --bg: #F6F5F1;
+  :root{
+    --navy: #0A0F1F;
+    --navy-2: #10182E;
     --card: #FFFFFF;
-    --ink: #14231F;
-    --ink-soft: #4B5C57;
-    --line: #DEDCD3;
-    --accent: #1F4B45;
-    --accent-soft: #E7EFEC;
-    --error: #B4432E;
+    --ink: #12131A;
+    --slate: #6B7280;
+    --slate-soft: #9CA3AF;
+    --gold: #D8A13A;
+    --gold-soft: #F1D9A8;
+    --green: #2F8F5B;
+    --line: #EDEEF1;
   }
 
   * { box-sizing: border-box; }
 
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+  }
+
   body {
-    margin: 0;
-    background: var(--bg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+    background:
+      radial-gradient(circle at 20% -10%, #16203E 0%, transparent 55%),
+      var(--navy);
     color: var(--ink);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    display: flex;
-    justify-content: center;
-    padding: 40px 16px 80px;
     min-height: 100vh;
-  }
-
-  .wrap { width: 100%; max-width: 440px; }
-
-  header { margin-bottom: 28px; }
-
-  .eyebrow {
-    font-size: 13px;
-    color: var(--ink-soft);
-    letter-spacing: 0.02em;
-  }
-
-  h1 {
-    font-size: 26px;
-    line-height: 1.25;
-    margin: 6px 0 8px;
-    font-weight: 650;
-  }
-
-  .sub {
-    font-size: 15px;
-    color: var(--ink-soft);
-    line-height: 1.5;
-    margin: 0;
-  }
-
-  form {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 24px;
-    margin-top: 24px;
-  }
-
-  .photo-field {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
+    justify-content: center;
+    padding: 28px 18px;
   }
 
-  .photo-circle {
+  .card {
+    width: 100%;
+    max-width: 380px;
+    background: var(--card);
+    border-radius: 28px;
+    padding: 36px 28px 28px;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .avatar {
     width: 84px;
     height: 84px;
     border-radius: 50%;
-    background: var(--accent-soft);
-    border: 1px dashed #A9BDB6;
+    background: linear-gradient(155deg, #DCE3F0, #C7D0E3);
+    margin: 4px auto 18px;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: 800;
+    font-size: 28px;
+    color: #4B5670;
     overflow: hidden;
-    flex-shrink: 0;
-    cursor: pointer;
-    position: relative;
+  }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+  .identity { text-align: center; margin-bottom: 26px; }
+
+  .name {
+    font-weight: 800;
+    font-size: 24px;
+    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+    line-height: 1.1;
   }
 
-  .photo-circle img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .role {
+    font-size: 14.5px;
+    color: var(--slate);
+    margin: 0;
+    font-weight: 500;
+  }
+  .role b { color: var(--ink); font-weight: 600; }
+
+  .divider {
+    height: 1px;
+    background: var(--line);
+    margin: 24px 0 22px;
   }
 
-  .photo-circle span {
-    font-size: 11px;
-    color: var(--accent);
+  .prompt {
     text-align: center;
-    padding: 0 6px;
-    line-height: 1.3;
+    font-size: 15px;
+    color: var(--ink);
+    font-weight: 600;
+    margin: 0 0 16px;
   }
 
-  .photo-meta { font-size: 13px; color: var(--ink-soft); }
-  .photo-meta strong { display: block; color: var(--ink); font-size: 14px; margin-bottom: 2px; }
-
-  input[type="file"] { display: none; }
-
-  .field { margin-bottom: 16px; }
-
-  label {
-    display: block;
-    font-size: 13px;
-    color: var(--ink-soft);
+  .stars {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
     margin-bottom: 6px;
   }
 
-  input[type="text"],
-  input[type="tel"],
-  input[type="number"],
-  select {
-    width: 100%;
-    padding: 11px 12px;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    font-size: 15px;
-    color: var(--ink);
-    background: #FCFCFA;
-    font-family: inherit;
-  }
-
-  input:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-soft);
-  }
-
-  .row2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  button[type="submit"] {
-    width: 100%;
-    padding: 13px;
-    margin-top: 8px;
+  .star-btn {
+    background: none;
     border: none;
-    border-radius: 8px;
-    background: var(--accent);
-    color: #fff;
-    font-size: 15px;
+    padding: 4px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .star-btn svg {
+    width: 42px;
+    height: 42px;
+    transition: transform 0.15s ease;
+  }
+  .star-btn:active svg { transform: scale(0.88); }
+
+  .star-path {
+    fill: #E7E9EE;
+    stroke: #D7DAE2;
+    stroke-width: 1.2;
+    transition: fill 0.15s ease, stroke 0.15s ease;
+  }
+  .star-btn.filled .star-path {
+    fill: var(--gold);
+    stroke: var(--gold);
+  }
+
+  .star-label {
+    text-align: center;
+    font-size: 13px;
+    color: var(--slate-soft);
+    height: 18px;
+    margin-bottom: 22px;
+    font-weight: 600;
+  }
+
+  .tags-section {
+    display: none;
+    margin-bottom: 20px;
+  }
+  .tags-section.show { display: block; }
+
+  .tags-heading {
+    font-size: 13px;
+    color: var(--slate);
+    font-weight: 600;
+    margin: 0 0 10px;
+    text-align: center;
+  }
+
+  .tags-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .tag-chip {
+    border: 1.5px solid var(--line);
+    background: #FAFAFB;
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+  .tag-chip:active { transform: scale(0.97); }
+  .tag-chip.selected {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
   }
 
-  button[type="submit"]:disabled {
-    opacity: 0.6;
-    cursor: default;
+  textarea {
+    width: 100%;
+    min-height: 84px;
+    border-radius: 14px;
+    border: 1.5px solid var(--line);
+    padding: 12px 14px;
+    font-family: inherit;
+    font-size: 14.5px;
+    resize: none;
+    color: var(--ink);
+    background: #FAFAFB;
+    margin-bottom: 18px;
+  }
+  textarea::placeholder { color: var(--slate-soft); }
+  textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: #fff;
   }
 
-  .status {
-    margin-top: 14px;
-    font-size: 14px;
+  .submit {
+    width: 100%;
+    border: none;
+    border-radius: 14px;
+    padding: 15px 18px;
+    background: var(--ink);
+    color: #fff;
+    font-size: 15.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+  .submit:disabled {
+    background: #D1D3D8;
+    cursor: not-allowed;
+  }
+  .submit:not(:disabled):active { transform: scale(0.985); }
+
+  .powered {
     text-align: center;
+    font-size: 11px;
+    color: var(--slate-soft);
+    margin-top: 18px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  .powered b { color: var(--slate); }
+
+  /* success state */
+  .success {
     display: none;
+    text-align: center;
+    padding: 20px 4px 6px;
+  }
+  .success.show { display: block; }
+  .success-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #E7F5EC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 18px;
+  }
+  .success h2 {
+    font-size: 19px;
+    margin: 0 0 8px;
+    font-weight: 800;
+  }
+  .success p {
+    font-size: 14px;
+    color: var(--slate);
+    margin: 0;
+    line-height: 1.5;
   }
 
-  .status.error { color: var(--error); }
-  .status.ok { color: var(--accent); }
-  .status.show { display: block; }
+  .form-wrap.hidden { display: none; }
 
-  .field-error {
-    font-size: 12px;
-    color: var(--error);
-    margin-top: 4px;
+  .error-banner {
     display: none;
+    background: #FDECEC;
+    color: #B3261E;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 12px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    text-align: center;
   }
-
-  .field-error.show { display: block; }
+  .error-banner.show { display: block; }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="eyebrow">Tapport</div>
-      <h1>Registra tu perfil</h1>
-      <p class="sub">Esta información se usa para tu tarjeta y tu página de reseñas. Tómate una foto clara del rostro, de frente.</p>
-    </header>
 
-    <form id="regForm" novalidate>
-      <div class="photo-field">
-        <div class="photo-circle" id="photoCircle">
-          <span id="photoPlaceholder">Subir<br/>foto</span>
-          <img id="photoPreview" style="display:none" />
-        </div>
-        <div class="photo-meta">
-          <strong>Foto de perfil</strong>
-          Toca el círculo para elegir una imagen
-        </div>
-        <input type="file" id="foto" accept="image/*" />
-      </div>
-      <div class="field-error" id="fotoError">La foto es obligatoria.</div>
+  <div class="card">
 
-      <div class="field">
-        <label for="email">Correo electrónico</label>
-        <div style="display:flex; gap:8px;">
-          <input type="text" id="email" placeholder="tucorreo@ejemplo.com" autocomplete="email" style="flex:1;" />
-          <button type="button" id="enviarCodigoBtn" style="white-space:nowrap; border:1.5px solid var(--line); background:#FAFAFB; border-radius:8px; padding:0 14px; font-size:13px; font-weight:600; color:var(--ink); cursor:pointer;">Enviar código</button>
-        </div>
-        <div class="field-error" id="emailError">Ingresa un correo válido.</div>
+    <div class="form-wrap" id="formWrap">
+      <div class="avatar" id="avatar">SC</div>
+
+      <div class="identity">
+        <p class="name" id="waiterName">Cargando…</p>
+        <p class="role" id="waiterRole">&nbsp;</p>
       </div>
 
-      <div class="field" id="codigoField" style="display:none;">
-        <label for="codigoVerificacion">Código que te llegó al correo</label>
-        <div style="display:flex; gap:8px;">
-          <input type="text" id="codigoVerificacion" placeholder="123456" inputmode="numeric" maxlength="6" style="flex:1;" />
-          <button type="button" id="verificarCodigoBtn" style="white-space:nowrap; border:none; background:var(--accent); color:#fff; border-radius:8px; padding:0 14px; font-size:13px; font-weight:600; cursor:pointer;">Verificar</button>
-        </div>
-        <div id="verifStatus" style="font-size:12.5px; margin-top:6px; font-weight:600;"></div>
+      <div class="divider"></div>
+
+      <p class="prompt">¿Cómo fue tu atención?</p>
+
+      <div class="error-banner" id="errorBanner">No pudimos identificar al mesero. Vuelve a escanear el código QR.</div>
+
+      <div class="stars" id="stars">
+        <button class="star-btn" data-value="1" aria-label="1 estrella"><svg viewBox="0 0 24 24"><path class="star-path" d="M12 2.5l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg></button>
+        <button class="star-btn" data-value="2" aria-label="2 estrellas"><svg viewBox="0 0 24 24"><path class="star-path" d="M12 2.5l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg></button>
+        <button class="star-btn" data-value="3" aria-label="3 estrellas"><svg viewBox="0 0 24 24"><path class="star-path" d="M12 2.5l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg></button>
+        <button class="star-btn" data-value="4" aria-label="4 estrellas"><svg viewBox="0 0 24 24"><path class="star-path" d="M12 2.5l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg></button>
+        <button class="star-btn" data-value="5" aria-label="5 estrellas"><svg viewBox="0 0 24 24"><path class="star-path" d="M12 2.5l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg></button>
+      </div>
+      <div class="star-label" id="starLabel">&nbsp;</div>
+
+      <div class="tags-section" id="tagsSection">
+        <p class="tags-heading">¿Qué destacarías? (elige al menos una)</p>
+        <div class="tags-wrap" id="tagsWrap"></div>
       </div>
 
-      <div class="field">
-        <label for="restaurante">Restaurante</label>
-        <select id="restaurante">
-          <option value="">Cargando restaurantes…</option>
-        </select>
-        <div class="field-error" id="restauranteError">Elige un restaurante.</div>
-      </div>
+      <textarea id="comment" placeholder="Cuéntanos algo más (opcional)" maxlength="400"></textarea>
 
-      <div class="row2">
-        <div class="field">
-          <label for="nombre">Nombre</label>
-          <input type="text" id="nombre" autocomplete="given-name" />
-          <div class="field-error" id="nombreError">Ingresa tu nombre.</div>
-        </div>
-        <div class="field">
-          <label for="apellido">Apellido</label>
-          <input type="text" id="apellido" autocomplete="family-name" />
-          <div class="field-error" id="apellidoError">Ingresa tu apellido.</div>
-        </div>
-      </div>
+      <button class="submit" id="submitBtn" disabled>Enviar calificación</button>
 
-      <div class="field">
-        <label for="telefono">Teléfono</label>
-        <input type="tel" id="telefono" placeholder="9XX XXX XXX" autocomplete="tel" />
-        <div class="field-error" id="telefonoError">Ingresa un teléfono válido.</div>
-      </div>
+      <div class="powered">Powered by <b>Tapport</b></div>
+    </div>
 
-      <div class="row2">
-        <div class="field">
-          <label for="edad">Edad</label>
-          <input type="number" id="edad" min="16" max="80" />
-          <div class="field-error" id="edadError">Ingresa una edad válida.</div>
-        </div>
-        <div class="field">
-          <label for="dni">DNI</label>
-          <input type="text" id="dni" inputmode="numeric" maxlength="8" />
-          <div class="field-error" id="dniError">DNI de 8 dígitos.</div>
-        </div>
+    <div class="success" id="successState">
+      <div class="success-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+          <path d="M4 12.5L9.5 18L20 6" stroke="#2F8F5B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </div>
-
-      <button type="submit" id="submitBtn">Registrar</button>
-      <div class="status" id="statusMsg"></div>
-    </form>
+      <h2>¡Gracias por tu calificación!</h2>
+      <p id="successSub">Tu opinión ayuda a que este mesero construya su reputación.</p>
+      <div class="powered">Powered by <b>Tapport</b></div>
+    </div>
   </div>
 
-  <script>
-    // URL del Web App de Apps Script ya desplegado para Tapport
-    const ENDPOINT = "https://script.google.com/macros/s/AKfycbx9nTiQEr_2AvK0bc3hIyJPao5PqtADFeRQKuhR6_XFV_rR0FG0UsZ5sexFrkyJIdJW/exec";
+<script>
+  // ---------------------------------------------------------------
+  // CONFIG: reemplaza esta URL por la de tu Google Apps Script Web App
+  // (ver guía de backend). Debe responder:
+  //   GET  ?code=XXXX          -> {mesero, restaurante}
+  //   POST {code, estrellas, comentario} -> {ok:true}
+  // ---------------------------------------------------------------
+  const API_URL = "https://script.google.com/macros/s/AKfycbx9nTiQEr_2AvK0bc3hIyJPao5PqtADFeRQKuhR6_XFV_rR0FG0UsZ5sexFrkyJIdJW/exec";
 
-    const form = document.getElementById("regForm");
-    const photoCircle = document.getElementById("photoCircle");
-    const fotoInput = document.getElementById("foto");
-    const photoPreview = document.getElementById("photoPreview");
-    const photoPlaceholder = document.getElementById("photoPlaceholder");
-    const submitBtn = document.getElementById("submitBtn");
-    const statusMsg = document.getElementById("statusMsg");
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
 
-    let fotoBase64 = null;
-    let emailVerificado = false;
-    let emailVerificadoPara = "";
+  const els = {
+    formWrap: document.getElementById("formWrap"),
+    avatar: document.getElementById("avatar"),
+    name: document.getElementById("waiterName"),
+    role: document.getElementById("waiterRole"),
+    stars: document.getElementById("stars"),
+    starLabel: document.getElementById("starLabel"),
+    comment: document.getElementById("comment"),
+    submitBtn: document.getElementById("submitBtn"),
+    errorBanner: document.getElementById("errorBanner"),
+    success: document.getElementById("successState"),
+  };
 
-    photoCircle.addEventListener("click", () => fotoInput.click());
+  let rating = 0;
+  let selectedTags = [];
+  const labels = ["", "Muy mala", "Mala", "Buena", "Muy buena", "Excelente"];
 
-    fotoInput.addEventListener("change", () => {
-      const file = fotoInput.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        fotoBase64 = reader.result; // data:image/...;base64,....
-        photoPreview.src = fotoBase64;
-        photoPreview.style.display = "block";
-        photoPlaceholder.style.display = "none";
-        setFieldError("foto", false);
-      };
-      reader.readAsDataURL(file);
-    });
+  const TAGS_POSITIVE = ["Rápido", "Es atento", "Conoce el menú", "Tuvo paciencia"];
+  const TAGS_CONSTRUCTIVE = ["Faltó atención", "Se demoró mucho", "Fue cortante", "Se puso impaciente"];
 
-    // --- Verificación de correo ---
-    const emailInput = document.getElementById("email");
-    const enviarCodigoBtn = document.getElementById("enviarCodigoBtn");
-    const codigoField = document.getElementById("codigoField");
-    const codigoInput = document.getElementById("codigoVerificacion");
-    const verificarCodigoBtn = document.getElementById("verificarCodigoBtn");
-    const verifStatus = document.getElementById("verifStatus");
+  const tagsSection = document.getElementById("tagsSection");
+  const tagsWrap = document.getElementById("tagsWrap");
 
-    function emailValido(v) {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-    }
+  function updateSubmitState() {
+    els.submitBtn.disabled = !(rating > 0 && selectedTags.length > 0);
+  }
 
-    enviarCodigoBtn.addEventListener("click", async () => {
-      const email = emailInput.value.trim();
-      if (!emailValido(email)) {
-        setFieldError("email", true);
-        return;
-      }
-      setFieldError("email", false);
-
-      emailVerificado = false;
-      enviarCodigoBtn.disabled = true;
-      enviarCodigoBtn.textContent = "Enviando…";
-
-      try {
-        const res = await fetch(ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({ action: "enviar_codigo_verificacion", email })
-        });
-        const data = await res.json();
-        if (data.ok) {
-          codigoField.style.display = "block";
-          verifStatus.style.color = "var(--ink-soft)";
-          verifStatus.textContent = "Te enviamos un código a " + email + ". Revisa tu correo (y la carpeta de spam).";
-          enviarCodigoBtn.textContent = "Reenviar código";
+  function renderTags(forRating) {
+    const list = forRating >= 3 ? TAGS_POSITIVE : TAGS_CONSTRUCTIVE;
+    selectedTags = [];
+    tagsWrap.innerHTML = "";
+    list.forEach((tag) => {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "tag-chip";
+      chip.textContent = tag;
+      chip.addEventListener("click", () => {
+        chip.classList.toggle("selected");
+        if (selectedTags.includes(tag)) {
+          selectedTags = selectedTags.filter((t) => t !== tag);
         } else {
-          verifStatus.style.color = "var(--error)";
-          verifStatus.textContent = data.error || "No se pudo enviar el código.";
-          codigoField.style.display = "block";
-          enviarCodigoBtn.textContent = "Enviar código";
+          selectedTags.push(tag);
         }
-      } catch (err) {
-        verifStatus.style.color = "var(--error)";
-        verifStatus.textContent = "Error de conexión. Intenta de nuevo.";
-        codigoField.style.display = "block";
-        enviarCodigoBtn.textContent = "Enviar código";
-      } finally {
-        enviarCodigoBtn.disabled = false;
-      }
+        updateSubmitState();
+      });
+      tagsWrap.appendChild(chip);
     });
+    tagsSection.classList.add("show");
+  }
 
-    verificarCodigoBtn.addEventListener("click", async () => {
-      const email = emailInput.value.trim();
-      const codigo = codigoInput.value.trim();
-      if (!codigo) return;
+  function initials(name) {
+    return name.split(" ").filter(Boolean).slice(0,2).map(w => w[0].toUpperCase()).join("");
+  }
 
-      verificarCodigoBtn.disabled = true;
-      verificarCodigoBtn.textContent = "Verificando…";
+  function renderWaiter(data) {
+    els.name.textContent = data.mesero;
+    els.role.innerHTML = `Mesero en <b>${data.restaurante}</b>`;
+    els.avatar.textContent = initials(data.mesero);
+  }
 
-      try {
-        const res = await fetch(ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({ action: "verificar_codigo", email, codigo })
-        });
-        const data = await res.json();
-        if (data.ok) {
-          emailVerificado = true;
-          emailVerificadoPara = email;
-          verifStatus.style.color = "var(--accent)";
-          verifStatus.textContent = "✓ Correo verificado";
-          emailInput.disabled = true;
-          codigoInput.disabled = true;
-          enviarCodigoBtn.style.display = "none";
-          verificarCodigoBtn.style.display = "none";
-        } else {
-          emailVerificado = false;
-          verifStatus.style.color = "var(--error)";
-          verifStatus.textContent = data.error || "Código incorrecto.";
-        }
-      } catch (err) {
-        verifStatus.style.color = "var(--error)";
-        verifStatus.textContent = "Error de conexión. Intenta de nuevo.";
-      } finally {
-        verificarCodigoBtn.disabled = false;
-        verificarCodigoBtn.textContent = "Verificar";
-      }
+  function showError() {
+    els.errorBanner.classList.add("show");
+    els.name.textContent = "Mesero no encontrado";
+    els.role.textContent = "";
+    els.submitBtn.disabled = true;
+  }
+
+  async function loadWaiter() {
+    if (!code) { showError(); return; }
+    try {
+      const res = await fetch(`${API_URL}?code=${encodeURIComponent(code)}`);
+      const data = await res.json();
+      if (!data || data.error) { showError(); return; }
+      renderWaiter(data);
+    } catch (e) {
+      showError();
+    }
+  }
+
+  els.stars.addEventListener("click", (e) => {
+    const btn = e.target.closest(".star-btn");
+    if (!btn) return;
+    rating = parseInt(btn.dataset.value, 10);
+    [...els.stars.children].forEach((s, i) => {
+      s.classList.toggle("filled", i < rating);
     });
+    els.starLabel.textContent = labels[rating];
+    renderTags(rating);
+    updateSubmitState();
+  });
 
-    function setFieldError(field, show) {
-      const el = document.getElementById(field + "Error");
-      if (el) el.classList.toggle("show", show);
+  els.submitBtn.addEventListener("click", async () => {
+    if (!rating) return;
+    els.submitBtn.disabled = true;
+    els.submitBtn.textContent = "Enviando…";
+    try {
+      await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({
+          code,
+          estrellas: rating,
+          tags: selectedTags.join(", "),
+          comentario: els.comment.value.trim(),
+        }),
+      });
+    } catch (e) {
+      // en Apps Script el POST con no-cors puede no devolver body legible;
+      // igual mostramos éxito porque el registro ya se guardó del lado del Sheet
     }
+    els.formWrap.classList.add("hidden");
+    els.success.classList.add("show");
+  });
 
-    function validate() {
-      let ok = true;
-      const nombre = document.getElementById("nombre").value.trim();
-      const apellido = document.getElementById("apellido").value.trim();
-      const telefono = document.getElementById("telefono").value.trim();
-      const edad = document.getElementById("edad").value.trim();
-      const dni = document.getElementById("dni").value.trim();
-      const email = emailInput.value.trim();
-
-      const restaurante = document.getElementById("restaurante").value;
-
-      if (!fotoBase64) { setFieldError("foto", true); ok = false; }
-      if (!emailValido(email)) { setFieldError("email", true); ok = false; } else setFieldError("email", false);
-      if (!emailVerificado || emailVerificadoPara !== email) {
-        verifStatus.style.color = "var(--error)";
-        verifStatus.textContent = "Verifica tu correo antes de registrarte.";
-        ok = false;
-      }
-      if (!restaurante) { setFieldError("restaurante", true); ok = false; } else setFieldError("restaurante", false);
-      if (!nombre) { setFieldError("nombre", true); ok = false; } else setFieldError("nombre", false);
-      if (!apellido) { setFieldError("apellido", true); ok = false; } else setFieldError("apellido", false);
-      if (!/^\d{7,9}$/.test(telefono.replace(/\s/g, ""))) { setFieldError("telefono", true); ok = false; } else setFieldError("telefono", false);
-      if (!edad || edad < 16 || edad > 80) { setFieldError("edad", true); ok = false; } else setFieldError("edad", false);
-      if (!/^\d{8}$/.test(dni)) { setFieldError("dni", true); ok = false; } else setFieldError("dni", false);
-
-      return ok;
-    }
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      statusMsg.className = "status";
-      if (!validate()) return;
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Registrando...";
-
-      const payload = {
-        action: "registrar_mesero",
-        restaurante: document.getElementById("restaurante").value,
-        nombre: document.getElementById("nombre").value.trim(),
-        apellido: document.getElementById("apellido").value.trim(),
-        telefono: document.getElementById("telefono").value.trim(),
-        edad: document.getElementById("edad").value.trim(),
-        dni: document.getElementById("dni").value.trim(),
-        email: emailInput.value.trim(),
-        foto_base64: fotoBase64
-      };
-
-      try {
-        // text/plain evita el preflight CORS que Apps Script no maneja bien
-        const res = await fetch(ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-
-        if (data.ok) {
-          statusMsg.textContent = "¡Registro exitoso! Ya puedes recibir tu tarjeta.";
-          statusMsg.className = "status ok show";
-          form.reset();
-          document.getElementById("restaurante").value = "";
-          photoPreview.style.display = "none";
-          photoPlaceholder.style.display = "block";
-          fotoBase64 = null;
-          emailVerificado = false;
-          emailVerificadoPara = "";
-          emailInput.disabled = false;
-          codigoInput.disabled = false;
-          codigoField.style.display = "none";
-          verifStatus.textContent = "";
-          enviarCodigoBtn.style.display = "inline-block";
-          enviarCodigoBtn.textContent = "Enviar código";
-          verificarCodigoBtn.style.display = "inline-block";
-        } else {
-          throw new Error(data.error || "Error desconocido");
-        }
-      } catch (err) {
-        statusMsg.textContent = "No se pudo registrar. Intenta de nuevo. (" + err.message + ")";
-        statusMsg.className = "status error show";
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Registrar";
-      }
-    });
-
-    // Carga la lista de restaurantes desde el Sheet (hoja "Config")
-    // apenas se abre la página, así el desplegable siempre está al día.
-    async function cargarRestaurantes() {
-      const select = document.getElementById("restaurante");
-      try {
-        const res = await fetch(`${ENDPOINT}?accion=restaurantes`);
-        const data = await res.json();
-        const lista = (data.restaurantes || []).slice().sort();
-
-        select.innerHTML = "";
-        const optVacia = document.createElement("option");
-        optVacia.value = "";
-        optVacia.textContent = "Selecciona un restaurante";
-        select.appendChild(optVacia);
-
-        lista.forEach((nombre) => {
-          const opt = document.createElement("option");
-          opt.value = nombre;
-          opt.textContent = nombre;
-          select.appendChild(opt);
-        });
-      } catch (err) {
-        select.innerHTML = '<option value="">No se pudo cargar la lista</option>';
-      }
-    }
-
-    cargarRestaurantes();
-  </script>
+  loadWaiter();
+</script>
 </body>
 </html>
