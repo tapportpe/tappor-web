@@ -56,8 +56,18 @@
     text-transform: uppercase;
     letter-spacing: 0.03em;
     margin: 18px 0 10px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
   }
   .feed-section-title:first-child { margin-top: 4px; }
+  .feed-section-title .count {
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 600;
+    color: var(--ink-soft);
+    font-size: 11.5px;
+  }
 
   .job-card {
     background: var(--accent);
@@ -91,6 +101,52 @@
     text-decoration: none;
   }
 
+  /* Carrusel horizontal de meseros destacados */
+  .waiter-carousel {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    margin: 0 -20px 4px;
+    padding-left: 20px;
+    padding-right: 20px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+  .waiter-carousel::-webkit-scrollbar { height: 4px; }
+  .waiter-carousel::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+
+  .waiter-chip {
+    flex: 0 0 auto;
+    width: 132px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px 12px;
+    text-align: center;
+    cursor: pointer;
+    scroll-snap-align: start;
+  }
+  .waiter-chip-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    object-fit: cover;
+    margin: 0 auto 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 750;
+    font-size: 18px;
+    color: var(--accent);
+    overflow: hidden;
+  }
+  .waiter-chip-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .waiter-chip-name { font-size: 12.5px; font-weight: 700; margin: 0 0 2px; line-height: 1.25; }
+  .waiter-chip-rest { font-size: 10.5px; color: var(--ink-soft); margin-bottom: 4px; line-height: 1.2; }
+  .waiter-chip-rating { font-size: 11.5px; color: var(--star); font-weight: 700; }
+
   .waiter-card {
     background: var(--card);
     border: 1px solid var(--line);
@@ -102,7 +158,12 @@
     align-items: center;
     cursor: pointer;
   }
-  .waiter-photo { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: var(--accent-soft); flex-shrink: 0; }
+  .waiter-photo {
+    width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: var(--accent-soft); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-weight: 750; font-size: 15px; color: var(--accent);
+    overflow: hidden;
+  }
+  .waiter-photo img { width: 100%; height: 100%; object-fit: cover; }
   .waiter-info { flex: 1; min-width: 0; }
   .waiter-name { font-size: 14.5px; font-weight: 700; margin: 0 0 2px; }
   .waiter-rest { font-size: 12px; color: var(--ink-soft); margin-bottom: 3px; }
@@ -255,7 +316,12 @@
     line-height: 1;
   }
   .modal-header { display: flex; align-items: center; gap: 16px; margin-bottom: 4px; clear: both; }
-  .modal-photo { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; background: var(--accent-soft); }
+  .modal-photo {
+    width: 72px; height: 72px; border-radius: 50%; object-fit: cover; background: var(--accent-soft);
+    display: flex; align-items: center; justify-content: center; font-weight: 750; font-size: 22px; color: var(--accent);
+    overflow: hidden;
+  }
+  .modal-photo img { width: 100%; height: 100%; object-fit: cover; }
   .modal-name { font-size: 18px; font-weight: 750; margin: 0 0 2px; }
   .modal-rest { font-size: 13px; color: var(--ink-soft); }
 
@@ -298,7 +364,7 @@
       <div class="feed-section-title">Restaurantes buscando personal</div>
       <div id="feedVacantes"><div class="loading-state">Cargando…</div></div>
 
-      <div class="feed-section-title">Meseros destacados</div>
+      <div class="feed-section-title">Meseros destacados <span class="count" id="destacadosCount"></span></div>
       <div id="feedDestacados"><div class="loading-state">Cargando…</div></div>
     </div>
 
@@ -355,7 +421,7 @@
     <div class="modal">
       <button class="modal-close" id="cerrarPerfilBtn">×</button>
       <div class="modal-header">
-        <img class="modal-photo" id="modalFoto" />
+        <div class="modal-photo" id="modalFotoWrap"><img id="modalFoto" style="display:none;" /><span id="modalFotoIniciales"></span></div>
         <div>
           <p class="modal-name" id="modalNombre"></p>
           <p class="modal-rest" id="modalRest"></p>
@@ -411,6 +477,18 @@
       return div.innerHTML;
     }
 
+    function iniciales(nombre) {
+      return (nombre || "").split(" ").filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join("");
+    }
+
+    // Crea el HTML de una foto con respaldo automático a iniciales si la
+    // imagen no carga (evita círculos rotos cuando Drive falla o tarda).
+    function fotoConRespaldoHtml(fotoUrl, nombre, claseImg) {
+      const ini = escapeHtml(iniciales(nombre));
+      if (!fotoUrl) return `<span>${ini}</span>`;
+      return `<img class="${claseImg}" src="${escapeHtml(fotoUrl)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" /><span style="display:none;">${ini}</span>`;
+    }
+
     // ---------- Navegación inferior ----------
     const views = {
       home: document.getElementById("viewHome"),
@@ -419,24 +497,24 @@
     };
     const titles = { home: "Home", buscar: "Buscar", cuenta: "Cuenta" };
 
+    function irAVista(target) {
+      if (target === "cuenta") {
+        window.location.href = PERFIL_URL;
+        return;
+      }
+
+      document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
+      document.querySelector(`.nav-item[data-view="${target}"]`).classList.add("active");
+      Object.keys(views).forEach(k => views[k].classList.toggle("active", k === target));
+      document.getElementById("topTitle").textContent = titles[target];
+
+      if (target === "buscar" && !document.getElementById("resultadosBusqueda").dataset.loaded) {
+        buscar();
+      }
+    }
+
     document.querySelectorAll(".nav-item").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const target = btn.dataset.view;
-
-        if (target === "cuenta") {
-          window.location.href = PERFIL_URL;
-          return;
-        }
-
-        document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        Object.keys(views).forEach(k => views[k].classList.toggle("active", k === target));
-        document.getElementById("topTitle").textContent = titles[target];
-
-        if (target === "buscar" && !document.getElementById("resultadosBusqueda").dataset.loaded) {
-          buscar();
-        }
-      });
+      btn.addEventListener("click", () => irAVista(btn.dataset.view));
     });
 
     // ---------- Cargar restaurantes (para filtros y para publicar vacante) ----------
@@ -495,23 +573,37 @@
         const data = await res.json();
         const lista = (data.resultados || []).slice(0, 10);
 
+        document.getElementById("destacadosCount").textContent = lista.length ? `(${lista.length})` : "";
+
         if (!lista.length) {
           cont.innerHTML = '<div class="empty-state">Todavía no hay meseros con reseñas suficientes.</div>';
           return;
         }
 
-        cont.innerHTML = lista.map(renderWaiterCard).join("");
+        cont.innerHTML = `<div class="waiter-carousel">${lista.map(renderWaiterChip).join("")}</div>`;
         adjuntarClicksWaiterCards(cont);
       } catch (err) {
         cont.innerHTML = '<div class="empty-state">No se pudo cargar el feed.</div>';
       }
     }
 
+    function renderWaiterChip(r) {
+      const promedioTexto = r.promedio > 0 ? "★ " + r.promedio.toFixed(1) : "Sin reseñas";
+      return `
+        <div class="waiter-chip" data-code="${escapeHtml(r.codigo)}">
+          <div class="waiter-chip-photo">${fotoConRespaldoHtml(r.fotoUrl, r.nombre, "")}</div>
+          <p class="waiter-chip-name">${escapeHtml(r.nombre)}</p>
+          <p class="waiter-chip-rest">${escapeHtml(r.restaurante)}</p>
+          <p class="waiter-chip-rating">${promedioTexto}</p>
+        </div>
+      `;
+    }
+
     function renderWaiterCard(r) {
       const promedioTexto = r.promedio > 0 ? r.promedio.toFixed(1) : "Sin reseñas";
       return `
         <div class="waiter-card" data-code="${escapeHtml(r.codigo)}">
-          <img class="waiter-photo" src="${escapeHtml(r.fotoUrl || '')}" />
+          <div class="waiter-photo">${fotoConRespaldoHtml(r.fotoUrl, r.nombre, "")}</div>
           <div class="waiter-info">
             <p class="waiter-name">${escapeHtml(r.nombre)}</p>
             <p class="waiter-rest">${escapeHtml(r.restaurante)}</p>
@@ -522,7 +614,7 @@
     }
 
     function adjuntarClicksWaiterCards(cont) {
-      cont.querySelectorAll(".waiter-card").forEach(card => {
+      cont.querySelectorAll("[data-code]").forEach(card => {
         card.addEventListener("click", () => abrirPerfil(card.dataset.code));
       });
     }
@@ -575,7 +667,7 @@
         const data = await res.json();
         if (!data.ok) return;
 
-        document.getElementById("modalFoto").src = data.fotoUrl || "";
+        document.getElementById("modalFotoWrap").innerHTML = fotoConRespaldoHtml(data.fotoUrl, data.nombre, "");
         document.getElementById("modalNombre").textContent = data.nombre || "";
         document.getElementById("modalRest").textContent = data.restaurante || "";
         document.getElementById("modalPromedio").textContent = data.promedio > 0 ? data.promedio.toFixed(1) : "—";
@@ -680,10 +772,16 @@
     cargarRestaurantes();
     cargarFeed();
 
-    // Si se llega desde la página de reseñas con ?code=XXXX,
-    // abre directo el perfil de ese mesero.
+    // Soporta llegar con ?code=XXXX (abre el perfil directo) o con
+    // ?view=buscar (por ejemplo, cuando vienes del botón "Buscar" del
+    // nav en perfil.html) para que el nav te lleve a la vista correcta.
     const urlParams = new URLSearchParams(window.location.search);
     const codeDesdeUrl = urlParams.get("code");
+    const viewDesdeUrl = urlParams.get("view");
+
+    if (viewDesdeUrl && views[viewDesdeUrl]) {
+      irAVista(viewDesdeUrl);
+    }
     if (codeDesdeUrl) {
       abrirPerfil(codeDesdeUrl);
     }
