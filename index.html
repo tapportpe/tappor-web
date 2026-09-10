@@ -64,7 +64,7 @@
     color: #4B5670;
     overflow: hidden;
   }
-  .avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
   .identity { text-align: center; margin-bottom: 26px; }
 
@@ -294,7 +294,10 @@
   <div class="card">
 
     <div class="form-wrap" id="formWrap">
-      <div class="avatar" id="avatar">SC</div>
+      <div class="avatar" id="avatar">
+        <img id="avatarImg" style="display:none" alt="" />
+        <span id="avatarIniciales">SC</span>
+      </div>
 
       <div class="identity">
         <p class="name" id="waiterName">Cargando…</p>
@@ -347,7 +350,7 @@
   // ---------------------------------------------------------------
   // CONFIG: reemplaza esta URL por la de tu Google Apps Script Web App
   // (ver guía de backend). Debe responder:
-  //   GET  ?code=XXXX          -> {mesero, restaurante}
+  //   GET  ?code=XXXX          -> {mesero, restaurante, fotoUrl}
   //   POST {code, estrellas, comentario} -> {ok:true}
   // ---------------------------------------------------------------
   const API_URL = "https://script.google.com/macros/s/AKfycbx9nTiQEr_2AvK0bc3hIyJPao5PqtADFeRQKuhR6_XFV_rR0FG0UsZ5sexFrkyJIdJW/exec";
@@ -359,6 +362,8 @@
   const els = {
     formWrap: document.getElementById("formWrap"),
     avatar: document.getElementById("avatar"),
+    avatarImg: document.getElementById("avatarImg"),
+    avatarIniciales: document.getElementById("avatarIniciales"),
     name: document.getElementById("waiterName"),
     role: document.getElementById("waiterRole"),
     stars: document.getElementById("stars"),
@@ -417,10 +422,26 @@
     return name.split(" ").filter(Boolean).slice(0,2).map(w => w[0].toUpperCase()).join("");
   }
 
+  // Muestra la foto del mesero en el avatar ovalado; si no hay foto, o si la
+  // imagen falla al cargar (link roto, Drive sin compartir, etc.), cae de
+  // vuelta a las iniciales para que nunca quede un círculo vacío o roto.
   function renderWaiter(data) {
     els.name.textContent = data.mesero;
     els.role.innerHTML = `Mesero en <b>${data.restaurante}</b>`;
-    els.avatar.textContent = initials(data.mesero);
+    els.avatarIniciales.textContent = initials(data.mesero);
+
+    if (data.fotoUrl) {
+      els.avatarImg.src = data.fotoUrl;
+      els.avatarImg.style.display = "block";
+      els.avatarIniciales.style.display = "none";
+      els.avatarImg.onerror = () => {
+        els.avatarImg.style.display = "none";
+        els.avatarIniciales.style.display = "flex";
+      };
+    } else {
+      els.avatarImg.style.display = "none";
+      els.avatarIniciales.style.display = "flex";
+    }
   }
 
   function showError() {
