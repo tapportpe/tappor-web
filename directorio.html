@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Directorio de meseros — Tapport</title>
+<style>
+  :root {
+    --bg: #F6F5F1;
+    --card: #FFFFFF;
+    --ink: #14231F;
+    --ink-soft: #4B5C57;
+    --line: #DEDCD3;
+    --accent: #1F4B45;
+    --accent-soft: #E7EFEC;
+    --error: #B4432E;
+    --star: #E3A427;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px 80px;
+    min-height: 100vh;
+  }
+
+  .wrap { width: 100%; max-width: 560px; }
+
+  header { margin-bottom: 24px; }
+  .eyebrow { font-size: 13px; color: var(--ink-soft); }
+  h1 { font-size: 24px; margin: 6px 0 8px; font-weight: 650; }
+  .sub { font-size: 14px; color: var(--ink-soft); line-height: 1.5; margin: 0; }
+
+  .filters {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 20px;
+  }
+
+  .field { margin-bottom: 12px; }
+  .field:last-child { margin-bottom: 0; }
+
+  label { display: block; font-size: 12.5px; color: var(--ink-soft); margin-bottom: 5px; }
+
+  input[type="text"], select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 14.5px;
+    color: var(--ink);
+    background: #FCFCFA;
+    font-family: inherit;
+  }
+
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  .filters-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .btn-primary {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 14.5px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+
+  .result-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 14px;
+    cursor: pointer;
+  }
+
+  .result-photo {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--accent-soft);
+    flex-shrink: 0;
+  }
+
+  .result-info { flex: 1; min-width: 0; }
+  .result-name { font-size: 15px; font-weight: 700; margin: 0 0 2px; }
+  .result-rest { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 4px; }
+  .result-rating { font-size: 13px; color: var(--star); font-weight: 600; }
+  .result-rating .count { color: var(--ink-soft); font-weight: 400; margin-left: 4px; }
+
+  .empty-state, .loading-state {
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 14px;
+    padding: 30px 0;
+  }
+
+  /* ---- Modal de perfil completo ---- */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20,35,31,0.5);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 16px;
+    overflow-y: auto;
+    z-index: 10;
+  }
+  .overlay.show { display: flex; }
+
+  .modal {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 440px;
+    width: 100%;
+  }
+
+  .modal-close {
+    float: right;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  .modal-header { display: flex; align-items: center; gap: 16px; margin-bottom: 6px; clear: both; }
+  .modal-photo { width: 76px; height: 76px; border-radius: 50%; object-fit: cover; background: var(--accent-soft); }
+  .modal-name { font-size: 19px; font-weight: 750; margin: 0 0 2px; }
+  .modal-rest { font-size: 13.5px; color: var(--ink-soft); }
+
+  .stats-row { display: flex; gap: 12px; margin-top: 18px; }
+  .stat-box { flex: 1; background: var(--accent-soft); border-radius: 10px; padding: 14px; text-align: center; }
+  .stat-box .num { font-size: 20px; font-weight: 750; color: var(--accent); }
+  .stat-box .label { font-size: 11px; color: var(--ink-soft); margin-top: 2px; }
+
+  .contact-row { display: flex; gap: 10px; margin-top: 16px; }
+  .contact-btn {
+    flex: 1;
+    text-align: center;
+    padding: 11px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1.5px solid var(--line);
+    color: var(--ink);
+  }
+  .contact-btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .review-item { border-bottom: 1px solid var(--line); padding: 12px 0; }
+  .review-item:last-child { border-bottom: none; }
+  .review-stars { color: var(--star); font-size: 13.5px; margin-bottom: 3px; }
+  .review-tags { font-size: 11px; color: var(--accent); margin-bottom: 3px; }
+  .review-comment { font-size: 13px; color: var(--ink); line-height: 1.4; }
+  .review-date { font-size: 10.5px; color: var(--ink-soft); margin-top: 3px; }
+
+  h2.section-title { font-size: 14.5px; margin: 20px 0 8px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="eyebrow">Tapport · Directorio</div>
+      <h1>Encuentra personal</h1>
+      <p class="sub">Busca meseros por restaurante, nombre o rating para encontrar al mejor personal según su desempeño real.</p>
+    </header>
+
+    <div class="filters">
+      <div class="field">
+        <label for="fNombre">Buscar por nombre</label>
+        <input type="text" id="fNombre" placeholder="Ej. Santiago" />
+      </div>
+      <div class="filters-row">
+        <div class="field">
+          <label for="fRestaurante">Restaurante</label>
+          <select id="fRestaurante"><option value="">Todos</option></select>
+        </div>
+        <div class="field">
+          <label for="fRating">Rating mínimo</label>
+          <select id="fRating">
+            <option value="0">Cualquiera</option>
+            <option value="3">3+ ★</option>
+            <option value="4">4+ ★</option>
+            <option value="4.5">4.5+ ★</option>
+          </select>
+        </div>
+      </div>
+      <button type="button" class="btn-primary" id="buscarBtn">Buscar</button>
+    </div>
+
+    <div id="resultados"></div>
+  </div>
+
+  <!-- Modal perfil completo -->
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <button class="modal-close" id="cerrarModalBtn">×</button>
+      <div class="modal-header">
+        <img class="modal-photo" id="modalFoto" />
+        <div>
+          <p class="modal-name" id="modalNombre"></p>
+          <p class="modal-rest" id="modalRest"></p>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="num" id="modalPromedio">—</div>
+          <div class="label">Rating promedio</div>
+        </div>
+        <div class="stat-box">
+          <div class="num" id="modalTotal">—</div>
+          <div class="label">Reseñas totales</div>
+        </div>
+      </div>
+
+      <div class="contact-row">
+        <a href="#" class="contact-btn primary" id="contactoTelefono">Llamar</a>
+        <a href="#" class="contact-btn" id="contactoEmail">Enviar correo</a>
+      </div>
+
+      <h2 class="section-title">Reseñas de clientes</h2>
+      <div id="modalReviews"></div>
+    </div>
+  </div>
+
+  <script>
+    const ENDPOINT = "https://script.google.com/macros/s/AKfycbx9nTiQEr_2AvK0bc3hIyJPao5PqtADFeRQKuhR6_XFV_rR0FG0UsZ5sexFrkyJIdJW/exec";
+
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    async function cargarRestaurantes() {
+      const select = document.getElementById("fRestaurante");
+      try {
+        const res = await fetch(`${ENDPOINT}?accion=restaurantes`);
+        const data = await res.json();
+        const lista = (data.restaurantes || []).slice().sort();
+        select.innerHTML = '<option value="">Todos</option>' +
+          lista.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("");
+      } catch (err) {
+        // deja solo "Todos" si falla
+      }
+    }
+
+    async function buscar() {
+      const cont = document.getElementById("resultados");
+      cont.innerHTML = '<div class="loading-state">Buscando…</div>';
+
+      const nombre = document.getElementById("fNombre").value.trim();
+      const restaurante = document.getElementById("fRestaurante").value;
+      const minRating = document.getElementById("fRating").value;
+
+      const params = new URLSearchParams({ accion: "buscar_meseros" });
+      if (nombre) params.set("q", nombre);
+      if (restaurante) params.set("restaurante", restaurante);
+      if (minRating) params.set("minRating", minRating);
+
+      try {
+        const res = await fetch(`${ENDPOINT}?${params.toString()}`);
+        const data = await res.json();
+        renderResultados(data.resultados || []);
+      } catch (err) {
+        cont.innerHTML = '<div class="empty-state">Error al buscar. Intenta de nuevo.</div>';
+      }
+    }
+
+    function renderResultados(resultados) {
+      const cont = document.getElementById("resultados");
+      if (!resultados.length) {
+        cont.innerHTML = '<div class="empty-state">No encontramos meseros con esos filtros.</div>';
+        return;
+      }
+
+      cont.innerHTML = resultados.map(r => {
+        const promedioTexto = r.promedio > 0 ? r.promedio.toFixed(1) : "Sin reseñas";
+        return `
+          <div class="result-card" data-code="${escapeHtml(r.codigo)}">
+            <img class="result-photo" src="${escapeHtml(r.fotoUrl || '')}" />
+            <div class="result-info">
+              <p class="result-name">${escapeHtml(r.nombre)}</p>
+              <p class="result-rest">${escapeHtml(r.restaurante)}</p>
+              <p class="result-rating">★ ${promedioTexto}<span class="count">(${r.totalReviews} reseña${r.totalReviews === 1 ? '' : 's'})</span></p>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      cont.querySelectorAll(".result-card").forEach(card => {
+        card.addEventListener("click", () => abrirPerfil(card.dataset.code));
+      });
+    }
+
+    async function abrirPerfil(code) {
+      const overlay = document.getElementById("overlay");
+      overlay.classList.add("show");
+      document.getElementById("modalReviews").innerHTML = '<div class="loading-state">Cargando…</div>';
+
+      try {
+        const res = await fetch(`${ENDPOINT}?accion=perfil_publico&code=${encodeURIComponent(code)}`);
+        const data = await res.json();
+        if (!data.ok) return;
+
+        document.getElementById("modalFoto").src = data.fotoUrl || "";
+        document.getElementById("modalNombre").textContent = data.nombre || "";
+        document.getElementById("modalRest").textContent = data.restaurante || "";
+        document.getElementById("modalPromedio").textContent = data.promedio > 0 ? data.promedio.toFixed(1) : "—";
+        document.getElementById("modalTotal").textContent = data.totalReviews || 0;
+
+        const tel = document.getElementById("contactoTelefono");
+        const mail = document.getElementById("contactoEmail");
+        tel.href = data.telefono ? `tel:${data.telefono}` : "#";
+        mail.href = data.email ? `mailto:${data.email}` : "#";
+
+        const reviews = data.reviews || [];
+        const reviewsCont = document.getElementById("modalReviews");
+        if (!reviews.length) {
+          reviewsCont.innerHTML = '<div class="empty-state">Todavía no tiene reseñas.</div>';
+        } else {
+          reviewsCont.innerHTML = reviews.map(r => {
+            const estrellas = "★".repeat(r.estrellas) + "☆".repeat(5 - r.estrellas);
+            const fecha = new Date(r.fecha);
+            const fechaTexto = isNaN(fecha) ? "" : fecha.toLocaleDateString("es-PE", { day: "numeric", month: "short", year: "numeric" });
+            return `
+              <div class="review-item">
+                <div class="review-stars">${estrellas}</div>
+                ${r.tags ? `<div class="review-tags">${escapeHtml(r.tags)}</div>` : ""}
+                ${r.comentario ? `<div class="review-comment">"${escapeHtml(r.comentario)}"</div>` : ""}
+                <div class="review-date">${fechaTexto}</div>
+              </div>
+            `;
+          }).join("");
+        }
+      } catch (err) {
+        document.getElementById("modalReviews").innerHTML = '<div class="empty-state">Error al cargar el perfil.</div>';
+      }
+    }
+
+    document.getElementById("cerrarModalBtn").addEventListener("click", () => {
+      document.getElementById("overlay").classList.remove("show");
+    });
+    document.getElementById("overlay").addEventListener("click", (e) => {
+      if (e.target.id === "overlay") document.getElementById("overlay").classList.remove("show");
+    });
+
+    document.getElementById("buscarBtn").addEventListener("click", buscar);
+    document.getElementById("fNombre").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") buscar();
+    });
+
+    cargarRestaurantes();
+    buscar(); // carga todos los meseros al abrir la página
+  </script>
+</body>
+</html>
