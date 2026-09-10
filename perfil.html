@@ -69,6 +69,30 @@
     box-shadow: 0 0 0 3px var(--accent-soft);
   }
 
+  /* --- Campo de contraseña con botón de mostrar/ocultar --- */
+  .password-field { position: relative; }
+  .password-field input { padding-right: 42px; }
+  .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--ink-soft);
+    padding: 0;
+  }
+  .toggle-password svg { width: 19px; height: 19px; }
+  .toggle-password .eye-off { display: none; }
+  .toggle-password.showing .eye { display: none; }
+  .toggle-password.showing .eye-off { display: block; }
+
   .btn-primary {
     width: 100%;
     padding: 13px;
@@ -265,7 +289,13 @@
         </div>
         <div class="field">
           <label for="loginPassword">Contraseña</label>
-          <input type="password" id="loginPassword" />
+          <div class="password-field">
+            <input type="password" id="loginPassword" />
+            <button type="button" class="toggle-password" data-target="loginPassword" aria-label="Mostrar contraseña">
+              <svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10.6 10.6 0 0 1 12 19c-7 0-11-7-11-7a18.6 18.6 0 0 1 4.2-5.1M9.9 4.2A9.9 9.9 0 0 1 12 4c7 0 11 7 11 7a18.6 18.6 0 0 1-2.2 3.1M14.1 14.1a3 3 0 1 1-4.2-4.2"/><path d="M1 1l22 22"/></svg>
+            </button>
+          </div>
         </div>
         <button type="button" class="btn-primary" id="loginBtn">Iniciar sesión</button>
         <div class="msg" id="loginMsg"></div>
@@ -294,7 +324,13 @@
         <div id="crearPaso3" style="display:none; margin-top:16px;">
           <div class="field">
             <label for="nuevaPassword">Crea tu contraseña (mínimo 6 caracteres)</label>
-            <input type="password" id="nuevaPassword" />
+            <div class="password-field">
+              <input type="password" id="nuevaPassword" />
+              <button type="button" class="toggle-password" data-target="nuevaPassword" aria-label="Mostrar contraseña">
+                <svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10.6 10.6 0 0 1 12 19c-7 0-11-7-11-7a18.6 18.6 0 0 1 4.2-5.1M9.9 4.2A9.9 9.9 0 0 1 12 4c7 0 11 7 11 7a18.6 18.6 0 0 1-2.2 3.1M14.1 14.1a3 3 0 1 1-4.2-4.2"/><path d="M1 1l22 22"/></svg>
+              </button>
+            </div>
           </div>
           <button type="button" class="btn-primary" id="crearPasswordBtn">Crear contraseña</button>
           <div class="msg" id="crearMsg3"></div>
@@ -388,6 +424,18 @@
     document.getElementById("navBuscar").addEventListener("click", () => { window.location.href = DIRECTORIO_URL + "?view=buscar"; });
     // "navCuenta" ya estamos aquí, no hace nada.
 
+    // ---------- Mostrar / ocultar contraseña ----------
+    document.querySelectorAll(".toggle-password").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const input = document.getElementById(btn.dataset.target);
+        if (!input) return;
+        const mostrando = input.type === "text";
+        input.type = mostrando ? "password" : "text";
+        btn.classList.toggle("showing", !mostrando);
+        btn.setAttribute("aria-label", mostrando ? "Mostrar contraseña" : "Ocultar contraseña");
+      });
+    });
+
     // ---------- Sesión con expiración de 10 minutos ----------
     const SESION_KEY = "tapport_sesion";
     const DURACION_SESION_MS = 10 * 60 * 1000; // 10 minutos
@@ -444,6 +492,13 @@
     const loginForm = document.getElementById("loginForm");
     const crearForm = document.getElementById("crearForm");
 
+    function irATabCrear() {
+      tabCrear.classList.add("active");
+      tabLogin.classList.remove("active");
+      crearForm.style.display = "block";
+      loginForm.style.display = "none";
+    }
+
     tabLogin.addEventListener("click", () => {
       tabLogin.classList.add("active");
       tabCrear.classList.remove("active");
@@ -451,12 +506,7 @@
       crearForm.style.display = "none";
     });
 
-    tabCrear.addEventListener("click", () => {
-      tabCrear.classList.add("active");
-      tabLogin.classList.remove("active");
-      crearForm.style.display = "block";
-      loginForm.style.display = "none";
-    });
+    tabCrear.addEventListener("click", irATabCrear);
 
     // ---------- Login ----------
     document.getElementById("loginBtn").addEventListener("click", async () => {
@@ -818,6 +868,15 @@
       sesion = sesionGuardada;
       mostrarDashboard();
       iniciarVigilanciaSesion();
+    } else {
+      // Si llegamos desde registro.html con ?crear=1&email=..., abre directo
+      // la pestaña de "Crear mi cuenta" con el correo ya verificado prellenado.
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("crear") === "1") {
+        irATabCrear();
+        const emailParam = urlParams.get("email");
+        if (emailParam) document.getElementById("crearEmail").value = emailParam;
+      }
     }
   </script>
 </body>
