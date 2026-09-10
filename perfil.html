@@ -26,7 +26,7 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     display: flex;
     justify-content: center;
-    padding: 40px 16px 80px;
+    padding: 40px 16px 100px;
     min-height: 100vh;
   }
 
@@ -110,6 +110,7 @@
   .msg { font-size: 13px; margin-top: 10px; text-align: center; }
   .msg.error { color: var(--error); }
   .msg.ok { color: var(--accent); }
+  .msg.notice { color: var(--ink-soft); }
 
   .tabs { display: flex; gap: 8px; margin-bottom: 4px; }
   .tabs button {
@@ -142,6 +143,12 @@
     object-fit: cover;
     background: var(--accent-soft);
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 750;
+    font-size: 22px;
+    color: var(--accent);
   }
 
   .profile-name { font-size: 18px; font-weight: 700; margin: 0 0 2px; }
@@ -186,6 +193,51 @@
   .photo-edit-circle img { width: 100%; height: 100%; object-fit: cover; }
   .photo-edit-circle span { font-size: 10px; color: var(--accent); text-align: center; }
   input[type="file"] { display: none; }
+
+  /* --- Barra de navegación inferior (igual a directorio.html) --- */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    background: var(--card);
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    z-index: 20;
+  }
+  .nav-item {
+    background: none;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    color: var(--ink-soft);
+    font-size: 10.5px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 10px;
+  }
+  .nav-item.active { color: var(--accent); }
+  .nav-item svg { width: 22px; height: 22px; }
+
+  .nav-item.search-item {
+    background: var(--accent);
+    color: #fff;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    justify-content: center;
+    margin-top: -26px;
+    box-shadow: 0 4px 10px rgba(31,75,69,0.3);
+  }
+  .nav-item.search-item svg { width: 24px; height: 24px; }
+  .nav-item.search-item.active { color: #fff; }
 </style>
 </head>
 <body>
@@ -198,6 +250,8 @@
 
     <!-- ============ LOGIN / CREAR CUENTA ============ -->
     <div class="card" id="authCard">
+      <div class="msg notice hidden" id="sesionExpiradaMsg">Tu sesión expiró por inactividad. Vuelve a iniciar sesión.</div>
+
       <div class="tabs">
         <button type="button" id="tabLogin" class="active">Iniciar sesión</button>
         <button type="button" id="tabCrear">Crear mi cuenta</button>
@@ -251,7 +305,7 @@
     <!-- ============ DASHBOARD (tras login) ============ -->
     <div class="card hidden" id="dashboard">
       <div class="profile-header">
-        <img class="profile-photo" id="dashFoto" />
+        <div class="profile-photo" id="dashFotoWrap"><img id="dashFoto" style="display:none; width:100%; height:100%; border-radius:50%; object-fit:cover;" /><span id="dashFotoIniciales"></span></div>
         <div>
           <p class="profile-name" id="dashNombre"></p>
           <p class="profile-sub" id="dashRestaurante"></p>
@@ -308,10 +362,81 @@
     </div>
   </div>
 
+  <!-- Barra de navegación inferior: te sigue entre directorio.html y perfil.html -->
+  <div class="bottom-nav">
+    <button type="button" class="nav-item" id="navHome">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
+      Home
+    </button>
+    <button type="button" class="nav-item search-item" id="navBuscar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    </button>
+    <button type="button" class="nav-item active" id="navCuenta">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg>
+      Cuenta
+    </button>
+  </div>
+
   <script>
     const ENDPOINT = "https://script.google.com/macros/s/AKfycbx9nTiQEr_2AvK0bc3hIyJPao5PqtADFeRQKuhR6_XFV_rR0FG0UsZ5sexFrkyJIdJW/exec";
+    const DIRECTORIO_URL = "directorio.html";
 
     let sesion = null; // { email, password, ...datosPerfil }
+
+    // ---------- Navegación inferior (persiste entre páginas) ----------
+    document.getElementById("navHome").addEventListener("click", () => { window.location.href = DIRECTORIO_URL; });
+    document.getElementById("navBuscar").addEventListener("click", () => { window.location.href = DIRECTORIO_URL + "?view=buscar"; });
+    // "navCuenta" ya estamos aquí, no hace nada.
+
+    // ---------- Sesión con expiración de 10 minutos ----------
+    const SESION_KEY = "tapport_sesion";
+    const DURACION_SESION_MS = 10 * 60 * 1000; // 10 minutos
+    let intervaloSesion = null;
+
+    function guardarSesion(datos) {
+      const conMarcaDeTiempo = { ...datos, _loginTime: Date.now() };
+      sessionStorage.setItem(SESION_KEY, JSON.stringify(conMarcaDeTiempo));
+    }
+
+    function leerSesion() {
+      const raw = sessionStorage.getItem(SESION_KEY);
+      if (!raw) return null;
+      try {
+        const datos = JSON.parse(raw);
+        if (Date.now() - datos._loginTime > DURACION_SESION_MS) {
+          sessionStorage.removeItem(SESION_KEY);
+          return null;
+        }
+        return datos;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function borrarSesion() {
+      sessionStorage.removeItem(SESION_KEY);
+      if (intervaloSesion) clearInterval(intervaloSesion);
+    }
+
+    function iniciarVigilanciaSesion() {
+      if (intervaloSesion) clearInterval(intervaloSesion);
+      intervaloSesion = setInterval(() => {
+        if (!leerSesion()) {
+          cerrarSesionPorExpiracion();
+        }
+      }, 15000); // revisa cada 15s
+    }
+
+    function cerrarSesionPorExpiracion() {
+      sesion = null;
+      borrarSesion();
+      document.getElementById("dashboard").classList.add("hidden");
+      document.getElementById("editCard").classList.add("hidden");
+      document.getElementById("reviewsCard").classList.add("hidden");
+      document.getElementById("authCard").classList.remove("hidden");
+      document.getElementById("headerSub").textContent = "Inicia sesión para ver tu rating, tus reseñas y editar tus datos.";
+      document.getElementById("sesionExpiradaMsg").classList.remove("hidden");
+    }
 
     // ---------- Tabs login / crear cuenta ----------
     const tabLogin = document.getElementById("tabLogin");
@@ -360,7 +485,10 @@
 
         if (data.ok) {
           sesion = { email, password, ...data };
+          guardarSesion(sesion);
+          document.getElementById("sesionExpiradaMsg").classList.add("hidden");
           mostrarDashboard();
+          iniciarVigilanciaSesion();
         } else {
           msg.className = "msg error";
           msg.textContent = data.error || "No se pudo iniciar sesión.";
@@ -482,7 +610,10 @@
           const dataLogin = await resLogin.json();
           if (dataLogin.ok) {
             sesion = { email, password, ...dataLogin };
+            guardarSesion(sesion);
+            document.getElementById("sesionExpiradaMsg").classList.add("hidden");
             mostrarDashboard();
+            iniciarVigilanciaSesion();
           }
         } else {
           msg.className = "msg error";
@@ -497,6 +628,28 @@
       }
     });
 
+    // ---------- Foto con respaldo de iniciales si no carga ----------
+    function iniciales(nombre) {
+      return (nombre || "").split(" ").filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join("");
+    }
+
+    function pintarFotoDashboard(fotoUrl, nombre) {
+      const img = document.getElementById("dashFoto");
+      const span = document.getElementById("dashFotoIniciales");
+      if (fotoUrl) {
+        img.src = fotoUrl;
+        img.style.display = "block";
+        img.onerror = () => {
+          img.style.display = "none";
+          span.textContent = iniciales(nombre);
+        };
+        span.textContent = "";
+      } else {
+        img.style.display = "none";
+        span.textContent = iniciales(nombre);
+      }
+    }
+
     // ---------- Dashboard ----------
     function mostrarDashboard() {
       document.getElementById("authCard").classList.add("hidden");
@@ -504,7 +657,7 @@
       document.getElementById("reviewsCard").classList.remove("hidden");
       document.getElementById("headerSub").textContent = "Este es tu perfil en Tapport.";
 
-      document.getElementById("dashFoto").src = sesion.fotoUrl || "";
+      pintarFotoDashboard(sesion.fotoUrl, sesion.nombre);
       document.getElementById("dashNombre").textContent = sesion.nombre || "";
       document.getElementById("dashRestaurante").textContent = sesion.restaurante || "";
       document.getElementById("dashPromedio").textContent = sesion.promedio ? sesion.promedio.toFixed(1) : "—";
@@ -542,12 +695,14 @@
 
     document.getElementById("cerrarSesionBtn").addEventListener("click", () => {
       sesion = null;
+      borrarSesion();
       document.getElementById("dashboard").classList.add("hidden");
       document.getElementById("editCard").classList.add("hidden");
       document.getElementById("reviewsCard").classList.add("hidden");
       document.getElementById("authCard").classList.remove("hidden");
       document.getElementById("headerSub").textContent = "Inicia sesión para ver tu rating, tus reseñas y editar tus datos.";
       document.getElementById("loginPassword").value = "";
+      document.getElementById("sesionExpiradaMsg").classList.add("hidden");
     });
 
     // ---------- Editar perfil ----------
@@ -618,6 +773,7 @@
           sesion.telefono = telefono;
           sesion.restaurante = restaurante;
           if (data.foto_url) sesion.fotoUrl = data.foto_url;
+          guardarSesion(sesion);
 
           msg.className = "msg ok";
           msg.textContent = "¡Cambios guardados!";
@@ -655,6 +811,14 @@
     }
 
     cargarRestaurantes();
+
+    // ---------- Al cargar la página, revisa si ya hay una sesión activa ----------
+    const sesionGuardada = leerSesion();
+    if (sesionGuardada) {
+      sesion = sesionGuardada;
+      mostrarDashboard();
+      iniciarVigilanciaSesion();
+    }
   </script>
 </body>
 </html>
