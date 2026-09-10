@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Directorio de meseros — Tapport</title>
+<title>Tapport</title>
 <style>
   :root {
     --bg: #F6F5F1;
@@ -19,38 +19,121 @@
 
   * { box-sizing: border-box; }
 
-  body {
+  html, body {
     margin: 0;
     background: var(--bg);
     color: var(--ink);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    display: flex;
-    justify-content: center;
-    padding: 40px 16px 80px;
-    min-height: 100vh;
   }
 
-  .wrap { width: 100%; max-width: 560px; }
+  .app {
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+    padding-bottom: 84px; /* espacio para la barra inferior */
+    position: relative;
+  }
 
-  header { margin-bottom: 24px; }
-  .eyebrow { font-size: 13px; color: var(--ink-soft); }
-  h1 { font-size: 24px; margin: 6px 0 8px; font-weight: 650; }
-  .sub { font-size: 14px; color: var(--ink-soft); line-height: 1.5; margin: 0; }
+  .topbar {
+    padding: 22px 20px 14px;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 5;
+  }
 
+  .eyebrow { font-size: 12.5px; color: var(--ink-soft); }
+  .topbar h1 { font-size: 22px; margin: 4px 0 0; font-weight: 700; }
+
+  .view { display: none; padding: 4px 20px 20px; }
+  .view.active { display: block; }
+
+  /* ---- Feed (Home) ---- */
+  .feed-section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin: 18px 0 10px;
+  }
+  .feed-section-title:first-child { margin-top: 4px; }
+
+  .job-card {
+    background: var(--accent);
+    color: #fff;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .job-card .tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+  }
+  .job-card h3 { font-size: 15.5px; margin: 0 0 4px; }
+  .job-card .job-rest { font-size: 12.5px; opacity: 0.85; margin-bottom: 6px; }
+  .job-card p { font-size: 13px; line-height: 1.4; margin: 0 0 12px; opacity: 0.95; }
+  .job-card a.contact-btn {
+    display: inline-block;
+    background: #fff;
+    color: var(--accent);
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+  }
+
+  .waiter-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    cursor: pointer;
+  }
+  .waiter-photo { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: var(--accent-soft); flex-shrink: 0; }
+  .waiter-info { flex: 1; min-width: 0; }
+  .waiter-name { font-size: 14.5px; font-weight: 700; margin: 0 0 2px; }
+  .waiter-rest { font-size: 12px; color: var(--ink-soft); margin-bottom: 3px; }
+  .waiter-rating { font-size: 12.5px; color: var(--star); font-weight: 600; }
+  .waiter-rating .count { color: var(--ink-soft); font-weight: 400; margin-left: 3px; }
+
+  .publicar-btn {
+    width: 100%;
+    padding: 12px;
+    border: 1.5px dashed var(--line);
+    border-radius: 10px;
+    background: none;
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 16px;
+  }
+
+  /* ---- Search view ---- */
   .filters {
     background: var(--card);
     border: 1px solid var(--line);
     border-radius: 14px;
-    padding: 18px;
-    margin-bottom: 20px;
+    padding: 16px;
+    margin-bottom: 16px;
   }
-
   .field { margin-bottom: 12px; }
   .field:last-child { margin-bottom: 0; }
-
-  label { display: block; font-size: 12.5px; color: var(--ink-soft); margin-bottom: 5px; }
-
-  input[type="text"], select {
+  label { display: block; font-size: 12px; color: var(--ink-soft); margin-bottom: 5px; }
+  input[type="text"], select, textarea {
     width: 100%;
     padding: 10px 12px;
     border: 1px solid var(--line);
@@ -60,15 +143,12 @@
     background: #FCFCFA;
     font-family: inherit;
   }
-
-  input:focus, select:focus {
+  input:focus, select:focus, textarea:focus {
     outline: none;
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--accent-soft);
   }
-
   .filters-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
   .btn-primary {
     width: 100%;
     padding: 12px;
@@ -81,41 +161,71 @@
     cursor: pointer;
     margin-top: 4px;
   }
-
-  .result-card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 12px;
-    display: flex;
-    gap: 14px;
+  .btn-secondary {
+    width: 100%;
+    padding: 11px;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    background: #FAFAFB;
+    color: var(--ink);
+    font-size: 13.5px;
+    font-weight: 600;
     cursor: pointer;
   }
-
-  .result-photo {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    object-fit: cover;
-    background: var(--accent-soft);
-    flex-shrink: 0;
-  }
-
-  .result-info { flex: 1; min-width: 0; }
-  .result-name { font-size: 15px; font-weight: 700; margin: 0 0 2px; }
-  .result-rest { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 4px; }
-  .result-rating { font-size: 13px; color: var(--star); font-weight: 600; }
-  .result-rating .count { color: var(--ink-soft); font-weight: 400; margin-left: 4px; }
 
   .empty-state, .loading-state {
     text-align: center;
     color: var(--ink-soft);
-    font-size: 14px;
-    padding: 30px 0;
+    font-size: 13.5px;
+    padding: 26px 0;
   }
 
-  /* ---- Modal de perfil completo ---- */
+  /* ---- Bottom nav ---- */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    background: var(--card);
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    z-index: 20;
+  }
+  .nav-item {
+    background: none;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    color: var(--ink-soft);
+    font-size: 10.5px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 10px;
+  }
+  .nav-item.active { color: var(--accent); }
+  .nav-item svg { width: 22px; height: 22px; }
+
+  .nav-item.search-item {
+    background: var(--accent);
+    color: #fff;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    justify-content: center;
+    margin-top: -26px;
+    box-shadow: 0 4px 10px rgba(31,75,69,0.3);
+  }
+  .nav-item.search-item svg { width: 24px; height: 24px; }
+  .nav-item.search-item.active { color: #fff; }
+
+  /* ---- Modal perfil / publicar vacante ---- */
   .overlay {
     position: fixed;
     inset: 0;
@@ -125,18 +235,16 @@
     justify-content: center;
     padding: 40px 16px;
     overflow-y: auto;
-    z-index: 10;
+    z-index: 30;
   }
   .overlay.show { display: flex; }
-
   .modal {
     background: var(--card);
     border-radius: 16px;
-    padding: 24px;
+    padding: 22px;
     max-width: 440px;
     width: 100%;
   }
-
   .modal-close {
     float: right;
     background: none;
@@ -146,79 +254,106 @@
     cursor: pointer;
     line-height: 1;
   }
+  .modal-header { display: flex; align-items: center; gap: 16px; margin-bottom: 4px; clear: both; }
+  .modal-photo { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; background: var(--accent-soft); }
+  .modal-name { font-size: 18px; font-weight: 750; margin: 0 0 2px; }
+  .modal-rest { font-size: 13px; color: var(--ink-soft); }
 
-  .modal-header { display: flex; align-items: center; gap: 16px; margin-bottom: 6px; clear: both; }
-  .modal-photo { width: 76px; height: 76px; border-radius: 50%; object-fit: cover; background: var(--accent-soft); }
-  .modal-name { font-size: 19px; font-weight: 750; margin: 0 0 2px; }
-  .modal-rest { font-size: 13.5px; color: var(--ink-soft); }
+  .stats-row { display: flex; gap: 12px; margin: 16px 0; }
+  .stat-box { flex: 1; background: var(--accent-soft); border-radius: 10px; padding: 12px; text-align: center; }
+  .stat-box .num { font-size: 19px; font-weight: 750; color: var(--accent); }
+  .stat-box .label { font-size: 10.5px; color: var(--ink-soft); margin-top: 2px; }
 
-  .stats-row { display: flex; gap: 12px; margin-top: 18px; }
-  .stat-box { flex: 1; background: var(--accent-soft); border-radius: 10px; padding: 14px; text-align: center; }
-  .stat-box .num { font-size: 20px; font-weight: 750; color: var(--accent); }
-  .stat-box .label { font-size: 11px; color: var(--ink-soft); margin-top: 2px; }
-
-  .contact-row { display: flex; gap: 10px; margin-top: 16px; }
+  .contact-row { display: flex; gap: 10px; margin-bottom: 16px; }
   .contact-btn {
-    flex: 1;
-    text-align: center;
-    padding: 11px;
-    border-radius: 8px;
-    font-size: 13.5px;
-    font-weight: 600;
-    text-decoration: none;
-    border: 1.5px solid var(--line);
-    color: var(--ink);
+    flex: 1; text-align: center; padding: 10px; border-radius: 8px;
+    font-size: 13px; font-weight: 600; text-decoration: none;
+    border: 1.5px solid var(--line); color: var(--ink);
   }
   .contact-btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-  .review-item { border-bottom: 1px solid var(--line); padding: 12px 0; }
+  .review-item { border-bottom: 1px solid var(--line); padding: 11px 0; }
   .review-item:last-child { border-bottom: none; }
-  .review-stars { color: var(--star); font-size: 13.5px; margin-bottom: 3px; }
-  .review-tags { font-size: 11px; color: var(--accent); margin-bottom: 3px; }
-  .review-comment { font-size: 13px; color: var(--ink); line-height: 1.4; }
-  .review-date { font-size: 10.5px; color: var(--ink-soft); margin-top: 3px; }
-
-  h2.section-title { font-size: 14.5px; margin: 20px 0 8px; }
+  .review-stars { color: var(--star); font-size: 13px; margin-bottom: 3px; }
+  .review-tags { font-size: 10.5px; color: var(--accent); margin-bottom: 3px; }
+  .review-comment { font-size: 12.5px; color: var(--ink); line-height: 1.4; }
+  .review-date { font-size: 10px; color: var(--ink-soft); margin-top: 3px; }
+  h2.section-title { font-size: 14px; margin: 18px 0 8px; }
+  .msg { font-size: 13px; margin-top: 10px; text-align: center; }
+  .msg.error { color: var(--error); }
+  .msg.ok { color: var(--accent); }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="eyebrow">Tapport · Directorio</div>
-      <h1>Encuentra personal</h1>
-      <p class="sub">Busca meseros por restaurante, nombre o rating para encontrar al mejor personal según su desempeño real.</p>
-    </header>
-
-    <div class="filters">
-      <div class="field">
-        <label for="fNombre">Buscar por nombre</label>
-        <input type="text" id="fNombre" placeholder="Ej. Santiago" />
-      </div>
-      <div class="filters-row">
-        <div class="field">
-          <label for="fRestaurante">Restaurante</label>
-          <select id="fRestaurante"><option value="">Todos</option></select>
-        </div>
-        <div class="field">
-          <label for="fRating">Rating mínimo</label>
-          <select id="fRating">
-            <option value="0">Cualquiera</option>
-            <option value="3">3+ ★</option>
-            <option value="4">4+ ★</option>
-            <option value="4.5">4.5+ ★</option>
-          </select>
-        </div>
-      </div>
-      <button type="button" class="btn-primary" id="buscarBtn">Buscar</button>
+  <div class="app">
+    <div class="topbar">
+      <div class="eyebrow">Tapport</div>
+      <h1 id="topTitle">Home</h1>
     </div>
 
-    <div id="resultados"></div>
+    <!-- ============ HOME (FEED) ============ -->
+    <div class="view active" id="viewHome">
+      <button type="button" class="publicar-btn" id="abrirPublicarBtn">+ Publicar un anuncio de trabajo</button>
+
+      <div class="feed-section-title">Restaurantes buscando personal</div>
+      <div id="feedVacantes"><div class="loading-state">Cargando…</div></div>
+
+      <div class="feed-section-title">Meseros destacados</div>
+      <div id="feedDestacados"><div class="loading-state">Cargando…</div></div>
+    </div>
+
+    <!-- ============ BUSCAR ============ -->
+    <div class="view" id="viewBuscar">
+      <div class="filters">
+        <div class="field">
+          <label for="fNombre">Buscar por nombre</label>
+          <input type="text" id="fNombre" placeholder="Ej. Santiago" />
+        </div>
+        <div class="filters-row">
+          <div class="field">
+            <label for="fRestaurante">Restaurante</label>
+            <select id="fRestaurante"><option value="">Todos</option></select>
+          </div>
+          <div class="field">
+            <label for="fRating">Rating mínimo</label>
+            <select id="fRating">
+              <option value="0">Cualquiera</option>
+              <option value="3">3+ ★</option>
+              <option value="4">4+ ★</option>
+              <option value="4.5">4.5+ ★</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" class="btn-primary" id="buscarBtn">Buscar</button>
+      </div>
+      <div id="resultadosBusqueda"></div>
+    </div>
+
+    <!-- ============ CUENTA (placeholder, redirige a perfil.html) ============ -->
+    <div class="view" id="viewCuenta">
+      <div class="empty-state">Redirigiendo a tu cuenta…</div>
+    </div>
   </div>
 
-  <!-- Modal perfil completo -->
-  <div class="overlay" id="overlay">
+  <!-- Barra de navegación inferior -->
+  <div class="bottom-nav">
+    <button type="button" class="nav-item active" data-view="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
+      Home
+    </button>
+    <button type="button" class="nav-item search-item" data-view="buscar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    </button>
+    <button type="button" class="nav-item" data-view="cuenta">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg>
+      Cuenta
+    </button>
+  </div>
+
+  <!-- Modal: perfil completo de un mesero -->
+  <div class="overlay" id="overlayPerfil">
     <div class="modal">
-      <button class="modal-close" id="cerrarModalBtn">×</button>
+      <button class="modal-close" id="cerrarPerfilBtn">×</button>
       <div class="modal-header">
         <img class="modal-photo" id="modalFoto" />
         <div>
@@ -226,30 +361,49 @@
           <p class="modal-rest" id="modalRest"></p>
         </div>
       </div>
-
       <div class="stats-row">
-        <div class="stat-box">
-          <div class="num" id="modalPromedio">—</div>
-          <div class="label">Rating promedio</div>
-        </div>
-        <div class="stat-box">
-          <div class="num" id="modalTotal">—</div>
-          <div class="label">Reseñas totales</div>
-        </div>
+        <div class="stat-box"><div class="num" id="modalPromedio">—</div><div class="label">Rating promedio</div></div>
+        <div class="stat-box"><div class="num" id="modalTotal">—</div><div class="label">Reseñas totales</div></div>
       </div>
-
       <div class="contact-row">
         <a href="#" class="contact-btn primary" id="contactoTelefono">Llamar</a>
         <a href="#" class="contact-btn" id="contactoEmail">Enviar correo</a>
       </div>
-
       <h2 class="section-title">Reseñas de clientes</h2>
       <div id="modalReviews"></div>
     </div>
   </div>
 
+  <!-- Modal: publicar anuncio de trabajo -->
+  <div class="overlay" id="overlayPublicar">
+    <div class="modal">
+      <button class="modal-close" id="cerrarPublicarBtn">×</button>
+      <h2 style="font-size:17px; margin:0 0 14px;">Publicar un anuncio</h2>
+
+      <div class="field">
+        <label for="vRestaurante">Restaurante</label>
+        <select id="vRestaurante"></select>
+      </div>
+      <div class="field">
+        <label for="vPuesto">Puesto que buscan</label>
+        <input type="text" id="vPuesto" placeholder="Ej. Mesero(a) turno noche" />
+      </div>
+      <div class="field">
+        <label for="vDescripcion">Descripción (opcional)</label>
+        <textarea id="vDescripcion" rows="3" placeholder="Horario, requisitos, sueldo, etc."></textarea>
+      </div>
+      <div class="field">
+        <label for="vContacto">Teléfono o correo de contacto</label>
+        <input type="text" id="vContacto" placeholder="999 999 999 o correo@restaurante.com" />
+      </div>
+      <button type="button" class="btn-primary" id="publicarVacanteBtn">Publicar anuncio</button>
+      <div class="msg" id="publicarMsg"></div>
+    </div>
+  </div>
+
   <script>
     const ENDPOINT = "https://script.google.com/macros/s/AKfycbx9nTiQEr_2AvK0bc3hIyJPao5PqtADFeRQKuhR6_XFV_rR0FG0UsZ5sexFrkyJIdJW/exec";
+    const PERFIL_URL = "perfil.html";
 
     function escapeHtml(str) {
       const div = document.createElement("div");
@@ -257,22 +411,127 @@
       return div.innerHTML;
     }
 
+    // ---------- Navegación inferior ----------
+    const views = {
+      home: document.getElementById("viewHome"),
+      buscar: document.getElementById("viewBuscar"),
+      cuenta: document.getElementById("viewCuenta")
+    };
+    const titles = { home: "Home", buscar: "Buscar", cuenta: "Cuenta" };
+
+    document.querySelectorAll(".nav-item").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.view;
+
+        if (target === "cuenta") {
+          window.location.href = PERFIL_URL;
+          return;
+        }
+
+        document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        Object.keys(views).forEach(k => views[k].classList.toggle("active", k === target));
+        document.getElementById("topTitle").textContent = titles[target];
+
+        if (target === "buscar" && !document.getElementById("resultadosBusqueda").dataset.loaded) {
+          buscar();
+        }
+      });
+    });
+
+    // ---------- Cargar restaurantes (para filtros y para publicar vacante) ----------
     async function cargarRestaurantes() {
-      const select = document.getElementById("fRestaurante");
       try {
         const res = await fetch(`${ENDPOINT}?accion=restaurantes`);
         const data = await res.json();
         const lista = (data.restaurantes || []).slice().sort();
-        select.innerHTML = '<option value="">Todos</option>' +
-          lista.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("");
+        const opciones = lista.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("");
+
+        document.getElementById("fRestaurante").innerHTML = '<option value="">Todos</option>' + opciones;
+        document.getElementById("vRestaurante").innerHTML = opciones;
+      } catch (err) { /* deja los selects vacíos si falla */ }
+    }
+
+    // ---------- FEED (Home) ----------
+    async function cargarFeed() {
+      cargarVacantes();
+      cargarDestacados();
+    }
+
+    async function cargarVacantes() {
+      const cont = document.getElementById("feedVacantes");
+      try {
+        const res = await fetch(`${ENDPOINT}?accion=listar_vacantes`);
+        const data = await res.json();
+        const vacantes = (data.vacantes || []).slice(0, 8);
+
+        if (!vacantes.length) {
+          cont.innerHTML = '<div class="empty-state">Ningún restaurante ha publicado anuncios todavía.</div>';
+          return;
+        }
+
+        cont.innerHTML = vacantes.map(v => {
+          const esCorreo = /@/.test(v.contacto);
+          const href = esCorreo ? `mailto:${v.contacto}` : `tel:${v.contacto}`;
+          return `
+            <div class="job-card">
+              <span class="tag">Buscan personal</span>
+              <h3>${escapeHtml(v.puesto)}</h3>
+              <div class="job-rest">${escapeHtml(v.restaurante)}</div>
+              ${v.descripcion ? `<p>${escapeHtml(v.descripcion)}</p>` : ""}
+              <a class="contact-btn" href="${href}">Contactar</a>
+            </div>
+          `;
+        }).join("");
       } catch (err) {
-        // deja solo "Todos" si falla
+        cont.innerHTML = '<div class="empty-state">No se pudieron cargar los anuncios.</div>';
       }
     }
 
+    async function cargarDestacados() {
+      const cont = document.getElementById("feedDestacados");
+      try {
+        const res = await fetch(`${ENDPOINT}?accion=buscar_meseros&minRating=4`);
+        const data = await res.json();
+        const lista = (data.resultados || []).slice(0, 10);
+
+        if (!lista.length) {
+          cont.innerHTML = '<div class="empty-state">Todavía no hay meseros con reseñas suficientes.</div>';
+          return;
+        }
+
+        cont.innerHTML = lista.map(renderWaiterCard).join("");
+        adjuntarClicksWaiterCards(cont);
+      } catch (err) {
+        cont.innerHTML = '<div class="empty-state">No se pudo cargar el feed.</div>';
+      }
+    }
+
+    function renderWaiterCard(r) {
+      const promedioTexto = r.promedio > 0 ? r.promedio.toFixed(1) : "Sin reseñas";
+      return `
+        <div class="waiter-card" data-code="${escapeHtml(r.codigo)}">
+          <img class="waiter-photo" src="${escapeHtml(r.fotoUrl || '')}" />
+          <div class="waiter-info">
+            <p class="waiter-name">${escapeHtml(r.nombre)}</p>
+            <p class="waiter-rest">${escapeHtml(r.restaurante)}</p>
+            <p class="waiter-rating">★ ${promedioTexto}<span class="count">(${r.totalReviews} reseña${r.totalReviews === 1 ? '' : 's'})</span></p>
+          </div>
+        </div>
+      `;
+    }
+
+    function adjuntarClicksWaiterCards(cont) {
+      cont.querySelectorAll(".waiter-card").forEach(card => {
+        card.addEventListener("click", () => abrirPerfil(card.dataset.code));
+      });
+    }
+
+    // ---------- BUSCAR ----------
     async function buscar() {
-      const cont = document.getElementById("resultados");
+      const cont = document.getElementById("resultadosBusqueda");
       cont.innerHTML = '<div class="loading-state">Buscando…</div>';
+      cont.dataset.loaded = "1";
 
       const nombre = document.getElementById("fNombre").value.trim();
       const restaurante = document.getElementById("fRestaurante").value;
@@ -286,40 +545,28 @@
       try {
         const res = await fetch(`${ENDPOINT}?${params.toString()}`);
         const data = await res.json();
-        renderResultados(data.resultados || []);
+        const resultados = data.resultados || [];
+
+        if (!resultados.length) {
+          cont.innerHTML = '<div class="empty-state">No encontramos meseros con esos filtros.</div>';
+          return;
+        }
+
+        cont.innerHTML = resultados.map(renderWaiterCard).join("");
+        adjuntarClicksWaiterCards(cont);
       } catch (err) {
         cont.innerHTML = '<div class="empty-state">Error al buscar. Intenta de nuevo.</div>';
       }
     }
 
-    function renderResultados(resultados) {
-      const cont = document.getElementById("resultados");
-      if (!resultados.length) {
-        cont.innerHTML = '<div class="empty-state">No encontramos meseros con esos filtros.</div>';
-        return;
-      }
+    document.getElementById("buscarBtn").addEventListener("click", buscar);
+    document.getElementById("fNombre").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") buscar();
+    });
 
-      cont.innerHTML = resultados.map(r => {
-        const promedioTexto = r.promedio > 0 ? r.promedio.toFixed(1) : "Sin reseñas";
-        return `
-          <div class="result-card" data-code="${escapeHtml(r.codigo)}">
-            <img class="result-photo" src="${escapeHtml(r.fotoUrl || '')}" />
-            <div class="result-info">
-              <p class="result-name">${escapeHtml(r.nombre)}</p>
-              <p class="result-rest">${escapeHtml(r.restaurante)}</p>
-              <p class="result-rating">★ ${promedioTexto}<span class="count">(${r.totalReviews} reseña${r.totalReviews === 1 ? '' : 's'})</span></p>
-            </div>
-          </div>
-        `;
-      }).join("");
-
-      cont.querySelectorAll(".result-card").forEach(card => {
-        card.addEventListener("click", () => abrirPerfil(card.dataset.code));
-      });
-    }
-
+    // ---------- Modal perfil ----------
     async function abrirPerfil(code) {
-      const overlay = document.getElementById("overlay");
+      const overlay = document.getElementById("overlayPerfil");
       overlay.classList.add("show");
       document.getElementById("modalReviews").innerHTML = '<div class="loading-state">Cargando…</div>';
 
@@ -334,10 +581,8 @@
         document.getElementById("modalPromedio").textContent = data.promedio > 0 ? data.promedio.toFixed(1) : "—";
         document.getElementById("modalTotal").textContent = data.totalReviews || 0;
 
-        const tel = document.getElementById("contactoTelefono");
-        const mail = document.getElementById("contactoEmail");
-        tel.href = data.telefono ? `tel:${data.telefono}` : "#";
-        mail.href = data.email ? `mailto:${data.email}` : "#";
+        document.getElementById("contactoTelefono").href = data.telefono ? `tel:${data.telefono}` : "#";
+        document.getElementById("contactoEmail").href = data.email ? `mailto:${data.email}` : "#";
 
         const reviews = data.reviews || [];
         const reviewsCont = document.getElementById("modalReviews");
@@ -363,20 +608,85 @@
       }
     }
 
-    document.getElementById("cerrarModalBtn").addEventListener("click", () => {
-      document.getElementById("overlay").classList.remove("show");
+    document.getElementById("cerrarPerfilBtn").addEventListener("click", () => {
+      document.getElementById("overlayPerfil").classList.remove("show");
     });
-    document.getElementById("overlay").addEventListener("click", (e) => {
-      if (e.target.id === "overlay") document.getElementById("overlay").classList.remove("show");
+    document.getElementById("overlayPerfil").addEventListener("click", (e) => {
+      if (e.target.id === "overlayPerfil") document.getElementById("overlayPerfil").classList.remove("show");
     });
 
-    document.getElementById("buscarBtn").addEventListener("click", buscar);
-    document.getElementById("fNombre").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") buscar();
+    // ---------- Modal publicar vacante ----------
+    document.getElementById("abrirPublicarBtn").addEventListener("click", () => {
+      document.getElementById("publicarMsg").textContent = "";
+      document.getElementById("vPuesto").value = "";
+      document.getElementById("vDescripcion").value = "";
+      document.getElementById("vContacto").value = "";
+      document.getElementById("overlayPublicar").classList.add("show");
+    });
+    document.getElementById("cerrarPublicarBtn").addEventListener("click", () => {
+      document.getElementById("overlayPublicar").classList.remove("show");
+    });
+    document.getElementById("overlayPublicar").addEventListener("click", (e) => {
+      if (e.target.id === "overlayPublicar") document.getElementById("overlayPublicar").classList.remove("show");
+    });
+
+    document.getElementById("publicarVacanteBtn").addEventListener("click", async () => {
+      const btn = document.getElementById("publicarVacanteBtn");
+      const msg = document.getElementById("publicarMsg");
+
+      const restaurante = document.getElementById("vRestaurante").value;
+      const puesto = document.getElementById("vPuesto").value.trim();
+      const descripcion = document.getElementById("vDescripcion").value.trim();
+      const contacto = document.getElementById("vContacto").value.trim();
+
+      if (!restaurante || !puesto || !contacto) {
+        msg.className = "msg error";
+        msg.textContent = "Completa restaurante, puesto y contacto.";
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Publicando…";
+
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "publicar_vacante", restaurante, puesto, descripcion, contacto })
+        });
+        const data = await res.json();
+
+        if (data.ok) {
+          msg.className = "msg ok";
+          msg.textContent = "¡Anuncio publicado!";
+          setTimeout(() => {
+            document.getElementById("overlayPublicar").classList.remove("show");
+            msg.textContent = "";
+            cargarVacantes();
+          }, 800);
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.error || "No se pudo publicar.";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Publicar anuncio";
+      }
     });
 
     cargarRestaurantes();
-    buscar(); // carga todos los meseros al abrir la página
+    cargarFeed();
+
+    // Si se llega desde la página de reseñas con ?code=XXXX,
+    // abre directo el perfil de ese mesero.
+    const urlParams = new URLSearchParams(window.location.search);
+    const codeDesdeUrl = urlParams.get("code");
+    if (codeDesdeUrl) {
+      abrirPerfil(codeDesdeUrl);
+    }
   </script>
 </body>
 </html>
