@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Panel de gerente — Tapport</title>
+<style>
+  :root {
+    --bg: #F6F5F1;
+    --card: #FFFFFF;
+    --ink: #14231F;
+    --ink-soft: #4B5C57;
+    --line: #DEDCD3;
+    --accent: #1F4B45;
+    --accent-soft: #E7EFEC;
+    --error: #B4432E;
+    --star: #E3A427;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px 60px;
+    min-height: 100vh;
+  }
+
+  .wrap { width: 100%; max-width: 520px; }
+
+  header { margin-bottom: 24px; }
+  .eyebrow { font-size: 13px; color: var(--ink-soft); }
+  h1 { font-size: 24px; margin: 6px 0 8px; font-weight: 650; }
+  .sub { font-size: 14px; color: var(--ink-soft); line-height: 1.5; margin: 0; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 22px;
+    margin-top: 20px;
+  }
+
+  .field { margin-bottom: 14px; }
+  label { display: block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
+
+  input[type="text"], input[type="email"], input[type="password"], select {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 15px;
+    color: var(--ink);
+    background: #FCFCFA;
+    font-family: inherit;
+  }
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .btn-primary:disabled { opacity: 0.6; cursor: default; }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 12px;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    background: #FAFAFB;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  .btn-link {
+    background: none; border: none; color: var(--accent);
+    font-size: 13px; font-weight: 600; cursor: pointer; padding: 0; text-decoration: underline;
+  }
+
+  .msg { font-size: 13px; margin-top: 10px; text-align: center; }
+  .msg.error { color: var(--error); }
+  .msg.ok { color: var(--accent); }
+  .msg.notice { color: var(--ink-soft); }
+
+  .tabs { display: flex; gap: 8px; margin-bottom: 4px; }
+  .tabs button {
+    flex: 1; padding: 10px; border-radius: 8px; border: 1.5px solid var(--line);
+    background: #FAFAFB; font-size: 13px; font-weight: 600; color: var(--ink-soft); cursor: pointer;
+  }
+  .tabs button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .hidden { display: none !important; }
+
+  /* --- Panel --- */
+  .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .panel-rest { font-size: 18px; font-weight: 750; margin: 0; }
+  .panel-sub { font-size: 12.5px; color: var(--ink-soft); margin: 2px 0 0; }
+
+  .stats-row { display: flex; gap: 12px; margin-top: 18px; }
+  .stat-box { flex: 1; background: var(--accent-soft); border-radius: 10px; padding: 14px; text-align: center; }
+  .stat-box .num { font-size: 22px; font-weight: 750; color: var(--accent); }
+  .stat-box .label { font-size: 11px; color: var(--ink-soft); margin-top: 2px; }
+
+  .mesero-row {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-top: 12px;
+    cursor: pointer;
+  }
+  .mesero-row-top { display: flex; align-items: center; gap: 12px; }
+  .mesero-photo {
+    width: 44px; height: 44px; border-radius: 50%; object-fit: cover; background: var(--accent-soft);
+    display: flex; align-items: center; justify-content: center; font-weight: 750; font-size: 14px; color: var(--accent);
+    flex-shrink: 0; overflow: hidden;
+  }
+  .mesero-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .mesero-nombre { font-size: 14px; font-weight: 700; margin: 0; }
+  .mesero-rating { font-size: 12px; color: var(--star); font-weight: 700; margin: 2px 0 0; }
+  .mesero-rating .count { color: var(--ink-soft); font-weight: 400; margin-left: 4px; }
+  .mesero-toggle { margin-left: auto; font-size: 11px; color: var(--ink-soft); }
+
+  .mesero-reviews { display: none; margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+  .mesero-reviews.show { display: block; }
+  .review-item { border-bottom: 1px solid var(--line); padding: 9px 0; }
+  .review-item:last-child { border-bottom: none; }
+  .review-stars { color: var(--star); font-size: 12.5px; margin-bottom: 3px; }
+  .review-tags { font-size: 10.5px; color: var(--accent); margin-bottom: 3px; }
+  .review-comment { font-size: 12px; color: var(--ink); line-height: 1.4; }
+  .review-date { font-size: 10px; color: var(--ink-soft); margin-top: 3px; }
+  .empty-state { font-size: 13px; color: var(--ink-soft); text-align: center; padding: 16px 0; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="eyebrow">Tapport · Panel de gerente</div>
+      <h1>Mi restaurante</h1>
+      <p class="sub" id="headerSub">Inicia sesión para ver las reseñas y el rating de tu equipo.</p>
+    </header>
+
+    <!-- ============ LOGIN / CREAR CUENTA ============ -->
+    <div class="card" id="authCard">
+      <div class="msg notice hidden" id="sesionExpiradaMsg">Tu sesión expiró por inactividad. Vuelve a iniciar sesión.</div>
+
+      <div class="tabs">
+        <button type="button" id="tabLogin" class="active">Iniciar sesión</button>
+        <button type="button" id="tabCrear">Crear cuenta de gerente</button>
+      </div>
+
+      <div id="loginForm" style="margin-top:16px;">
+        <div class="field">
+          <label for="loginEmail">Correo electrónico</label>
+          <input type="email" id="loginEmail" placeholder="tucorreo@restaurante.com" />
+        </div>
+        <div class="field">
+          <label for="loginPassword">Contraseña</label>
+          <input type="password" id="loginPassword" />
+        </div>
+        <button type="button" class="btn-primary" id="loginBtn">Iniciar sesión</button>
+        <div class="msg" id="loginMsg"></div>
+      </div>
+
+      <div id="crearForm" style="margin-top:16px; display:none;">
+        <div id="crearPaso1">
+          <div class="field">
+            <label for="crearRestaurante">Restaurante que administras</label>
+            <select id="crearRestaurante"><option value="">Cargando…</option></select>
+          </div>
+          <div class="field">
+            <label for="crearEmail">Tu correo</label>
+            <input type="email" id="crearEmail" placeholder="tucorreo@restaurante.com" />
+          </div>
+          <button type="button" class="btn-primary" id="enviarCodigoBtn">Enviar código de verificación</button>
+          <div class="msg" id="crearMsg1"></div>
+        </div>
+
+        <div id="crearPaso2" style="display:none; margin-top:16px;">
+          <div class="field">
+            <label for="codigoVerif">Código que te llegó al correo</label>
+            <input type="text" id="codigoVerif" inputmode="numeric" maxlength="6" placeholder="123456" />
+          </div>
+          <button type="button" class="btn-secondary" id="verificarCodigoBtn">Verificar código</button>
+          <div class="msg" id="crearMsg2"></div>
+        </div>
+
+        <div id="crearPaso3" style="display:none; margin-top:16px;">
+          <div class="field">
+            <label for="nuevaPassword">Crea tu contraseña (mínimo 6 caracteres)</label>
+            <input type="password" id="nuevaPassword" />
+          </div>
+          <button type="button" class="btn-primary" id="crearCuentaBtn">Crear cuenta</button>
+          <div class="msg" id="crearMsg3"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ PANEL (tras login) ============ -->
+    <div class="card hidden" id="panel">
+      <div class="panel-header">
+        <div>
+          <p class="panel-rest" id="panelRestaurante"></p>
+          <p class="panel-sub">Equipo de meseros y sus reseñas</p>
+        </div>
+        <button type="button" class="btn-link" id="cerrarSesionBtn">Cerrar sesión</button>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="num" id="panelPromedio">—</div>
+          <div class="label">Rating del equipo</div>
+        </div>
+        <div class="stat-box">
+          <div class="num" id="panelTotalMeseros">—</div>
+          <div class="label">Meseros registrados</div>
+        </div>
+        <div class="stat-box">
+          <div class="num" id="panelTotalResenas">—</div>
+          <div class="label">Reseñas totales</div>
+        </div>
+      </div>
+
+      <div id="listaMeseros" style="margin-top:6px;"></div>
+    </div>
+  </div>
+
+  <script>
+    const ENDPOINT = "https://script.google.com/macros/s/AKfycbx9nTiQEr_2AvK0bc3hIyJPao5PqtADFeRQKuhR6_XFV_rR0FG0UsZ5sexFrkyJIdJW/exec";
+
+    let sesion = null; // { email, password, restaurante, meseros }
+
+    // ---------- Sesión con expiración de 10 minutos ----------
+    const SESION_KEY = "tapport_sesion_gerente";
+    const DURACION_SESION_MS = 10 * 60 * 1000;
+    let intervaloSesion = null;
+
+    function guardarSesion(datos) {
+      sessionStorage.setItem(SESION_KEY, JSON.stringify({ ...datos, _loginTime: Date.now() }));
+    }
+    function leerSesion() {
+      const raw = sessionStorage.getItem(SESION_KEY);
+      if (!raw) return null;
+      try {
+        const datos = JSON.parse(raw);
+        if (Date.now() - datos._loginTime > DURACION_SESION_MS) {
+          sessionStorage.removeItem(SESION_KEY);
+          return null;
+        }
+        return datos;
+      } catch (e) { return null; }
+    }
+    function borrarSesion() {
+      sessionStorage.removeItem(SESION_KEY);
+      if (intervaloSesion) clearInterval(intervaloSesion);
+    }
+    function iniciarVigilanciaSesion() {
+      if (intervaloSesion) clearInterval(intervaloSesion);
+      intervaloSesion = setInterval(() => {
+        if (!leerSesion()) cerrarSesionPorExpiracion();
+      }, 15000);
+    }
+    function cerrarSesionPorExpiracion() {
+      sesion = null;
+      borrarSesion();
+      document.getElementById("panel").classList.add("hidden");
+      document.getElementById("authCard").classList.remove("hidden");
+      document.getElementById("headerSub").textContent = "Inicia sesión para ver las reseñas y el rating de tu equipo.";
+      document.getElementById("sesionExpiradaMsg").classList.remove("hidden");
+    }
+
+    // ---------- Tabs ----------
+    const tabLogin = document.getElementById("tabLogin");
+    const tabCrear = document.getElementById("tabCrear");
+    tabLogin.addEventListener("click", () => {
+      tabLogin.classList.add("active"); tabCrear.classList.remove("active");
+      document.getElementById("loginForm").style.display = "block";
+      document.getElementById("crearForm").style.display = "none";
+    });
+    tabCrear.addEventListener("click", () => {
+      tabCrear.classList.add("active"); tabLogin.classList.remove("active");
+      document.getElementById("crearForm").style.display = "block";
+      document.getElementById("loginForm").style.display = "none";
+    });
+
+    // ---------- Login ----------
+    document.getElementById("loginBtn").addEventListener("click", async () => {
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+      const msg = document.getElementById("loginMsg");
+      const btn = document.getElementById("loginBtn");
+
+      if (!email || !password) {
+        msg.className = "msg error";
+        msg.textContent = "Completa correo y contraseña.";
+        return;
+      }
+      btn.disabled = true; btn.textContent = "Ingresando…"; msg.textContent = "";
+
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "login_gerente", email, password })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          sesion = { email, password, ...data };
+          guardarSesion(sesion);
+          document.getElementById("sesionExpiradaMsg").classList.add("hidden");
+          mostrarPanel();
+          iniciarVigilanciaSesion();
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.error || "No se pudo iniciar sesión.";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Error de conexión. Intenta de nuevo.";
+      } finally {
+        btn.disabled = false; btn.textContent = "Iniciar sesión";
+      }
+    });
+
+    // ---------- Crear cuenta paso 1 ----------
+    document.getElementById("enviarCodigoBtn").addEventListener("click", async () => {
+      const restaurante = document.getElementById("crearRestaurante").value;
+      const email = document.getElementById("crearEmail").value.trim();
+      const msg = document.getElementById("crearMsg1");
+      const btn = document.getElementById("enviarCodigoBtn");
+
+      if (!restaurante) { msg.className = "msg error"; msg.textContent = "Elige el restaurante que administras."; return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.className = "msg error"; msg.textContent = "Ingresa un correo válido."; return; }
+
+      btn.disabled = true; btn.textContent = "Enviando…";
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "enviar_codigo_verificacion", email })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          msg.className = "msg ok";
+          msg.textContent = "Te enviamos un código. Revisa tu correo.";
+          document.getElementById("crearPaso2").style.display = "block";
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.error || "No se pudo enviar el código.";
+        }
+      } catch (err) {
+        msg.className = "msg error"; msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false; btn.textContent = "Enviar código de verificación";
+      }
+    });
+
+    // ---------- Crear cuenta paso 2 ----------
+    document.getElementById("verificarCodigoBtn").addEventListener("click", async () => {
+      const email = document.getElementById("crearEmail").value.trim();
+      const codigo = document.getElementById("codigoVerif").value.trim();
+      const msg = document.getElementById("crearMsg2");
+      const btn = document.getElementById("verificarCodigoBtn");
+      if (!codigo) return;
+
+      btn.disabled = true; btn.textContent = "Verificando…";
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "verificar_codigo", email, codigo })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          msg.className = "msg ok"; msg.textContent = "✓ Correo verificado";
+          document.getElementById("crearPaso3").style.display = "block";
+        } else {
+          msg.className = "msg error"; msg.textContent = data.error || "Código incorrecto.";
+        }
+      } catch (err) {
+        msg.className = "msg error"; msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false; btn.textContent = "Verificar código";
+      }
+    });
+
+    // ---------- Crear cuenta paso 3 ----------
+    document.getElementById("crearCuentaBtn").addEventListener("click", async () => {
+      const restaurante = document.getElementById("crearRestaurante").value;
+      const email = document.getElementById("crearEmail").value.trim();
+      const password = document.getElementById("nuevaPassword").value;
+      const msg = document.getElementById("crearMsg3");
+      const btn = document.getElementById("crearCuentaBtn");
+
+      if (password.length < 6) {
+        msg.className = "msg error"; msg.textContent = "La contraseña debe tener al menos 6 caracteres."; return;
+      }
+
+      btn.disabled = true; btn.textContent = "Creando…";
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "crear_cuenta_gerente", email, restaurante, password })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          const resLogin = await fetch(ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action: "login_gerente", email, password })
+          });
+          const dataLogin = await resLogin.json();
+          if (dataLogin.ok) {
+            sesion = { email, password, ...dataLogin };
+            guardarSesion(sesion);
+            document.getElementById("sesionExpiradaMsg").classList.add("hidden");
+            mostrarPanel();
+            iniciarVigilanciaSesion();
+          }
+        } else {
+          msg.className = "msg error"; msg.textContent = data.error || "No se pudo crear la cuenta.";
+        }
+      } catch (err) {
+        msg.className = "msg error"; msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false; btn.textContent = "Crear cuenta";
+      }
+    });
+
+    // ---------- Foto con respaldo de iniciales ----------
+    function iniciales(nombre) {
+      return (nombre || "").split(" ").filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join("");
+    }
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+    function fotoConRespaldoHtml(fotoUrl, nombre) {
+      const ini = escapeHtml(iniciales(nombre));
+      if (!fotoUrl) return `<span>${ini}</span>`;
+      return `<img src="${escapeHtml(fotoUrl)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" /><span style="display:none;">${ini}</span>`;
+    }
+
+    // ---------- Panel ----------
+    function mostrarPanel() {
+      document.getElementById("authCard").classList.add("hidden");
+      document.getElementById("panel").classList.remove("hidden");
+      document.getElementById("headerSub").textContent = "Este es el equipo de tu restaurante en Tapport.";
+
+      document.getElementById("panelRestaurante").textContent = sesion.restaurante || "";
+
+      const meseros = sesion.meseros || [];
+      const totalResenas = meseros.reduce((acc, m) => acc + (m.total || 0), 0);
+      const promedioGeneral = meseros.length
+        ? Math.round((meseros.reduce((acc, m) => acc + (m.promedio || 0) * (m.total || 0), 0) / (totalResenas || 1)) * 10) / 10
+        : 0;
+
+      document.getElementById("panelPromedio").textContent = totalResenas ? promedioGeneral.toFixed(1) : "—";
+      document.getElementById("panelTotalMeseros").textContent = meseros.length;
+      document.getElementById("panelTotalResenas").textContent = totalResenas;
+
+      renderMeseros(meseros);
+    }
+
+    function renderMeseros(meseros) {
+      const cont = document.getElementById("listaMeseros");
+      if (!meseros.length) {
+        cont.innerHTML = '<div class="empty-state">Todavía no hay meseros registrados en tu restaurante.</div>';
+        return;
+      }
+
+      cont.innerHTML = meseros.map((m, idx) => {
+        const promedioTexto = m.promedio > 0 ? m.promedio.toFixed(1) : "Sin reseñas";
+        const reviews = m.reviews || [];
+        const reviewsHtml = reviews.length
+          ? reviews.map(r => {
+              const estrellas = "★".repeat(r.estrellas) + "☆".repeat(5 - r.estrellas);
+              const fecha = new Date(r.fecha);
+              const fechaTexto = isNaN(fecha) ? "" : fecha.toLocaleDateString("es-PE", { day: "numeric", month: "short", year: "numeric" });
+              return `
+                <div class="review-item">
+                  <div class="review-stars">${estrellas}</div>
+                  ${r.tags ? `<div class="review-tags">${escapeHtml(r.tags)}</div>` : ""}
+                  ${r.comentario ? `<div class="review-comment">"${escapeHtml(r.comentario)}"</div>` : ""}
+                  <div class="review-date">${fechaTexto}</div>
+                </div>
+              `;
+            }).join("")
+          : '<div class="empty-state">Todavía no tiene reseñas.</div>';
+
+        return `
+          <div class="mesero-row" data-idx="${idx}">
+            <div class="mesero-row-top">
+              <div class="mesero-photo">${fotoConRespaldoHtml(m.fotoUrl, m.nombre)}</div>
+              <div>
+                <p class="mesero-nombre">${escapeHtml(m.nombre)}</p>
+                <p class="mesero-rating">★ ${promedioTexto}<span class="count">(${m.total} reseña${m.total === 1 ? '' : 's'})</span></p>
+              </div>
+              <span class="mesero-toggle">Ver reseñas ▾</span>
+            </div>
+            <div class="mesero-reviews" id="reviews-${idx}">${reviewsHtml}</div>
+          </div>
+        `;
+      }).join("");
+
+      cont.querySelectorAll(".mesero-row").forEach(row => {
+        row.addEventListener("click", () => {
+          document.getElementById(`reviews-${row.dataset.idx}`).classList.toggle("show");
+        });
+      });
+    }
+
+    document.getElementById("cerrarSesionBtn").addEventListener("click", () => {
+      sesion = null;
+      borrarSesion();
+      document.getElementById("panel").classList.add("hidden");
+      document.getElementById("authCard").classList.remove("hidden");
+      document.getElementById("headerSub").textContent = "Inicia sesión para ver las reseñas y el rating de tu equipo.";
+      document.getElementById("loginPassword").value = "";
+      document.getElementById("sesionExpiradaMsg").classList.add("hidden");
+    });
+
+    // ---------- Cargar restaurantes para el selector de "crear cuenta" ----------
+    async function cargarRestaurantes() {
+      const select = document.getElementById("crearRestaurante");
+      try {
+        const res = await fetch(`${ENDPOINT}?accion=restaurantes`);
+        const data = await res.json();
+        const lista = (data.restaurantes || []).slice().sort();
+        select.innerHTML = '<option value="">Selecciona un restaurante</option>' +
+          lista.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("");
+      } catch (err) {
+        select.innerHTML = '<option value="">No se pudo cargar</option>';
+      }
+    }
+    cargarRestaurantes();
+
+    // ---------- Revisa si ya hay una sesión activa al cargar ----------
+    const sesionGuardada = leerSesion();
+    if (sesionGuardada) {
+      sesion = sesionGuardada;
+      mostrarPanel();
+      iniciarVigilanciaSesion();
+    }
+  </script>
+</body>
+</html>
