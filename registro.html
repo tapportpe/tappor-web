@@ -283,6 +283,64 @@
     font-family: "SF Mono", "Consolas", monospace;
   }
 
+  /* --- CTA para crear cuenta / conocer el feed --- */
+  .success-cta {
+    background: var(--accent);
+    border-radius: 12px;
+    padding: 18px 16px;
+    margin-bottom: 20px;
+    text-align: left;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .success-cta .cta-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .success-cta .cta-icon svg { width: 18px; height: 18px; }
+
+  .success-cta strong {
+    display: block;
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 3px;
+  }
+
+  .success-cta p {
+    color: rgba(255,255,255,0.82);
+    font-size: 12.5px;
+    line-height: 1.45;
+    margin: 0 0 12px;
+  }
+
+  .success-cta a.cta-btn {
+    display: inline-block;
+    background: #fff;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 9px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    margin-right: 8px;
+    margin-bottom: 6px;
+  }
+
+  .success-cta a.cta-btn.secondary {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.35);
+  }
+
   .btn-secondary {
     width: 100%;
     padding: 12px;
@@ -403,6 +461,20 @@
         <div class="label">Código de tarjeta</div>
         <div class="code" id="successCode"></div>
       </div>
+
+      <!-- Siguiente paso: crear cuenta para ver perfil y reseñas -->
+      <div class="success-cta">
+        <div class="cta-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="4" stroke="#fff" stroke-width="2"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div>
+          <strong>Un último paso</strong>
+          <p>Crea tu cuenta para ver tu perfil, tu rating y tus reseñas apenas empiecen a llegar. También puedes explorar el feed de Tapport mientras tanto.</p>
+          <a href="perfil.html" class="cta-btn" id="crearCuentaLink">Crear mi cuenta</a>
+          <a href="directorio.html" class="cta-btn secondary" id="verFeedLink">Ver el feed</a>
+        </div>
+      </div>
+
       <button type="button" class="btn-secondary" id="registrarOtroBtn">Registrar a otro mesero</button>
     </div>
   </div>
@@ -625,6 +697,10 @@
           successName.textContent = payload.nombre + " " + payload.apellido;
           successCode.textContent = data.codigo || "";
           successPhoto.src = fotoBase64 || "";
+          // Pasa el correo ya verificado a perfil.html para que el mesero
+          // no tenga que volver a escribirlo al crear su cuenta.
+          document.getElementById("crearCuentaLink").href =
+            "perfil.html?crear=1&email=" + encodeURIComponent(payload.email);
           form.style.display = "none";
           successCard.classList.add("show");
           window.scrollTo({ top: 0, behavior: "smooth" });
