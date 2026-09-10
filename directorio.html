@@ -40,10 +40,31 @@
     top: 0;
     background: var(--bg);
     z-index: 5;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
   }
 
   .eyebrow { font-size: 12.5px; color: var(--ink-soft); }
   .topbar h1 { font-size: 22px; margin: 4px 0 0; font-weight: 700; }
+
+  .help-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1.5px solid var(--line);
+    background: var(--card);
+    color: var(--ink-soft);
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
 
   .view { display: none; padding: 4px 20px 20px; }
   .view.active { display: block; }
@@ -71,10 +92,18 @@
 
   .job-card {
     background: var(--accent);
+    background-size: cover;
+    background-position: center;
     color: #fff;
     border-radius: 14px;
     padding: 16px;
     margin-bottom: 12px;
+    position: relative;
+  }
+  .job-card.has-cover {
+    background-image:
+      linear-gradient(180deg, rgba(20,35,31,0.35), rgba(20,35,31,0.82)),
+      var(--cover-img);
   }
   .job-card .tag {
     display: inline-block;
@@ -88,7 +117,8 @@
     margin-bottom: 8px;
   }
   .job-card h3 { font-size: 15.5px; margin: 0 0 4px; }
-  .job-card .job-rest { font-size: 12.5px; opacity: 0.85; margin-bottom: 6px; }
+  .job-card .job-rest { font-size: 12.5px; opacity: 0.85; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+  .job-card .job-rest img { width: 16px; height: 16px; border-radius: 50%; object-fit: cover; }
   .job-card p { font-size: 13px; line-height: 1.4; margin: 0 0 12px; opacity: 0.95; }
   .job-card a.contact-btn {
     display: inline-block;
@@ -323,7 +353,9 @@
   }
   .modal-photo img { width: 100%; height: 100%; object-fit: cover; }
   .modal-name { font-size: 18px; font-weight: 750; margin: 0 0 2px; }
-  .modal-rest { font-size: 13px; color: var(--ink-soft); }
+  .modal-rest { font-size: 13px; color: var(--ink-soft); display: flex; align-items: center; gap: 6px; }
+  .modal-rest img { width: 15px; height: 15px; border-radius: 50%; object-fit: cover; }
+  .modal-address { font-size: 12px; color: var(--ink-soft); margin: 3px 0 0; }
 
   .stats-row { display: flex; gap: 12px; margin: 16px 0; }
   .stat-box { flex: 1; background: var(--accent-soft); border-radius: 10px; padding: 12px; text-align: center; }
@@ -348,13 +380,37 @@
   .msg { font-size: 13px; margin-top: 10px; text-align: center; }
   .msg.error { color: var(--error); }
   .msg.ok { color: var(--accent); }
+
+  /* ---- Tutorial de bienvenida ---- */
+  .tutorial-modal { text-align: center; }
+  .tutorial-step { display: none; }
+  .tutorial-step.active { display: block; }
+  .tutorial-icon {
+    width: 56px; height: 56px; border-radius: 50%; background: var(--accent-soft);
+    display: flex; align-items: center; justify-content: center; margin: 4px auto 16px;
+  }
+  .tutorial-icon svg { width: 26px; height: 26px; }
+  .tutorial-step h3 { font-size: 17px; margin: 0 0 8px; font-weight: 700; }
+  .tutorial-step p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.5; margin: 0 0 22px; }
+  .tutorial-dots { display: flex; justify-content: center; gap: 6px; margin-bottom: 18px; }
+  .tutorial-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--line); }
+  .tutorial-dots span.active { background: var(--accent); width: 16px; border-radius: 4px; }
+  .tutorial-actions { display: flex; gap: 10px; }
+  .tutorial-actions .btn-secondary, .tutorial-actions .btn-primary { margin: 0; }
+  .tutorial-skip {
+    display: block; margin: 14px auto 0; background: none; border: none;
+    color: var(--ink-soft); font-size: 12.5px; text-decoration: underline; cursor: pointer;
+  }
 </style>
 </head>
 <body>
   <div class="app">
     <div class="topbar">
-      <div class="eyebrow">Tapport</div>
-      <h1 id="topTitle">Home</h1>
+      <div>
+        <div class="eyebrow">Tapport</div>
+        <h1 id="topTitle">Home</h1>
+      </div>
+      <button type="button" class="help-btn" id="abrirTutorialBtn" title="Cómo funciona Tapport">?</button>
     </div>
 
     <!-- ============ HOME (FEED) ============ -->
@@ -425,6 +481,7 @@
         <div>
           <p class="modal-name" id="modalNombre"></p>
           <p class="modal-rest" id="modalRest"></p>
+          <p class="modal-address hidden" id="modalDireccion"></p>
         </div>
       </div>
       <div class="stats-row">
@@ -464,6 +521,44 @@
       </div>
       <button type="button" class="btn-primary" id="publicarVacanteBtn">Publicar anuncio</button>
       <div class="msg" id="publicarMsg"></div>
+    </div>
+  </div>
+
+  <!-- Modal: tutorial de bienvenida (aparece solo la primera vez) -->
+  <div class="overlay" id="overlayTutorial">
+    <div class="modal tutorial-modal">
+      <button class="modal-close" id="cerrarTutorialBtn">×</button>
+      <div style="clear:both;"></div>
+
+      <div class="tutorial-step active" data-step="1">
+        <div class="tutorial-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1F4B45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
+        <h3>Bienvenido a Tapport</h3>
+        <p>Aquí puedes buscar meseros, ver su rating y sus reseñas, o encontrar restaurantes que están buscando personal.</p>
+      </div>
+
+      <div class="tutorial-step" data-step="2">
+        <div class="tutorial-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1F4B45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg></div>
+        <h3>Todo empieza con una calificación</h3>
+        <p>Cuando un cliente paga la cuenta, acerca su celular a la tarjeta Tapport del mesero (o escanea el QR) y lo califica. Esas reseñas arman su reputación.</p>
+      </div>
+
+      <div class="tutorial-step" data-step="3">
+        <div class="tutorial-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1F4B45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg></div>
+        <h3>¿Eres mesero?</h3>
+        <p>Crea tu cuenta desde la pestaña "Cuenta" para ver tu rating, todas tus reseñas y mantener tu perfil actualizado.</p>
+      </div>
+
+      <div class="tutorial-dots">
+        <span class="active" data-dot="1"></span>
+        <span data-dot="2"></span>
+        <span data-dot="3"></span>
+      </div>
+
+      <div class="tutorial-actions">
+        <button type="button" class="btn-secondary" id="tutorialAtrasBtn" style="display:none;">Atrás</button>
+        <button type="button" class="btn-primary" id="tutorialSiguienteBtn">Siguiente</button>
+      </div>
+      <button type="button" class="tutorial-skip" id="tutorialSaltarBtn">Saltar</button>
     </div>
   </div>
 
@@ -517,6 +612,57 @@
       btn.addEventListener("click", () => irAVista(btn.dataset.view));
     });
 
+    // ---------- Tutorial de bienvenida ----------
+    const TUTORIAL_KEY = "tapport_tutorial_visto";
+    const overlayTutorial = document.getElementById("overlayTutorial");
+    let pasoTutorial = 1;
+    const totalPasosTutorial = 3;
+
+    function mostrarPasoTutorial(paso) {
+      pasoTutorial = paso;
+      document.querySelectorAll(".tutorial-step").forEach(el => {
+        el.classList.toggle("active", Number(el.dataset.step) === paso);
+      });
+      document.querySelectorAll(".tutorial-dots span").forEach(el => {
+        el.classList.toggle("active", Number(el.dataset.dot) === paso);
+      });
+      document.getElementById("tutorialAtrasBtn").style.display = paso === 1 ? "none" : "block";
+      document.getElementById("tutorialSiguienteBtn").textContent = paso === totalPasosTutorial ? "Entendido" : "Siguiente";
+    }
+
+    function abrirTutorial() {
+      mostrarPasoTutorial(1);
+      overlayTutorial.classList.add("show");
+    }
+
+    function cerrarTutorial(marcarVisto) {
+      overlayTutorial.classList.remove("show");
+      if (marcarVisto) {
+        try { localStorage.setItem(TUTORIAL_KEY, "1"); } catch (e) { /* si el navegador bloquea localStorage, no pasa nada grave */ }
+      }
+    }
+
+    document.getElementById("tutorialSiguienteBtn").addEventListener("click", () => {
+      if (pasoTutorial < totalPasosTutorial) {
+        mostrarPasoTutorial(pasoTutorial + 1);
+      } else {
+        cerrarTutorial(true);
+      }
+    });
+    document.getElementById("tutorialAtrasBtn").addEventListener("click", () => {
+      if (pasoTutorial > 1) mostrarPasoTutorial(pasoTutorial - 1);
+    });
+    document.getElementById("tutorialSaltarBtn").addEventListener("click", () => cerrarTutorial(true));
+    document.getElementById("cerrarTutorialBtn").addEventListener("click", () => cerrarTutorial(true));
+    document.getElementById("abrirTutorialBtn").addEventListener("click", abrirTutorial);
+    overlayTutorial.addEventListener("click", (e) => {
+      if (e.target.id === "overlayTutorial") cerrarTutorial(true);
+    });
+
+    function tutorialYaVisto() {
+      try { return localStorage.getItem(TUTORIAL_KEY) === "1"; } catch (e) { return false; }
+    }
+
     // ---------- Cargar restaurantes (para filtros y para publicar vacante) ----------
     async function cargarRestaurantes() {
       try {
@@ -551,11 +697,14 @@
         cont.innerHTML = vacantes.map(v => {
           const esCorreo = /@/.test(v.contacto);
           const href = esCorreo ? `mailto:${v.contacto}` : `tel:${v.contacto}`;
+          const tieneCover = !!v.portadaUrl;
+          const estiloCover = tieneCover ? ` style="--cover-img: url('${escapeHtml(v.portadaUrl)}')"` : "";
+          const logoHtml = v.logoUrl ? `<img src="${escapeHtml(v.logoUrl)}" onerror="this.style.display='none';" />` : "";
           return `
-            <div class="job-card">
+            <div class="job-card${tieneCover ? " has-cover" : ""}"${estiloCover}>
               <span class="tag">Buscan personal</span>
               <h3>${escapeHtml(v.puesto)}</h3>
-              <div class="job-rest">${escapeHtml(v.restaurante)}</div>
+              <div class="job-rest">${logoHtml}${escapeHtml(v.restaurante)}</div>
               ${v.descripcion ? `<p>${escapeHtml(v.descripcion)}</p>` : ""}
               <a class="contact-btn" href="${href}">Contactar</a>
             </div>
@@ -669,7 +818,18 @@
 
         document.getElementById("modalFotoWrap").innerHTML = fotoConRespaldoHtml(data.fotoUrl, data.nombre, "");
         document.getElementById("modalNombre").textContent = data.nombre || "";
-        document.getElementById("modalRest").textContent = data.restaurante || "";
+
+        const logoHtml = data.negocioLogoUrl ? `<img src="${escapeHtml(data.negocioLogoUrl)}" onerror="this.remove();" />` : "";
+        document.getElementById("modalRest").innerHTML = logoHtml + escapeHtml(data.restaurante || "");
+
+        const direccionEl = document.getElementById("modalDireccion");
+        if (data.negocioDireccion) {
+          direccionEl.textContent = data.negocioDireccion;
+          direccionEl.classList.remove("hidden");
+        } else {
+          direccionEl.classList.add("hidden");
+        }
+
         document.getElementById("modalPromedio").textContent = data.promedio > 0 ? data.promedio.toFixed(1) : "—";
         document.getElementById("modalTotal").textContent = data.totalReviews || 0;
 
@@ -784,6 +944,13 @@
     }
     if (codeDesdeUrl) {
       abrirPerfil(codeDesdeUrl);
+    }
+
+    // Muestra el tutorial de bienvenida solo la primera vez que alguien
+    // entra al directorio (y no si ya vino directo a ver un perfil o a
+    // buscar, para no taparle lo que quería ver).
+    if (!tutorialYaVisto() && !codeDesdeUrl) {
+      setTimeout(abrirTutorial, 500);
     }
   </script>
 </body>
