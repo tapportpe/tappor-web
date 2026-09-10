@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mi perfil — Tapport</title>
+<style>
+  :root {
+    --bg: #F6F5F1;
+    --card: #FFFFFF;
+    --ink: #14231F;
+    --ink-soft: #4B5C57;
+    --line: #DEDCD3;
+    --accent: #1F4B45;
+    --accent-soft: #E7EFEC;
+    --error: #B4432E;
+    --star: #E3A427;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px 80px;
+    min-height: 100vh;
+  }
+
+  .wrap { width: 100%; max-width: 460px; }
+
+  header { margin-bottom: 24px; }
+
+  .eyebrow { font-size: 13px; color: var(--ink-soft); }
+
+  h1 { font-size: 24px; margin: 6px 0 8px; font-weight: 650; }
+
+  .sub { font-size: 14px; color: var(--ink-soft); line-height: 1.5; margin: 0; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 22px;
+    margin-top: 20px;
+  }
+
+  .field { margin-bottom: 14px; }
+
+  label { display: block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
+
+  input[type="text"], input[type="email"], input[type="password"], input[type="tel"], select {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 15px;
+    color: var(--ink);
+    background: #FCFCFA;
+    font-family: inherit;
+  }
+
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .btn-primary:disabled { opacity: 0.6; cursor: default; }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 12px;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    background: #FAFAFB;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  .btn-link {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+  }
+
+  .msg { font-size: 13px; margin-top: 10px; text-align: center; }
+  .msg.error { color: var(--error); }
+  .msg.ok { color: var(--accent); }
+
+  .tabs { display: flex; gap: 8px; margin-bottom: 4px; }
+  .tabs button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1.5px solid var(--line);
+    background: #FAFAFB;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .tabs button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .hidden { display: none !important; }
+
+  /* --- Dashboard --- */
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 4px;
+  }
+
+  .profile-photo {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--accent-soft);
+    flex-shrink: 0;
+  }
+
+  .profile-name { font-size: 18px; font-weight: 700; margin: 0 0 2px; }
+  .profile-sub { font-size: 13px; color: var(--ink-soft); }
+
+  .stats-row { display: flex; gap: 12px; margin-top: 18px; }
+  .stat-box {
+    flex: 1;
+    background: var(--accent-soft);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+  .stat-box .num { font-size: 22px; font-weight: 750; color: var(--accent); }
+  .stat-box .label { font-size: 11.5px; color: var(--ink-soft); margin-top: 2px; }
+
+  .review-item {
+    border-bottom: 1px solid var(--line);
+    padding: 14px 0;
+  }
+  .review-item:last-child { border-bottom: none; }
+
+  .review-stars { color: var(--star); font-size: 14px; margin-bottom: 4px; }
+  .review-tags { font-size: 11.5px; color: var(--accent); margin-bottom: 4px; }
+  .review-comment { font-size: 13.5px; color: var(--ink); line-height: 1.4; }
+  .review-date { font-size: 11px; color: var(--ink-soft); margin-top: 4px; }
+  .empty-state { font-size: 13.5px; color: var(--ink-soft); text-align: center; padding: 20px 0; }
+
+  .photo-edit-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    border: 1px dashed #A9BDB6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .photo-edit-circle img { width: 100%; height: 100%; object-fit: cover; }
+  .photo-edit-circle span { font-size: 10px; color: var(--accent); text-align: center; }
+  input[type="file"] { display: none; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="eyebrow">Tapport</div>
+      <h1>Mi perfil</h1>
+      <p class="sub" id="headerSub">Inicia sesión para ver tu rating, tus reseñas y editar tus datos.</p>
+    </header>
+
+    <!-- ============ LOGIN / CREAR CUENTA ============ -->
+    <div class="card" id="authCard">
+      <div class="tabs">
+        <button type="button" id="tabLogin" class="active">Iniciar sesión</button>
+        <button type="button" id="tabCrear">Crear mi cuenta</button>
+      </div>
+
+      <!-- Login con email + password -->
+      <div id="loginForm" style="margin-top:16px;">
+        <div class="field">
+          <label for="loginEmail">Correo electrónico</label>
+          <input type="email" id="loginEmail" placeholder="tucorreo@ejemplo.com" />
+        </div>
+        <div class="field">
+          <label for="loginPassword">Contraseña</label>
+          <input type="password" id="loginPassword" />
+        </div>
+        <button type="button" class="btn-primary" id="loginBtn">Iniciar sesión</button>
+        <div class="msg" id="loginMsg"></div>
+      </div>
+
+      <!-- Crear cuenta: verificar correo -> crear password -->
+      <div id="crearForm" style="margin-top:16px; display:none;">
+        <div id="crearPaso1">
+          <div class="field">
+            <label for="crearEmail">Correo con el que te registraste como mesero</label>
+            <input type="email" id="crearEmail" placeholder="tucorreo@ejemplo.com" />
+          </div>
+          <button type="button" class="btn-primary" id="enviarCodigoBtn">Enviar código de verificación</button>
+          <div class="msg" id="crearMsg1"></div>
+        </div>
+
+        <div id="crearPaso2" style="display:none; margin-top:16px;">
+          <div class="field">
+            <label for="codigoVerif">Código que te llegó al correo</label>
+            <input type="text" id="codigoVerif" inputmode="numeric" maxlength="6" placeholder="123456" />
+          </div>
+          <button type="button" class="btn-secondary" id="verificarCodigoBtn">Verificar código</button>
+          <div class="msg" id="crearMsg2"></div>
+        </div>
+
+        <div id="crearPaso3" style="display:none; margin-top:16px;">
+          <div class="field">
+            <label for="nuevaPassword">Crea tu contraseña (mínimo 6 caracteres)</label>
+            <input type="password" id="nuevaPassword" />
+          </div>
+          <button type="button" class="btn-primary" id="crearPasswordBtn">Crear contraseña</button>
+          <div class="msg" id="crearMsg3"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ DASHBOARD (tras login) ============ -->
+    <div class="card hidden" id="dashboard">
+      <div class="profile-header">
+        <img class="profile-photo" id="dashFoto" />
+        <div>
+          <p class="profile-name" id="dashNombre"></p>
+          <p class="profile-sub" id="dashRestaurante"></p>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="num" id="dashPromedio">—</div>
+          <div class="label">Rating promedio</div>
+        </div>
+        <div class="stat-box">
+          <div class="num" id="dashTotal">—</div>
+          <div class="label">Reseñas totales</div>
+        </div>
+      </div>
+
+      <button type="button" class="btn-secondary" id="toggleEditarBtn" style="margin-top:18px;">Editar mi perfil</button>
+      <button type="button" class="btn-link" id="cerrarSesionBtn" style="display:block; margin:14px auto 0;">Cerrar sesión</button>
+    </div>
+
+    <!-- ============ EDITAR PERFIL ============ -->
+    <div class="card hidden" id="editCard">
+      <h2 style="font-size:16px; margin:0 0 16px;">Editar mi perfil</h2>
+
+      <div class="field" style="display:flex; align-items:center; gap:14px;">
+        <div class="photo-edit-circle" id="editPhotoCircle">
+          <img id="editPhotoPreview" style="display:none" />
+          <span id="editPhotoPlaceholder">Cambiar<br/>foto</span>
+        </div>
+        <input type="file" id="editFoto" accept="image/*" />
+        <span style="font-size:12.5px; color:var(--ink-soft);">Toca el círculo para elegir una nueva foto</span>
+      </div>
+
+      <div class="field">
+        <label for="editTelefono">Teléfono</label>
+        <input type="tel" id="editTelefono" />
+      </div>
+
+      <div class="field">
+        <label for="editRestaurante">Restaurante</label>
+        <select id="editRestaurante"></select>
+      </div>
+
+      <button type="button" class="btn-primary" id="guardarCambiosBtn">Guardar cambios</button>
+      <button type="button" class="btn-secondary" id="cancelarEditarBtn">Cancelar</button>
+      <div class="msg" id="editMsg"></div>
+    </div>
+
+    <!-- ============ MIS RESEÑAS ============ -->
+    <div class="card hidden" id="reviewsCard">
+      <h2 style="font-size:16px; margin:0 0 12px;">Mis reseñas</h2>
+      <div id="reviewsList"></div>
+    </div>
+  </div>
+
+  <script>
+    const ENDPOINT = "https://script.google.com/macros/s/AKfycbx9nTiQEr_2AvK0bc3hIyJPao5PqtADFeRQKuhR6_XFV_rR0FG0UsZ5sexFrkyJIdJW/exec";
+
+    let sesion = null; // { email, password, ...datosPerfil }
+
+    // ---------- Tabs login / crear cuenta ----------
+    const tabLogin = document.getElementById("tabLogin");
+    const tabCrear = document.getElementById("tabCrear");
+    const loginForm = document.getElementById("loginForm");
+    const crearForm = document.getElementById("crearForm");
+
+    tabLogin.addEventListener("click", () => {
+      tabLogin.classList.add("active");
+      tabCrear.classList.remove("active");
+      loginForm.style.display = "block";
+      crearForm.style.display = "none";
+    });
+
+    tabCrear.addEventListener("click", () => {
+      tabCrear.classList.add("active");
+      tabLogin.classList.remove("active");
+      crearForm.style.display = "block";
+      loginForm.style.display = "none";
+    });
+
+    // ---------- Login ----------
+    document.getElementById("loginBtn").addEventListener("click", async () => {
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+      const msg = document.getElementById("loginMsg");
+      const btn = document.getElementById("loginBtn");
+
+      if (!email || !password) {
+        msg.className = "msg error";
+        msg.textContent = "Completa correo y contraseña.";
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Ingresando…";
+      msg.textContent = "";
+
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "login", email, password })
+        });
+        const data = await res.json();
+
+        if (data.ok) {
+          sesion = { email, password, ...data };
+          mostrarDashboard();
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.error || "No se pudo iniciar sesión.";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Error de conexión. Intenta de nuevo.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Iniciar sesión";
+      }
+    });
+
+    // ---------- Crear cuenta: paso 1, enviar código ----------
+    document.getElementById("enviarCodigoBtn").addEventListener("click", async () => {
+      const email = document.getElementById("crearEmail").value.trim();
+      const msg = document.getElementById("crearMsg1");
+      const btn = document.getElementById("enviarCodigoBtn");
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        msg.className = "msg error";
+        msg.textContent = "Ingresa un correo válido.";
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Enviando…";
+
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "enviar_codigo_verificacion", email })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          msg.className = "msg ok";
+          msg.textContent = "Te enviamos un código. Revisa tu correo.";
+          document.getElementById("crearPaso2").style.display = "block";
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.error || "No se pudo enviar el código.";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Enviar código de verificación";
+      }
+    });
+
+    // ---------- Crear cuenta: paso 2, verificar código ----------
+    document.getElementById("verificarCodigoBtn").addEventListener("click", async () => {
+      const email = document.getElementById("crearEmail").value.trim();
+      const codigo = document.getElementById("codigoVerif").value.trim();
+      const msg = document.getElementById("crearMsg2");
+      const btn = document.getElementById("verificarCodigoBtn");
+
+      if (!codigo) return;
+
+      btn.disabled = true;
+      btn.textContent = "Verificando…";
+
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "verificar_codigo", email, codigo })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          msg.className = "msg ok";
+          msg.textContent = "✓ Correo verificado";
+          document.getElementById("crearPaso3").style.display = "block";
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.error || "Código incorrecto.";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Verificar código";
+      }
+    });
+
+    // ---------- Crear cuenta: paso 3, crear password ----------
+    document.getElementById("crearPasswordBtn").addEventListener("click", async () => {
+      const email = document.getElementById("crearEmail").value.trim();
+      const password = document.getElementById("nuevaPassword").value;
+      const msg = document.getElementById("crearMsg3");
+      const btn = document.getElementById("crearPasswordBtn");
+
+      if (password.length < 6) {
+        msg.className = "msg error";
+        msg.textContent = "La contraseña debe tener al menos 6 caracteres.";
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Creando…";
+
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "establecer_password", email, password })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          // Auto-login tras crear la contraseña
+          const resLogin = await fetch(ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action: "login", email, password })
+          });
+          const dataLogin = await resLogin.json();
+          if (dataLogin.ok) {
+            sesion = { email, password, ...dataLogin };
+            mostrarDashboard();
+          }
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.error || "No se pudo crear la contraseña.";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Crear contraseña";
+      }
+    });
+
+    // ---------- Dashboard ----------
+    function mostrarDashboard() {
+      document.getElementById("authCard").classList.add("hidden");
+      document.getElementById("dashboard").classList.remove("hidden");
+      document.getElementById("reviewsCard").classList.remove("hidden");
+      document.getElementById("headerSub").textContent = "Este es tu perfil en Tapport.";
+
+      document.getElementById("dashFoto").src = sesion.fotoUrl || "";
+      document.getElementById("dashNombre").textContent = sesion.nombre || "";
+      document.getElementById("dashRestaurante").textContent = sesion.restaurante || "";
+      document.getElementById("dashPromedio").textContent = sesion.promedio ? sesion.promedio.toFixed(1) : "—";
+      document.getElementById("dashTotal").textContent = sesion.totalReviews || 0;
+
+      renderReviews(sesion.reviews || []);
+    }
+
+    function renderReviews(reviews) {
+      const cont = document.getElementById("reviewsList");
+      if (!reviews.length) {
+        cont.innerHTML = '<div class="empty-state">Todavía no tienes reseñas. ¡Sigue dando un gran servicio!</div>';
+        return;
+      }
+      cont.innerHTML = reviews.map(r => {
+        const estrellas = "★".repeat(r.estrellas) + "☆".repeat(5 - r.estrellas);
+        const fecha = new Date(r.fecha);
+        const fechaTexto = isNaN(fecha) ? "" : fecha.toLocaleDateString("es-PE", { day: "numeric", month: "short", year: "numeric" });
+        return `
+          <div class="review-item">
+            <div class="review-stars">${estrellas}</div>
+            ${r.tags ? `<div class="review-tags">${escapeHtml(r.tags)}</div>` : ""}
+            ${r.comentario ? `<div class="review-comment">"${escapeHtml(r.comentario)}"</div>` : ""}
+            <div class="review-date">${fechaTexto}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    document.getElementById("cerrarSesionBtn").addEventListener("click", () => {
+      sesion = null;
+      document.getElementById("dashboard").classList.add("hidden");
+      document.getElementById("editCard").classList.add("hidden");
+      document.getElementById("reviewsCard").classList.add("hidden");
+      document.getElementById("authCard").classList.remove("hidden");
+      document.getElementById("headerSub").textContent = "Inicia sesión para ver tu rating, tus reseñas y editar tus datos.";
+      document.getElementById("loginPassword").value = "";
+    });
+
+    // ---------- Editar perfil ----------
+    let editFotoBase64 = null;
+
+    document.getElementById("toggleEditarBtn").addEventListener("click", () => {
+      document.getElementById("editRestaurante").value = sesion.restaurante || "";
+      document.getElementById("editTelefono").value = sesion.telefono || "";
+      document.getElementById("editPhotoPreview").src = sesion.fotoUrl || "";
+      document.getElementById("editPhotoPreview").style.display = sesion.fotoUrl ? "block" : "none";
+      document.getElementById("editPhotoPlaceholder").style.display = sesion.fotoUrl ? "none" : "block";
+      editFotoBase64 = null;
+      document.getElementById("dashboard").classList.add("hidden");
+      document.getElementById("reviewsCard").classList.add("hidden");
+      document.getElementById("editCard").classList.remove("hidden");
+    });
+
+    document.getElementById("cancelarEditarBtn").addEventListener("click", () => {
+      document.getElementById("editCard").classList.add("hidden");
+      document.getElementById("dashboard").classList.remove("hidden");
+      document.getElementById("reviewsCard").classList.remove("hidden");
+    });
+
+    document.getElementById("editPhotoCircle").addEventListener("click", () => {
+      document.getElementById("editFoto").click();
+    });
+
+    document.getElementById("editFoto").addEventListener("change", () => {
+      const file = document.getElementById("editFoto").files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        editFotoBase64 = reader.result;
+        document.getElementById("editPhotoPreview").src = editFotoBase64;
+        document.getElementById("editPhotoPreview").style.display = "block";
+        document.getElementById("editPhotoPlaceholder").style.display = "none";
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById("guardarCambiosBtn").addEventListener("click", async () => {
+      const msg = document.getElementById("editMsg");
+      const btn = document.getElementById("guardarCambiosBtn");
+      const telefono = document.getElementById("editTelefono").value.trim();
+      const restaurante = document.getElementById("editRestaurante").value;
+
+      btn.disabled = true;
+      btn.textContent = "Guardando…";
+
+      try {
+        const payload = {
+          action: "actualizar_perfil",
+          email: sesion.email,
+          password: sesion.password,
+          telefono,
+          restaurante
+        };
+        if (editFotoBase64) payload.foto_base64 = editFotoBase64;
+
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (data.ok) {
+          sesion.telefono = telefono;
+          sesion.restaurante = restaurante;
+          if (data.foto_url) sesion.fotoUrl = data.foto_url;
+
+          msg.className = "msg ok";
+          msg.textContent = "¡Cambios guardados!";
+          setTimeout(() => {
+            document.getElementById("editCard").classList.add("hidden");
+            document.getElementById("dashboard").classList.remove("hidden");
+            document.getElementById("reviewsCard").classList.remove("hidden");
+            mostrarDashboard();
+            msg.textContent = "";
+          }, 900);
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.error || "No se pudo guardar.";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Guardar cambios";
+      }
+    });
+
+    // ---------- Carga la lista de restaurantes para el selector de edición ----------
+    async function cargarRestaurantes() {
+      const select = document.getElementById("editRestaurante");
+      try {
+        const res = await fetch(`${ENDPOINT}?accion=restaurantes`);
+        const data = await res.json();
+        const lista = (data.restaurantes || []).slice().sort();
+        select.innerHTML = lista.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("");
+      } catch (err) {
+        select.innerHTML = '<option value="">No se pudo cargar</option>';
+      }
+    }
+
+    cargarRestaurantes();
+  </script>
+</body>
+</html>
