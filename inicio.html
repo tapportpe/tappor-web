@@ -32,6 +32,7 @@
     align-items: center;
     justify-content: center;
     transition: opacity 0.5s ease, visibility 0.5s ease;
+    pointer-events: none;
   }
   #preloader.hide {
     opacity: 0;
@@ -146,6 +147,26 @@
   @media (max-width: 780px) {
     .nav-mobile-hide { display: none; }
   }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .nav-login {
+    display: flex;
+    gap: 8px;
+  }
+  .nav-login a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 500;
+    border: 1.5px solid rgba(255,255,255,0.22);
+    border-radius: 9px;
+    padding: 8px 14px;
+    white-space: nowrap;
+  }
+  .nav-login a:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
 
   /* ---------- HERO ---------- */
   .hero {
@@ -389,6 +410,29 @@
     white-space: nowrap;
   }
 
+  /* ---------- CONTACT ---------- */
+  .contact {
+    padding: 76px 0 84px;
+  }
+  .contact-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .contact h2 {
+    font-size: 27px;
+    font-weight: 600;
+  }
+  .contact p {
+    margin-top: 10px;
+    font-size: 15.5px;
+    color: var(--slate);
+    max-width: 42ch;
+    line-height: 1.6;
+  }
+
   /* ---------- FOOTER ---------- */
   footer {
     background: var(--navy);
@@ -440,8 +484,15 @@
       <li><a href="#como-funciona">Cómo funciona</a></li>
       <li><a href="#meseros">Para meseros</a></li>
       <li><a href="#restaurantes">Para restaurantes</a></li>
+      <li><a href="#contacto">Contacto</a></li>
     </ul>
-    <a class="nav-cta" href="#piloto">Solicitar piloto</a>
+    <div class="nav-right">
+      <div class="nav-login nav-mobile-hide">
+        <a href="login-mesero.html">Ingreso meseros</a>
+        <a href="login-admin.html">Ingreso administradores</a>
+      </div>
+      <a class="nav-cta" href="#piloto">Solicitar piloto</a>
+    </div>
   </div>
 </nav>
 
@@ -451,7 +502,7 @@
       <h1>La reputación de un mesero, fuera del restaurante.</h1>
       <p class="sub">Cada cliente califica el servicio al pagar, con solo tocar su celular contra una tarjeta. Esas calificaciones construyen un historial que el mesero se lleva a su próximo trabajo.</p>
       <div class="hero-ctas">
-        <a class="btn-primary" href="#piloto">Quiero un piloto gratis</a>
+        <a class="btn-primary" href="mailto:tapport.pe@gmail.com">Quiero contratar Tapport</a>
         <a class="btn-secondary" href="#como-funciona">Ver cómo funciona</a>
       </div>
     </div>
@@ -549,7 +600,17 @@
       <h2>¿Tienes un restaurante? Prueba Tapport gratis por un mes.</h2>
       <p>Sin costo, sin compromiso — solo medimos el uso de las tarjetas y las reseñas que genera.</p>
     </div>
-    <a class="btn-dark" href="mailto:hola@tapport.pe">Hablemos</a>
+    <a class="btn-dark" href="mailto:tapport.pe@gmail.com">Hablemos</a>
+  </div>
+</section>
+
+<section class="contact" id="contacto">
+  <div class="wrap contact-inner">
+    <div>
+      <h2>Hablemos directamente</h2>
+      <p>¿Preguntas sobre el piloto, tu tarjeta o cómo empezar? Escríbenos y te respondemos en menos de 24 horas.</p>
+    </div>
+    <a class="btn-primary" href="mailto:tapport.pe@gmail.com">tapport.pe@gmail.com</a>
   </div>
 </section>
 
@@ -559,7 +620,7 @@
       <div class="footer-brand">Tapport</div>
       <div class="footer-tag">La reputación del buen servicio.</div>
     </div>
-    <div class="footer-meta">Hecho en Lima, Perú<br>hola@tapport.pe</div>
+    <div class="footer-meta">Hecho en Lima, Perú<br>tapport.pe@gmail.com</div>
   </div>
 </footer>
 
