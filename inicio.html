@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tapport — La reputación de un mesero, fuera del restaurante</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy: #0A0F1F;
+    --navy-2: #121B33;
+    --paper: #F3F5F9;
+    --card: #FFFFFF;
+    --ink: #12131A;
+    --slate: #5B6270;
+    --slate-soft: #8A90A0;
+    --gold: #D8A13A;
+    --gold-soft: #F1D9A8;
+    --line: #E3E6ED;
+    --line-dark: rgba(255,255,255,0.12);
+  }
+
+  /* ---------- PRELOADER ---------- */
+  #preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+  }
+  #preloader.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .preloader-mark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    animation: markIn 0.6s ease forwards 0.15s;
+  }
+  .preloader-mark svg {
+    width: 26px;
+    height: 26px;
+    animation: markPulse 1.1s ease-in-out infinite 0.6s;
+  }
+  .preloader-mark span {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: #fff;
+    letter-spacing: -0.01em;
+  }
+  @keyframes markIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes markPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.45; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .preloader-mark, .preloader-mark svg { animation: none; opacity: 1; }
+  }
+  body.loading { overflow: hidden; }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  a { color: inherit; }
+
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---------- NAV ---------- */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(10,15,31,0.92);
+    backdrop-filter: blur(8px);
+  }
+  .nav-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    color: #fff;
+  }
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,0.72);
+    text-decoration: none;
+    font-size: 14.5px;
+    font-weight: 500;
+  }
+  .nav-links a:hover { color: #fff; }
+  .nav-cta {
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .nav-mobile-hide { display: flex; }
+  @media (max-width: 780px) {
+    .nav-mobile-hide { display: none; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    background:
+      radial-gradient(circle at 85% 10%, #1B2647 0%, transparent 45%),
+      linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%);
+    color: #fff;
+    padding: 76px 0 96px;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 56px;
+    align-items: center;
+  }
+  @media (max-width: 860px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+  }
+
+  .hero h1 {
+    font-size: 42px;
+    line-height: 1.15;
+    font-weight: 600;
+    max-width: 15ch;
+  }
+  @media (max-width: 500px) {
+    .hero h1 { font-size: 32px; }
+  }
+
+  .hero p.sub {
+    margin-top: 20px;
+    font-size: 16.5px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.72);
+    max-width: 46ch;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 14px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    border-radius: 12px;
+    padding: 14px 22px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .btn-secondary {
+    background: transparent;
+    color: #fff;
+    border: 1.5px solid rgba(255,255,255,0.28);
+    border-radius: 12px;
+    padding: 13px 22px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* ---------- hero illustration ---------- */
+  .illo-wrap {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  .illo-card {
+    width: 100%;
+    max-width: 300px;
+  }
+  .illo-star {
+    opacity: 0.25;
+    transform-origin: center;
+    animation: starFill 2.2s ease forwards;
+  }
+  .illo-star:nth-child(1) { animation-delay: 0.5s; }
+  .illo-star:nth-child(2) { animation-delay: 0.75s; }
+  .illo-star:nth-child(3) { animation-delay: 1s; }
+  .illo-star:nth-child(4) { animation-delay: 1.25s; }
+  .illo-star:nth-child(5) { animation-delay: 1.5s; }
+  @keyframes starFill {
+    0% { opacity: 0.25; }
+    40% { opacity: 1; transform: scale(1.12); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  .illo-wave {
+    stroke: rgba(216,161,58,0.5);
+    animation: waveOut 2.4s ease-out infinite;
+  }
+  .illo-wave:nth-child(2) { animation-delay: 0.5s; }
+  .illo-wave:nth-child(3) { animation-delay: 1s; }
+  @keyframes waveOut {
+    0% { opacity: 0.7; transform: scale(0.85); }
+    100% { opacity: 0; transform: scale(1.15); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .illo-star, .illo-wave { animation: none; opacity: 1; }
+  }
+
+  /* ---------- INSIGHT ---------- */
+  .insight {
+    padding: 84px 0;
+  }
+  .insight .wrap { max-width: 720px; }
+  .insight p {
+    font-size: 24px;
+    line-height: 1.5;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .insight p.support {
+    margin-top: 18px;
+    font-size: 15.5px;
+    font-weight: 400;
+    color: var(--slate);
+    line-height: 1.65;
+  }
+
+  /* ---------- STEPS ---------- */
+  .steps {
+    padding: 40px 0 88px;
+  }
+  .steps h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 40px;
+  }
+  .step-list {
+    display: grid;
+    gap: 0;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 20px;
+    padding: 26px 0;
+    border-top: 1px solid var(--line);
+  }
+  .step:last-child { border-bottom: 1px solid var(--line); }
+  .step-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gold);
+    padding-top: 2px;
+  }
+  .step h3 {
+    font-size: 17.5px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .step p {
+    font-size: 14.5px;
+    color: var(--slate);
+    line-height: 1.6;
+    max-width: 54ch;
+    margin: 0;
+  }
+
+  /* ---------- AUDIENCES ---------- */
+  .audiences {
+    background: var(--navy);
+    color: #fff;
+    padding: 84px 0;
+  }
+  .aud-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  @media (max-width: 720px) {
+    .aud-grid { grid-template-columns: 1fr; }
+    .aud-col.left { border-right: none; border-bottom: 1px solid var(--line-dark); padding-bottom: 40px; margin-bottom: 40px; }
+  }
+  .aud-col { padding: 0 40px; }
+  .aud-col.left {
+    border-right: 1px solid var(--line-dark);
+    padding-left: 0;
+  }
+  .aud-col.right { padding-right: 0; }
+  @media (max-width: 720px) {
+    .aud-col.right { padding-left: 0; }
+  }
+  .aud-col h3 {
+    font-size: 21px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .aud-col ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .aud-col li {
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.75);
+    padding: 12px 0;
+    border-top: 1px solid var(--line-dark);
+  }
+  .aud-col li:first-of-type { border-top: none; }
+
+  /* ---------- CTA BANNER ---------- */
+  .cta-band {
+    background: var(--gold);
+    color: var(--navy);
+    padding: 64px 0;
+  }
+  .cta-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .cta-band h2 {
+    font-size: 27px;
+    font-weight: 600;
+    max-width: 20ch;
+  }
+  .cta-band p {
+    margin-top: 8px;
+    font-size: 15px;
+    color: rgba(18,19,26,0.72);
+  }
+  .btn-dark {
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 15px 24px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.6);
+    padding: 44px 0 36px;
+  }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 20px;
+    border-top: 1px solid var(--line-dark);
+    padding-top: 28px;
+  }
+  .footer-brand {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: #fff;
+  }
+  .footer-tag {
+    font-size: 13px;
+    margin-top: 4px;
+    color: rgba(255,255,255,0.5);
+  }
+  .footer-meta {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    text-align: right;
+  }
+</style>
+</head>
+<body class="loading">
+
+<div id="preloader">
+  <div class="preloader-mark">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z" fill="#D8A13A"/>
+    </svg>
+    <span>Tapport</span>
+  </div>
+</div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">Tapport</div>
+    <ul class="nav-links nav-mobile-hide">
+      <li><a href="#como-funciona">Cómo funciona</a></li>
+      <li><a href="#meseros">Para meseros</a></li>
+      <li><a href="#restaurantes">Para restaurantes</a></li>
+    </ul>
+    <a class="nav-cta" href="#piloto">Solicitar piloto</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>La reputación de un mesero, fuera del restaurante.</h1>
+      <p class="sub">Cada cliente califica el servicio al pagar, con solo tocar su celular contra una tarjeta. Esas calificaciones construyen un historial que el mesero se lleva a su próximo trabajo.</p>
+      <div class="hero-ctas">
+        <a class="btn-primary" href="#piloto">Quiero un piloto gratis</a>
+        <a class="btn-secondary" href="#como-funciona">Ver cómo funciona</a>
+      </div>
+    </div>
+
+    <div class="illo-wrap">
+      <svg class="illo-card" viewBox="0 0 320 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- tarjeta -->
+        <rect x="30" y="60" width="200" height="260" rx="22" fill="#FFFFFF"/>
+        <circle cx="130" cy="130" r="36" fill="#DCE3F0"/>
+        <rect x="70" y="182" width="120" height="12" rx="6" fill="#12131A"/>
+        <rect x="70" y="204" width="88" height="9" rx="4.5" fill="#C7CBD6"/>
+
+        <!-- telefono tapeando -->
+        <rect x="196" y="24" width="94" height="170" rx="20" fill="#12131A" stroke="#2A3350" stroke-width="2"/>
+        <rect x="206" y="40" width="74" height="138" rx="6" fill="#1A2136"/>
+
+        <!-- ondas de tap -->
+        <circle class="illo-wave" cx="222" cy="70" r="16" stroke-width="2"/>
+        <circle class="illo-wave" cx="222" cy="70" r="16" stroke-width="2"/>
+        <circle class="illo-wave" cx="222" cy="70" r="16" stroke-width="2"/>
+
+        <!-- estrellas -->
+        <g transform="translate(50,250)">
+          <path class="illo-star" d="M20 0l5.2 11.3 12.4 1.3-9.3 8.4 2.7 12.2L20 27.1l-11 6.1 2.7-12.2-9.3-8.4 12.4-1.3z" fill="#D8A13A"/>
+          <path class="illo-star" transform="translate(30,0)" d="M20 0l5.2 11.3 12.4 1.3-9.3 8.4 2.7 12.2L20 27.1l-11 6.1 2.7-12.2-9.3-8.4 12.4-1.3z" fill="#D8A13A"/>
+          <path class="illo-star" transform="translate(60,0)" d="M20 0l5.2 11.3 12.4 1.3-9.3 8.4 2.7 12.2L20 27.1l-11 6.1 2.7-12.2-9.3-8.4 12.4-1.3z" fill="#D8A13A"/>
+          <path class="illo-star" transform="translate(90,0)" d="M20 0l5.2 11.3 12.4 1.3-9.3 8.4 2.7 12.2L20 27.1l-11 6.1 2.7-12.2-9.3-8.4 12.4-1.3z" fill="#D8A13A"/>
+          <path class="illo-star" transform="translate(120,0)" d="M20 0l5.2 11.3 12.4 1.3-9.3 8.4 2.7 12.2L20 27.1l-11 6.1 2.7-12.2-9.3-8.4 12.4-1.3z" fill="#D8A13A"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<section class="insight">
+  <div class="wrap">
+    <p>Un mesero puede trabajar diez años y pasar por diez restaurantes distintos, sin que ninguna de esas experiencias quede registrada en ningún lado.</p>
+    <p class="support">Cuando busca su siguiente trabajo, todo lo que tiene es su palabra. Tapport le da un historial verificable — calificado por las personas que de verdad lo vieron trabajar: los clientes.</p>
+  </div>
+</section>
+
+<section class="steps" id="como-funciona">
+  <div class="wrap">
+    <h2>Cómo funciona</h2>
+    <div class="step-list">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div>
+          <h3>Tarjeta personal</h3>
+          <p>Cada mesero recibe su propia tarjeta con chip NFC, con su nombre y foto — no hay catálogo ni selección, cada tarjeta identifica a una sola persona.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div>
+          <h3>Un tap al pagar</h3>
+          <p>El cliente que pagó la cuenta acerca su celular a la tarjeta (o escanea el código QR de respaldo) y califica el servicio en segundos, sin crear cuenta ni dar su correo.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div>
+          <h3>Una reputación que viaja</h3>
+          <p>Las calificaciones se acumulan en el perfil del mesero, no en el del restaurante — así lo acompañan a donde trabaje después.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="audiences">
+  <div class="wrap aud-grid">
+    <div class="aud-col left" id="meseros">
+      <h3>Para meseros</h3>
+      <ul>
+        <li>Construyes un historial verificable de tu desempeño, calificación tras calificación.</li>
+        <li>Es gratis, siempre — no pagas nada por tener tu tarjeta ni por acumular reseñas.</li>
+        <li>Tu reputación te acompaña de un restaurante a otro, en vez de quedarse atrás.</li>
+      </ul>
+    </div>
+    <div class="aud-col right" id="restaurantes">
+      <h3>Para restaurantes</h3>
+      <ul>
+        <li>Feedback real de cada mesa, sin encuestas ni fricción para el cliente.</li>
+        <li>Meseros más motivados: su esfuerzo por fin queda registrado.</li>
+        <li>Cero costo e implementación durante el mes de piloto.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band" id="piloto">
+  <div class="wrap cta-inner">
+    <div>
+      <h2>¿Tienes un restaurante? Prueba Tapport gratis por un mes.</h2>
+      <p>Sin costo, sin compromiso — solo medimos el uso de las tarjetas y las reseñas que genera.</p>
+    </div>
+    <a class="btn-dark" href="mailto:hola@tapport.pe">Hablemos</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div>
+      <div class="footer-brand">Tapport</div>
+      <div class="footer-tag">La reputación del buen servicio.</div>
+    </div>
+    <div class="footer-meta">Hecho en Lima, Perú<br>hola@tapport.pe</div>
+  </div>
+</footer>
+
+<script>
+  window.addEventListener("load", () => {
+    setTimeout(() => {
+      document.getElementById("preloader").classList.add("hide");
+      document.body.classList.remove("loading");
+    }, 2000);
+  });
+</script>
+
+</body>
+</html>
