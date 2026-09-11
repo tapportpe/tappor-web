@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tapport — Ingreso meseros</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy: #0A0F1F;
+    --navy-2: #121B33;
+    --paper: #F3F5F9;
+    --card: #FFFFFF;
+    --ink: #12131A;
+    --slate: #5B6270;
+    --slate-soft: #8A90A0;
+    --gold: #D8A13A;
+    --line: #E3E6ED;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at 85% 10%, #1B2647 0%, transparent 45%),
+      linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  h1, .logo { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.01em; margin: 0; }
+  .card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 40px 36px;
+    width: 100%;
+    max-width: 380px;
+  }
+  .logo { color: var(--navy); font-weight: 700; font-size: 19px; margin-bottom: 26px; }
+  h1 { font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+  .sub { font-size: 14.5px; color: var(--slate); line-height: 1.5; margin-bottom: 28px; }
+  label { display: block; font-size: 13.5px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
+  input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1.5px solid var(--line);
+    font-size: 14.5px;
+    font-family: inherit;
+    margin-bottom: 18px;
+  }
+  input:focus { outline: none; border-color: var(--gold); }
+  button {
+    width: 100%;
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    border-radius: 10px;
+    padding: 13px;
+    font-weight: 600;
+    font-size: 14.5px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  #step-code { display: none; }
+  .note { margin-top: 18px; font-size: 13px; color: var(--slate-soft); text-align: center; }
+  .back { display: inline-block; margin-top: 22px; font-size: 13.5px; color: var(--slate); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo">Tapport</div>
+  <h1>Ingreso meseros</h1>
+  <p class="sub">Ingresa con el correo con el que te registraste para ver tus calificaciones y tu perfil.</p>
+
+  <div id="step-email">
+    <label for="email">Correo electrónico</label>
+    <input type="email" id="email" placeholder="tucorreo@ejemplo.com">
+    <button id="btn-send-code" type="button">Enviar código</button>
+  </div>
+
+  <div id="step-code">
+    <label for="code">Código de verificación</label>
+    <input type="text" id="code" placeholder="Ingresa el código recibido">
+    <button id="btn-login" type="button">Ingresar</button>
+  </div>
+
+  <p class="note">Este flujo aún no está conectado — falta enlazarlo con el registro de meseros.</p>
+  <a class="back" href="inicio.html">← Volver al inicio</a>
+</div>
+
+<script>
+  document.getElementById('btn-send-code').addEventListener('click', () => {
+    document.getElementById('step-email').style.display = 'none';
+    document.getElementById('step-code').style.display = 'block';
+  });
+  document.getElementById('btn-login').addEventListener('click', () => {
+    alert('Falta conectar este formulario con el sistema de verificación.');
+  });
+</script>
+
+</body>
+</html>
