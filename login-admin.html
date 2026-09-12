@@ -17,31 +17,114 @@
     --slate: #5B6270;
     --slate-soft: #8A90A0;
     --gold: #D8A13A;
+    --gold-soft: #F1D9A8;
     --line: #E3E6ED;
+    --line-dark: rgba(255,255,255,0.12);
   }
+
   * { box-sizing: border-box; }
+
   body {
     margin: 0;
     font-family: 'Inter', -apple-system, sans-serif;
     color: var(--ink);
+    background: var(--paper);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  h1, .logo { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.01em; margin: 0; }
+  a { color: inherit; }
+
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---------- NAV (igual a inicio.html) ---------- */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(10,15,31,0.92);
+    backdrop-filter: blur(8px);
+  }
+  .nav-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    color: #fff;
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,0.72);
+    text-decoration: none;
+    font-size: 14.5px;
+    font-weight: 500;
+  }
+  .nav-links a:hover { color: #fff; }
+  .nav-mobile-hide { display: flex; }
+  @media (max-width: 680px) {
+    .nav-mobile-hide { display: none; }
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .nav-right a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 500;
+    border: 1.5px solid rgba(255,255,255,0.22);
+    border-radius: 9px;
+    padding: 8px 14px;
+    white-space: nowrap;
+  }
+  .nav-right a:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
+
+  /* ---------- HERO / LOGIN SECTION ---------- */
+  .login-hero {
+    flex: 1;
     background:
       radial-gradient(circle at 85% 10%, #1B2647 0%, transparent 45%),
       linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%);
-    min-height: 100vh;
+    color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px;
+    padding: 56px 24px;
   }
-  h1, .logo { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.01em; margin: 0; }
+
   .card {
-    background: var(--card);
-    border-radius: 20px;
-    padding: 40px 36px;
     width: 100%;
     max-width: 380px;
+    background: var(--card);
+    color: var(--ink);
+    border-radius: 20px;
+    padding: 40px 36px;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55);
   }
-  .logo { color: var(--navy); font-weight: 700; font-size: 19px; margin-bottom: 26px; }
+
   h1 { font-size: 22px; font-weight: 600; margin-bottom: 8px; }
   .sub { font-size: 14.5px; color: var(--slate); line-height: 1.5; margin-bottom: 28px; }
   label { display: block; font-size: 13.5px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
@@ -55,7 +138,7 @@
     margin-bottom: 18px;
   }
   input:focus { outline: none; border-color: var(--gold); }
-  button {
+  .btn-primary {
     width: 100%;
     background: var(--gold);
     color: var(--navy);
@@ -68,32 +151,119 @@
     font-family: inherit;
   }
   #step-code { display: none; }
-  .note { margin-top: 18px; font-size: 13px; color: var(--slate-soft); text-align: center; }
-  .back { display: inline-block; margin-top: 22px; font-size: 13.5px; color: var(--slate); text-decoration: none; }
+
+  .note {
+    margin-top: 18px;
+    font-size: 13px;
+    color: var(--slate-soft);
+    text-align: center;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--line);
+    margin: 26px 0 20px;
+  }
+
+  .btn-secondary {
+    display: block;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    padding: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    font-family: inherit;
+  }
+  .btn-secondary:hover { border-color: var(--gold); }
+
+  .back {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 13.5px;
+    color: var(--slate);
+    text-decoration: none;
+  }
+  .back:hover { color: var(--ink); }
+
+  /* ---------- FOOTER (igual a inicio.html) ---------- */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.6);
+    padding: 28px 0;
+  }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer-brand {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: #fff;
+  }
+  .footer-meta {
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.5);
+  }
 </style>
 </head>
 <body>
 
-<div class="card">
-  <div class="logo">Tapport</div>
-  <h1>Ingreso administradores</h1>
-  <p class="sub">Ingresa con tu correo de administrador para gestionar meseros y ver reseñas del restaurante.</p>
-
-  <div id="step-email">
-    <label for="email">Correo electrónico</label>
-    <input type="email" id="email" placeholder="tucorreo@ejemplo.com">
-    <button id="btn-send-code" type="button">Enviar código</button>
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="inicio.html">Tapport</a>
+    <ul class="nav-links nav-mobile-hide">
+      <li><a href="directorio.html">Directorio</a></li>
+      <li><a href="inicio.html#como-funciona">Cómo funciona</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="login-mesero.html">Ingreso meseros</a>
+    </div>
   </div>
+</nav>
 
-  <div id="step-code">
-    <label for="code">Código de verificación</label>
-    <input type="text" id="code" placeholder="Ingresa el código recibido">
-    <button id="btn-login" type="button">Ingresar</button>
+<section class="login-hero">
+  <div class="card">
+    <h1>Ingreso administradores</h1>
+    <p class="sub">Ingresa con el correo de administrador para gestionar meseros y ver reseñas del restaurante.</p>
+
+    <div id="step-email">
+      <label for="email">Correo electrónico</label>
+      <input type="email" id="email" placeholder="tucorreo@ejemplo.com">
+      <button class="btn-primary" id="btn-send-code" type="button">Enviar código</button>
+    </div>
+
+    <div id="step-code">
+      <label for="code">Código de verificación</label>
+      <input type="text" id="code" placeholder="Ingresa el código recibido">
+      <button class="btn-primary" id="btn-login" type="button">Ingresar</button>
+    </div>
+
+    <p class="note">Este flujo aún no está conectado — falta enlazarlo con el panel de administración.</p>
+
+    <div class="divider"></div>
+
+    <a class="btn-secondary" href="directorio.html">Explorar el directorio</a>
+    <a class="back" href="inicio.html">← Volver al inicio</a>
   </div>
+</section>
 
-  <p class="note">Este flujo aún no está conectado — falta enlazarlo con el panel de administración.</p>
-  <a class="back" href="inicio.html">← Volver al inicio</a>
-</div>
+<footer>
+  <div class="wrap footer-inner">
+    <div class="footer-brand">Tapport</div>
+    <div class="footer-meta">Hecho en Lima, Perú · tapport.pe@gmail.com</div>
+  </div>
+</footer>
 
 <script>
   document.getElementById('btn-send-code').addEventListener('click', () => {
