@@ -415,8 +415,6 @@
 
     <!-- ============ HOME (FEED) ============ -->
     <div class="view active" id="viewHome">
-      <button type="button" class="publicar-btn" id="abrirPublicarBtn">+ Publicar un anuncio de trabajo</button>
-
       <div class="feed-section-title">Restaurantes buscando personal</div>
       <div id="feedVacantes"><div class="loading-state">Cargando…</div></div>
 
@@ -494,33 +492,6 @@
       </div>
       <h2 class="section-title">Reseñas de clientes</h2>
       <div id="modalReviews"></div>
-    </div>
-  </div>
-
-  <!-- Modal: publicar anuncio de trabajo -->
-  <div class="overlay" id="overlayPublicar">
-    <div class="modal">
-      <button class="modal-close" id="cerrarPublicarBtn">×</button>
-      <h2 style="font-size:17px; margin:0 0 14px;">Publicar un anuncio</h2>
-
-      <div class="field">
-        <label for="vRestaurante">Restaurante</label>
-        <select id="vRestaurante"></select>
-      </div>
-      <div class="field">
-        <label for="vPuesto">Puesto que buscan</label>
-        <input type="text" id="vPuesto" placeholder="Ej. Mesero(a) turno noche" />
-      </div>
-      <div class="field">
-        <label for="vDescripcion">Descripción (opcional)</label>
-        <textarea id="vDescripcion" rows="3" placeholder="Horario, requisitos, sueldo, etc."></textarea>
-      </div>
-      <div class="field">
-        <label for="vContacto">Teléfono o correo de contacto</label>
-        <input type="text" id="vContacto" placeholder="999 999 999 o correo@restaurante.com" />
-      </div>
-      <button type="button" class="btn-primary" id="publicarVacanteBtn">Publicar anuncio</button>
-      <div class="msg" id="publicarMsg"></div>
     </div>
   </div>
 
@@ -663,7 +634,7 @@
       try { return localStorage.getItem(TUTORIAL_KEY) === "1"; } catch (e) { return false; }
     }
 
-    // ---------- Cargar restaurantes (para filtros y para publicar vacante) ----------
+    // ---------- Cargar restaurantes (para el filtro de búsqueda) ----------
     async function cargarRestaurantes() {
       try {
         const res = await fetch(`${ENDPOINT}?accion=restaurantes`);
@@ -672,8 +643,7 @@
         const opciones = lista.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("");
 
         document.getElementById("fRestaurante").innerHTML = '<option value="">Todos</option>' + opciones;
-        document.getElementById("vRestaurante").innerHTML = opciones;
-      } catch (err) { /* deja los selects vacíos si falla */ }
+      } catch (err) { /* deja el select vacío si falla */ }
     }
 
     // ---------- FEED (Home) ----------
@@ -867,67 +837,9 @@
       if (e.target.id === "overlayPerfil") document.getElementById("overlayPerfil").classList.remove("show");
     });
 
-    // ---------- Modal publicar vacante ----------
-    document.getElementById("abrirPublicarBtn").addEventListener("click", () => {
-      document.getElementById("publicarMsg").textContent = "";
-      document.getElementById("vPuesto").value = "";
-      document.getElementById("vDescripcion").value = "";
-      document.getElementById("vContacto").value = "";
-      document.getElementById("overlayPublicar").classList.add("show");
-    });
-    document.getElementById("cerrarPublicarBtn").addEventListener("click", () => {
-      document.getElementById("overlayPublicar").classList.remove("show");
-    });
-    document.getElementById("overlayPublicar").addEventListener("click", (e) => {
-      if (e.target.id === "overlayPublicar") document.getElementById("overlayPublicar").classList.remove("show");
-    });
-
-    document.getElementById("publicarVacanteBtn").addEventListener("click", async () => {
-      const btn = document.getElementById("publicarVacanteBtn");
-      const msg = document.getElementById("publicarMsg");
-
-      const restaurante = document.getElementById("vRestaurante").value;
-      const puesto = document.getElementById("vPuesto").value.trim();
-      const descripcion = document.getElementById("vDescripcion").value.trim();
-      const contacto = document.getElementById("vContacto").value.trim();
-
-      if (!restaurante || !puesto || !contacto) {
-        msg.className = "msg error";
-        msg.textContent = "Completa restaurante, puesto y contacto.";
-        return;
-      }
-
-      btn.disabled = true;
-      btn.textContent = "Publicando…";
-
-      try {
-        const res = await fetch(ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({ action: "publicar_vacante", restaurante, puesto, descripcion, contacto })
-        });
-        const data = await res.json();
-
-        if (data.ok) {
-          msg.className = "msg ok";
-          msg.textContent = "¡Anuncio publicado!";
-          setTimeout(() => {
-            document.getElementById("overlayPublicar").classList.remove("show");
-            msg.textContent = "";
-            cargarVacantes();
-          }, 800);
-        } else {
-          msg.className = "msg error";
-          msg.textContent = data.error || "No se pudo publicar.";
-        }
-      } catch (err) {
-        msg.className = "msg error";
-        msg.textContent = "Error de conexión.";
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Publicar anuncio";
-      }
-    });
+    // Nota: publicar un anuncio de trabajo ya NO se hace desde aquí — el
+    // directorio es público. Ahora solo el gerente logueado del restaurante
+    // puede publicar, desde su panel en admin.html.
 
     cargarRestaurantes();
     cargarFeed();
