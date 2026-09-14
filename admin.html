@@ -359,8 +359,32 @@
       </div>
 
       <button type="button" class="btn-secondary" id="toggleEditarNegocioBtn" style="margin-top:16px;">Editar perfil del negocio</button>
+      <button type="button" class="btn-secondary" id="togglePublicarVacanteBtn" style="margin-top:10px;">+ Publicar vacante</button>
 
       <div id="listaMeseros" style="margin-top:6px;"></div>
+    </div>
+
+    <!-- ============ PUBLICAR VACANTE (solo gerente logueado) ============ -->
+    <div class="card hidden" id="publicarVacanteCard">
+      <h2 style="font-size:16px; margin:0 0 16px;">Publicar vacante</h2>
+      <p style="font-size:13px; color:var(--ink-soft); margin:-8px 0 16px;">Se publicará a nombre de <strong id="vacanteRestauranteLabel"></strong>.</p>
+
+      <div class="field">
+        <label for="vPuesto">Puesto que buscan</label>
+        <input type="text" id="vPuesto" placeholder="Ej. Mesero(a) turno noche" />
+      </div>
+      <div class="field">
+        <label for="vDescripcion">Descripción (opcional)</label>
+        <textarea id="vDescripcion" rows="3" placeholder="Horario, requisitos, sueldo, etc."></textarea>
+      </div>
+      <div class="field">
+        <label for="vContacto">Teléfono o correo de contacto</label>
+        <input type="text" id="vContacto" placeholder="999 999 999 o correo@restaurante.com" />
+      </div>
+
+      <button type="button" class="btn-primary" id="publicarVacanteBtn">Publicar anuncio</button>
+      <button type="button" class="btn-secondary" id="cancelarPublicarVacanteBtn">Cancelar</button>
+      <div class="msg" id="publicarVacanteMsg"></div>
     </div>
 
     <!-- ============ EDITAR PERFIL DEL NEGOCIO ============ -->
@@ -655,6 +679,7 @@
     function mostrarPanel() {
       document.getElementById("authCard").classList.add("hidden");
       document.getElementById("editNegocioCard").classList.add("hidden");
+      document.getElementById("publicarVacanteCard").classList.add("hidden");
       document.getElementById("panel").classList.remove("hidden");
       document.getElementById("headerSub").textContent = "Este es el equipo de tu restaurante en Tapport.";
 
@@ -727,6 +752,7 @@
       borrarSesion();
       document.getElementById("panel").classList.add("hidden");
       document.getElementById("editNegocioCard").classList.add("hidden");
+      document.getElementById("publicarVacanteCard").classList.add("hidden");
       document.getElementById("authCard").classList.remove("hidden");
       document.getElementById("headerSub").textContent = "Inicia sesión para ver las reseñas y el rating de tu equipo.";
       document.getElementById("loginPassword").value = "";
@@ -774,6 +800,77 @@
     document.getElementById("cancelarEditarNegocioBtn").addEventListener("click", () => {
       document.getElementById("editNegocioCard").classList.add("hidden");
       document.getElementById("panel").classList.remove("hidden");
+    });
+
+    // ---------- Publicar vacante (protegido: solo el gerente logueado,
+    // el restaurante nunca se manda desde aquí — el backend lo saca de la
+    // sesión validada) ----------
+    document.getElementById("togglePublicarVacanteBtn").addEventListener("click", () => {
+      document.getElementById("vacanteRestauranteLabel").textContent = sesion.restaurante || "";
+      document.getElementById("vPuesto").value = "";
+      document.getElementById("vDescripcion").value = "";
+      document.getElementById("vContacto").value = "";
+      document.getElementById("publicarVacanteMsg").textContent = "";
+      document.getElementById("panel").classList.add("hidden");
+      document.getElementById("publicarVacanteCard").classList.remove("hidden");
+    });
+
+    document.getElementById("cancelarPublicarVacanteBtn").addEventListener("click", () => {
+      document.getElementById("publicarVacanteCard").classList.add("hidden");
+      document.getElementById("panel").classList.remove("hidden");
+    });
+
+    document.getElementById("publicarVacanteBtn").addEventListener("click", async () => {
+      const btn = document.getElementById("publicarVacanteBtn");
+      const msg = document.getElementById("publicarVacanteMsg");
+
+      const puesto = document.getElementById("vPuesto").value.trim();
+      const descripcion = document.getElementById("vDescripcion").value.trim();
+      const contacto = document.getElementById("vContacto").value.trim();
+
+      if (!puesto || !contacto) {
+        msg.className = "msg error";
+        msg.textContent = "Completa el puesto y el contacto.";
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Publicando…";
+
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            action: "publicar_vacante",
+            email: sesion.email,
+            password: sesion.password,
+            puesto,
+            descripcion,
+            contacto
+          })
+        });
+        const data = await res.json();
+
+        if (data.ok) {
+          msg.className = "msg ok";
+          msg.textContent = "¡Anuncio publicado!";
+          setTimeout(() => {
+            document.getElementById("publicarVacanteCard").classList.add("hidden");
+            document.getElementById("panel").classList.remove("hidden");
+            msg.textContent = "";
+          }, 900);
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.error || "No se pudo publicar.";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Publicar anuncio";
+      }
     });
 
     negocioCoverPicker.addEventListener("click", () => negocioCoverInput.click());
