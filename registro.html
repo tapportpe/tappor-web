@@ -175,6 +175,113 @@
 
   .field-error.show { display: block; }
 
+  /* --- Términos y condiciones (checkbox obligatorio + modal) --- */
+  .terms-field {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .terms-field input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
+  .terms-field label {
+    margin: 0;
+    font-size: 13.5px;
+    color: var(--ink);
+    line-height: 1.45;
+    cursor: pointer;
+  }
+
+  .terms-field a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 35, 31, 0.55);
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 50;
+    padding: 0;
+  }
+  .overlay.show { display: flex; }
+
+  .terms-modal {
+    background: var(--card);
+    width: 100%;
+    max-width: 480px;
+    max-height: 82vh;
+    border-radius: 18px 18px 0 0;
+    padding: 22px 22px 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 -12px 40px rgba(0,0,0,0.25);
+  }
+  @media (min-width: 520px) {
+    .overlay { align-items: center; }
+    .terms-modal { border-radius: 16px; max-height: 78vh; }
+  }
+
+  .terms-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+  }
+  .terms-modal-header h2 { font-size: 17px; margin: 0; font-weight: 700; }
+  .terms-modal-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--ink-soft);
+    cursor: pointer;
+    padding: 4px 6px;
+  }
+
+  .terms-modal-body {
+    overflow-y: auto;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .terms-modal-body h3 {
+    font-size: 13.5px;
+    color: var(--ink);
+    margin: 16px 0 4px;
+  }
+  .terms-modal-body h3:first-child { margin-top: 0; }
+  .terms-modal-body p { margin: 0 0 8px; }
+
+  .terms-modal-footer {
+    flex-shrink: 0;
+    margin-top: 16px;
+  }
+  .terms-modal-footer button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 14.5px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
   /* --- Pantalla de confirmación --- */
   .success-card {
     display: none;
@@ -434,6 +541,12 @@
         </div>
       </div>
 
+      <div class="terms-field">
+        <input type="checkbox" id="aceptaTerminos" />
+        <label for="aceptaTerminos">Acepto los <a href="#" id="verTerminosLink">Términos y Condiciones</a> de Tapport</label>
+      </div>
+      <div class="field-error" id="terminosError">Debes leer y aceptar los Términos y Condiciones para registrarte.</div>
+
       <button type="submit" id="submitBtn">Registrar</button>
       <div class="status" id="statusMsg"></div>
     </form>
@@ -476,6 +589,48 @@
       </div>
 
       <button type="button" class="btn-secondary" id="registrarOtroBtn">Registrar a otro mesero</button>
+    </div>
+  </div>
+
+  <!-- Modal: Términos y Condiciones -->
+  <div class="overlay" id="overlayTerminos">
+    <div class="terms-modal">
+      <div class="terms-modal-header">
+        <h2>Términos y Condiciones</h2>
+        <button type="button" class="terms-modal-close" id="cerrarTerminosBtn">×</button>
+      </div>
+      <div class="terms-modal-body">
+        <p><strong>Última actualización: septiembre de 2026.</strong> Al registrarte como mesero en Tapport aceptas lo siguiente:</p>
+
+        <h3>1. Qué es Tapport</h3>
+        <p>Tapport es una plataforma que te permite construir un historial de reseñas verificable a partir de las calificaciones que te dejan los clientes que atendiste, usando una tarjeta con código NFC/QR personal.</p>
+
+        <h3>2. Datos que recopilamos</h3>
+        <p>Para crear tu tarjeta guardamos tu nombre, apellido, foto, teléfono, edad, DNI y correo electrónico. Estos datos se usan para identificarte de forma única, evitar registros duplicados o fraudulentos, y permitirte iniciar sesión para editar tu perfil.</p>
+
+        <h3>3. Qué se muestra públicamente</h3>
+        <p>Tu nombre, foto, restaurante, rating promedio y las reseñas (estrellas, etiquetas y comentarios) que te dejen los clientes son visibles públicamente en tu perfil y en el directorio de Tapport. Tu DNI, teléfono y correo NO se muestran públicamente; el teléfono y correo solo pueden ser vistos por el gerente de tu restaurante.</p>
+
+        <h3>4. Sobre las reseñas</h3>
+        <p>Las reseñas las dejan los clientes después de ser atendidos y pueden ser positivas o negativas. Tapport no modifica ni elimina reseñas a pedido, salvo casos de contenido ofensivo, falso o que incumpla la ley, evaluados caso por caso.</p>
+
+        <h3>5. Uso por restaurantes</h3>
+        <p>El gerente del restaurante donde trabajas puede ver tu perfil, tus reseñas y tus datos de contacto dentro de su panel, y puede publicar vacantes visibles en el directorio. Tapport no garantiza ofertas de trabajo ni resultados de contratación.</p>
+
+        <h3>6. Tu responsabilidad</h3>
+        <p>Declaras que los datos que ingresas son tuyos, reales y correctos, y que la foto que subes te corresponde a ti. El uso de datos de otra persona sin su consentimiento no está permitido.</p>
+
+        <h3>7. Tus derechos sobre tus datos</h3>
+        <p>Puedes solicitar la corrección o eliminación de tu cuenta y tus datos personales escribiendo a <strong>tapport.pe@gmail.com</strong>. Ten en cuenta que las reseñas ya asociadas a tu código podrían mantenerse de forma anónima para preservar la integridad del historial de calificaciones de los demás usuarios.</p>
+
+        <h3>8. Cambios a estos términos</h3>
+        <p>Podemos actualizar estos Términos y Condiciones conforme la plataforma evolucione. Si los cambios son relevantes, te lo notificaremos por correo o dentro de la app.</p>
+
+        <p style="margin-top:16px; font-size:12px; color:var(--ink-soft);">Este texto es un modelo general y no reemplaza asesoría legal formal. Se recomienda revisión por un abogado antes de un lanzamiento a mayor escala, especialmente en lo referente al tratamiento de datos personales (DNI) bajo la Ley N° 29733 de Protección de Datos Personales del Perú.</p>
+      </div>
+      <div class="terms-modal-footer">
+        <button type="button" id="aceptarTerminosBtn">Entendido, aceptar</button>
+      </div>
     </div>
   </div>
 
@@ -636,6 +791,9 @@
       if (!edad || edad < 16 || edad > 80) { setFieldError("edad", true); ok = false; } else setFieldError("edad", false);
       if (!/^\d{8}$/.test(dni)) { setFieldError("dni", true); ok = false; } else setFieldError("dni", false);
 
+      const aceptaTerminos = document.getElementById("aceptaTerminos").checked;
+      if (!aceptaTerminos) { setFieldError("terminos", true); ok = false; } else setFieldError("terminos", false);
+
       return ok;
     }
 
@@ -662,6 +820,24 @@
     }
 
     registrarOtroBtn.addEventListener("click", resetFormForNewRegistration);
+
+    // ---------- Modal de Términos y Condiciones ----------
+    const overlayTerminos = document.getElementById("overlayTerminos");
+    document.getElementById("verTerminosLink").addEventListener("click", (e) => {
+      e.preventDefault();
+      overlayTerminos.classList.add("show");
+    });
+    document.getElementById("cerrarTerminosBtn").addEventListener("click", () => {
+      overlayTerminos.classList.remove("show");
+    });
+    overlayTerminos.addEventListener("click", (e) => {
+      if (e.target.id === "overlayTerminos") overlayTerminos.classList.remove("show");
+    });
+    document.getElementById("aceptarTerminosBtn").addEventListener("click", () => {
+      document.getElementById("aceptaTerminos").checked = true;
+      setFieldError("terminos", false);
+      overlayTerminos.classList.remove("show");
+    });
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
