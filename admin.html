@@ -6,15 +6,16 @@
 <title>Panel de gerente — Tapport</title>
 <style>
   :root {
-    --bg: #F6F5F1;
+    --bg: #F3F5F9;
     --card: #FFFFFF;
-    --ink: #14231F;
-    --ink-soft: #4B5C57;
-    --line: #DEDCD3;
-    --accent: #1F4B45;
-    --accent-soft: #E7EFEC;
+    --ink: #12131A;
+    --ink-soft: #5B6270;
+    --line: #E3E6ED;
+    --accent: #0A0F1F;
+    --gold: #D8A13A;
+    --accent-soft: #E4E6ED;
     --error: #B4432E;
-    --star: #E3A427;
+    --star: #D8A13A;
   }
 
   * { box-sizing: border-box; }
@@ -94,8 +95,8 @@
     padding: 13px;
     border: none;
     border-radius: 8px;
-    background: var(--accent);
-    color: #fff;
+    background: var(--gold);
+    color: var(--accent);
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
@@ -189,7 +190,7 @@
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .chart-track { flex: 1; height: 14px; background: var(--accent-soft); border-radius: 999px; overflow: hidden; }
-  .chart-fill { height: 100%; background: var(--accent); border-radius: 999px; transition: width 0.4s ease; }
+  .chart-fill { height: 100%; background: var(--gold); border-radius: 999px; transition: width 0.4s ease; }
   .chart-row .chart-value { width: 34px; flex-shrink: 0; font-size: 12px; font-weight: 700; color: var(--accent); text-align: right; }
 
   .mesero-row {
@@ -997,14 +998,19 @@
     });
 
     // ---------- Cargar restaurantes para el selector de "crear cuenta" ----------
+    // Usa "restaurantes_disponibles" (no "restaurantes") a propósito: excluye
+    // los restaurantes que ya tienen una cuenta de gerente creada, para que
+    // no se pueda intentar registrar dos veces el mismo restaurante.
     async function cargarRestaurantes() {
       const select = document.getElementById("crearRestaurante");
       try {
-        const res = await fetch(`${ENDPOINT}?accion=restaurantes`);
+        const res = await fetch(`${ENDPOINT}?accion=restaurantes_disponibles`);
         const data = await res.json();
         const lista = (data.restaurantes || []).slice().sort();
-        select.innerHTML = '<option value="">Selecciona un restaurante</option>' +
-          lista.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("");
+        select.innerHTML = lista.length
+          ? '<option value="">Selecciona un restaurante</option>' +
+            lista.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("")
+          : '<option value="">No hay restaurantes disponibles</option>';
       } catch (err) {
         select.innerHTML = '<option value="">No se pudo cargar</option>';
       }
