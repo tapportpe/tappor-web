@@ -236,7 +236,7 @@
     <h1>Ingreso administradores</h1>
     <p class="sub">Inicia sesión con el correo y la contraseña de gerente que creaste para gestionar tu restaurante en Tapport: publicar vacantes, ver a tu equipo y sus reseñas.</p>
 
-    <a class="btn-primary" href="admin.html" style="display:block; text-align:center; text-decoration:none; box-sizing:border-box;">Ir al panel de administración</a>
+    <a class="btn-primary" href="admin.html" id="irAlPanelBtn" style="display:block; text-align:center; text-decoration:none; box-sizing:border-box;">Ir al panel de administración</a>
 
     <p class="note">¿Primera vez? En el panel también puedes crear tu cuenta de gerente verificando tu correo.</p>
 
@@ -253,6 +253,13 @@
     <div class="footer-meta">Hecho en Lima, Perú · tapport.pe@gmail.com</div>
   </div>
 </footer>
+
+<script>
+  // Si este link se comparte con parámetros (ej. ?registro=1, el link
+  // privado para que un gerente nuevo cree su cuenta), los pasa a
+  // admin.html en vez de perderlos.
+  document.getElementById("irAlPanelBtn").href = "admin.html" + window.location.search;
+</script>
 
 </body>
 </html>
