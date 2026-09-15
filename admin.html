@@ -494,8 +494,20 @@
     }
 
     // ---------- Tabs ----------
+    // "Crear cuenta de gerente" está oculto por defecto: solo aparece si el
+    // link incluye ?registro=1 — ese es el link privado que Santiago le
+    // manda a cada gerente nuevo. El link público (el que va en inicio.html)
+    // no lo lleva, así que ahí solo se puede iniciar sesión.
+    const params = new URLSearchParams(window.location.search);
+    const esLinkDeRegistro = params.get("registro") === "1";
+
     const tabLogin = document.getElementById("tabLogin");
     const tabCrear = document.getElementById("tabCrear");
+
+    if (!esLinkDeRegistro) {
+      tabCrear.style.display = "none";
+    }
+
     tabLogin.addEventListener("click", () => {
       tabLogin.classList.add("active"); tabCrear.classList.remove("active");
       document.getElementById("loginForm").style.display = "block";
@@ -506,6 +518,9 @@
       document.getElementById("crearForm").style.display = "block";
       document.getElementById("loginForm").style.display = "none";
     });
+
+    // Si entraron con el link de registro, arranca directo en "Crear cuenta".
+    if (esLinkDeRegistro) tabCrear.click();
 
     // ---------- Login ----------
     document.getElementById("loginBtn").addEventListener("click", async () => {
