@@ -150,7 +150,6 @@
     cursor: pointer;
     font-family: inherit;
   }
-  #step-code { display: none; }
 
   .note {
     margin-top: 18px;
@@ -235,21 +234,11 @@
 <section class="login-hero">
   <div class="card">
     <h1>Ingreso administradores</h1>
-    <p class="sub">Ingresa con el correo de administrador para gestionar meseros y ver reseñas del restaurante.</p>
+    <p class="sub">Inicia sesión con el correo y la contraseña de gerente que creaste para gestionar tu restaurante en Tapport: publicar vacantes, ver a tu equipo y sus reseñas.</p>
 
-    <div id="step-email">
-      <label for="email">Correo electrónico</label>
-      <input type="email" id="email" placeholder="tucorreo@ejemplo.com">
-      <button class="btn-primary" id="btn-send-code" type="button">Enviar código</button>
-    </div>
+    <a class="btn-primary" href="admin.html" style="display:block; text-align:center; text-decoration:none; box-sizing:border-box;">Ir al panel de administración</a>
 
-    <div id="step-code">
-      <label for="code">Código de verificación</label>
-      <input type="text" id="code" placeholder="Ingresa el código recibido">
-      <button class="btn-primary" id="btn-login" type="button">Ingresar</button>
-    </div>
-
-    <p class="note">Este flujo aún no está conectado — falta enlazarlo con el panel de administración.</p>
+    <p class="note">¿Primera vez? En el panel también puedes crear tu cuenta de gerente verificando tu correo.</p>
 
     <div class="divider"></div>
 
@@ -264,16 +253,6 @@
     <div class="footer-meta">Hecho en Lima, Perú · tapport.pe@gmail.com</div>
   </div>
 </footer>
-
-<script>
-  document.getElementById('btn-send-code').addEventListener('click', () => {
-    document.getElementById('step-email').style.display = 'none';
-    document.getElementById('step-code').style.display = 'block';
-  });
-  document.getElementById('btn-login').addEventListener('click', () => {
-    alert('Falta conectar este formulario con el sistema de verificación.');
-  });
-</script>
 
 </body>
 </html>
