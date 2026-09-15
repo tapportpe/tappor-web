@@ -179,6 +179,19 @@
   .stat-box .num { font-size: 22px; font-weight: 750; color: var(--accent); }
   .stat-box .label { font-size: 11px; color: var(--ink-soft); margin-top: 2px; }
 
+  /* ---- Gráfico comparativo del equipo ---- */
+  .chart-card { margin-top: 18px; }
+  .chart-title { font-size: 13px; font-weight: 700; color: var(--ink); margin: 0 0 10px; }
+  .chart-empty { font-size: 12.5px; color: var(--ink-soft); }
+  .chart-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+  .chart-row .chart-name {
+    width: 92px; flex-shrink: 0; font-size: 12px; font-weight: 600; color: var(--ink);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .chart-track { flex: 1; height: 14px; background: var(--accent-soft); border-radius: 999px; overflow: hidden; }
+  .chart-fill { height: 100%; background: var(--accent); border-radius: 999px; transition: width 0.4s ease; }
+  .chart-row .chart-value { width: 34px; flex-shrink: 0; font-size: 12px; font-weight: 700; color: var(--accent); text-align: right; }
+
   .mesero-row {
     border: 1px solid var(--line);
     border-radius: 12px;
@@ -356,6 +369,11 @@
           <div class="num" id="panelTotalResenas">—</div>
           <div class="label">Reseñas totales</div>
         </div>
+      </div>
+
+      <div class="chart-card" id="chartCard">
+        <p class="chart-title">Rating por mesero</p>
+        <div id="graficoMeseros"></div>
       </div>
 
       <button type="button" class="btn-secondary" id="toggleEditarNegocioBtn" style="margin-top:16px;">Editar perfil del negocio</button>
@@ -696,7 +714,33 @@
       document.getElementById("panelTotalMeseros").textContent = meseros.length;
       document.getElementById("panelTotalResenas").textContent = totalResenas;
 
+      renderGraficoMeseros(meseros);
       renderMeseros(meseros);
+    }
+
+    // Gráfico de barras horizontal (sin librerías externas) comparando el
+    // rating de cada mesero del restaurante, ordenado de mayor a menor.
+    function renderGraficoMeseros(meseros) {
+      const cont = document.getElementById("graficoMeseros");
+      if (!meseros.length) {
+        cont.innerHTML = '<div class="chart-empty">Todavía no hay meseros para graficar.</div>';
+        return;
+      }
+
+      const ordenados = meseros.slice().sort((a, b) => (b.promedio || 0) - (a.promedio || 0));
+
+      cont.innerHTML = ordenados.map(m => {
+        const promedio = m.promedio || 0;
+        const anchoPorc = Math.max((promedio / 5) * 100, promedio > 0 ? 4 : 0);
+        const valorTexto = promedio > 0 ? promedio.toFixed(1) : "—";
+        return `
+          <div class="chart-row">
+            <div class="chart-name">${escapeHtml(m.nombre)}</div>
+            <div class="chart-track"><div class="chart-fill" style="width:${anchoPorc}%;"></div></div>
+            <div class="chart-value">${valorTexto}</div>
+          </div>
+        `;
+      }).join("");
     }
 
     function renderMeseros(meseros) {
