@@ -6,15 +6,16 @@
 <title>Tapport</title>
 <style>
   :root {
-    --bg: #F6F5F1;
+    --bg: #F3F5F9;
     --card: #FFFFFF;
-    --ink: #14231F;
-    --ink-soft: #4B5C57;
-    --line: #DEDCD3;
-    --accent: #1F4B45;
-    --accent-soft: #E7EFEC;
+    --ink: #12131A;
+    --ink-soft: #5B6270;
+    --line: #E3E6ED;
+    --accent: #0A0F1F;
+    --gold: #D8A13A;
+    --accent-soft: #E4E6ED;
     --error: #B4432E;
-    --star: #E3A427;
+    --star: #D8A13A;
   }
 
   * { box-sizing: border-box; }
@@ -245,8 +246,8 @@
     padding: 12px;
     border: none;
     border-radius: 8px;
-    background: var(--accent);
-    color: #fff;
+    background: var(--gold);
+    color: var(--accent);
     font-size: 14.5px;
     font-weight: 600;
     cursor: pointer;
@@ -368,7 +369,7 @@
     font-size: 13px; font-weight: 600; text-decoration: none;
     border: 1.5px solid var(--line); color: var(--ink);
   }
-  .contact-btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .contact-btn.primary { background: var(--gold); border-color: var(--gold); color: var(--accent); }
 
   .review-item { border-bottom: 1px solid var(--line); padding: 11px 0; }
   .review-item:last-child { border-bottom: none; }
@@ -502,19 +503,19 @@
       <div style="clear:both;"></div>
 
       <div class="tutorial-step active" data-step="1">
-        <div class="tutorial-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1F4B45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
+        <div class="tutorial-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#0A0F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
         <h3>Bienvenido a Tapport</h3>
         <p>Aquí puedes buscar meseros, ver su rating y sus reseñas, o encontrar restaurantes que están buscando personal.</p>
       </div>
 
       <div class="tutorial-step" data-step="2">
-        <div class="tutorial-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1F4B45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg></div>
+        <div class="tutorial-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#0A0F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg></div>
         <h3>Todo empieza con una calificación</h3>
         <p>Cuando un cliente paga la cuenta, acerca su celular a la tarjeta Tapport del mesero (o escanea el QR) y lo califica. Esas reseñas arman su reputación.</p>
       </div>
 
       <div class="tutorial-step" data-step="3">
-        <div class="tutorial-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1F4B45" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg></div>
+        <div class="tutorial-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#0A0F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg></div>
         <h3>¿Eres mesero?</h3>
         <p>Crea tu cuenta desde la pestaña "Cuenta" para ver tu rating, todas tus reseñas y mantener tu perfil actualizado.</p>
       </div>
