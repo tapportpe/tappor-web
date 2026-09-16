@@ -49,7 +49,22 @@
   .field { margin-bottom: 14px; }
   label { display: block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
 
-  input[type="text"], input[type="email"], input[type="password"], select {
+  .row2 { display: flex; gap: 12px; }
+  .row2 .field { flex: 1; }
+
+  .photo-field { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+  .photo-circle {
+    width: 64px; height: 64px; border-radius: 50%; flex-shrink: 0;
+    background: var(--accent-soft); border: 1.5px dashed var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; font-size: 10.5px; font-weight: 600; color: var(--ink-soft);
+    cursor: pointer; overflow: hidden; line-height: 1.25;
+  }
+  .photo-circle img { width: 100%; height: 100%; object-fit: cover; }
+  .photo-meta { font-size: 12.5px; color: var(--ink-soft); line-height: 1.4; }
+  .photo-meta strong { color: var(--ink); font-size: 13px; }
+
+  input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="date"], select {
     width: 100%;
     padding: 11px 12px;
     border: 1px solid var(--line);
@@ -141,9 +156,36 @@
 
     <div class="card" id="formCard">
       <div id="crearPaso1">
+        <div class="photo-field">
+          <div class="photo-circle" id="photoCircle">
+            <span id="photoPlaceholder">Subir<br/>foto</span>
+            <img id="photoPreview" style="display:none" />
+          </div>
+          <div class="photo-meta"><strong>Foto del gerente</strong><br/>Toca el círculo para elegir una imagen</div>
+          <input type="file" id="foto" accept="image/*" style="display:none;" />
+        </div>
+
         <div class="field">
           <label for="crearRestaurante">Restaurante que administra</label>
           <select id="crearRestaurante"><option value="">Cargando…</option></select>
+        </div>
+        <div class="field">
+          <label for="crearNombre">Nombre completo</label>
+          <input type="text" id="crearNombre" placeholder="Nombre y apellido" />
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="crearTelefono">Teléfono</label>
+            <input type="tel" id="crearTelefono" placeholder="9XX XXX XXX" />
+          </div>
+          <div class="field">
+            <label for="crearDni">DNI</label>
+            <input type="text" id="crearDni" inputmode="numeric" maxlength="8" placeholder="8 dígitos" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="crearFechaNacimiento">Fecha de nacimiento</label>
+          <input type="date" id="crearFechaNacimiento" />
         </div>
         <div class="field">
           <label for="crearEmail">Correo del gerente</label>
@@ -210,6 +252,27 @@
       return div.innerHTML;
     }
 
+    // ---------- Foto ----------
+    let fotoBase64 = null;
+    const photoCircle = document.getElementById("photoCircle");
+    const fotoInput = document.getElementById("foto");
+    const photoPreview = document.getElementById("photoPreview");
+    const photoPlaceholder = document.getElementById("photoPlaceholder");
+
+    photoCircle.addEventListener("click", () => fotoInput.click());
+    fotoInput.addEventListener("change", () => {
+      const file = fotoInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        fotoBase64 = reader.result;
+        photoPreview.src = fotoBase64;
+        photoPreview.style.display = "block";
+        photoPlaceholder.style.display = "none";
+      };
+      reader.readAsDataURL(file);
+    });
+
     // Solo restaurantes SIN gerente asignado todavía — así no se puede
     // registrar dos veces el mismo restaurante.
     async function cargarRestaurantes() {
@@ -231,11 +294,20 @@
     // ---------- Paso 1: enviar código ----------
     document.getElementById("enviarCodigoBtn").addEventListener("click", async () => {
       const restaurante = document.getElementById("crearRestaurante").value;
+      const nombre = document.getElementById("crearNombre").value.trim();
+      const telefono = document.getElementById("crearTelefono").value.trim();
+      const dni = document.getElementById("crearDni").value.trim();
+      const fechaNacimiento = document.getElementById("crearFechaNacimiento").value;
       const email = document.getElementById("crearEmail").value.trim();
       const msg = document.getElementById("crearMsg1");
       const btn = document.getElementById("enviarCodigoBtn");
 
+      if (!fotoBase64) { msg.className = "msg error"; msg.textContent = "Sube una foto del gerente."; return; }
       if (!restaurante) { msg.className = "msg error"; msg.textContent = "Elige el restaurante que administra."; return; }
+      if (!nombre) { msg.className = "msg error"; msg.textContent = "Ingresa el nombre completo."; return; }
+      if (!telefono) { msg.className = "msg error"; msg.textContent = "Ingresa un teléfono."; return; }
+      if (!/^\d{8}$/.test(dni)) { msg.className = "msg error"; msg.textContent = "El DNI debe tener 8 dígitos."; return; }
+      if (!fechaNacimiento) { msg.className = "msg error"; msg.textContent = "Ingresa la fecha de nacimiento."; return; }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.className = "msg error"; msg.textContent = "Ingresa un correo válido."; return; }
 
       btn.disabled = true; btn.textContent = "Enviando…";
@@ -295,6 +367,10 @@
       const restaurante = document.getElementById("crearRestaurante").value;
       const email = document.getElementById("crearEmail").value.trim();
       const password = document.getElementById("nuevaPassword").value;
+      const nombre = document.getElementById("crearNombre").value.trim();
+      const telefono = document.getElementById("crearTelefono").value.trim();
+      const dni = document.getElementById("crearDni").value.trim();
+      const fechaNacimiento = document.getElementById("crearFechaNacimiento").value;
       const msg = document.getElementById("crearMsg3");
       const btn = document.getElementById("crearCuentaBtn");
 
@@ -307,7 +383,13 @@
         const res = await fetch(ENDPOINT, {
           method: "POST",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({ action: "crear_cuenta_gerente", email, restaurante, password })
+          body: JSON.stringify({
+            action: "crear_cuenta_gerente",
+            email, restaurante, password,
+            nombre, telefono, dni,
+            fecha_nacimiento: fechaNacimiento,
+            foto_base64: fotoBase64
+          })
         });
         const data = await res.json();
         if (data.ok) {
