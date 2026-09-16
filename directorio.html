@@ -496,6 +496,29 @@
     </div>
   </div>
 
+  <!-- Modal: "Me interesa" (postular a una vacante) -->
+  <div class="overlay" id="overlayInteresado">
+    <div class="modal">
+      <button class="modal-close" id="cerrarInteresadoBtn">×</button>
+      <h2 style="font-size:17px; margin:0 0 14px;">Me interesa este puesto</h2>
+      <input type="hidden" id="interesadoVacanteId" />
+      <div class="field">
+        <label for="interesadoNombre">Tu nombre</label>
+        <input type="text" id="interesadoNombre" placeholder="Nombre y apellido" />
+      </div>
+      <div class="field">
+        <label for="interesadoContacto">Tu teléfono o correo</label>
+        <input type="text" id="interesadoContacto" placeholder="999 999 999 o correo@ejemplo.com" />
+      </div>
+      <div class="field">
+        <label for="interesadoMensaje">Mensaje para el restaurante (opcional)</label>
+        <textarea id="interesadoMensaje" rows="3" placeholder="Cuéntales por qué te interesa, tu disponibilidad, etc."></textarea>
+      </div>
+      <button type="button" class="btn-primary" id="enviarInteresadoBtn">Enviar</button>
+      <div class="msg" id="interesadoMsg"></div>
+    </div>
+  </div>
+
   <!-- Modal: tutorial de bienvenida (aparece solo la primera vez) -->
   <div class="overlay" id="overlayTutorial">
     <div class="modal tutorial-modal">
@@ -672,19 +695,99 @@
           const estiloCover = tieneCover ? ` style="--cover-img: url('${escapeHtml(v.portadaUrl)}')"` : "";
           const logoHtml = v.logoUrl ? `<img src="${escapeHtml(v.logoUrl)}" onerror="this.style.display='none';" />` : "";
           return `
-            <div class="job-card${tieneCover ? " has-cover" : ""}"${estiloCover}>
+            <div class="job-card${tieneCover ? " has-cover" : ""}" data-vacante-id="${escapeHtml(v.id || "")}"${estiloCover}>
               <span class="tag">Buscan personal</span>
               <h3>${escapeHtml(v.puesto)}</h3>
               <div class="job-rest">${logoHtml}${escapeHtml(v.restaurante)}</div>
               ${v.descripcion ? `<p>${escapeHtml(v.descripcion)}</p>` : ""}
-              <a class="contact-btn" href="${href}">Contactar</a>
+              <div class="contact-row">
+                <a class="contact-btn" href="${href}">Contactar</a>
+                <button type="button" class="contact-btn primary btn-interesado" data-vacante-id="${escapeHtml(v.id || "")}">Me interesa</button>
+              </div>
             </div>
           `;
         }).join("");
+
+        registrarVistasVacantes(vacantes);
+        document.querySelectorAll(".btn-interesado").forEach(btn => {
+          btn.addEventListener("click", () => abrirModalInteresado(btn.dataset.vacanteId));
+        });
       } catch (err) {
         cont.innerHTML = '<div class="empty-state">No se pudieron cargar los anuncios.</div>';
       }
     }
+
+    // Registra 1 vista por vacante, pero solo la PRIMERA vez que este
+    // navegador la ve (localStorage), para no inflar el contador con cada
+    // recarga de la página.
+    function registrarVistasVacantes(vacantes) {
+      vacantes.forEach(v => {
+        if (!v.id) return;
+        const key = "tapport_vista_" + v.id;
+        if (localStorage.getItem(key)) return;
+        localStorage.setItem(key, "1");
+        fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "registrar_vista_vacante", id: v.id })
+        }).catch(() => {});
+      });
+    }
+
+    // ---------- Modal: "Me interesa" (postular a una vacante) ----------
+    function abrirModalInteresado(vacanteId) {
+      document.getElementById("interesadoVacanteId").value = vacanteId;
+      document.getElementById("interesadoNombre").value = "";
+      document.getElementById("interesadoContacto").value = "";
+      document.getElementById("interesadoMensaje").value = "";
+      document.getElementById("interesadoMsg").textContent = "";
+      document.getElementById("overlayInteresado").classList.add("show");
+    }
+    document.getElementById("cerrarInteresadoBtn").addEventListener("click", () => {
+      document.getElementById("overlayInteresado").classList.remove("show");
+    });
+    document.getElementById("overlayInteresado").addEventListener("click", (e) => {
+      if (e.target.id === "overlayInteresado") document.getElementById("overlayInteresado").classList.remove("show");
+    });
+    document.getElementById("enviarInteresadoBtn").addEventListener("click", async () => {
+      const vacanteId = document.getElementById("interesadoVacanteId").value;
+      const nombre = document.getElementById("interesadoNombre").value.trim();
+      const contacto = document.getElementById("interesadoContacto").value.trim();
+      const mensaje = document.getElementById("interesadoMensaje").value.trim();
+      const msg = document.getElementById("interesadoMsg");
+      const btn = document.getElementById("enviarInteresadoBtn");
+
+      if (!nombre || !contacto) {
+        msg.className = "msg error";
+        msg.textContent = "Completa tu nombre y un contacto (teléfono o correo).";
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Enviando…";
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "postular_vacante", vacanteId, nombre, contacto, mensaje })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          msg.className = "msg ok";
+          msg.textContent = "¡Listo! El restaurante ya puede ver tu interés.";
+          setTimeout(() => document.getElementById("overlayInteresado").classList.remove("show"), 900);
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.error || "No se pudo enviar.";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Enviar";
+      }
+    });
 
     async function cargarDestacados() {
       const cont = document.getElementById("feedDestacados");
