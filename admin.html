@@ -186,6 +186,34 @@
   .chart-fill { height: 100%; background: var(--gold); border-radius: 999px; transition: width 0.4s ease; }
   .chart-row .chart-value { width: 34px; flex-shrink: 0; font-size: 12px; font-weight: 700; color: var(--accent); text-align: right; }
 
+  /* ---- Mis vacantes / interesados ---- */
+  .vacante-item { border: 1px solid var(--line); border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+  .vacante-item h3 { font-size: 14.5px; margin: 0 0 4px; }
+  .vacante-item .vacante-meta { font-size: 12px; color: var(--ink-soft); margin-bottom: 10px; }
+  .vacante-badges { display: flex; gap: 8px; margin-bottom: 10px; }
+  .vacante-badge {
+    font-size: 11.5px; font-weight: 700; color: var(--accent);
+    background: var(--accent-soft); border-radius: 999px; padding: 4px 10px;
+  }
+  .vacante-actions { display: flex; gap: 8px; margin-top: 10px; }
+  .vacante-actions button {
+    flex: 1; padding: 8px; border-radius: 8px; font-size: 12.5px; font-weight: 600; cursor: pointer;
+  }
+  .vacante-actions .btn-editar { border: 1.5px solid var(--line); background: #FAFAFB; color: var(--ink); }
+  .vacante-actions .btn-eliminar { border: 1.5px solid var(--error); background: #FDECEC; color: var(--error); }
+
+  .interesados-toggle {
+    background: none; border: none; padding: 0; font-size: 12.5px; font-weight: 700;
+    color: var(--accent); cursor: pointer; text-decoration: underline;
+  }
+  .interesados-list { margin-top: 10px; display: none; }
+  .interesados-list.show { display: block; }
+  .interesado-item { background: #FAFAFB; border-radius: 8px; padding: 10px; margin-bottom: 8px; }
+  .interesado-item .ii-top { display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 700; }
+  .interesado-item .ii-contacto { font-size: 12px; color: var(--ink-soft); }
+  .interesado-item .ii-msg { font-size: 12.5px; margin-top: 6px; }
+  .interesado-item .ii-fecha { font-size: 11px; color: var(--ink-soft); margin-top: 4px; }
+
   .mesero-row {
     border: 1px solid var(--line);
     border-radius: 12px;
@@ -328,8 +356,37 @@
 
       <button type="button" class="btn-secondary" id="toggleEditarNegocioBtn" style="margin-top:16px;">Editar perfil del negocio</button>
       <button type="button" class="btn-secondary" id="togglePublicarVacanteBtn" style="margin-top:10px;">+ Publicar vacante</button>
+      <button type="button" class="btn-secondary" id="toggleMisVacantesBtn" style="margin-top:10px;">Ver mis vacantes</button>
 
       <div id="listaMeseros" style="margin-top:6px;"></div>
+    </div>
+
+    <!-- ============ MIS VACANTES (vistas, interesados, editar/eliminar) ============ -->
+    <div class="card hidden" id="misVacantesCard">
+      <h2 style="font-size:16px; margin:0 0 16px;">Mis vacantes</h2>
+      <div id="listaVacantes"></div>
+      <button type="button" class="btn-secondary" id="cerrarMisVacantesBtn" style="margin-top:14px;">Volver</button>
+    </div>
+
+    <!-- ============ EDITAR VACANTE ============ -->
+    <div class="card hidden" id="editarVacanteCard">
+      <h2 style="font-size:16px; margin:0 0 16px;">Editar vacante</h2>
+      <input type="hidden" id="evId" />
+      <div class="field">
+        <label for="evPuesto">Puesto que buscan</label>
+        <input type="text" id="evPuesto" />
+      </div>
+      <div class="field">
+        <label for="evDescripcion">Descripción (opcional)</label>
+        <textarea id="evDescripcion" rows="3"></textarea>
+      </div>
+      <div class="field">
+        <label for="evContacto">Teléfono o correo de contacto</label>
+        <input type="text" id="evContacto" />
+      </div>
+      <button type="button" class="btn-primary" id="guardarVacanteBtn">Guardar cambios</button>
+      <button type="button" class="btn-secondary" id="cancelarEditarVacanteBtn">Cancelar</button>
+      <div class="msg" id="editarVacanteMsg"></div>
     </div>
 
     <!-- ============ PUBLICAR VACANTE (solo gerente logueado) ============ -->
@@ -528,6 +585,8 @@
       document.getElementById("authCard").classList.add("hidden");
       document.getElementById("editNegocioCard").classList.add("hidden");
       document.getElementById("publicarVacanteCard").classList.add("hidden");
+      document.getElementById("misVacantesCard").classList.add("hidden");
+      document.getElementById("editarVacanteCard").classList.add("hidden");
       document.getElementById("panel").classList.remove("hidden");
       document.getElementById("headerSub").textContent = "Este es el equipo de tu restaurante en Tapport.";
 
@@ -627,6 +686,8 @@
       document.getElementById("panel").classList.add("hidden");
       document.getElementById("editNegocioCard").classList.add("hidden");
       document.getElementById("publicarVacanteCard").classList.add("hidden");
+      document.getElementById("misVacantesCard").classList.add("hidden");
+      document.getElementById("editarVacanteCard").classList.add("hidden");
       document.getElementById("authCard").classList.remove("hidden");
       document.getElementById("headerSub").textContent = "Inicia sesión para ver las reseñas y el rating de tu equipo.";
       document.getElementById("loginPassword").value = "";
@@ -744,6 +805,170 @@
       } finally {
         btn.disabled = false;
         btn.textContent = "Publicar anuncio";
+      }
+    });
+
+    // ---------- Mis vacantes: vistas, interesados, editar, eliminar ----------
+    document.getElementById("toggleMisVacantesBtn").addEventListener("click", () => {
+      document.getElementById("panel").classList.add("hidden");
+      document.getElementById("misVacantesCard").classList.remove("hidden");
+      cargarMisVacantes();
+    });
+    document.getElementById("cerrarMisVacantesBtn").addEventListener("click", () => {
+      document.getElementById("misVacantesCard").classList.add("hidden");
+      document.getElementById("panel").classList.remove("hidden");
+    });
+
+    function formatearFecha(iso) {
+      const d = new Date(iso);
+      if (isNaN(d)) return "";
+      return d.toLocaleDateString("es-PE", { day: "2-digit", month: "short", year: "numeric" });
+    }
+
+    async function cargarMisVacantes() {
+      const cont = document.getElementById("listaVacantes");
+      cont.innerHTML = '<p style="font-size:13px; color:var(--ink-soft);">Cargando…</p>';
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "listar_postulaciones_vacantes", email: sesion.email, password: sesion.password })
+        });
+        const data = await res.json();
+        if (!data.ok) {
+          cont.innerHTML = `<p style="font-size:13px; color:var(--error);">${escapeHtml(data.error || "No se pudo cargar.")}</p>`;
+          return;
+        }
+        renderMisVacantes(data.vacantes || []);
+      } catch (err) {
+        cont.innerHTML = '<p style="font-size:13px; color:var(--error);">Error de conexión.</p>';
+      }
+    }
+
+    function renderMisVacantes(vacantes) {
+      const cont = document.getElementById("listaVacantes");
+      if (!vacantes.length) {
+        cont.innerHTML = '<p style="font-size:13px; color:var(--ink-soft);">Todavía no has publicado ninguna vacante.</p>';
+        return;
+      }
+
+      cont.innerHTML = vacantes.map((v, idx) => {
+        const interesadosHtml = v.postulaciones.length
+          ? v.postulaciones.map(p => `
+              <div class="interesado-item">
+                <div class="ii-top"><span>${escapeHtml(p.nombre)}</span></div>
+                <div class="ii-contacto">${escapeHtml(p.contacto)}</div>
+                ${p.mensaje ? `<div class="ii-msg">${escapeHtml(p.mensaje)}</div>` : ""}
+                <div class="ii-fecha">${formatearFecha(p.fecha)}</div>
+              </div>
+            `).join("")
+          : '<p style="font-size:12.5px; color:var(--ink-soft);">Nadie ha mostrado interés todavía.</p>';
+
+        return `
+          <div class="vacante-item">
+            <h3>${escapeHtml(v.puesto)}</h3>
+            <div class="vacante-meta">Publicada el ${formatearFecha(v.fecha)}</div>
+            <div class="vacante-badges">
+              <span class="vacante-badge">${v.vistas} vista${v.vistas === 1 ? "" : "s"}</span>
+              <span class="vacante-badge">${v.postulaciones.length} interesado${v.postulaciones.length === 1 ? "" : "s"}</span>
+            </div>
+            <button type="button" class="interesados-toggle" data-idx="${idx}">Ver interesados</button>
+            <div class="interesados-list" id="interesados-${idx}">${interesadosHtml}</div>
+            <div class="vacante-actions">
+              <button type="button" class="btn-editar" data-id="${escapeHtml(v.id)}" data-puesto="${escapeHtml(v.puesto)}" data-descripcion="${escapeHtml(v.descripcion || "")}" data-contacto="${escapeHtml(v.contacto)}">Editar</button>
+              <button type="button" class="btn-eliminar" data-id="${escapeHtml(v.id)}">Eliminar</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      cont.querySelectorAll(".interesados-toggle").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const list = document.getElementById("interesados-" + btn.dataset.idx);
+          const abierto = list.classList.toggle("show");
+          btn.textContent = abierto ? "Ocultar interesados" : "Ver interesados";
+        });
+      });
+
+      cont.querySelectorAll(".btn-editar").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.getElementById("evId").value = btn.dataset.id;
+          document.getElementById("evPuesto").value = btn.dataset.puesto;
+          document.getElementById("evDescripcion").value = btn.dataset.descripcion;
+          document.getElementById("evContacto").value = btn.dataset.contacto;
+          document.getElementById("editarVacanteMsg").textContent = "";
+          document.getElementById("misVacantesCard").classList.add("hidden");
+          document.getElementById("editarVacanteCard").classList.remove("hidden");
+        });
+      });
+
+      cont.querySelectorAll(".btn-eliminar").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          if (!confirm("¿Eliminar esta vacante? Esta acción no se puede deshacer.")) return;
+          btn.disabled = true;
+          try {
+            const res = await fetch(ENDPOINT, {
+              method: "POST",
+              headers: { "Content-Type": "text/plain;charset=utf-8" },
+              body: JSON.stringify({ action: "eliminar_vacante", email: sesion.email, password: sesion.password, id: btn.dataset.id })
+            });
+            const data = await res.json();
+            if (data.ok) {
+              cargarMisVacantes();
+            } else {
+              alert(data.error || "No se pudo eliminar.");
+              btn.disabled = false;
+            }
+          } catch (err) {
+            alert("Error de conexión.");
+            btn.disabled = false;
+          }
+        });
+      });
+    }
+
+    document.getElementById("cancelarEditarVacanteBtn").addEventListener("click", () => {
+      document.getElementById("editarVacanteCard").classList.add("hidden");
+      document.getElementById("misVacantesCard").classList.remove("hidden");
+    });
+
+    document.getElementById("guardarVacanteBtn").addEventListener("click", async () => {
+      const btn = document.getElementById("guardarVacanteBtn");
+      const msg = document.getElementById("editarVacanteMsg");
+      const id = document.getElementById("evId").value;
+      const puesto = document.getElementById("evPuesto").value.trim();
+      const descripcion = document.getElementById("evDescripcion").value.trim();
+      const contacto = document.getElementById("evContacto").value.trim();
+
+      if (!puesto || !contacto) {
+        msg.className = "msg error";
+        msg.textContent = "Completa el puesto y el contacto.";
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Guardando…";
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "editar_vacante", email: sesion.email, password: sesion.password, id, puesto, descripcion, contacto })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          document.getElementById("editarVacanteCard").classList.add("hidden");
+          document.getElementById("misVacantesCard").classList.remove("hidden");
+          cargarMisVacantes();
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.error || "No se pudo guardar.";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Guardar cambios";
       }
     });
 
