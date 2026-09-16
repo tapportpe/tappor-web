@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Crear cuenta de gerente — Tapport</title>
+<style>
+  :root {
+    --bg: #F3F5F9;
+    --card: #FFFFFF;
+    --ink: #12131A;
+    --ink-soft: #5B6270;
+    --line: #E3E6ED;
+    --accent: #0A0F1F;
+    --gold: #D8A13A;
+    --accent-soft: #E4E6ED;
+    --error: #B4432E;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px 60px;
+    min-height: 100vh;
+  }
+
+  .wrap { width: 100%; max-width: 520px; }
+
+  header { margin-bottom: 24px; }
+  .eyebrow { font-size: 13px; color: var(--ink-soft); }
+  h1 { font-size: 24px; margin: 6px 0 8px; font-weight: 650; }
+  .sub { font-size: 14px; color: var(--ink-soft); line-height: 1.5; margin: 0; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 22px;
+    margin-top: 20px;
+    overflow: hidden;
+  }
+
+  .field { margin-bottom: 14px; }
+  label { display: block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
+
+  input[type="text"], input[type="email"], input[type="password"], select {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 15px;
+    color: var(--ink);
+    background: #FCFCFA;
+    font-family: inherit;
+  }
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  .password-field { position: relative; }
+  .password-field input { padding-right: 42px; }
+  .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--ink-soft);
+    padding: 0;
+  }
+  .toggle-password svg { width: 19px; height: 19px; }
+  .toggle-password .eye-off { display: none; }
+  .toggle-password.showing .eye { display: none; }
+  .toggle-password.showing .eye-off { display: block; }
+
+  .btn-primary {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    background: var(--gold);
+    color: var(--accent);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .btn-primary:disabled { opacity: 0.6; cursor: default; }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 12px;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    background: #FAFAFB;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  .msg { font-size: 13px; margin-top: 10px; text-align: center; }
+  .msg.error { color: var(--error); }
+  .msg.ok { color: var(--accent); }
+
+  .hidden { display: none !important; }
+
+  /* --- Pantalla de éxito --- */
+  .success-icon {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--accent-soft);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+  }
+  .success h2 { font-size: 18px; text-align: center; margin: 0 0 8px; }
+  .success p { font-size: 13.5px; color: var(--ink-soft); text-align: center; line-height: 1.5; margin: 0 0 18px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="eyebrow">Tapport · Alta de gerentes</div>
+      <h1>Crear cuenta de gerente</h1>
+      <p class="sub">Este link es privado — solo se usa una vez por restaurante, cuando se suma un nuevo gerente a Tapport.</p>
+    </header>
+
+    <div class="card" id="formCard">
+      <div id="crearPaso1">
+        <div class="field">
+          <label for="crearRestaurante">Restaurante que administra</label>
+          <select id="crearRestaurante"><option value="">Cargando…</option></select>
+        </div>
+        <div class="field">
+          <label for="crearEmail">Correo del gerente</label>
+          <input type="email" id="crearEmail" placeholder="tucorreo@restaurante.com" />
+        </div>
+        <button type="button" class="btn-primary" id="enviarCodigoBtn">Enviar código de verificación</button>
+        <div class="msg" id="crearMsg1"></div>
+      </div>
+
+      <div id="crearPaso2" class="hidden" style="margin-top:16px;">
+        <div class="field">
+          <label for="codigoVerif">Código que le llegó al correo</label>
+          <input type="text" id="codigoVerif" inputmode="numeric" maxlength="6" placeholder="123456" />
+        </div>
+        <button type="button" class="btn-secondary" id="verificarCodigoBtn">Verificar código</button>
+        <div class="msg" id="crearMsg2"></div>
+      </div>
+
+      <div id="crearPaso3" class="hidden" style="margin-top:16px;">
+        <div class="field">
+          <label for="nuevaPassword">Contraseña (mínimo 6 caracteres)</label>
+          <div class="password-field">
+            <input type="password" id="nuevaPassword" />
+            <button type="button" class="toggle-password" data-target="nuevaPassword" aria-label="Mostrar contraseña">
+              <svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10.6 10.6 0 0 1 12 19c-7 0-11-7-11-7a18.6 18.6 0 0 1 4.2-5.1M9.9 4.2A9.9 9.9 0 0 1 12 4c7 0 11 7 11 7a18.6 18.6 0 0 1-2.2 3.1M14.1 14.1a3 3 0 1 1-4.2-4.2"/><path d="M1 1l22 22"/></svg>
+            </button>
+          </div>
+        </div>
+        <button type="button" class="btn-primary" id="crearCuentaBtn">Crear cuenta</button>
+        <div class="msg" id="crearMsg3"></div>
+      </div>
+    </div>
+
+    <div class="card success hidden" id="successCard">
+      <div class="success-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M4 12.5L9.5 18L20 6" stroke="#0A0F1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2>¡Cuenta creada!</h2>
+      <p>Ya puede iniciar sesión en el panel de gerente con el correo y la contraseña que acaba de crear.</p>
+      <a class="btn-primary" href="admin.html" style="display:block; text-align:center; text-decoration:none; box-sizing:border-box;">Ir a iniciar sesión</a>
+    </div>
+  </div>
+
+  <script>
+    const ENDPOINT = "https://script.google.com/macros/s/AKfycbx9nTiQEr_2AvK0bc3hIyJPao5PqtADFeRQKuhR6_XFV_rR0FG0UsZ5sexFrkyJIdJW/exec";
+
+    document.querySelectorAll(".toggle-password").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const input = document.getElementById(btn.dataset.target);
+        if (!input) return;
+        const mostrando = input.type === "text";
+        input.type = mostrando ? "password" : "text";
+        btn.classList.toggle("showing", !mostrando);
+        btn.setAttribute("aria-label", mostrando ? "Mostrar contraseña" : "Ocultar contraseña");
+      });
+    });
+
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // Solo restaurantes SIN gerente asignado todavía — así no se puede
+    // registrar dos veces el mismo restaurante.
+    async function cargarRestaurantes() {
+      const select = document.getElementById("crearRestaurante");
+      try {
+        const res = await fetch(`${ENDPOINT}?accion=restaurantes_disponibles`);
+        const data = await res.json();
+        const lista = (data.restaurantes || []).slice().sort();
+        select.innerHTML = lista.length
+          ? '<option value="">Selecciona un restaurante</option>' +
+            lista.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("")
+          : '<option value="">No hay restaurantes disponibles</option>';
+      } catch (err) {
+        select.innerHTML = '<option value="">No se pudo cargar</option>';
+      }
+    }
+    cargarRestaurantes();
+
+    // ---------- Paso 1: enviar código ----------
+    document.getElementById("enviarCodigoBtn").addEventListener("click", async () => {
+      const restaurante = document.getElementById("crearRestaurante").value;
+      const email = document.getElementById("crearEmail").value.trim();
+      const msg = document.getElementById("crearMsg1");
+      const btn = document.getElementById("enviarCodigoBtn");
+
+      if (!restaurante) { msg.className = "msg error"; msg.textContent = "Elige el restaurante que administra."; return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.className = "msg error"; msg.textContent = "Ingresa un correo válido."; return; }
+
+      btn.disabled = true; btn.textContent = "Enviando…";
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "enviar_codigo_verificacion", email })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          msg.className = "msg ok";
+          msg.textContent = "Le enviamos un código. Revisa su correo.";
+          document.getElementById("crearPaso2").classList.remove("hidden");
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.error || "No se pudo enviar el código.";
+        }
+      } catch (err) {
+        msg.className = "msg error"; msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false; btn.textContent = "Enviar código de verificación";
+      }
+    });
+
+    // ---------- Paso 2: verificar código ----------
+    document.getElementById("verificarCodigoBtn").addEventListener("click", async () => {
+      const email = document.getElementById("crearEmail").value.trim();
+      const codigo = document.getElementById("codigoVerif").value.trim();
+      const msg = document.getElementById("crearMsg2");
+      const btn = document.getElementById("verificarCodigoBtn");
+      if (!codigo) return;
+
+      btn.disabled = true; btn.textContent = "Verificando…";
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "verificar_codigo", email, codigo })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          msg.className = "msg ok"; msg.textContent = "✓ Correo verificado";
+          document.getElementById("crearPaso3").classList.remove("hidden");
+        } else {
+          msg.className = "msg error"; msg.textContent = data.error || "Código incorrecto.";
+        }
+      } catch (err) {
+        msg.className = "msg error"; msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false; btn.textContent = "Verificar código";
+      }
+    });
+
+    // ---------- Paso 3: crear cuenta ----------
+    document.getElementById("crearCuentaBtn").addEventListener("click", async () => {
+      const restaurante = document.getElementById("crearRestaurante").value;
+      const email = document.getElementById("crearEmail").value.trim();
+      const password = document.getElementById("nuevaPassword").value;
+      const msg = document.getElementById("crearMsg3");
+      const btn = document.getElementById("crearCuentaBtn");
+
+      if (password.length < 6) {
+        msg.className = "msg error"; msg.textContent = "La contraseña debe tener al menos 6 caracteres."; return;
+      }
+
+      btn.disabled = true; btn.textContent = "Creando…";
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "crear_cuenta_gerente", email, restaurante, password })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          document.getElementById("formCard").classList.add("hidden");
+          document.getElementById("successCard").classList.remove("hidden");
+        } else {
+          msg.className = "msg error"; msg.textContent = data.error || "No se pudo crear la cuenta.";
+        }
+      } catch (err) {
+        msg.className = "msg error"; msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false; btn.textContent = "Crear cuenta";
+      }
+    });
+  </script>
+</body>
+</html>
