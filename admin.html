@@ -126,13 +126,6 @@
   .msg.ok { color: var(--accent); }
   .msg.notice { color: var(--ink-soft); }
 
-  .tabs { display: flex; gap: 8px; margin-bottom: 4px; }
-  .tabs button {
-    flex: 1; padding: 10px; border-radius: 8px; border: 1.5px solid var(--line);
-    background: #FAFAFB; font-size: 13px; font-weight: 600; color: var(--ink-soft); cursor: pointer;
-  }
-  .tabs button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-
   .hidden { display: none !important; }
 
   /* --- Portada del negocio --- */
@@ -273,16 +266,11 @@
       <p class="sub" id="headerSub">Inicia sesión para ver las reseñas y el rating de tu equipo.</p>
     </header>
 
-    <!-- ============ LOGIN / CREAR CUENTA ============ -->
+    <!-- ============ LOGIN ============ -->
     <div class="card" id="authCard">
       <div class="msg notice hidden" id="sesionExpiradaMsg">Tu sesión expiró por inactividad. Vuelve a iniciar sesión.</div>
 
-      <div class="tabs">
-        <button type="button" id="tabLogin" class="active">Iniciar sesión</button>
-        <button type="button" id="tabCrear">Crear cuenta de gerente</button>
-      </div>
-
-      <div id="loginForm" style="margin-top:16px;">
+      <div id="loginForm">
         <div class="field">
           <label for="loginEmail">Correo electrónico</label>
           <input type="email" id="loginEmail" placeholder="tucorreo@restaurante.com" />
@@ -299,45 +287,6 @@
         </div>
         <button type="button" class="btn-primary" id="loginBtn">Iniciar sesión</button>
         <div class="msg" id="loginMsg"></div>
-      </div>
-
-      <div id="crearForm" style="margin-top:16px; display:none;">
-        <div id="crearPaso1">
-          <div class="field">
-            <label for="crearRestaurante">Restaurante que administras</label>
-            <select id="crearRestaurante"><option value="">Cargando…</option></select>
-          </div>
-          <div class="field">
-            <label for="crearEmail">Tu correo</label>
-            <input type="email" id="crearEmail" placeholder="tucorreo@restaurante.com" />
-          </div>
-          <button type="button" class="btn-primary" id="enviarCodigoBtn">Enviar código de verificación</button>
-          <div class="msg" id="crearMsg1"></div>
-        </div>
-
-        <div id="crearPaso2" style="display:none; margin-top:16px;">
-          <div class="field">
-            <label for="codigoVerif">Código que te llegó al correo</label>
-            <input type="text" id="codigoVerif" inputmode="numeric" maxlength="6" placeholder="123456" />
-          </div>
-          <button type="button" class="btn-secondary" id="verificarCodigoBtn">Verificar código</button>
-          <div class="msg" id="crearMsg2"></div>
-        </div>
-
-        <div id="crearPaso3" style="display:none; margin-top:16px;">
-          <div class="field">
-            <label for="nuevaPassword">Crea tu contraseña (mínimo 6 caracteres)</label>
-            <div class="password-field">
-              <input type="password" id="nuevaPassword" />
-              <button type="button" class="toggle-password" data-target="nuevaPassword" aria-label="Mostrar contraseña">
-                <svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10.6 10.6 0 0 1 12 19c-7 0-11-7-11-7a18.6 18.6 0 0 1 4.2-5.1M9.9 4.2A9.9 9.9 0 0 1 12 4c7 0 11 7 11 7a18.6 18.6 0 0 1-2.2 3.1M14.1 14.1a3 3 0 1 1-4.2-4.2"/><path d="M1 1l22 22"/></svg>
-              </button>
-            </div>
-          </div>
-          <button type="button" class="btn-primary" id="crearCuentaBtn">Crear cuenta</button>
-          <div class="msg" id="crearMsg3"></div>
-        </div>
       </div>
     </div>
 
@@ -493,35 +442,6 @@
       document.getElementById("sesionExpiradaMsg").classList.remove("hidden");
     }
 
-    // ---------- Tabs ----------
-    // "Crear cuenta de gerente" está oculto por defecto: solo aparece si el
-    // link incluye ?registro=1 — ese es el link privado que Santiago le
-    // manda a cada gerente nuevo. El link público (el que va en inicio.html)
-    // no lo lleva, así que ahí solo se puede iniciar sesión.
-    const params = new URLSearchParams(window.location.search);
-    const esLinkDeRegistro = params.get("registro") === "1";
-
-    const tabLogin = document.getElementById("tabLogin");
-    const tabCrear = document.getElementById("tabCrear");
-
-    if (!esLinkDeRegistro) {
-      tabCrear.style.display = "none";
-    }
-
-    tabLogin.addEventListener("click", () => {
-      tabLogin.classList.add("active"); tabCrear.classList.remove("active");
-      document.getElementById("loginForm").style.display = "block";
-      document.getElementById("crearForm").style.display = "none";
-    });
-    tabCrear.addEventListener("click", () => {
-      tabCrear.classList.add("active"); tabLogin.classList.remove("active");
-      document.getElementById("crearForm").style.display = "block";
-      document.getElementById("loginForm").style.display = "none";
-    });
-
-    // Si entraron con el link de registro, arranca directo en "Crear cuenta".
-    if (esLinkDeRegistro) tabCrear.click();
-
     // ---------- Login ----------
     document.getElementById("loginBtn").addEventListener("click", async () => {
       const email = document.getElementById("loginEmail").value.trim();
@@ -558,112 +478,6 @@
         msg.textContent = "Error de conexión. Intenta de nuevo.";
       } finally {
         btn.disabled = false; btn.textContent = "Iniciar sesión";
-      }
-    });
-
-    // ---------- Crear cuenta paso 1 ----------
-    document.getElementById("enviarCodigoBtn").addEventListener("click", async () => {
-      const restaurante = document.getElementById("crearRestaurante").value;
-      const email = document.getElementById("crearEmail").value.trim();
-      const msg = document.getElementById("crearMsg1");
-      const btn = document.getElementById("enviarCodigoBtn");
-
-      if (!restaurante) { msg.className = "msg error"; msg.textContent = "Elige el restaurante que administras."; return; }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.className = "msg error"; msg.textContent = "Ingresa un correo válido."; return; }
-
-      btn.disabled = true; btn.textContent = "Enviando…";
-      try {
-        const res = await fetch(ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({ action: "enviar_codigo_verificacion", email })
-        });
-        const data = await res.json();
-        if (data.ok) {
-          msg.className = "msg ok";
-          msg.textContent = "Te enviamos un código. Revisa tu correo.";
-          document.getElementById("crearPaso2").style.display = "block";
-        } else {
-          msg.className = "msg error";
-          msg.textContent = data.error || "No se pudo enviar el código.";
-        }
-      } catch (err) {
-        msg.className = "msg error"; msg.textContent = "Error de conexión.";
-      } finally {
-        btn.disabled = false; btn.textContent = "Enviar código de verificación";
-      }
-    });
-
-    // ---------- Crear cuenta paso 2 ----------
-    document.getElementById("verificarCodigoBtn").addEventListener("click", async () => {
-      const email = document.getElementById("crearEmail").value.trim();
-      const codigo = document.getElementById("codigoVerif").value.trim();
-      const msg = document.getElementById("crearMsg2");
-      const btn = document.getElementById("verificarCodigoBtn");
-      if (!codigo) return;
-
-      btn.disabled = true; btn.textContent = "Verificando…";
-      try {
-        const res = await fetch(ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({ action: "verificar_codigo", email, codigo })
-        });
-        const data = await res.json();
-        if (data.ok) {
-          msg.className = "msg ok"; msg.textContent = "✓ Correo verificado";
-          document.getElementById("crearPaso3").style.display = "block";
-        } else {
-          msg.className = "msg error"; msg.textContent = data.error || "Código incorrecto.";
-        }
-      } catch (err) {
-        msg.className = "msg error"; msg.textContent = "Error de conexión.";
-      } finally {
-        btn.disabled = false; btn.textContent = "Verificar código";
-      }
-    });
-
-    // ---------- Crear cuenta paso 3 ----------
-    document.getElementById("crearCuentaBtn").addEventListener("click", async () => {
-      const restaurante = document.getElementById("crearRestaurante").value;
-      const email = document.getElementById("crearEmail").value.trim();
-      const password = document.getElementById("nuevaPassword").value;
-      const msg = document.getElementById("crearMsg3");
-      const btn = document.getElementById("crearCuentaBtn");
-
-      if (password.length < 6) {
-        msg.className = "msg error"; msg.textContent = "La contraseña debe tener al menos 6 caracteres."; return;
-      }
-
-      btn.disabled = true; btn.textContent = "Creando…";
-      try {
-        const res = await fetch(ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({ action: "crear_cuenta_gerente", email, restaurante, password })
-        });
-        const data = await res.json();
-        if (data.ok) {
-          const resLogin = await fetch(ENDPOINT, {
-            method: "POST",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ action: "login_gerente", email, password })
-          });
-          const dataLogin = await resLogin.json();
-          if (dataLogin.ok) {
-            sesion = { email, password, ...dataLogin };
-            guardarSesion(sesion);
-            document.getElementById("sesionExpiradaMsg").classList.add("hidden");
-            mostrarPanel();
-            iniciarVigilanciaSesion();
-          }
-        } else {
-          msg.className = "msg error"; msg.textContent = data.error || "No se pudo crear la cuenta.";
-        }
-      } catch (err) {
-        msg.className = "msg error"; msg.textContent = "Error de conexión.";
-      } finally {
-        btn.disabled = false; btn.textContent = "Crear cuenta";
       }
     });
 
@@ -1011,26 +825,6 @@
         btn.textContent = "Guardar cambios";
       }
     });
-
-    // ---------- Cargar restaurantes para el selector de "crear cuenta" ----------
-    // Usa "restaurantes_disponibles" (no "restaurantes") a propósito: excluye
-    // los restaurantes que ya tienen una cuenta de gerente creada, para que
-    // no se pueda intentar registrar dos veces el mismo restaurante.
-    async function cargarRestaurantes() {
-      const select = document.getElementById("crearRestaurante");
-      try {
-        const res = await fetch(`${ENDPOINT}?accion=restaurantes_disponibles`);
-        const data = await res.json();
-        const lista = (data.restaurantes || []).slice().sort();
-        select.innerHTML = lista.length
-          ? '<option value="">Selecciona un restaurante</option>' +
-            lista.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("")
-          : '<option value="">No hay restaurantes disponibles</option>';
-      } catch (err) {
-        select.innerHTML = '<option value="">No se pudo cargar</option>';
-      }
-    }
-    cargarRestaurantes();
 
     // ---------- Revisa si ya hay una sesión activa al cargar ----------
     const sesionGuardada = leerSesion();
