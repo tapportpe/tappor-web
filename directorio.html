@@ -284,17 +284,22 @@
   .bottom-nav {
     position: fixed;
     bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
+    right: 0;
     width: 100%;
-    max-width: 480px;
     background: var(--card);
     border-top: 1px solid var(--line);
     display: flex;
-    align-items: center;
-    justify-content: space-around;
+    justify-content: center;
     padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
     z-index: 20;
+  }
+  .bottom-nav-inner {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
   }
   .nav-item {
     background: none;
@@ -466,17 +471,19 @@
 
   <!-- Barra de navegación inferior -->
   <div class="bottom-nav">
-    <button type="button" class="nav-item active" data-view="home">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
-      Home
-    </button>
-    <button type="button" class="nav-item search-item" data-view="buscar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-    </button>
-    <button type="button" class="nav-item" data-view="cuenta">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg>
-      Cuenta
-    </button>
+    <div class="bottom-nav-inner">
+      <button type="button" class="nav-item active" data-view="home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
+        Home
+      </button>
+      <button type="button" class="nav-item search-item" data-view="buscar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
+      <button type="button" class="nav-item" data-view="cuenta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg>
+        Cuenta
+      </button>
+    </div>
   </div>
 
   <!-- Modal: perfil completo de un mesero -->
