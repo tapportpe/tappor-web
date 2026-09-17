@@ -1,255 +1,936 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tapport — Ingreso meseros</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mi perfil — Tapport</title>
 <style>
-  :root{
-    --navy: #0A0F1F;
-    --navy-2: #121B33;
-    --paper: #F3F5F9;
+  :root {
+    --bg: #F3F5F9;
     --card: #FFFFFF;
     --ink: #12131A;
-    --slate: #5B6270;
-    --slate-soft: #8A90A0;
-    --gold: #D8A13A;
-    --gold-soft: #F1D9A8;
+    --ink-soft: #5B6270;
     --line: #E3E6ED;
-    --line-dark: rgba(255,255,255,0.12);
+    --accent: #0A0F1F;
+    --gold: #D8A13A;
+    --accent-soft: #E4E6ED;
+    --error: #B4432E;
+    --star: #D8A13A;
   }
 
   * { box-sizing: border-box; }
 
   body {
     margin: 0;
-    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
     color: var(--ink);
-    background: var(--paper);
-    -webkit-font-smoothing: antialiased;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px 100px;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
   }
 
-  h1, .logo { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.01em; margin: 0; }
-  a { color: inherit; }
+  .wrap { width: 100%; max-width: 460px; }
 
-  .wrap {
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 0 28px;
+  header { margin-bottom: 24px; }
+
+  .eyebrow { font-size: 13px; color: var(--ink-soft); }
+
+  h1 { font-size: 24px; margin: 6px 0 8px; font-weight: 650; }
+
+  .sub { font-size: 14px; color: var(--ink-soft); line-height: 1.5; margin: 0; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 22px;
+    margin-top: 20px;
   }
 
-  /* ---------- NAV (igual a inicio.html) ---------- */
-  nav {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    background: rgba(10,15,31,0.92);
-    backdrop-filter: blur(8px);
-  }
-  .nav-inner {
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 18px 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .logo {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 19px;
-    color: #fff;
-    text-decoration: none;
-  }
-  .nav-links {
-    display: flex;
-    gap: 28px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .nav-links a {
-    color: rgba(255,255,255,0.72);
-    text-decoration: none;
-    font-size: 14.5px;
-    font-weight: 500;
-  }
-  .nav-links a:hover { color: #fff; }
-  .nav-mobile-hide { display: flex; }
-  @media (max-width: 680px) {
-    .nav-mobile-hide { display: none; }
-  }
-  .nav-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .nav-right a {
-    color: rgba(255,255,255,0.85);
-    text-decoration: none;
-    font-size: 13.5px;
-    font-weight: 500;
-    border: 1.5px solid rgba(255,255,255,0.22);
-    border-radius: 9px;
-    padding: 8px 14px;
-    white-space: nowrap;
-  }
-  .nav-right a:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
+  .field { margin-bottom: 14px; }
 
-  /* ---------- HERO / LOGIN SECTION ---------- */
-  .login-hero {
-    flex: 1;
-    background:
-      radial-gradient(circle at 85% 10%, #1B2647 0%, transparent 45%),
-      linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%);
-    color: #fff;
+  label { display: block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
+
+  input[type="text"], input[type="email"], input[type="password"], input[type="tel"], select {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 15px;
+    color: var(--ink);
+    background: #FCFCFA;
+    font-family: inherit;
+  }
+
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  /* --- Campo de contraseña con botón de mostrar/ocultar --- */
+  .password-field { position: relative; }
+  .password-field input { padding-right: 42px; }
+  .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 56px 24px;
+    cursor: pointer;
+    color: var(--ink-soft);
+    padding: 0;
   }
+  .toggle-password svg { width: 19px; height: 19px; }
+  .toggle-password .eye-off { display: none; }
+  .toggle-password.showing .eye { display: none; }
+  .toggle-password.showing .eye-off { display: block; }
 
-  .card {
-    width: 100%;
-    max-width: 380px;
-    background: var(--card);
-    color: var(--ink);
-    border-radius: 20px;
-    padding: 40px 36px;
-    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55);
-  }
-
-  h1 { font-size: 22px; font-weight: 600; margin-bottom: 8px; }
-  .sub { font-size: 14.5px; color: var(--slate); line-height: 1.5; margin-bottom: 28px; }
-  label { display: block; font-size: 13.5px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
-  input {
-    width: 100%;
-    padding: 12px 14px;
-    border-radius: 10px;
-    border: 1.5px solid var(--line);
-    font-size: 14.5px;
-    font-family: inherit;
-    margin-bottom: 18px;
-  }
-  input:focus { outline: none; border-color: var(--gold); }
   .btn-primary {
     width: 100%;
-    background: var(--gold);
-    color: var(--navy);
-    border: none;
-    border-radius: 10px;
     padding: 13px;
+    border: none;
+    border-radius: 8px;
+    background: var(--gold);
+    color: var(--accent);
+    font-size: 15px;
     font-weight: 600;
-    font-size: 14.5px;
     cursor: pointer;
-    font-family: inherit;
   }
 
-  .note {
-    margin-top: 18px;
-    font-size: 13px;
-    color: var(--slate-soft);
-    text-align: center;
-  }
-
-  .divider {
-    height: 1px;
-    background: var(--line);
-    margin: 26px 0 20px;
-  }
+  .btn-primary:disabled { opacity: 0.6; cursor: default; }
 
   .btn-secondary {
-    display: block;
     width: 100%;
-    text-align: center;
-    box-sizing: border-box;
-    background: transparent;
-    color: var(--ink);
-    border: 1.5px solid var(--line);
-    border-radius: 10px;
     padding: 12px;
-    font-weight: 600;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    background: #FAFAFB;
+    color: var(--ink);
     font-size: 14px;
-    text-decoration: none;
-    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
   }
-  .btn-secondary:hover { border-color: var(--gold); }
 
-  .back {
-    display: block;
-    text-align: center;
-    margin-top: 20px;
-    font-size: 13.5px;
-    color: var(--slate);
-    text-decoration: none;
+  .btn-link {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
   }
-  .back:hover { color: var(--ink); }
 
-  /* ---------- FOOTER (igual a inicio.html) ---------- */
-  footer {
-    background: var(--navy);
-    color: rgba(255,255,255,0.6);
-    padding: 28px 0;
+  .msg { font-size: 13px; margin-top: 10px; text-align: center; }
+  .msg.error { color: var(--error); }
+  .msg.ok { color: var(--accent); }
+  .msg.notice { color: var(--ink-soft); }
+
+  .tabs { display: flex; gap: 8px; margin-bottom: 4px; }
+  .tabs button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1.5px solid var(--line);
+    background: #FAFAFB;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    cursor: pointer;
   }
-  .footer-inner {
+  .tabs button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .hidden { display: none !important; }
+
+  /* --- Dashboard --- */
+  .profile-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
     gap: 16px;
+    margin-bottom: 4px;
   }
-  .footer-brand {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 15px;
+
+  .profile-photo {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--accent-soft);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 750;
+    font-size: 22px;
+    color: var(--accent);
+  }
+
+  .profile-name { font-size: 18px; font-weight: 700; margin: 0 0 2px; }
+  .profile-sub { font-size: 13px; color: var(--ink-soft); }
+
+  .stats-row { display: flex; gap: 12px; margin-top: 18px; }
+  .stat-box {
+    flex: 1;
+    background: var(--accent-soft);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+  .stat-box .num { font-size: 22px; font-weight: 750; color: var(--accent); }
+  .stat-box .label { font-size: 11.5px; color: var(--ink-soft); margin-top: 2px; }
+
+  .review-item {
+    border-bottom: 1px solid var(--line);
+    padding: 14px 0;
+  }
+  .review-item:last-child { border-bottom: none; }
+
+  .vacante-para-ti { border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .vacante-para-ti h3 { font-size: 14px; margin: 0 0 3px; }
+  .vacante-para-ti .vpt-rest { font-size: 12px; color: var(--ink-soft); margin-bottom: 6px; }
+  .vacante-para-ti p { font-size: 12.5px; margin: 0 0 10px; line-height: 1.4; }
+  .vacante-para-ti a { display: inline-block; font-size: 12.5px; font-weight: 700; color: var(--accent); text-decoration: underline; }
+
+  .review-stars { color: var(--star); font-size: 14px; margin-bottom: 4px; }
+  .review-tags { font-size: 11.5px; color: var(--accent); margin-bottom: 4px; }
+  .review-comment { font-size: 13.5px; color: var(--ink); line-height: 1.4; }
+  .review-date { font-size: 11px; color: var(--ink-soft); margin-top: 4px; }
+  .empty-state { font-size: 13.5px; color: var(--ink-soft); text-align: center; padding: 20px 0; }
+
+  .photo-edit-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    border: 1px dashed #A9BDB6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .photo-edit-circle img { width: 100%; height: 100%; object-fit: cover; }
+  .photo-edit-circle span { font-size: 10px; color: var(--accent); text-align: center; }
+  input[type="file"] { display: none; }
+
+  /* --- Barra de navegación inferior (igual a directorio.html) --- */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    background: var(--card);
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    z-index: 20;
+  }
+  .nav-item {
+    background: none;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    color: var(--ink-soft);
+    font-size: 10.5px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 10px;
+  }
+  .nav-item.active { color: var(--accent); }
+  .nav-item svg { width: 22px; height: 22px; }
+
+  .nav-item.search-item {
+    background: var(--accent);
     color: #fff;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    justify-content: center;
+    margin-top: -26px;
+    box-shadow: 0 4px 10px rgba(31,75,69,0.3);
   }
-  .footer-meta {
-    font-size: 12.5px;
-    color: rgba(255,255,255,0.5);
-  }
+  .nav-item.search-item svg { width: 24px; height: 24px; }
+  .nav-item.search-item.active { color: #fff; }
 </style>
 </head>
 <body>
+  <div class="wrap">
+    <header>
+      <div class="eyebrow">Tapport</div>
+      <h1>Mi perfil</h1>
+      <p class="sub" id="headerSub">Inicia sesión para ver tu rating, tus reseñas y editar tus datos.</p>
+    </header>
 
-<nav>
-  <div class="nav-inner">
-    <a class="logo" href="inicio.html">Tapport</a>
-    <ul class="nav-links nav-mobile-hide">
-      <li><a href="directorio.html">Directorio</a></li>
-      <li><a href="inicio.html#como-funciona">Cómo funciona</a></li>
-    </ul>
+    <!-- ============ LOGIN / CREAR CUENTA ============ -->
+    <div class="card" id="authCard">
+      <div class="msg notice hidden" id="sesionExpiradaMsg">Tu sesión expiró por inactividad. Vuelve a iniciar sesión.</div>
+
+      <div class="tabs">
+        <button type="button" id="tabLogin" class="active">Iniciar sesión</button>
+        <button type="button" id="tabCrear">Crear mi cuenta</button>
+      </div>
+
+      <!-- Login con email + password -->
+      <div id="loginForm" style="margin-top:16px;">
+        <div class="field">
+          <label for="loginEmail">Correo electrónico</label>
+          <input type="email" id="loginEmail" placeholder="tucorreo@ejemplo.com" />
+        </div>
+        <div class="field">
+          <label for="loginPassword">Contraseña</label>
+          <div class="password-field">
+            <input type="password" id="loginPassword" />
+            <button type="button" class="toggle-password" data-target="loginPassword" aria-label="Mostrar contraseña">
+              <svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10.6 10.6 0 0 1 12 19c-7 0-11-7-11-7a18.6 18.6 0 0 1 4.2-5.1M9.9 4.2A9.9 9.9 0 0 1 12 4c7 0 11 7 11 7a18.6 18.6 0 0 1-2.2 3.1M14.1 14.1a3 3 0 1 1-4.2-4.2"/><path d="M1 1l22 22"/></svg>
+            </button>
+          </div>
+        </div>
+        <button type="button" class="btn-primary" id="loginBtn">Iniciar sesión</button>
+        <div class="msg" id="loginMsg"></div>
+      </div>
+
+      <!-- Crear cuenta: verificar correo -> crear password -->
+      <div id="crearForm" style="margin-top:16px; display:none;">
+        <div id="crearPaso1">
+          <div class="field">
+            <label for="crearEmail">Correo con el que te registraste como mesero</label>
+            <input type="email" id="crearEmail" placeholder="tucorreo@ejemplo.com" />
+          </div>
+          <button type="button" class="btn-primary" id="enviarCodigoBtn">Enviar código de verificación</button>
+          <div class="msg" id="crearMsg1"></div>
+        </div>
+
+        <div id="crearPaso2" style="display:none; margin-top:16px;">
+          <div class="field">
+            <label for="codigoVerif">Código que te llegó al correo</label>
+            <input type="text" id="codigoVerif" inputmode="numeric" maxlength="6" placeholder="123456" />
+          </div>
+          <button type="button" class="btn-secondary" id="verificarCodigoBtn">Verificar código</button>
+          <div class="msg" id="crearMsg2"></div>
+        </div>
+
+        <div id="crearPaso3" style="display:none; margin-top:16px;">
+          <div class="field">
+            <label for="nuevaPassword">Crea tu contraseña (mínimo 6 caracteres)</label>
+            <div class="password-field">
+              <input type="password" id="nuevaPassword" />
+              <button type="button" class="toggle-password" data-target="nuevaPassword" aria-label="Mostrar contraseña">
+                <svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10.6 10.6 0 0 1 12 19c-7 0-11-7-11-7a18.6 18.6 0 0 1 4.2-5.1M9.9 4.2A9.9 9.9 0 0 1 12 4c7 0 11 7 11 7a18.6 18.6 0 0 1-2.2 3.1M14.1 14.1a3 3 0 1 1-4.2-4.2"/><path d="M1 1l22 22"/></svg>
+              </button>
+            </div>
+          </div>
+          <button type="button" class="btn-primary" id="crearPasswordBtn">Crear contraseña</button>
+          <div class="msg" id="crearMsg3"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ DASHBOARD (tras login) ============ -->
+    <div class="card hidden" id="dashboard">
+      <div class="profile-header">
+        <div class="profile-photo" id="dashFotoWrap"><img id="dashFoto" style="display:none; width:100%; height:100%; border-radius:50%; object-fit:cover;" /><span id="dashFotoIniciales"></span></div>
+        <div>
+          <p class="profile-name" id="dashNombre"></p>
+          <p class="profile-sub" id="dashRestaurante"></p>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="num" id="dashPromedio">—</div>
+          <div class="label">Rating promedio</div>
+        </div>
+        <div class="stat-box">
+          <div class="num" id="dashTotal">—</div>
+          <div class="label">Reseñas totales</div>
+        </div>
+      </div>
+
+      <button type="button" class="btn-secondary" id="toggleEditarBtn" style="margin-top:18px;">Editar mi perfil</button>
+      <button type="button" class="btn-link" id="cerrarSesionBtn" style="display:block; margin:14px auto 0;">Cerrar sesión</button>
+    </div>
+
+    <!-- ============ EDITAR PERFIL ============ -->
+    <div class="card hidden" id="editCard">
+      <h2 style="font-size:16px; margin:0 0 16px;">Editar mi perfil</h2>
+
+      <div class="field" style="display:flex; align-items:center; gap:14px;">
+        <div class="photo-edit-circle" id="editPhotoCircle">
+          <img id="editPhotoPreview" style="display:none" />
+          <span id="editPhotoPlaceholder">Cambiar<br/>foto</span>
+        </div>
+        <input type="file" id="editFoto" accept="image/*" />
+        <span style="font-size:12.5px; color:var(--ink-soft);">Toca el círculo para elegir una nueva foto</span>
+      </div>
+
+      <div class="field">
+        <label for="editTelefono">Teléfono</label>
+        <input type="tel" id="editTelefono" />
+      </div>
+
+      <div class="field">
+        <label for="editRestaurante">Restaurante</label>
+        <select id="editRestaurante"></select>
+      </div>
+
+      <button type="button" class="btn-primary" id="guardarCambiosBtn">Guardar cambios</button>
+      <button type="button" class="btn-secondary" id="cancelarEditarBtn">Cancelar</button>
+      <div class="msg" id="editMsg"></div>
+    </div>
+
+    <!-- ============ VACANTES PARA TI (filtradas por tu rating real) ============ -->
+    <div class="card hidden" id="vacantesParaTiCard">
+      <h2 style="font-size:16px; margin:0 0 4px;">Vacantes para ti</h2>
+      <p style="font-size:12.5px; color:var(--ink-soft); margin:0 0 12px;">Solo se muestran las que calzan con tu rating actual.</p>
+      <div id="vacantesParaTiList"></div>
+    </div>
+
+    <!-- ============ MIS RESEÑAS ============ -->
+    <div class="card hidden" id="reviewsCard">
+      <h2 style="font-size:16px; margin:0 0 12px;">Mis reseñas</h2>
+      <div id="reviewsList"></div>
+    </div>
   </div>
-</nav>
 
-<section class="login-hero">
-  <div class="card">
-    <h1>Ingreso meseros</h1>
-    <p class="sub">Inicia sesión con el correo y la contraseña que creaste al registrarte, para ver tu rating, tus reseñas y editar tu perfil.</p>
-
-    <a class="btn-primary" href="perfil.html" style="display:block; text-align:center; text-decoration:none; box-sizing:border-box;">Ir a mi perfil</a>
-
-    <p class="note">¿Primera vez? Regístrate desde el código QR/NFC de tu tarjeta, o desde <a href="registro.html" style="color:inherit; text-decoration:underline;">este link</a>.</p>
-
-    <div class="divider"></div>
-
-    <a class="btn-secondary" href="directorio.html">Explorar el directorio</a>
-    <a class="back" href="inicio.html">← Volver al inicio</a>
+  <!-- Barra de navegación inferior: te sigue entre directorio.html y perfil.html -->
+  <div class="bottom-nav">
+    <button type="button" class="nav-item" id="navHome">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
+      Home
+    </button>
+    <button type="button" class="nav-item search-item" id="navBuscar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    </button>
+    <button type="button" class="nav-item active" id="navCuenta">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg>
+      Cuenta
+    </button>
   </div>
-</section>
 
-<footer>
-  <div class="wrap footer-inner">
-    <div class="footer-brand">Tapport</div>
-    <div class="footer-meta">Hecho en Lima, Perú · tapport.pe@gmail.com</div>
-  </div>
-</footer>
+  <script>
+    const ENDPOINT = "https://script.google.com/macros/s/AKfycbx9nTiQEr_2AvK0bc3hIyJPao5PqtADFeRQKuhR6_XFV_rR0FG0UsZ5sexFrkyJIdJW/exec";
+    const DIRECTORIO_URL = "directorio.html";
 
+    let sesion = null; // { email, password, ...datosPerfil }
+
+    // ---------- Navegación inferior (persiste entre páginas) ----------
+    document.getElementById("navHome").addEventListener("click", () => { window.location.href = DIRECTORIO_URL; });
+    document.getElementById("navBuscar").addEventListener("click", () => { window.location.href = DIRECTORIO_URL + "?view=buscar"; });
+    // "navCuenta" ya estamos aquí, no hace nada.
+
+    // ---------- Mostrar / ocultar contraseña ----------
+    document.querySelectorAll(".toggle-password").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const input = document.getElementById(btn.dataset.target);
+        if (!input) return;
+        const mostrando = input.type === "text";
+        input.type = mostrando ? "password" : "text";
+        btn.classList.toggle("showing", !mostrando);
+        btn.setAttribute("aria-label", mostrando ? "Mostrar contraseña" : "Ocultar contraseña");
+      });
+    });
+
+    // ---------- Sesión con expiración de 10 minutos ----------
+    const SESION_KEY = "tapport_sesion";
+    const DURACION_SESION_MS = 10 * 60 * 1000; // 10 minutos
+    let intervaloSesion = null;
+
+    function guardarSesion(datos) {
+      const conMarcaDeTiempo = { ...datos, _loginTime: Date.now() };
+      sessionStorage.setItem(SESION_KEY, JSON.stringify(conMarcaDeTiempo));
+    }
+
+    function leerSesion() {
+      const raw = sessionStorage.getItem(SESION_KEY);
+      if (!raw) return null;
+      try {
+        const datos = JSON.parse(raw);
+        if (Date.now() - datos._loginTime > DURACION_SESION_MS) {
+          sessionStorage.removeItem(SESION_KEY);
+          return null;
+        }
+        return datos;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function borrarSesion() {
+      sessionStorage.removeItem(SESION_KEY);
+      if (intervaloSesion) clearInterval(intervaloSesion);
+    }
+
+    function iniciarVigilanciaSesion() {
+      if (intervaloSesion) clearInterval(intervaloSesion);
+      intervaloSesion = setInterval(() => {
+        if (!leerSesion()) {
+          cerrarSesionPorExpiracion();
+        }
+      }, 15000); // revisa cada 15s
+    }
+
+    function cerrarSesionPorExpiracion() {
+      sesion = null;
+      borrarSesion();
+      document.getElementById("dashboard").classList.add("hidden");
+      document.getElementById("editCard").classList.add("hidden");
+      document.getElementById("reviewsCard").classList.add("hidden");
+      document.getElementById("vacantesParaTiCard").classList.add("hidden");
+      document.getElementById("authCard").classList.remove("hidden");
+      document.getElementById("headerSub").textContent = "Inicia sesión para ver tu rating, tus reseñas y editar tus datos.";
+      document.getElementById("sesionExpiradaMsg").classList.remove("hidden");
+    }
+
+    // ---------- Tabs login / crear cuenta ----------
+    const tabLogin = document.getElementById("tabLogin");
+    const tabCrear = document.getElementById("tabCrear");
+    const loginForm = document.getElementById("loginForm");
+    const crearForm = document.getElementById("crearForm");
+
+    function irATabCrear() {
+      tabCrear.classList.add("active");
+      tabLogin.classList.remove("active");
+      crearForm.style.display = "block";
+      loginForm.style.display = "none";
+    }
+
+    tabLogin.addEventListener("click", () => {
+      tabLogin.classList.add("active");
+      tabCrear.classList.remove("active");
+      loginForm.style.display = "block";
+      crearForm.style.display = "none";
+    });
+
+    tabCrear.addEventListener("click", irATabCrear);
+
+    // ---------- Login ----------
+    document.getElementById("loginBtn").addEventListener("click", async () => {
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+      const msg = document.getElementById("loginMsg");
+      const btn = document.getElementById("loginBtn");
+
+      if (!email || !password) {
+        msg.className = "msg error";
+        msg.textContent = "Completa correo y contraseña.";
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Ingresando…";
+      msg.textContent = "";
+
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "login", email, password })
+        });
+        const data = await res.json();
+
+        if (data.ok) {
+          sesion = { email, password, ...data };
+          guardarSesion(sesion);
+          document.getElementById("sesionExpiradaMsg").classList.add("hidden");
+          mostrarDashboard();
+          iniciarVigilanciaSesion();
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.error || "No se pudo iniciar sesión.";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Error de conexión. Intenta de nuevo.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Iniciar sesión";
+      }
+    });
+
+    // ---------- Crear cuenta: paso 1, enviar código ----------
+    document.getElementById("enviarCodigoBtn").addEventListener("click", async () => {
+      const email = document.getElementById("crearEmail").value.trim();
+      const msg = document.getElementById("crearMsg1");
+      const btn = document.getElementById("enviarCodigoBtn");
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        msg.className = "msg error";
+        msg.textContent = "Ingresa un correo válido.";
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Enviando…";
+
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "enviar_codigo_verificacion", email })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          msg.className = "msg ok";
+          msg.textContent = "Te enviamos un código. Revisa tu correo.";
+          document.getElementById("crearPaso2").style.display = "block";
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.error || "No se pudo enviar el código.";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Enviar código de verificación";
+      }
+    });
+
+    // ---------- Crear cuenta: paso 2, verificar código ----------
+    document.getElementById("verificarCodigoBtn").addEventListener("click", async () => {
+      const email = document.getElementById("crearEmail").value.trim();
+      const codigo = document.getElementById("codigoVerif").value.trim();
+      const msg = document.getElementById("crearMsg2");
+      const btn = document.getElementById("verificarCodigoBtn");
+
+      if (!codigo) return;
+
+      btn.disabled = true;
+      btn.textContent = "Verificando…";
+
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "verificar_codigo", email, codigo })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          msg.className = "msg ok";
+          msg.textContent = "✓ Correo verificado";
+          document.getElementById("crearPaso3").style.display = "block";
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.error || "Código incorrecto.";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Verificar código";
+      }
+    });
+
+    // ---------- Crear cuenta: paso 3, crear password ----------
+    document.getElementById("crearPasswordBtn").addEventListener("click", async () => {
+      const email = document.getElementById("crearEmail").value.trim();
+      const password = document.getElementById("nuevaPassword").value;
+      const msg = document.getElementById("crearMsg3");
+      const btn = document.getElementById("crearPasswordBtn");
+
+      if (password.length < 6) {
+        msg.className = "msg error";
+        msg.textContent = "La contraseña debe tener al menos 6 caracteres.";
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Creando…";
+
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "establecer_password", email, password })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          // Auto-login tras crear la contraseña
+          const resLogin = await fetch(ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action: "login", email, password })
+          });
+          const dataLogin = await resLogin.json();
+          if (dataLogin.ok) {
+            sesion = { email, password, ...dataLogin };
+            guardarSesion(sesion);
+            document.getElementById("sesionExpiradaMsg").classList.add("hidden");
+            mostrarDashboard();
+            iniciarVigilanciaSesion();
+          }
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.error || "No se pudo crear la contraseña.";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Crear contraseña";
+      }
+    });
+
+    // ---------- Foto con respaldo de iniciales si no carga ----------
+    function iniciales(nombre) {
+      return (nombre || "").split(" ").filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join("");
+    }
+
+    function pintarFotoDashboard(fotoUrl, nombre) {
+      const img = document.getElementById("dashFoto");
+      const span = document.getElementById("dashFotoIniciales");
+      if (fotoUrl) {
+        img.src = fotoUrl;
+        img.style.display = "block";
+        img.onerror = () => {
+          img.style.display = "none";
+          span.textContent = iniciales(nombre);
+        };
+        span.textContent = "";
+      } else {
+        img.style.display = "none";
+        span.textContent = iniciales(nombre);
+      }
+    }
+
+    // ---------- Dashboard ----------
+    function mostrarDashboard() {
+      document.getElementById("authCard").classList.add("hidden");
+      document.getElementById("dashboard").classList.remove("hidden");
+      document.getElementById("reviewsCard").classList.remove("hidden");
+      document.getElementById("vacantesParaTiCard").classList.remove("hidden");
+      document.getElementById("headerSub").textContent = "Este es tu perfil en Tapport.";
+
+      pintarFotoDashboard(sesion.fotoUrl, sesion.nombre);
+      document.getElementById("dashNombre").textContent = sesion.nombre || "";
+      document.getElementById("dashRestaurante").textContent = sesion.restaurante || "";
+      document.getElementById("dashPromedio").textContent = sesion.promedio ? sesion.promedio.toFixed(1) : "—";
+      document.getElementById("dashTotal").textContent = sesion.totalReviews || 0;
+
+      renderReviews(sesion.reviews || []);
+      cargarVacantesParaTi();
+    }
+
+    // Solo muestra vacantes cuyo rating mínimo (si tienen uno) es igual o
+    // menor al rating REAL del mesero (el que ya calculó el servidor a
+    // partir de sus reseñas) — no algo que el mesero pueda manipular.
+    async function cargarVacantesParaTi() {
+      const cont = document.getElementById("vacantesParaTiList");
+      cont.innerHTML = '<p style="font-size:12.5px; color:var(--ink-soft);">Cargando…</p>';
+      try {
+        const res = await fetch(`${ENDPOINT}?accion=listar_vacantes`);
+        const data = await res.json();
+        const miPromedio = sesion.promedio || 0;
+        const vacantes = (data.vacantes || []).filter(v => (Number(v.ratingMinimo) || 0) <= miPromedio);
+
+        if (!vacantes.length) {
+          cont.innerHTML = '<p style="font-size:12.5px; color:var(--ink-soft);">No hay vacantes disponibles para tu rating por ahora.</p>';
+          return;
+        }
+
+        cont.innerHTML = vacantes.map(v => {
+          const esCorreo = /@/.test(v.contacto);
+          const href = esCorreo ? `mailto:${v.contacto}` : `tel:${v.contacto}`;
+          return `
+            <div class="vacante-para-ti">
+              <h3>${escapeHtml(v.puesto)}</h3>
+              <div class="vpt-rest">${escapeHtml(v.restaurante)}</div>
+              ${v.descripcion ? `<p>${escapeHtml(v.descripcion)}</p>` : ""}
+              <a href="${href}">Contactar</a>
+            </div>
+          `;
+        }).join("");
+      } catch (err) {
+        cont.innerHTML = '<p style="font-size:12.5px; color:var(--error);">No se pudieron cargar las vacantes.</p>';
+      }
+    }
+
+    function renderReviews(reviews) {
+      const cont = document.getElementById("reviewsList");
+      if (!reviews.length) {
+        cont.innerHTML = '<div class="empty-state">Todavía no tienes reseñas. ¡Sigue dando un gran servicio!</div>';
+        return;
+      }
+      cont.innerHTML = reviews.map(r => {
+        const estrellas = "★".repeat(r.estrellas) + "☆".repeat(5 - r.estrellas);
+        const fecha = new Date(r.fecha);
+        const fechaTexto = isNaN(fecha) ? "" : fecha.toLocaleDateString("es-PE", { day: "numeric", month: "short", year: "numeric" });
+        return `
+          <div class="review-item">
+            <div class="review-stars">${estrellas}</div>
+            ${r.tags ? `<div class="review-tags">${escapeHtml(r.tags)}</div>` : ""}
+            ${r.comentario ? `<div class="review-comment">"${escapeHtml(r.comentario)}"</div>` : ""}
+            <div class="review-date">${fechaTexto}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    document.getElementById("cerrarSesionBtn").addEventListener("click", () => {
+      sesion = null;
+      borrarSesion();
+      document.getElementById("dashboard").classList.add("hidden");
+      document.getElementById("editCard").classList.add("hidden");
+      document.getElementById("reviewsCard").classList.add("hidden");
+      document.getElementById("vacantesParaTiCard").classList.add("hidden");
+      document.getElementById("authCard").classList.remove("hidden");
+      document.getElementById("headerSub").textContent = "Inicia sesión para ver tu rating, tus reseñas y editar tus datos.";
+      document.getElementById("loginPassword").value = "";
+      document.getElementById("sesionExpiradaMsg").classList.add("hidden");
+    });
+
+    // ---------- Editar perfil ----------
+    let editFotoBase64 = null;
+
+    document.getElementById("toggleEditarBtn").addEventListener("click", () => {
+      document.getElementById("editRestaurante").value = sesion.restaurante || "";
+      document.getElementById("editTelefono").value = sesion.telefono || "";
+      document.getElementById("editPhotoPreview").src = sesion.fotoUrl || "";
+      document.getElementById("editPhotoPreview").style.display = sesion.fotoUrl ? "block" : "none";
+      document.getElementById("editPhotoPlaceholder").style.display = sesion.fotoUrl ? "none" : "block";
+      editFotoBase64 = null;
+      document.getElementById("dashboard").classList.add("hidden");
+      document.getElementById("reviewsCard").classList.add("hidden");
+      document.getElementById("vacantesParaTiCard").classList.add("hidden");
+      document.getElementById("editCard").classList.remove("hidden");
+    });
+
+    document.getElementById("cancelarEditarBtn").addEventListener("click", () => {
+      document.getElementById("editCard").classList.add("hidden");
+      document.getElementById("dashboard").classList.remove("hidden");
+      document.getElementById("reviewsCard").classList.remove("hidden");
+    });
+
+    document.getElementById("editPhotoCircle").addEventListener("click", () => {
+      document.getElementById("editFoto").click();
+    });
+
+    document.getElementById("editFoto").addEventListener("change", () => {
+      const file = document.getElementById("editFoto").files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        editFotoBase64 = reader.result;
+        document.getElementById("editPhotoPreview").src = editFotoBase64;
+        document.getElementById("editPhotoPreview").style.display = "block";
+        document.getElementById("editPhotoPlaceholder").style.display = "none";
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById("guardarCambiosBtn").addEventListener("click", async () => {
+      const msg = document.getElementById("editMsg");
+      const btn = document.getElementById("guardarCambiosBtn");
+      const telefono = document.getElementById("editTelefono").value.trim();
+      const restaurante = document.getElementById("editRestaurante").value;
+
+      btn.disabled = true;
+      btn.textContent = "Guardando…";
+
+      try {
+        const payload = {
+          action: "actualizar_perfil",
+          email: sesion.email,
+          password: sesion.password,
+          telefono,
+          restaurante
+        };
+        if (editFotoBase64) payload.foto_base64 = editFotoBase64;
+
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (data.ok) {
+          sesion.telefono = telefono;
+          sesion.restaurante = restaurante;
+          if (data.foto_url) sesion.fotoUrl = data.foto_url;
+          guardarSesion(sesion);
+
+          msg.className = "msg ok";
+          msg.textContent = "¡Cambios guardados!";
+          setTimeout(() => {
+            document.getElementById("editCard").classList.add("hidden");
+            document.getElementById("dashboard").classList.remove("hidden");
+            document.getElementById("reviewsCard").classList.remove("hidden");
+            mostrarDashboard();
+            msg.textContent = "";
+          }, 900);
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.error || "No se pudo guardar.";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Guardar cambios";
+      }
+    });
+
+    // ---------- Carga la lista de restaurantes para el selector de edición ----------
+    async function cargarRestaurantes() {
+      const select = document.getElementById("editRestaurante");
+      try {
+        const res = await fetch(`${ENDPOINT}?accion=restaurantes`);
+        const data = await res.json();
+        const lista = (data.restaurantes || []).slice().sort();
+        select.innerHTML = lista.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("");
+      } catch (err) {
+        select.innerHTML = '<option value="">No se pudo cargar</option>';
+      }
+    }
+
+    cargarRestaurantes();
+
+    // ---------- Al cargar la página, revisa si ya hay una sesión activa ----------
+    const sesionGuardada = leerSesion();
+    if (sesionGuardada) {
+      sesion = sesionGuardada;
+      mostrarDashboard();
+      iniciarVigilanciaSesion();
+    } else {
+      // Si llegamos desde registro.html con ?crear=1&email=..., abre directo
+      // la pestaña de "Crear mi cuenta" con el correo ya verificado prellenado.
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("crear") === "1") {
+        irATabCrear();
+        const emailParam = urlParams.get("email");
+        if (emailParam) document.getElementById("crearEmail").value = emailParam;
+      }
+    }
+  </script>
 </body>
 </html>
