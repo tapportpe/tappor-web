@@ -196,6 +196,12 @@
   }
   .review-item:last-child { border-bottom: none; }
 
+  .vacante-para-ti { border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .vacante-para-ti h3 { font-size: 14px; margin: 0 0 3px; }
+  .vacante-para-ti .vpt-rest { font-size: 12px; color: var(--ink-soft); margin-bottom: 6px; }
+  .vacante-para-ti p { font-size: 12.5px; margin: 0 0 10px; line-height: 1.4; }
+  .vacante-para-ti a { display: inline-block; font-size: 12.5px; font-weight: 700; color: var(--accent); text-decoration: underline; }
+
   .review-stars { color: var(--star); font-size: 14px; margin-bottom: 4px; }
   .review-tags { font-size: 11.5px; color: var(--accent); margin-bottom: 4px; }
   .review-comment { font-size: 13.5px; color: var(--ink); line-height: 1.4; }
@@ -392,6 +398,13 @@
       <div class="msg" id="editMsg"></div>
     </div>
 
+    <!-- ============ VACANTES PARA TI (filtradas por tu rating real) ============ -->
+    <div class="card hidden" id="vacantesParaTiCard">
+      <h2 style="font-size:16px; margin:0 0 4px;">Vacantes para ti</h2>
+      <p style="font-size:12.5px; color:var(--ink-soft); margin:0 0 12px;">Solo se muestran las que calzan con tu rating actual.</p>
+      <div id="vacantesParaTiList"></div>
+    </div>
+
     <!-- ============ MIS RESEÑAS ============ -->
     <div class="card hidden" id="reviewsCard">
       <h2 style="font-size:16px; margin:0 0 12px;">Mis reseñas</h2>
@@ -482,6 +495,7 @@
       document.getElementById("dashboard").classList.add("hidden");
       document.getElementById("editCard").classList.add("hidden");
       document.getElementById("reviewsCard").classList.add("hidden");
+      document.getElementById("vacantesParaTiCard").classList.add("hidden");
       document.getElementById("authCard").classList.remove("hidden");
       document.getElementById("headerSub").textContent = "Inicia sesión para ver tu rating, tus reseñas y editar tus datos.";
       document.getElementById("sesionExpiradaMsg").classList.remove("hidden");
@@ -706,6 +720,7 @@
       document.getElementById("authCard").classList.add("hidden");
       document.getElementById("dashboard").classList.remove("hidden");
       document.getElementById("reviewsCard").classList.remove("hidden");
+      document.getElementById("vacantesParaTiCard").classList.remove("hidden");
       document.getElementById("headerSub").textContent = "Este es tu perfil en Tapport.";
 
       pintarFotoDashboard(sesion.fotoUrl, sesion.nombre);
@@ -715,6 +730,41 @@
       document.getElementById("dashTotal").textContent = sesion.totalReviews || 0;
 
       renderReviews(sesion.reviews || []);
+      cargarVacantesParaTi();
+    }
+
+    // Solo muestra vacantes cuyo rating mínimo (si tienen uno) es igual o
+    // menor al rating REAL del mesero (el que ya calculó el servidor a
+    // partir de sus reseñas) — no algo que el mesero pueda manipular.
+    async function cargarVacantesParaTi() {
+      const cont = document.getElementById("vacantesParaTiList");
+      cont.innerHTML = '<p style="font-size:12.5px; color:var(--ink-soft);">Cargando…</p>';
+      try {
+        const res = await fetch(`${ENDPOINT}?accion=listar_vacantes`);
+        const data = await res.json();
+        const miPromedio = sesion.promedio || 0;
+        const vacantes = (data.vacantes || []).filter(v => (Number(v.ratingMinimo) || 0) <= miPromedio);
+
+        if (!vacantes.length) {
+          cont.innerHTML = '<p style="font-size:12.5px; color:var(--ink-soft);">No hay vacantes disponibles para tu rating por ahora.</p>';
+          return;
+        }
+
+        cont.innerHTML = vacantes.map(v => {
+          const esCorreo = /@/.test(v.contacto);
+          const href = esCorreo ? `mailto:${v.contacto}` : `tel:${v.contacto}`;
+          return `
+            <div class="vacante-para-ti">
+              <h3>${escapeHtml(v.puesto)}</h3>
+              <div class="vpt-rest">${escapeHtml(v.restaurante)}</div>
+              ${v.descripcion ? `<p>${escapeHtml(v.descripcion)}</p>` : ""}
+              <a href="${href}">Contactar</a>
+            </div>
+          `;
+        }).join("");
+      } catch (err) {
+        cont.innerHTML = '<p style="font-size:12.5px; color:var(--error);">No se pudieron cargar las vacantes.</p>';
+      }
     }
 
     function renderReviews(reviews) {
@@ -750,6 +800,7 @@
       document.getElementById("dashboard").classList.add("hidden");
       document.getElementById("editCard").classList.add("hidden");
       document.getElementById("reviewsCard").classList.add("hidden");
+      document.getElementById("vacantesParaTiCard").classList.add("hidden");
       document.getElementById("authCard").classList.remove("hidden");
       document.getElementById("headerSub").textContent = "Inicia sesión para ver tu rating, tus reseñas y editar tus datos.";
       document.getElementById("loginPassword").value = "";
@@ -768,6 +819,7 @@
       editFotoBase64 = null;
       document.getElementById("dashboard").classList.add("hidden");
       document.getElementById("reviewsCard").classList.add("hidden");
+      document.getElementById("vacantesParaTiCard").classList.add("hidden");
       document.getElementById("editCard").classList.remove("hidden");
     });
 
