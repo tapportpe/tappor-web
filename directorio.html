@@ -415,6 +415,69 @@
     display: block; margin: 14px auto 0; background: none; border: none;
     color: var(--ink-soft); font-size: 12.5px; text-decoration: underline; cursor: pointer;
   }
+
+  /* ---- Ajustes para pantallas grandes (compu) ---- */
+  @media (min-width: 860px) {
+    html, body { background-attachment: fixed; }
+
+    .app {
+      max-width: 1080px;
+      padding-bottom: 40px;
+    }
+
+    .topbar {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 40px 20px;
+      border-radius: 0 0 18px 18px;
+    }
+    .topbar h1 { font-size: 26px; }
+
+    .view { padding: 4px 40px 20px; max-width: 1080px; margin: 0 auto; }
+
+    /* el feed y los resultados pasan de lista vertical a grilla */
+    #feedVacantes,
+    #resultadosBusqueda {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 14px;
+      align-items: start;
+    }
+    #feedVacantes .job-card,
+    #resultadosBusqueda .waiter-card {
+      margin-bottom: 0;
+    }
+
+    .waiter-carousel {
+      margin: 0 0 4px;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .filters {
+      max-width: 640px;
+    }
+    .btn-primary, .btn-secondary { width: auto; padding-left: 28px; padding-right: 28px; }
+
+    /* barra inferior: ya no pegada a los bordes de toda la pantalla */
+    .bottom-nav {
+      padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+      background: transparent;
+      border-top: none;
+      pointer-events: none;
+    }
+    .bottom-nav-inner {
+      max-width: 340px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 18px;
+      box-shadow: 0 10px 30px rgba(10,15,31,0.18);
+      pointer-events: auto;
+    }
+
+    .modal { max-width: 520px; padding: 28px; }
+  }
 </style>
 </head>
 <body>
