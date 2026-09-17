@@ -118,6 +118,13 @@
     margin-bottom: 8px;
   }
   .job-card h3 { font-size: 15.5px; margin: 0 0 4px; }
+  .job-card .tag.rating-req {
+    display: block;
+    width: fit-content;
+    background: rgba(216,161,58,0.25);
+    color: #F1D9A8;
+    margin-bottom: 10px;
+  }
   .job-card .job-rest { font-size: 12.5px; opacity: 0.85; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
   .job-card .job-rest img { width: 16px; height: 16px; border-radius: 50%; object-fit: cover; }
   .job-card p { font-size: 13px; line-height: 1.4; margin: 0 0 12px; opacity: 0.95; }
@@ -700,6 +707,7 @@
               <h3>${escapeHtml(v.puesto)}</h3>
               <div class="job-rest">${logoHtml}${escapeHtml(v.restaurante)}</div>
               ${v.descripcion ? `<p>${escapeHtml(v.descripcion)}</p>` : ""}
+              ${v.ratingMinimo > 0 ? `<span class="tag rating-req">Requiere ${v.ratingMinimo}★ o más</span>` : ""}
               <div class="contact-row">
                 <a class="contact-btn" href="${href}">Contactar</a>
                 <button type="button" class="contact-btn primary btn-interesado" data-vacante-id="${escapeHtml(v.id || "")}">Me interesa</button>
