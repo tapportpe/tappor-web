@@ -332,6 +332,49 @@
     margin: 0;
   }
 
+  /* ---------- AUDIENCES ---------- */
+  .audiences {
+    background: var(--navy);
+    color: #fff;
+    padding: 84px 0;
+  }
+  .aud-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  @media (max-width: 720px) {
+    .aud-grid { grid-template-columns: 1fr; }
+    .aud-col.left { border-right: none; border-bottom: 1px solid var(--line-dark); padding-bottom: 40px; margin-bottom: 40px; }
+  }
+  .aud-col { padding: 0 40px; }
+  .aud-col.left {
+    border-right: 1px solid var(--line-dark);
+    padding-left: 0;
+  }
+  .aud-col.right { padding-right: 0; }
+  @media (max-width: 720px) {
+    .aud-col.right { padding-left: 0; }
+  }
+  .aud-col h3 {
+    font-size: 21px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .aud-col ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .aud-col li {
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.75);
+    padding: 12px 0;
+    border-top: 1px solid var(--line-dark);
+  }
+  .aud-col li:first-of-type { border-top: none; }
+
   /* ---------- HUB ---------- */
   .hub {
     background:
@@ -502,8 +545,8 @@
   <div class="nav-inner">
     <div class="logo">Tapport</div>
     <ul class="nav-links nav-mobile-hide">
-      <li><a href="#como-funciona">Cómo funciona</a></li>
       <li><a href="#hub">El Feed</a></li>
+      <li><a href="#como-funciona">Cómo funciona</a></li>
       <li><a href="#contacto">Contacto</a></li>
     </ul>
     <div class="nav-right">
@@ -564,6 +607,23 @@
   </div>
 </section>
 
+<section class="hub" id="hub">
+  <div class="wrap">
+    <div class="hub-eyebrow">✦ Nuevo</div>
+    <h2>Entra al Feed: la comunidad Tapport en vivo</h2>
+    <p class="hub-sub">Perfiles de meseros, vacantes y reseñas reales de restaurantes — todo en un solo lugar. Explora el Feed y descubre quién está construyendo su reputación hoy.</p>
+    <div class="hub-stats">
+      <div class="hub-stat"><strong>Meseros</strong><span>perfiles con historial verificable</span></div>
+      <div class="hub-stat"><strong>Restaurantes</strong><span>vacantes y equipos calificados</span></div>
+      <div class="hub-stat"><strong>Reseñas</strong><span>calificaciones reales de clientes</span></div>
+    </div>
+    <div class="hub-ctas">
+      <a class="btn-primary" href="https://tapportpe.github.io/tappor-web/directorio.html">Explorar el Feed</a>
+      <a class="btn-secondary" href="#como-funciona">Ver cómo funciona</a>
+    </div>
+  </div>
+</section>
+
 <section class="steps" id="como-funciona">
   <div class="wrap">
     <h2>Cómo funciona</h2>
@@ -593,19 +653,23 @@
   </div>
 </section>
 
-<section class="hub" id="hub">
-  <div class="wrap">
-    <div class="hub-eyebrow">✦ Nuevo</div>
-    <h2>Entra al Feed: la comunidad Tapport en vivo</h2>
-    <p class="hub-sub">Perfiles de meseros, vacantes y reseñas reales de restaurantes — todo en un solo lugar. Explora el Feed y descubre quién está construyendo su reputación hoy.</p>
-    <div class="hub-stats">
-      <div class="hub-stat"><strong>Meseros</strong><span>perfiles con historial verificable</span></div>
-      <div class="hub-stat"><strong>Restaurantes</strong><span>vacantes y equipos calificados</span></div>
-      <div class="hub-stat"><strong>Reseñas</strong><span>calificaciones reales de clientes</span></div>
+<section class="audiences">
+  <div class="wrap aud-grid">
+    <div class="aud-col left" id="meseros">
+      <h3>Para meseros</h3>
+      <ul>
+        <li>Construyes un historial verificable de tu desempeño, calificación tras calificación.</li>
+        <li>Es gratis, siempre — no pagas nada por tener tu tarjeta ni por acumular reseñas.</li>
+        <li>Tu reputación te acompaña de un restaurante a otro, en vez de quedarse atrás.</li>
+      </ul>
     </div>
-    <div class="hub-ctas">
-      <a class="btn-primary" href="https://tapportpe.github.io/tappor-web/directorio.html">Explorar el Feed</a>
-      <a class="btn-secondary" href="#como-funciona">Ver cómo funciona</a>
+    <div class="aud-col right" id="restaurantes">
+      <h3>Para restaurantes</h3>
+      <ul>
+        <li>Feedback real de cada mesa, sin encuestas ni fricción para el cliente.</li>
+        <li>Meseros más motivados: su esfuerzo por fin queda registrado.</li>
+        <li>Implementación simple, sin fricción para tu operación diaria.</li>
+      </ul>
     </div>
   </div>
 </section>
