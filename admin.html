@@ -186,6 +186,54 @@
   .chart-fill { height: 100%; background: var(--gold); border-radius: 999px; transition: width 0.4s ease; }
   .chart-row .chart-value { width: 34px; flex-shrink: 0; font-size: 12px; font-weight: 700; color: var(--accent); text-align: right; }
 
+  /* ---- Rendimiento por día ---- */
+  .daily-card { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 18px; }
+  .daily-header {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    flex-wrap: wrap; margin-bottom: 12px;
+  }
+  .daily-date-input {
+    font-family: inherit; font-size: 12.5px; font-weight: 600; color: var(--ink);
+    border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px;
+    background: #fff;
+  }
+  .daily-quicklinks { display: flex; gap: 6px; flex-wrap: wrap; }
+  .daily-quicklink {
+    font-size: 11.5px; font-weight: 600; color: var(--accent);
+    background: var(--accent-soft); border: none; border-radius: 999px;
+    padding: 5px 11px; cursor: pointer;
+  }
+  .daily-quicklink.active { background: var(--gold); color: #fff; }
+  .daily-stats-row { display: flex; gap: 10px; margin-bottom: 16px; }
+  .daily-stat {
+    flex: 1; background: var(--accent-soft); border-radius: 10px; padding: 12px; text-align: center;
+  }
+  .daily-stat span { display: block; font-size: 19px; font-weight: 750; color: var(--accent); }
+  .daily-stat label { font-size: 10.5px; color: var(--ink-soft); }
+  .daily-empty { font-size: 12.5px; color: var(--ink-soft); padding: 6px 0 4px; }
+
+  /* Tendencia: barras verticales de servicios por día, sin librerías externas */
+  .trend-wrap { margin-top: 22px; }
+  .trend-chart {
+    display: flex; align-items: flex-end; gap: 4px; height: 110px;
+    border-bottom: 1px solid var(--line); padding-bottom: 2px;
+  }
+  .trend-bar-col {
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+    height: 100%; cursor: default;
+  }
+  .trend-bar {
+    width: 100%; max-width: 22px; background: var(--gold); border-radius: 4px 4px 0 0;
+    min-height: 2px; transition: opacity 0.15s ease;
+  }
+  .trend-bar-col.is-selected .trend-bar { background: var(--accent); }
+  .trend-bar-col:hover .trend-bar { opacity: 0.8; }
+  .trend-labels { display: flex; gap: 4px; margin-top: 6px; }
+  .trend-label-col {
+    flex: 1; text-align: center; font-size: 9.5px; color: var(--ink-soft);
+    white-space: nowrap; overflow: hidden;
+  }
+
   /* ---- Mis vacantes / interesados ---- */
   .vacante-item { border: 1px solid var(--line); border-radius: 10px; padding: 14px; margin-bottom: 12px; }
   .vacante-item h3 { font-size: 14.5px; margin: 0 0 4px; }
@@ -352,6 +400,31 @@
       <div class="chart-card" id="chartCard">
         <p class="chart-title">Rating por mesero</p>
         <div id="graficoMeseros"></div>
+      </div>
+
+      <div class="chart-card daily-card" id="dailyCard">
+        <div class="daily-header">
+          <p class="chart-title" style="margin:0;">Servicios por día</p>
+          <input type="date" id="dailyDatePicker" class="daily-date-input">
+        </div>
+        <div class="daily-quicklinks" id="dailyQuicklinks">
+          <button type="button" class="daily-quicklink" data-dias="0">Hoy</button>
+          <button type="button" class="daily-quicklink" data-dias="1">Ayer</button>
+        </div>
+
+        <div class="daily-stats-row" style="margin-top:14px;">
+          <div class="daily-stat"><span id="dailyTotalServicios">0</span><label>Servicios ese día</label></div>
+          <div class="daily-stat"><span id="dailyPromedioDia">—</span><label>Rating del día</label></div>
+        </div>
+
+        <p class="chart-title">Servicios del día por mesero</p>
+        <div id="graficoMeserosDia"></div>
+
+        <div class="trend-wrap">
+          <p class="chart-title">Tendencia — últimos 14 días</p>
+          <div class="trend-chart" id="trendChart"></div>
+          <div class="trend-labels" id="trendLabels"></div>
+        </div>
       </div>
 
       <button type="button" class="btn-secondary" id="toggleEditarNegocioBtn" style="margin-top:16px;">Editar perfil del negocio</button>
@@ -627,7 +700,147 @@
 
       renderGraficoMeseros(meseros);
       renderMeseros(meseros);
+      inicializarRendimientoDiario(meseros);
     }
+
+    // ---------- Rendimiento por día ----------
+    let meserosRendimiento = [];
+
+    function formatFechaLocal(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    }
+
+    // Agrupa todas las reseñas (de todos los meseros) por día (YYYY-MM-DD local).
+    // Devuelve un Map: fecha -> { total, sumaEstrellas, porMesero: { nombre: {count, suma} } }
+    function agruparServiciosPorDia(meseros) {
+      const mapa = new Map();
+      meseros.forEach(m => {
+        (m.reviews || []).forEach(r => {
+          const fecha = new Date(r.fecha);
+          if (isNaN(fecha)) return;
+          const key = formatFechaLocal(fecha);
+          if (!mapa.has(key)) mapa.set(key, { total: 0, sumaEstrellas: 0, porMesero: {} });
+          const dia = mapa.get(key);
+          dia.total += 1;
+          dia.sumaEstrellas += (r.estrellas || 0);
+          if (!dia.porMesero[m.nombre]) dia.porMesero[m.nombre] = { count: 0, suma: 0 };
+          dia.porMesero[m.nombre].count += 1;
+          dia.porMesero[m.nombre].suma += (r.estrellas || 0);
+        });
+      });
+      return mapa;
+    }
+
+    function inicializarRendimientoDiario(meseros) {
+      meserosRendimiento = meseros;
+      const hoy = new Date();
+      const input = document.getElementById("dailyDatePicker");
+      input.value = formatFechaLocal(hoy);
+      input.max = formatFechaLocal(hoy);
+      renderRendimientoDiario(input.value);
+      renderTendencia(input.value);
+    }
+
+    function renderRendimientoDiario(fechaStr) {
+      const mapa = agruparServiciosPorDia(meserosRendimiento);
+      const dia = mapa.get(fechaStr) || { total: 0, sumaEstrellas: 0, porMesero: {} };
+
+      document.getElementById("dailyTotalServicios").textContent = dia.total;
+      document.getElementById("dailyPromedioDia").textContent = dia.total
+        ? (dia.sumaEstrellas / dia.total).toFixed(1)
+        : "—";
+
+      const cont = document.getElementById("graficoMeserosDia");
+      const filas = Object.entries(dia.porMesero)
+        .map(([nombre, d]) => ({ nombre, count: d.count, promedio: d.suma / d.count }))
+        .sort((a, b) => b.count - a.count);
+
+      if (!filas.length) {
+        cont.innerHTML = '<div class="daily-empty">Ningún mesero registró servicios calificados ese día.</div>';
+        return;
+      }
+
+      const maxCount = Math.max(...filas.map(f => f.count));
+      cont.innerHTML = filas.map(f => {
+        const anchoPorc = Math.max((f.count / maxCount) * 100, 6);
+        return `
+          <div class="chart-row">
+            <div class="chart-name">${escapeHtml(f.nombre)}</div>
+            <div class="chart-track"><div class="chart-fill" style="width:${anchoPorc}%;"></div></div>
+            <div class="chart-value">${f.count} · ★${f.promedio.toFixed(1)}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // Barras de los últimos 14 días con el total de servicios (de todo el equipo) por día.
+    function renderTendencia(fechaSeleccionada) {
+      const mapa = agruparServiciosPorDia(meserosRendimiento);
+      const dias = [];
+      const hoy = new Date();
+      for (let i = 13; i >= 0; i--) {
+        const d = new Date(hoy);
+        d.setDate(d.getDate() - i);
+        const key = formatFechaLocal(d);
+        dias.push({ key, total: (mapa.get(key) || {}).total || 0, fechaObj: d });
+      }
+      const max = Math.max(1, ...dias.map(d => d.total));
+
+      const chart = document.getElementById("trendChart");
+      const labels = document.getElementById("trendLabels");
+
+      chart.innerHTML = dias.map(d => {
+        const alturaPorc = Math.max((d.total / max) * 100, d.total > 0 ? 4 : 1);
+        const seleccionado = d.key === fechaSeleccionada ? " is-selected" : "";
+        const fechaLegible = d.fechaObj.toLocaleDateString("es-PE", { day: "numeric", month: "short" });
+        return `
+          <div class="trend-bar-col${seleccionado}" data-fecha="${d.key}" title="${fechaLegible}: ${d.total} servicio${d.total === 1 ? "" : "s"}">
+            <div class="trend-bar" style="height:${alturaPorc}%;"></div>
+          </div>
+        `;
+      }).join("");
+
+      labels.innerHTML = dias.map((d, i) => {
+        // Solo mostramos la etiqueta cada 2 días para que no se amontonen.
+        const mostrar = i % 2 === 0;
+        return `<div class="trend-label-col">${mostrar ? d.fechaObj.getDate() : ""}</div>`;
+      }).join("");
+
+      chart.querySelectorAll(".trend-bar-col").forEach(col => {
+        col.addEventListener("click", () => {
+          const fecha = col.dataset.fecha;
+          document.getElementById("dailyDatePicker").value = fecha;
+          renderRendimientoDiario(fecha);
+          renderTendencia(fecha);
+          document.querySelectorAll(".daily-quicklink").forEach(b => b.classList.remove("active"));
+        });
+      });
+    }
+
+    document.getElementById("dailyDatePicker").addEventListener("change", (e) => {
+      const fecha = e.target.value;
+      if (!fecha) return;
+      renderRendimientoDiario(fecha);
+      renderTendencia(fecha);
+      document.querySelectorAll(".daily-quicklink").forEach(b => b.classList.remove("active"));
+    });
+
+    document.querySelectorAll(".daily-quicklink").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const dias = parseInt(btn.dataset.dias, 10);
+        const d = new Date();
+        d.setDate(d.getDate() - dias);
+        const fecha = formatFechaLocal(d);
+        document.getElementById("dailyDatePicker").value = fecha;
+        renderRendimientoDiario(fecha);
+        renderTendencia(fecha);
+        document.querySelectorAll(".daily-quicklink").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+      });
+    });
 
     // Gráfico de barras horizontal (sin librerías externas) comparando el
     // rating de cada mesero del restaurante, ordenado de mayor a menor.
