@@ -332,11 +332,165 @@
   }
   .negocio-logo-picker img { width: 100%; height: 100%; object-fit: cover; }
   .negocio-logo-picker span { font-size: 9.5px; color: var(--accent); text-align: center; line-height: 1.2; }
+
+  /* =====================================================================
+     SHELL: sidebar + contenido — reemplaza el layout de una sola columna
+     por un panel con navegación, solo para la vista de gerente logueado.
+     ===================================================================== */
+  .shell { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 18px;
+    position: fixed;
+    top: 0; bottom: 0; left: 0;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    z-index: 60;
+  }
+  .sidebar.open { transform: translateX(0); }
+  @media (min-width: 980px) {
+    .sidebar { position: sticky; transform: none; }
+    .sidebar-close { display: none; }
+  }
+
+  .sidebar-brand { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+  .sidebar-brand-sub { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 2px; margin-bottom: 30px; }
+
+  .sidebar-nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .sidebar-link {
+    display: flex; align-items: center; gap: 10px;
+    background: none; border: none; text-align: left;
+    color: rgba(255,255,255,0.68); font-size: 14.5px; font-weight: 600;
+    padding: 11px 12px; border-radius: 9px; cursor: pointer;
+    font-family: inherit;
+  }
+  .sidebar-link:hover { color: #fff; background: rgba(255,255,255,0.06); }
+  .sidebar-link.active { color: var(--accent); background: var(--gold); }
+  .sidebar-link .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.7; flex-shrink: 0; }
+
+  .sidebar-footer { font-size: 10.5px; color: rgba(255,255,255,0.4); letter-spacing: 0.03em; text-transform: uppercase; }
+  .sidebar-footer strong { display: block; color: rgba(255,255,255,0.7); font-size: 11.5px; margin-top: 2px; }
+
+  .sidebar-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(10,15,31,0.5); z-index: 55;
+  }
+  .sidebar-overlay.show { display: block; }
+  @media (min-width: 980px) { .sidebar-overlay { display: none !important; } }
+
+  .main { flex: 1; min-width: 0; display: flex; justify-content: center; padding: 24px 16px 60px; }
+  .main .wrap { max-width: 980px; }
+
+  .hamburger-btn {
+    position: fixed; top: 18px; left: 16px; z-index: 50;
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--card); border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; box-shadow: 0 4px 14px rgba(10,15,31,0.12);
+  }
+  .hamburger-btn span, .hamburger-btn::before, .hamburger-btn::after {
+    content: ""; display: block; width: 15px; height: 2px; background: var(--ink); border-radius: 2px;
+  }
+  .hamburger-btn { flex-direction: column; gap: 3px; }
+  @media (min-width: 980px) { .hamburger-btn { display: none; } }
+
+  /* --- Banner del restaurante (arriba del contenido, siempre visible) --- */
+  .rest-banner {
+    border-radius: 16px;
+    padding: 26px 22px;
+    margin-bottom: 20px;
+    background: var(--accent-soft);
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    color: var(--ink);
+    text-align: center;
+    overflow: hidden;
+  }
+  .rest-banner.has-photo { color: #fff; }
+  .rest-banner.has-photo::before {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(10,15,31,0.15), rgba(10,15,31,0.55));
+  }
+  .rest-banner-inner { position: relative; z-index: 1; }
+  .rest-banner-logo {
+    width: 46px; height: 46px; border-radius: 12px; object-fit: cover;
+    margin: 0 auto 10px; background: rgba(255,255,255,0.5); display: block;
+  }
+  .rest-banner-name { font-size: 20px; font-weight: 750; margin: 0; }
+  .rest-banner-address { font-size: 12.5px; opacity: 0.8; margin: 4px 0 0; }
+  .rest-banner-edit {
+    background: none; border: none; font-size: 12px; font-weight: 700;
+    text-decoration: underline; cursor: pointer; margin-top: 10px;
+    color: inherit; opacity: 0.85; font-family: inherit;
+  }
+
+  .view-title { font-size: 13px; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 12px; }
+
+  /* --- Vista Inicio: 3 columnas --- */
+  .dash-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  @media (min-width: 980px) { .dash-grid { grid-template-columns: 1.2fr 1fr 1fr; align-items: start; } }
+  .dash-col .card { margin-top: 0; }
+  .dash-col .card + .card { margin-top: 16px; }
+
+  .anuncio-row { border-bottom: 1px solid var(--line); padding: 10px 0; }
+  .anuncio-row:last-child { border-bottom: none; }
+  .anuncio-row h4 { font-size: 13.5px; margin: 0 0 3px; }
+  .anuncio-row p { font-size: 11.5px; color: var(--ink-soft); margin: 0; }
+
+  .data-row { display: flex; justify-content: space-between; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .data-row:last-child { border-bottom: none; }
+  .data-row .data-label { color: var(--ink-soft); }
+  .data-row .data-value { font-weight: 600; text-align: right; }
+
+  /* --- Vista Historial: tabla de personal + gráfico --- */
+  .hist-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  @media (min-width: 980px) { .hist-grid { grid-template-columns: 320px 1fr; align-items: start; } }
+
+  .personal-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .personal-table th {
+    text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.03em;
+    color: var(--ink-soft); padding: 0 8px 8px; font-weight: 700;
+  }
+  .personal-table td { padding: 9px 8px; border-top: 1px solid var(--line); }
+  .personal-table td.pt-rating { text-align: right; font-weight: 700; color: var(--star); white-space: nowrap; }
+  .personal-table td.pt-code { color: var(--ink-soft); font-size: 11.5px; }
+
+  .view { display: block; }
+  .view.hidden { display: none; }
 </style>
 </head>
 <body>
+<div class="shell">
+
+  <button type="button" class="hamburger-btn hidden" id="hamburgerBtn" aria-label="Abrir menú"></button>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <aside class="sidebar hidden" id="sidebar">
+    <div>
+      <div class="sidebar-brand">Tapport</div>
+      <div class="sidebar-brand-sub" id="sidebarRestaurante">Panel de gerente</div>
+    </div>
+    <nav class="sidebar-nav">
+      <button type="button" class="sidebar-link active" data-view="inicio"><span class="dot"></span>Inicio</button>
+      <button type="button" class="sidebar-link" data-view="historial"><span class="dot"></span>Historial</button>
+      <button type="button" class="sidebar-link" data-view="administrar"><span class="dot"></span>Administrar</button>
+    </nav>
+    <div class="sidebar-footer">
+      <button type="button" class="sidebar-link sidebar-close" id="cerrarSesionBtn" style="color:rgba(255,255,255,0.68); padding-left:12px; margin-bottom:14px;">Cerrar sesión</button>
+      Powered by
+      <strong>Tapport</strong>
+    </div>
+  </aside>
+
+  <div class="main">
   <div class="wrap">
-    <header>
+    <header id="loginHeader">
       <div class="eyebrow">Tapport · Panel de gerente</div>
       <h1>Mi restaurante</h1>
       <p class="sub" id="headerSub">Inicia sesión para ver las reseñas y el rating de tu equipo.</p>
@@ -367,71 +521,124 @@
     </div>
 
     <!-- ============ PANEL (tras login) ============ -->
-    <div class="card hidden" id="panel">
-      <div class="panel-cover empty" id="panelCover"><div class="panel-cover-fade"></div></div>
+    <div class="hidden" id="panel">
 
-      <div class="panel-header">
-        <div class="panel-rest-wrap">
-          <div class="panel-logo hidden" id="panelLogoWrap"><img id="panelLogo" /></div>
-          <div style="min-width:0;">
-            <p class="panel-rest" id="panelRestaurante"></p>
-            <p class="panel-sub">Equipo de meseros y sus reseñas</p>
-            <p class="panel-address hidden" id="panelAddress"></p>
+      <!-- Banner del restaurante, siempre visible arriba de las 3 vistas -->
+      <div class="rest-banner empty" id="panelCover">
+        <div class="rest-banner-inner">
+          <img class="rest-banner-logo hidden" id="panelLogo" />
+          <p class="rest-banner-name" id="panelRestaurante"></p>
+          <p class="rest-banner-address hidden" id="panelAddress"></p>
+          <button type="button" class="rest-banner-edit" id="bannerEditBtn">Editar banner y logo</button>
+        </div>
+      </div>
+
+      <!-- ============ VISTA: INICIO ============ -->
+      <div class="view" id="view-inicio">
+        <div class="dash-grid">
+
+          <div class="dash-col">
+            <div class="card">
+              <div class="stats-row" style="margin-top:0;">
+                <div class="stat-box">
+                  <div class="num" id="panelPromedio">—</div>
+                  <div class="label">Rating del equipo</div>
+                </div>
+                <div class="stat-box">
+                  <div class="num" id="panelTotalMeseros">—</div>
+                  <div class="label">Meseros registrados</div>
+                </div>
+                <div class="stat-box">
+                  <div class="num" id="panelTotalResenas">—</div>
+                  <div class="label">Reseñas totales</div>
+                </div>
+              </div>
+              <div class="chart-card" id="chartCard" style="margin-top:18px;">
+                <p class="chart-title">Rating por mesero</p>
+                <div id="graficoMeseros"></div>
+              </div>
+            </div>
           </div>
-        </div>
-        <button type="button" class="btn-link" id="cerrarSesionBtn" style="white-space:nowrap;">Cerrar sesión</button>
-      </div>
 
-      <div class="stats-row">
-        <div class="stat-box">
-          <div class="num" id="panelPromedio">—</div>
-          <div class="label">Rating del equipo</div>
-        </div>
-        <div class="stat-box">
-          <div class="num" id="panelTotalMeseros">—</div>
-          <div class="label">Meseros registrados</div>
-        </div>
-        <div class="stat-box">
-          <div class="num" id="panelTotalResenas">—</div>
-          <div class="label">Reseñas totales</div>
-        </div>
-      </div>
+          <div class="dash-col">
+            <div class="card">
+              <p class="view-title" style="margin-top:0;">Anuncios</p>
+              <div id="anunciosList"><div class="empty-state">Cargando…</div></div>
+              <button type="button" class="btn-secondary" id="togglePublicarVacanteBtn" style="margin-top:14px;">+ Publicar vacante</button>
+            </div>
+            <div class="card">
+              <button type="button" class="btn-secondary nav-shortcut" data-goto-view="historial" style="margin-top:0;">Historial de rating y personal</button>
+              <button type="button" class="btn-secondary nav-shortcut" id="toggleMisVacantesBtn">Vacantes y postulantes</button>
+              <button type="button" class="btn-secondary nav-shortcut" data-goto-view="administrar">Administrador</button>
+            </div>
+          </div>
 
-      <div class="chart-card" id="chartCard">
-        <p class="chart-title">Rating por mesero</p>
-        <div id="graficoMeseros"></div>
-      </div>
+          <div class="dash-col">
+            <div class="card">
+              <p class="view-title" style="margin-top:0;">Datos del restaurante</p>
+              <div class="data-row"><span class="data-label">Restaurante</span><span class="data-value" id="dataRestaurante">—</span></div>
+              <div class="data-row"><span class="data-label">Dirección</span><span class="data-value" id="dataDireccion">Sin registrar</span></div>
+              <div class="data-row"><span class="data-label">Logo</span><span class="data-value" id="dataLogo">Sin subir</span></div>
+              <div class="data-row"><span class="data-label">Portada</span><span class="data-value" id="dataPortada">Sin subir</span></div>
+              <button type="button" class="btn-secondary" id="toggleEditarNegocioBtn" style="margin-top:14px;">Editar perfil del negocio</button>
+            </div>
+          </div>
 
-      <div class="chart-card daily-card" id="dailyCard">
-        <div class="daily-header">
-          <p class="chart-title" style="margin:0;">Servicios por día</p>
-          <input type="date" id="dailyDatePicker" class="daily-date-input">
-        </div>
-        <div class="daily-quicklinks" id="dailyQuicklinks">
-          <button type="button" class="daily-quicklink" data-dias="0">Hoy</button>
-          <button type="button" class="daily-quicklink" data-dias="1">Ayer</button>
-        </div>
-
-        <div class="daily-stats-row" style="margin-top:14px;">
-          <div class="daily-stat"><span id="dailyTotalServicios">0</span><label>Servicios ese día</label></div>
-          <div class="daily-stat"><span id="dailyPromedioDia">—</span><label>Rating del día</label></div>
-        </div>
-
-        <p class="chart-title">Servicios del día por mesero</p>
-        <div id="graficoMeserosDia"></div>
-
-        <div class="trend-wrap">
-          <p class="chart-title">Tendencia — últimos 14 días</p>
-          <div class="trend-chart" id="trendChart"></div>
-          <div class="trend-labels" id="trendLabels"></div>
         </div>
       </div>
 
-      <button type="button" class="btn-secondary" id="toggleEditarNegocioBtn" style="margin-top:16px;">Editar perfil del negocio</button>
-      <button type="button" class="btn-secondary" id="togglePublicarVacanteBtn" style="margin-top:10px;">+ Publicar vacante</button>
-      <button type="button" class="btn-secondary" id="toggleMisVacantesBtn" style="margin-top:10px;">Ver mis vacantes</button>
+      <!-- ============ VISTA: HISTORIAL ============ -->
+      <div class="view hidden" id="view-historial">
+        <div class="hist-grid">
 
-      <div id="listaMeseros" style="margin-top:6px;"></div>
+          <div class="card">
+            <p class="view-title" style="margin-top:0;">Personal</p>
+            <table class="personal-table">
+              <thead><tr><th>Code</th><th>Nombre</th><th style="text-align:right;">Rating</th></tr></thead>
+              <tbody id="personalTableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <div class="daily-header">
+              <p class="chart-title" style="margin:0;">Gráfico de barras con historial</p>
+              <input type="date" id="dailyDatePicker" class="daily-date-input">
+            </div>
+            <div class="daily-quicklinks" id="dailyQuicklinks">
+              <button type="button" class="daily-quicklink" data-dias="0">Hoy</button>
+              <button type="button" class="daily-quicklink" data-dias="1">Ayer</button>
+            </div>
+
+            <div class="daily-stats-row" style="margin-top:14px;">
+              <div class="daily-stat"><span id="dailyTotalServicios">0</span><label>Servicios ese día</label></div>
+              <div class="daily-stat"><span id="dailyPromedioDia">—</span><label>Rating del día</label></div>
+            </div>
+
+            <p class="chart-title">Servicios del día por mesero</p>
+            <div id="graficoMeserosDia"></div>
+
+            <div class="trend-wrap">
+              <p class="chart-title">Tendencia — últimos 14 días</p>
+              <div class="trend-chart" id="trendChart"></div>
+              <div class="trend-labels" id="trendLabels"></div>
+            </div>
+
+            <div id="listaMeseros" style="margin-top:6px;"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============ VISTA: ADMINISTRAR ============ -->
+      <div class="view hidden" id="view-administrar">
+        <div class="card">
+          <p class="view-title" style="margin-top:0;">Administrar</p>
+          <button type="button" class="btn-secondary" id="toggleEditarNegocioBtn2" style="margin-top:0;">Editar perfil del negocio</button>
+          <button type="button" class="btn-secondary" id="togglePublicarVacanteBtn2">+ Publicar vacante</button>
+          <button type="button" class="btn-secondary" id="toggleMisVacantesBtn2">Ver mis vacantes</button>
+        </div>
+      </div>
+
     </div>
 
     <!-- ============ MIS VACANTES (vistas, interesados, editar/eliminar) ============ -->
@@ -536,6 +743,8 @@
       <div class="msg" id="editNegocioMsg"></div>
     </div>
   </div>
+  </div>
+</div>
 
   <script>
     const ENDPOINT = "https://script.google.com/macros/s/AKfycbx9nTiQEr_2AvK0bc3hIyJPao5PqtADFeRQKuhR6_XFV_rR0FG0UsZ5sexFrkyJIdJW/exec";
@@ -588,8 +797,12 @@
       sesion = null;
       borrarSesion();
       document.getElementById("panel").classList.add("hidden");
+      document.getElementById("sidebar").classList.add("hidden");
+      document.getElementById("hamburgerBtn").classList.add("hidden");
+      cerrarSidebar();
       document.getElementById("editNegocioCard").classList.add("hidden");
       document.getElementById("authCard").classList.remove("hidden");
+      document.getElementById("loginHeader").classList.remove("hidden");
       document.getElementById("headerSub").textContent = "Inicia sesión para ver las reseñas y el rating de tu equipo.";
       document.getElementById("sesionExpiradaMsg").classList.remove("hidden");
     }
@@ -653,18 +866,18 @@
       const cover = document.getElementById("panelCover");
       if (sesion.portadaUrl) {
         cover.style.backgroundImage = `url('${sesion.portadaUrl}')`;
-        cover.classList.remove("empty");
+        cover.classList.add("has-photo");
       } else {
         cover.style.backgroundImage = "";
-        cover.classList.add("empty");
+        cover.classList.remove("has-photo");
       }
 
-      const logoWrap = document.getElementById("panelLogoWrap");
+      const logoEl = document.getElementById("panelLogo");
       if (sesion.logoUrl) {
-        document.getElementById("panelLogo").src = sesion.logoUrl;
-        logoWrap.classList.remove("hidden");
+        logoEl.src = sesion.logoUrl;
+        logoEl.classList.remove("hidden");
       } else {
-        logoWrap.classList.add("hidden");
+        logoEl.classList.add("hidden");
       }
 
       const addressEl = document.getElementById("panelAddress");
@@ -674,16 +887,68 @@
       } else {
         addressEl.classList.add("hidden");
       }
+
+      document.getElementById("sidebarRestaurante").textContent = sesion.restaurante || "Panel de gerente";
+
+      // Tarjeta "Datos del restaurante" (vista Inicio)
+      document.getElementById("dataRestaurante").textContent = sesion.restaurante || "—";
+      document.getElementById("dataDireccion").textContent = sesion.direccion || "Sin registrar";
+      document.getElementById("dataLogo").textContent = sesion.logoUrl ? "Subido" : "Sin subir";
+      document.getElementById("dataPortada").textContent = sesion.portadaUrl ? "Subida" : "Sin subir";
+    }
+
+    // Tabla de personal (vista Historial): code, nombre, rating.
+    function renderTablaPersonal(meseros) {
+      const body = document.getElementById("personalTableBody");
+      if (!meseros.length) {
+        body.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--ink-soft); padding:16px 0;">Todavía no tienes meseros registrados.</td></tr>';
+        return;
+      }
+      body.innerHTML = meseros.map(m => `
+        <tr>
+          <td class="pt-code">${escapeHtml(m.codigo || "")}</td>
+          <td>${escapeHtml(m.nombre || "")}</td>
+          <td class="pt-rating">${m.total ? "★" + m.promedio.toFixed(1) : "—"}</td>
+        </tr>
+      `).join("");
+    }
+
+    // Tarjeta "Anuncios" (vista Inicio): trae las vacantes publicadas y sus vistas.
+    async function cargarAnuncios() {
+      const cont = document.getElementById("anunciosList");
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "listar_postulaciones_vacantes", email: sesion.email, password: sesion.password })
+        });
+        const data = await res.json();
+        const vacantes = (data.ok && data.vacantes) || [];
+        if (!vacantes.length) {
+          cont.innerHTML = '<div class="empty-state">Todavía no publicaste ninguna vacante.</div>';
+          return;
+        }
+        cont.innerHTML = vacantes.slice(0, 4).map(v => `
+          <div class="anuncio-row">
+            <h4>${escapeHtml(v.puesto || "")}</h4>
+            <p>${v.vistas || 0} vista${v.vistas === 1 ? "" : "s"} · ${(v.postulaciones || []).length} interesado${(v.postulaciones || []).length === 1 ? "" : "s"}</p>
+          </div>
+        `).join("");
+      } catch (err) {
+        cont.innerHTML = '<div class="empty-state">No se pudo cargar. Intenta de nuevo.</div>';
+      }
     }
 
     function mostrarPanel() {
       document.getElementById("authCard").classList.add("hidden");
+      document.getElementById("loginHeader").classList.add("hidden");
       document.getElementById("editNegocioCard").classList.add("hidden");
       document.getElementById("publicarVacanteCard").classList.add("hidden");
       document.getElementById("misVacantesCard").classList.add("hidden");
       document.getElementById("editarVacanteCard").classList.add("hidden");
       document.getElementById("panel").classList.remove("hidden");
-      document.getElementById("headerSub").textContent = "Este es el equipo de tu restaurante en Tapport.";
+      document.getElementById("sidebar").classList.remove("hidden");
+      document.getElementById("hamburgerBtn").classList.remove("hidden");
 
       document.getElementById("panelRestaurante").textContent = sesion.restaurante || "";
       pintarCabeceraNegocio();
@@ -700,8 +965,50 @@
 
       renderGraficoMeseros(meseros);
       renderMeseros(meseros);
+      renderTablaPersonal([...meseros].sort((a, b) => (b.promedio || 0) - (a.promedio || 0)));
       inicializarRendimientoDiario(meseros);
+      cargarAnuncios();
+      cambiarVista("inicio");
     }
+
+    // ---------- Navegación del panel: sidebar + atajos ----------
+    function cambiarVista(nombre) {
+      document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
+      const vista = document.getElementById("view-" + nombre);
+      if (vista) vista.classList.remove("hidden");
+
+      document.querySelectorAll(".sidebar-link[data-view]").forEach(link => {
+        link.classList.toggle("active", link.dataset.view === nombre);
+      });
+
+      cerrarSidebar();
+    }
+
+    function abrirSidebar() {
+      document.getElementById("sidebar").classList.add("open");
+      document.getElementById("sidebarOverlay").classList.add("show");
+    }
+    function cerrarSidebar() {
+      document.getElementById("sidebar").classList.remove("open");
+      document.getElementById("sidebarOverlay").classList.remove("show");
+    }
+
+    document.getElementById("hamburgerBtn").addEventListener("click", abrirSidebar);
+    document.getElementById("sidebarOverlay").addEventListener("click", cerrarSidebar);
+
+    document.querySelectorAll(".sidebar-link[data-view]").forEach(link => {
+      link.addEventListener("click", () => cambiarVista(link.dataset.view));
+    });
+    document.querySelectorAll("[data-goto-view]").forEach(btn => {
+      btn.addEventListener("click", () => cambiarVista(btn.dataset.gotoView));
+    });
+
+    // Los botones duplicados de la vista "Administrar" disparan el mismo
+    // flujo que los originales (evita repetir toda la lógica de cada uno).
+    document.getElementById("toggleEditarNegocioBtn2").addEventListener("click", () => document.getElementById("toggleEditarNegocioBtn").click());
+    document.getElementById("togglePublicarVacanteBtn2").addEventListener("click", () => document.getElementById("togglePublicarVacanteBtn").click());
+    document.getElementById("toggleMisVacantesBtn2").addEventListener("click", () => document.getElementById("toggleMisVacantesBtn").click());
+    document.getElementById("bannerEditBtn").addEventListener("click", () => document.getElementById("toggleEditarNegocioBtn").click());
 
     // ---------- Rendimiento por día ----------
     let meserosRendimiento = [];
@@ -919,11 +1226,15 @@
       sesion = null;
       borrarSesion();
       document.getElementById("panel").classList.add("hidden");
+      document.getElementById("sidebar").classList.add("hidden");
+      document.getElementById("hamburgerBtn").classList.add("hidden");
+      cerrarSidebar();
       document.getElementById("editNegocioCard").classList.add("hidden");
       document.getElementById("publicarVacanteCard").classList.add("hidden");
       document.getElementById("misVacantesCard").classList.add("hidden");
       document.getElementById("editarVacanteCard").classList.add("hidden");
       document.getElementById("authCard").classList.remove("hidden");
+      document.getElementById("loginHeader").classList.remove("hidden");
       document.getElementById("headerSub").textContent = "Inicia sesión para ver las reseñas y el rating de tu equipo.";
       document.getElementById("loginPassword").value = "";
       document.getElementById("sesionExpiradaMsg").classList.add("hidden");
