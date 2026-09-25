@@ -389,7 +389,7 @@
           <path d="M4 12.5L9.5 18L20 6" stroke="#2F8F5B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
-      <h2>¡Gracias por tu calificación!</h2>
+      <h2 id="successTitle">¡Gracias por tu calificación!</h2>
       <p id="successSub">Tu opinión ayuda a que este mesero construya su reputación.</p>
 
       <a href="directorio.html" id="verDirectorioBtn" class="cta-link">Conoce más de nuestro personal</a>
@@ -424,6 +424,8 @@
     submitBtn: document.getElementById("submitBtn"),
     errorBanner: document.getElementById("errorBanner"),
     success: document.getElementById("successState"),
+    successTitle: document.getElementById("successTitle"),
+    successSub: document.getElementById("successSub"),
     verDirectorioBtn: document.getElementById("verDirectorioBtn"),
     commentCount: document.getElementById("commentCount"),
   };
@@ -502,6 +504,7 @@
   }
 
   function showError() {
+    els.errorBanner.textContent = "No pudimos identificar al mesero. Vuelve a escanear el código QR.";
     els.errorBanner.classList.add("show");
     els.name.textContent = "Mesero no encontrado";
     els.role.textContent = "";
@@ -520,6 +523,90 @@
     }
   }
 
+  // -----------------------------------------------------------------
+  // SESIONES POR CLIENTE (localStorage)
+  //
+  // Una misma tarjeta NFC (cardCode, p.ej. TAPPO000) es reutilizada por
+  // muchos clientes distintos. Lo que se bloquea tras un envío exitoso
+  // no es la tarjeta, sino la sesión individual del cliente que la usó
+  // (identificada por un sessionId propio de su navegador/dispositivo).
+  //
+  // Como cada cliente escanea la tarjeta desde su propio celular, cada
+  // uno tiene su propio localStorage: por eso guardar la sesión ahí ya
+  // resuelve "un cliente no bloquea a los demás" de forma natural.
+  // -----------------------------------------------------------------
+  const SESSION_KEY_PREFIX = "tapport_session_";
+  // Después de este tiempo, la sesión guardada deja de considerarse válida
+  // y se trata como una visita nueva (aunque haya quedado en "completed").
+  // Esto evita que un cliente quede bloqueado para siempre: solo se bloquea
+  // el reenvío inmediato (refresh justo después de pagar/calificar).
+  const SESSION_EXPIRATION_MS = 15 * 60 * 1000; // 15 minutos
+  let currentSession = null;
+
+  function loadSession(cardCode) {
+    try {
+      const raw = localStorage.getItem(SESSION_KEY_PREFIX + cardCode);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (!parsed || parsed.cardCode !== cardCode || !parsed.sessionId || !parsed.status || !parsed.createdAt) {
+        return null;
+      }
+      const ageMs = Date.now() - new Date(parsed.createdAt).getTime();
+      if (isNaN(ageMs) || ageMs > SESSION_EXPIRATION_MS) {
+        // La sesión expiró: se trata como si no existiera (nueva visita).
+        return null;
+      }
+      return parsed;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function saveSession(session) {
+    try {
+      localStorage.setItem(SESSION_KEY_PREFIX + session.cardCode, JSON.stringify(session));
+    } catch (e) {
+      // Si localStorage no está disponible (modo privado estricto, etc.)
+      // la app sigue funcionando para esta carga, solo no persiste entre refrescos.
+    }
+  }
+
+  function createSession(cardCode) {
+    const sessionId = (window.crypto && typeof crypto.randomUUID === "function")
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    const session = {
+      sessionId,
+      cardCode,
+      status: "pending",
+      createdAt: new Date().toISOString(),
+    };
+    saveSession(session);
+    return session;
+  }
+
+  // Primera visita de este cliente a esta tarjeta -> crea sesión.
+  // Refresh (misma tarjeta, mismo navegador) -> recupera la sesión existente,
+  // sea "pending" o "completed", en vez de crear una nueva.
+  function getOrCreateSession(cardCode) {
+    const existing = loadSession(cardCode);
+    if (existing) return existing;
+    return createSession(cardCode);
+  }
+
+  function markSessionCompleted() {
+    if (!currentSession) return;
+    currentSession.status = "completed";
+    saveSession(currentSession);
+  }
+
+  function showAlreadyCompleted() {
+    els.formWrap.classList.add("hidden");
+    els.successTitle.textContent = "Ya calificaste a este mesero";
+    els.successSub.textContent = "Tu respuesta ya fue registrada. ¡Gracias!";
+    els.success.classList.add("show");
+  }
+
   els.stars.addEventListener("click", (e) => {
     const btn = e.target.closest(".star-btn");
     if (!btn) return;
@@ -536,9 +623,15 @@
     if (!rating) return;
     els.submitBtn.disabled = true;
     els.submitBtn.textContent = "Enviando…";
+    els.errorBanner.classList.remove("show");
     try {
+      // mode: "no-cors" evita que un bloqueo de lectura de CORS (típico en
+      // Apps Script Web Apps) se reporte como error de red: el request sí
+      // llega al servidor, solo no podemos leer su respuesta. Así, el catch
+      // de abajo captura fallos reales de envío (sin conexión, URL caída, etc.)
       await fetch(API_URL, {
         method: "POST",
+        mode: "no-cors",
         headers: { "Content-Type": "text/plain" },
         body: JSON.stringify({
           code,
@@ -547,15 +640,36 @@
           comentario: els.comment.value.trim(),
         }),
       });
+
+      // Envío confirmado: recién aquí se bloquea la sesión de ESTE cliente.
+      // La tarjeta (code) sigue disponible para cualquier otro cliente.
+      markSessionCompleted();
+      els.successTitle.textContent = "¡Gracias por tu calificación!";
+      els.successSub.textContent = "Tu opinión ayuda a que este mesero construya su reputación.";
+      els.formWrap.classList.add("hidden");
+      els.success.classList.add("show");
     } catch (e) {
-      // en Apps Script el POST con no-cors puede no devolver body legible;
-      // igual mostramos éxito porque el registro ya se guardó del lado del Sheet
+      // El envío falló de verdad: la sesión sigue "pending" y el cliente
+      // puede volver a intentarlo.
+      els.submitBtn.disabled = false;
+      els.submitBtn.textContent = "Enviar calificación";
+      els.errorBanner.textContent = "No pudimos enviar tu calificación. Verifica tu conexión e inténtalo de nuevo.";
+      els.errorBanner.classList.add("show");
     }
-    els.formWrap.classList.add("hidden");
-    els.success.classList.add("show");
   });
 
-  loadWaiter();
+  if (code) {
+    currentSession = getOrCreateSession(code);
+    if (currentSession.status === "completed") {
+      showAlreadyCompleted();
+    } else {
+      loadWaiter();
+    }
+  } else {
+    // Sin code no hay tarjeta que identificar ni sesión que crear;
+    // se mantiene el comportamiento de error existente.
+    loadWaiter();
+  }
 </script>
 </body>
 </html>
