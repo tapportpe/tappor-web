@@ -274,11 +274,247 @@
   }
   .nav-item.search-item svg { width: 24px; height: 24px; }
   .nav-item.search-item.active { color: #fff; }
+  @media (min-width: 860px) { .bottom-nav { display: none; } }
+  @media (max-width: 859px) { body { padding-bottom: 100px; } }
+
+  /* =====================================================================
+     SHELL: sidebar navy + topbar + contenido a todo el ancho.
+     Solo se usa para la vista de mesero logueado (desktop).
+     ===================================================================== */
+  .shell { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    background: linear-gradient(180deg, #1E40AF 0%, #16307E 100%);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 22px 16px;
+    position: fixed;
+    top: 0; bottom: 0; left: 0;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    z-index: 60;
+    overflow-y: auto;
+  }
+  .sidebar::after {
+    content: "";
+    position: absolute; left: -40px; bottom: -60px; width: 220px; height: 220px;
+    border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.06), transparent 70%);
+    pointer-events: none;
+  }
+  .sidebar.open { transform: translateX(0); }
+  @media (min-width: 860px) { .sidebar { position: sticky; transform: none; height: 100vh; } }
+
+  .sidebar-brand {
+    font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 750;
+    color: #fff; letter-spacing: -0.01em; padding: 4px 8px 22px;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
+  .sidebar-link {
+    display: flex; align-items: center; gap: 10px;
+    background: none; border: none; text-align: left;
+    color: rgba(255,255,255,0.65); font-size: 14px; font-weight: 600;
+    padding: 9px 10px; border-radius: 9px; cursor: pointer; font-family: inherit;
+  }
+  .sidebar-link:hover { color: #fff; background: rgba(255,255,255,0.06); }
+  .sidebar-link.active { color: #fff; background: rgba(255,255,255,0.14); }
+  .sidebar-link .nav-icon-s { width: 18px; height: 18px; flex-shrink: 0; }
+
+  .sidebar-restcard {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.08); border-radius: 12px; padding: 10px;
+    margin-top: 18px; position: relative; z-index: 1;
+  }
+  .sidebar-restcard img { width: 40px; height: 40px; border-radius: 9px; object-fit: cover; background: rgba(255,255,255,0.15); flex-shrink: 0; }
+  .sidebar-restcard .rc-name { font-size: 13px; font-weight: 700; color: #fff; line-height: 1.25; }
+  .sidebar-restcard .rc-tag { font-size: 10px; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.03em; }
+  .sidebar-restcard .rc-status { font-size: 10.5px; color: #6EE7B7; font-weight: 700; margin-top: 2px; display: flex; align-items: center; gap: 4px; }
+  .sidebar-restcard .rc-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #6EE7B7; display: inline-block; }
+
+  .sidebar-support {
+    margin-top: auto; display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.06); border-radius: 12px; padding: 12px;
+    color: rgba(255,255,255,0.75); font-size: 12px; font-weight: 600;
+    text-decoration: none; position: relative; z-index: 1;
+  }
+  .sidebar-support svg { flex-shrink: 0; }
+  .sidebar-support small { display: block; font-weight: 400; opacity: 0.7; font-size: 10.5px; }
+
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(10,15,31,0.45); z-index: 55; }
+  .sidebar-overlay.show { display: block; }
+  @media (min-width: 860px) { .sidebar-overlay { display: none !important; } }
+
+  .shell .main { flex: 1; min-width: 0; padding: 0 0 60px; display: block; }
+  .shell .main .shell-wrap { max-width: 1320px; margin: 0 auto; padding: 0 20px 40px; }
+
+  .topbar {
+    display: flex; align-items: center; gap: 16px;
+    padding: 18px 20px; margin: 0 -20px 20px;
+    background: var(--card); border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; z-index: 40;
+  }
+  .topbar-search { flex: 1; display: flex; align-items: center; gap: 8px; background: var(--bg); border-radius: 10px; padding: 9px 14px; color: var(--ink-soft); font-size: 13.5px; }
+  .topbar-search svg { flex-shrink: 0; opacity: 0.6; }
+  .topbar-search input { border: none; background: none; outline: none; font: inherit; color: var(--ink); width: 100%; }
+  .topbar-bell { position: relative; width: 38px; height: 38px; border-radius: 50%; background: var(--bg); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+  .topbar-bell::after { content: ""; position: absolute; top: 8px; right: 9px; width: 7px; height: 7px; border-radius: 50%; background: var(--error); border: 1.5px solid #fff; }
+  .topbar-user { display: flex; align-items: center; gap: 9px; flex-shrink: 0; }
+  .topbar-user img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: var(--accent-soft); }
+  .topbar-user .tu-name { font-size: 13px; font-weight: 700; line-height: 1.2; }
+  .topbar-user .tu-role { font-size: 11px; color: var(--ink-soft); }
+
+  .hamburger-btn {
+    width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+    background: var(--bg); border: none;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer;
+  }
+  .hamburger-btn span, .hamburger-btn::before, .hamburger-btn::after { content: ""; display: block; width: 16px; height: 2px; background: var(--ink); border-radius: 2px; }
+  @media (min-width: 860px) { .hamburger-btn { display: none; } }
+
+  .view { display: block; }
+  .view.hidden { display: none; }
+  .dash-card { background: var(--card); border-radius: 16px; padding: 20px; box-shadow: 0 8px 28px rgba(22,26,46,0.06); }
+  .dash-card + .dash-card { margin-top: 16px; }
+
+  /* --- Banner de bienvenida (Inicio / Mi rendimiento) --- */
+  .p-banner {
+    border-radius: 18px; margin-bottom: 20px; overflow: hidden; position: relative;
+    min-height: 150px; display: flex; align-items: center;
+    background: linear-gradient(135deg, #1E40AF, #16307E);
+    background-size: cover; background-position: center;
+  }
+  .p-banner.has-photo::before { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, rgba(10,20,50,0.82) 30%, rgba(10,20,50,0.35) 100%); }
+  .p-banner-inner { position: relative; z-index: 1; width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 24px 26px; flex-wrap: wrap; }
+  .p-banner-hola { font-size: 22px; font-weight: 800; color: #fff; margin: 0; }
+  .p-banner-hola span { color: #93C1FF; }
+  .p-banner-sub { font-size: 13px; color: rgba(255,255,255,0.8); margin: 4px 0 0; }
+  .p-banner-rating {
+    background: rgba(10,20,50,0.55); border-radius: 14px; padding: 12px 18px; color: #fff; flex-shrink: 0;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .p-banner-rating .pbr-icon { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .p-banner-rating .pbr-label { font-size: 11px; color: rgba(255,255,255,0.7); }
+  .p-banner-rating .pbr-num { font-size: 22px; font-weight: 800; }
+
+  /* --- Grillas reutilizables (2 y 4 columnas) --- */
+  .row-2col { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 16px; }
+  @media (min-width: 860px) { .row-2col { grid-template-columns: 1.5fr 1fr; align-items: start; } }
+  .row-2col.even { grid-template-columns: 1fr; }
+  @media (min-width: 860px) { .row-2col.even { grid-template-columns: 1fr 1fr; } }
+
+  .stat-grid-2x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .mini-stat { background: var(--bg); border-radius: 10px; padding: 12px; }
+  .mini-stat span { display: block; font-size: 19px; font-weight: 750; color: var(--accent); }
+  .mini-stat label { font-size: 10.5px; color: var(--ink-soft); }
+
+  .star-row { color: var(--star); font-size: 16px; letter-spacing: 2px; }
+
+  .motivational-card {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: linear-gradient(135deg, var(--accent), #16307E); color: #fff; border: none;
+  }
+  .mot-icon { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 800; }
+  .mot-title { font-size: 14.5px; font-weight: 750; margin: 0 0 4px; }
+  .mot-text { font-size: 12.5px; opacity: 0.9; margin: 0; line-height: 1.4; }
+
+  .reseña-mini { border-bottom: 1px solid var(--line); padding: 10px 0; }
+  .reseña-mini:last-child { border-bottom: none; }
+  .reseña-mini .rm-top { display: flex; justify-content: space-between; gap: 8px; font-size: 11.5px; color: var(--ink-soft); }
+  .reseña-mini .rm-stars { color: var(--star); font-size: 13px; }
+  .reseña-mini .rm-text { font-size: 13px; color: var(--ink); margin-top: 3px; line-height: 1.4; }
+
+  /* --- Página con header simple (Historial / Cuenta) --- */
+  .page-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 18px; }
+  .page-back { width: 34px; height: 34px; border-radius: 9px; background: var(--accent-soft); color: var(--accent); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+  .page-head h1 { font-size: 22px; font-weight: 800; margin: 0; color: var(--ink); }
+  .page-head p { font-size: 13px; color: var(--ink-soft); margin: 4px 0 0; }
+
+  .mini-profile { display: flex; align-items: center; gap: 12px; }
+  .mini-profile img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; background: var(--accent-soft); }
+  .mini-profile .mp-name { font-size: 15px; font-weight: 750; }
+  .mini-profile .mp-role { font-size: 12px; color: var(--ink-soft); }
+
+  .stat-trio { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 16px; }
+  .stat-trio .mini-stat { text-align: center; }
+
+  .filter-row { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .filter-row select, .filter-row input {
+    border: 1px solid var(--line); border-radius: 9px; padding: 9px 12px; font-size: 13px; font-family: inherit; color: var(--ink); background: var(--bg);
+  }
+  .filter-row input { flex: 1; min-width: 160px; }
+
+  .account-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+  .account-row:last-child { border-bottom: none; }
+  .account-row .ar-label { font-size: 11px; color: var(--ink-soft); }
+  .account-row .ar-value { font-size: 14px; font-weight: 600; }
+  .account-row svg { color: var(--accent); flex-shrink: 0; }
+  .account-row .ar-icon-wrap { display: flex; align-items: center; gap: 10px; }
+
+  .cuenta-avatar-row { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .cuenta-avatar-row img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; background: var(--accent-soft); }
+  .cuenta-avatar-row .ca-name { font-size: 17px; font-weight: 800; }
+  .cuenta-avatar-row .ca-role { font-size: 12.5px; color: var(--ink-soft); }
+  .cuenta-avatar-row .ca-status { font-size: 11px; color: var(--ok, #1FA971); font-weight: 700; margin-top: 2px; display: flex; align-items: center; gap: 4px; }
+  .cuenta-avatar-row .ca-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #1FA971; display: inline-block; }
+
+  .weekday-chart { display: flex; align-items: flex-end; gap: 6px; height: 90px; margin-top: 10px; }
+  .weekday-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+  .weekday-bar { width: 100%; max-width: 26px; background: var(--gold); border-radius: 4px 4px 0 0; min-height: 3px; }
+  .weekday-labels { display: flex; gap: 6px; margin-top: 6px; }
+  .weekday-labels span { flex: 1; text-align: center; font-size: 9.5px; color: var(--ink-soft); }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
+<div class="shell">
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <aside class="sidebar hidden" id="sidebar">
+    <div class="sidebar-brand">
+      <svg width="24" height="24" viewBox="0 0 32 32"><path d="M6 4h20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-7v16a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V10H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="#fff"/></svg>
+      Tapport<sup style="font-size:10px;">®</sup>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button type="button" class="sidebar-link active" data-view="inicio">
+        <svg class="nav-icon-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
+        Inicio
+      </button>
+      <button type="button" class="sidebar-link" data-view="rendimiento">
+        <svg class="nav-icon-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
+        Mi rendimiento
+      </button>
+      <button type="button" class="sidebar-link" data-view="historial">
+        <svg class="nav-icon-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+        Historial
+      </button>
+      <button type="button" class="sidebar-link" data-view="cuenta">
+        <svg class="nav-icon-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg>
+        Cuenta
+      </button>
+    </nav>
+
+    <div class="sidebar-restcard">
+      <img id="sidebarLogo" src="" alt="" />
+      <div style="min-width:0;">
+        <div class="rc-name" id="sidebarRestaurante">Mi restaurante</div>
+        <div class="rc-tag">Restaurante</div>
+        <div class="rc-status">Activo</div>
+      </div>
+    </div>
+
+    <a class="sidebar-support" href="mailto:tapport.pe@gmail.com">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 18 0v5a2 2 0 0 1-2 2h-1v-7h3M3 17v-5h3v7H5a2 2 0 0 1-2-2Z"/></svg>
+      <span>Soporte<small>¿Necesitas ayuda?</small></span>
+    </a>
+  </aside>
+
+  <div class="main">
+  <div class="wrap" id="loginWrap">
+    <header id="loginHeader">
       <div class="eyebrow">Tapport</div>
       <h1>Mi perfil</h1>
       <p class="sub" id="headerSub">Inicia sesión para ver tu rating, tus reseñas y editar tus datos.</p>
@@ -349,34 +585,220 @@
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- ============ DASHBOARD (tras login) ============ -->
-    <div class="card hidden" id="dashboard">
-      <div class="profile-header">
-        <div class="profile-photo" id="dashFotoWrap"><img id="dashFoto" style="display:none; width:100%; height:100%; border-radius:50%; object-fit:cover;" /><span id="dashFotoIniciales"></span></div>
+  <!-- ============ TOPBAR + PANEL (tras login) ============ -->
+  <div class="hidden" id="panelWrap">
+    <div class="topbar hidden" id="topbar">
+      <button type="button" class="hamburger-btn" id="hamburgerBtn" aria-label="Abrir menú"></button>
+      <div class="topbar-search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" placeholder="Buscar en Tapport…" />
+      </div>
+      <button type="button" class="topbar-bell" aria-label="Notificaciones">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+      </button>
+      <div class="topbar-user">
+        <img id="topbarAvatar" src="" alt="" onerror="this.style.visibility='hidden'" />
         <div>
-          <p class="profile-name" id="dashNombre"></p>
-          <p class="profile-sub" id="dashRestaurante"></p>
+          <div class="tu-name" id="topbarNombre">—</div>
+          <div class="tu-role">Mesero</div>
         </div>
+        <button type="button" class="btn-link" id="cerrarSesionBtn" style="font-size:11.5px; padding:0;">Salir</button>
       </div>
-
-      <div class="stats-row">
-        <div class="stat-box">
-          <div class="num" id="dashPromedio">—</div>
-          <div class="label">Rating promedio</div>
-        </div>
-        <div class="stat-box">
-          <div class="num" id="dashTotal">—</div>
-          <div class="label">Reseñas totales</div>
-        </div>
-      </div>
-
-      <button type="button" class="btn-secondary" id="toggleEditarBtn" style="margin-top:18px;">Editar mi perfil</button>
-      <button type="button" class="btn-link" id="cerrarSesionBtn" style="display:block; margin:14px auto 0;">Cerrar sesión</button>
     </div>
 
-    <!-- ============ EDITAR PERFIL ============ -->
-    <div class="card hidden" id="editCard">
+    <div class="shell-wrap">
+
+      <!-- ============ VISTA: INICIO ============ -->
+      <div class="view" id="view-inicio">
+        <div class="p-banner" id="pBanner">
+          <div class="p-banner-inner">
+            <div>
+              <p class="p-banner-hola">¡Hola, <span id="bannerNombre">—</span>!</p>
+              <p class="p-banner-sub">Tu esfuerzo también se nota. 💪</p>
+            </div>
+            <div class="p-banner-rating">
+              <div class="pbr-icon">★</div>
+              <div><div class="pbr-label">Tu rating actual</div><div class="pbr-num" id="bannerPromedio">—</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row-2col">
+          <div class="dash-card">
+            <p class="view-title" style="margin-top:0;">Reseñas recientes</p>
+            <div id="reseñasRecientesInicio"></div>
+          </div>
+          <div>
+            <div class="dash-card">
+              <p class="view-title" style="margin-top:0;">Tu rating promedio</p>
+              <div style="font-size:26px; font-weight:800;" id="ratingPromedioGrande">—</div>
+              <div class="star-row" id="starRowInicio">☆☆☆☆☆</div>
+            </div>
+            <div class="dash-card">
+              <p class="view-title" style="margin-top:0;">Tu rendimiento</p>
+              <div class="stat-grid-2x2">
+                <div class="mini-stat"><span id="statReseñasTotal">—</span><label>Reseñas totales</label></div>
+                <div class="mini-stat"><span id="statReseñasMes">—</span><label>Reseñas este mes</label></div>
+                <div class="mini-stat"><span id="statRatingProm">—</span><label>Rating promedio</label></div>
+                <div class="mini-stat"><span id="statMejorDia">—</span><label>Mejor día</label></div>
+              </div>
+            </div>
+            <div class="dash-card motivational-card">
+              <div class="mot-icon">✓</div>
+              <div>
+                <p class="mot-title" id="motTitulo">¡Sigue así!</p>
+                <p class="mot-text" id="motTexto">Tu desempeño se nota y hace la diferencia.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dash-card hidden" id="vacantesParaTiCard">
+          <p class="view-title" style="margin-top:0;">Vacantes para ti</p>
+          <p style="font-size:12.5px; color:var(--ink-soft); margin:-6px 0 12px;">Solo se muestran las que calzan con tu rating actual.</p>
+          <div id="vacantesParaTiList"></div>
+        </div>
+      </div>
+
+      <!-- ============ VISTA: MI RENDIMIENTO ============ -->
+      <div class="view hidden" id="view-rendimiento">
+        <div class="p-banner" id="pBanner2">
+          <div class="p-banner-inner">
+            <div>
+              <p class="p-banner-hola">¡Hola, <span id="bannerNombre2">—</span>!</p>
+              <p class="p-banner-sub">Así va tu desempeño en Tapport.</p>
+            </div>
+            <div class="p-banner-rating">
+              <div class="pbr-icon">★</div>
+              <div><div class="pbr-label">Tu rating actual</div><div class="pbr-num" id="bannerPromedio2">—</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row-2col">
+          <div class="dash-card">
+            <p class="view-title" style="margin-top:0;">Información personal</p>
+            <div class="account-row"><span class="ar-label">Nombre completo</span><span class="ar-value" id="rendNombre">—</span></div>
+            <div class="account-row"><span class="ar-label">Restaurante</span><span class="ar-value" id="rendRestaurante">—</span></div>
+            <div class="account-row"><span class="ar-label">Teléfono</span><span class="ar-value" id="rendTelefono">—</span></div>
+          </div>
+          <div class="dash-card">
+            <p class="view-title" style="margin-top:0;">Comparativa semanal</p>
+            <p style="font-size:11.5px; color:var(--ink-soft); margin:-8px 0 0;">Rating promedio por día de la semana.</p>
+            <div class="weekday-chart" id="weekdayChart"></div>
+            <div class="weekday-labels"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div>
+          </div>
+        </div>
+
+        <div class="dash-card">
+          <p class="view-title" style="margin-top:0;">Tu rendimiento</p>
+          <div class="stat-grid-2x2">
+            <div class="mini-stat"><span id="statReseñasTotal2">—</span><label>Reseñas totales</label></div>
+            <div class="mini-stat"><span id="statReseñasMes2">—</span><label>Reseñas este mes</label></div>
+            <div class="mini-stat"><span id="statRatingProm2">—</span><label>Rating promedio</label></div>
+            <div class="mini-stat"><span id="statMejorDia2">—</span><label>Mejor día</label></div>
+          </div>
+        </div>
+
+        <div class="dash-card">
+          <p class="view-title" style="margin-top:0;">Evolución de tu rating</p>
+          <p style="font-size:11.5px; color:var(--ink-soft); margin:-8px 0 0;">Promedio acumulado, de tu reseña más antigua a la más reciente.</p>
+          <div class="weekday-chart" id="evolChart" style="align-items:stretch;"></div>
+        </div>
+      </div>
+
+      <!-- ============ VISTA: HISTORIAL ============ -->
+      <div class="view hidden" id="view-historial">
+        <div class="page-head">
+          <button type="button" class="page-back" data-goto-view="inicio">←</button>
+          <div><h1>Historial</h1><p>Revisa todas tus reseñas en el tiempo.</p></div>
+        </div>
+
+        <div class="row-2col">
+          <div class="dash-card">
+            <div class="mini-profile">
+              <img id="histFoto" src="" alt="" onerror="this.style.visibility='hidden'" />
+              <div><div class="mp-name" id="histNombre">—</div><div class="mp-role">Mesero</div></div>
+            </div>
+            <div class="stat-trio">
+              <div class="mini-stat"><span id="statReseñasTotal3">—</span><label>Reseñas</label></div>
+              <div class="mini-stat"><span id="statReseñasMes3">—</span><label>Este mes</label></div>
+              <div class="mini-stat"><span id="statRatingProm3">—</span><label>Rating</label></div>
+            </div>
+          </div>
+
+          <div class="dash-card">
+            <div class="filter-row">
+              <select id="filtroEstrellas">
+                <option value="0">Todas las estrellas</option>
+                <option value="5">5 estrellas</option>
+                <option value="4">4 estrellas</option>
+                <option value="3">3 estrellas</option>
+                <option value="2">2 estrellas</option>
+                <option value="1">1 estrella</option>
+              </select>
+              <input type="text" id="buscarHistorial" placeholder="Buscar en tu historial…" />
+            </div>
+            <div id="reviewsList"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ VISTA: CUENTA ============ -->
+      <div class="view hidden" id="view-cuenta">
+        <div class="page-head">
+          <button type="button" class="page-back" data-goto-view="inicio">←</button>
+          <div><h1>Cuenta</h1><p>Gestiona tu información y seguridad.</p></div>
+        </div>
+
+        <div class="row-2col even">
+          <div class="dash-card">
+            <div class="cuenta-avatar-row">
+              <div class="profile-photo" id="dashFotoWrap" style="width:64px; height:64px;"><img id="dashFoto" style="display:none; width:100%; height:100%; border-radius:50%; object-fit:cover;" /><span id="dashFotoIniciales"></span></div>
+              <div>
+                <p class="ca-name" id="dashNombre">—</p>
+                <p class="ca-role">Mesero Tapport</p>
+                <p class="ca-status">Activo</p>
+              </div>
+            </div>
+            <div class="stat-trio">
+              <div class="mini-stat"><span id="dashPromedio">—</span><label>Rating</label></div>
+              <div class="mini-stat"><span id="dashTotal">—</span><label>Reseñas</label></div>
+            </div>
+            <button type="button" class="btn-secondary" id="toggleEditarBtn" style="margin-top:16px;">✎ Editar perfil</button>
+          </div>
+
+          <div>
+            <div class="dash-card">
+              <p class="view-title" style="margin-top:0;">Datos de la cuenta</p>
+              <div class="account-row"><span class="ar-label">Nombre completo</span><span class="ar-value" id="cuentaNombre">—</span></div>
+              <div class="account-row"><span class="ar-label">Teléfono</span><span class="ar-value" id="cuentaTelefono">—</span></div>
+              <div class="account-row"><span class="ar-label">Correo</span><span class="ar-value" id="cuentaCorreo">—</span></div>
+              <div class="account-row"><span class="ar-label">Restaurante</span><span class="ar-value" id="cuentaRestaurante">—</span></div>
+            </div>
+            <div class="dash-card">
+              <p class="view-title" style="margin-top:0;">Seguridad</p>
+              <div class="account-row">
+                <div class="ar-icon-wrap">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <div><div class="ar-value" style="font-size:13px;">Cambiar contraseña</div><div class="ar-label">Usa una contraseña fuerte y única.</div></div>
+                </div>
+                <button type="button" class="btn-link" id="irCambiarPasswordBtn">Cambiar →</button>
+              </div>
+            </div>
+            <button type="button" class="btn-link" id="cerrarSesionBtn2" style="display:block; margin:14px auto 0;">Cerrar sesión</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ EDITAR PERFIL (overlay) ============ -->
+  <div class="wrap hidden" id="editCardWrap" style="max-width:460px; margin:40px auto; padding:0 16px;">
+    <div class="card" id="editCard">
       <h2 style="font-size:16px; margin:0 0 16px;">Editar mi perfil</h2>
 
       <div class="field" style="display:flex; align-items:center; gap:14px;">
@@ -402,22 +824,11 @@
       <button type="button" class="btn-secondary" id="cancelarEditarBtn">Cancelar</button>
       <div class="msg" id="editMsg"></div>
     </div>
-
-    <!-- ============ VACANTES PARA TI (filtradas por tu rating real) ============ -->
-    <div class="card hidden" id="vacantesParaTiCard">
-      <h2 style="font-size:16px; margin:0 0 4px;">Vacantes para ti</h2>
-      <p style="font-size:12.5px; color:var(--ink-soft); margin:0 0 12px;">Solo se muestran las que calzan con tu rating actual.</p>
-      <div id="vacantesParaTiList"></div>
-    </div>
-
-    <!-- ============ MIS RESEÑAS ============ -->
-    <div class="card hidden" id="reviewsCard">
-      <h2 style="font-size:16px; margin:0 0 12px;">Mis reseñas</h2>
-      <div id="reviewsList"></div>
-    </div>
   </div>
 
-  <!-- Barra de navegación inferior: te sigue entre directorio.html y perfil.html -->
+  </div>
+
+  <!-- Barra de navegación inferior: solo en celular; en desktop manda el sidebar -->
   <div class="bottom-nav">
     <div class="bottom-nav-inner">
       <button type="button" class="nav-item" id="navHome">
@@ -432,6 +843,7 @@
         Cuenta
       </button>
     </div>
+  </div>
   </div>
 
   <script>
@@ -496,14 +908,19 @@
       }, 15000); // revisa cada 15s
     }
 
+    function volverALogin() {
+      document.getElementById("panelWrap").classList.add("hidden");
+      document.getElementById("editCardWrap").classList.add("hidden");
+      document.getElementById("sidebar").classList.add("hidden");
+      cerrarSidebar();
+      document.getElementById("loginWrap").classList.remove("hidden");
+      document.getElementById("authCard").classList.remove("hidden");
+    }
+
     function cerrarSesionPorExpiracion() {
       sesion = null;
       borrarSesion();
-      document.getElementById("dashboard").classList.add("hidden");
-      document.getElementById("editCard").classList.add("hidden");
-      document.getElementById("reviewsCard").classList.add("hidden");
-      document.getElementById("vacantesParaTiCard").classList.add("hidden");
-      document.getElementById("authCard").classList.remove("hidden");
+      volverALogin();
       document.getElementById("headerSub").textContent = "Inicia sesión para ver tu rating, tus reseñas y editar tus datos.";
       document.getElementById("sesionExpiradaMsg").classList.remove("hidden");
     }
@@ -722,22 +1139,153 @@
       }
     }
 
+    // ---------- Navegación del panel: sidebar + vistas ----------
+    function cambiarVista(nombre) {
+      document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
+      const vista = document.getElementById("view-" + nombre);
+      if (vista) vista.classList.remove("hidden");
+      document.querySelectorAll(".sidebar-link[data-view]").forEach(link => {
+        link.classList.toggle("active", link.dataset.view === nombre);
+      });
+      cerrarSidebar();
+      window.scrollTo(0, 0);
+    }
+    function abrirSidebar() { document.getElementById("sidebar").classList.add("open"); document.getElementById("sidebarOverlay").classList.add("show"); }
+    function cerrarSidebar() { document.getElementById("sidebar").classList.remove("open"); document.getElementById("sidebarOverlay").classList.remove("show"); }
+
+    document.getElementById("hamburgerBtn").addEventListener("click", abrirSidebar);
+    document.getElementById("sidebarOverlay").addEventListener("click", cerrarSidebar);
+    document.querySelectorAll(".sidebar-link[data-view]").forEach(link => link.addEventListener("click", () => cambiarVista(link.dataset.view)));
+    document.querySelectorAll("[data-goto-view]").forEach(btn => btn.addEventListener("click", () => cambiarVista(btn.dataset.gotoView)));
+
+    // Agrupa las reseñas del mesero por día de la semana (0=Dom..6=Sáb) para
+    // "Comparativa semanal" y calcula cuál es, en promedio, su mejor día.
+    function calcularPorDiaSemana(reviews) {
+      const dias = [0, 1, 2, 3, 4, 5, 6].map(() => ({ suma: 0, total: 0 }));
+      reviews.forEach(r => {
+        const f = new Date(r.fecha);
+        if (isNaN(f)) return;
+        const d = dias[f.getDay()];
+        d.suma += r.estrellas || 0;
+        d.total += 1;
+      });
+      return dias.map(d => (d.total ? d.suma / d.total : 0));
+    }
+
+    const NOMBRES_DIA = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+
     // ---------- Dashboard ----------
     function mostrarDashboard() {
-      document.getElementById("authCard").classList.add("hidden");
-      document.getElementById("dashboard").classList.remove("hidden");
-      document.getElementById("reviewsCard").classList.remove("hidden");
-      document.getElementById("vacantesParaTiCard").classList.remove("hidden");
+      document.getElementById("loginWrap").classList.add("hidden");
+      document.getElementById("panelWrap").classList.remove("hidden");
+      document.getElementById("sidebar").classList.remove("hidden");
+      document.getElementById("topbar").classList.remove("hidden");
+      document.getElementById("editCardWrap").classList.add("hidden");
       document.getElementById("headerSub").textContent = "Este es tu perfil en Tapport.";
+
+      const reviews = sesion.reviews || [];
+      const total = sesion.totalReviews || 0;
+      const promedio = sesion.promedio || 0;
+      const primerNombre = (sesion.nombre || "").split(" ")[0];
 
       pintarFotoDashboard(sesion.fotoUrl, sesion.nombre);
       document.getElementById("dashNombre").textContent = sesion.nombre || "";
-      document.getElementById("dashRestaurante").textContent = sesion.restaurante || "";
-      document.getElementById("dashPromedio").textContent = sesion.promedio ? sesion.promedio.toFixed(1) : "—";
-      document.getElementById("dashTotal").textContent = sesion.totalReviews || 0;
+      document.getElementById("dashPromedio").textContent = promedio ? promedio.toFixed(1) : "—";
+      document.getElementById("dashTotal").textContent = total;
 
-      renderReviews(sesion.reviews || []);
+      document.getElementById("sidebarRestaurante").textContent = sesion.restaurante || "Mi restaurante";
+      document.getElementById("topbarAvatar").src = sesion.fotoUrl || "";
+      document.getElementById("topbarNombre").textContent = primerNombre || "—";
+
+      ["bannerNombre", "bannerNombre2"].forEach(id => document.getElementById(id).textContent = primerNombre || "—");
+      ["bannerPromedio", "bannerPromedio2"].forEach(id => document.getElementById(id).textContent = promedio ? promedio.toFixed(1) : "—");
+
+      document.getElementById("ratingPromedioGrande").textContent = promedio ? promedio.toFixed(1) : "—";
+      document.getElementById("starRowInicio").textContent = "★".repeat(Math.round(promedio)) + "☆".repeat(5 - Math.round(promedio));
+
+      const inicioMes = new Date(); inicioMes.setDate(1); inicioMes.setHours(0, 0, 0, 0);
+      const reseñasEsteMes = reviews.filter(r => new Date(r.fecha) >= inicioMes).length;
+
+      const porDia = calcularPorDiaSemana(reviews);
+      let mejorDiaTexto = "—";
+      if (reviews.length) {
+        const idxMejor = porDia.reduce((best, v, i) => (v > porDia[best] ? i : best), 0);
+        if (porDia[idxMejor] > 0) mejorDiaTexto = NOMBRES_DIA[idxMejor].slice(0, 3);
+      }
+
+      ["statReseñasTotal", "statReseñasTotal2", "statReseñasTotal3"].forEach(id => document.getElementById(id).textContent = total);
+      ["statReseñasMes", "statReseñasMes2", "statReseñasMes3"].forEach(id => document.getElementById(id).textContent = reseñasEsteMes);
+      ["statRatingProm", "statRatingProm2", "statRatingProm3"].forEach(id => document.getElementById(id).textContent = promedio ? promedio.toFixed(1) : "—");
+      ["statMejorDia", "statMejorDia2"].forEach(id => document.getElementById(id).textContent = mejorDiaTexto);
+
+      // Mensaje motivacional dinámico, según tu rating real.
+      const motTitulo = document.getElementById("motTitulo");
+      const motTexto = document.getElementById("motTexto");
+      if (!total) {
+        motTitulo.textContent = "¡Bienvenido!";
+        motTexto.textContent = "Todavía no tienes reseñas — comparte tu código para que los clientes te califiquen.";
+      } else if (promedio >= 4.5) {
+        motTitulo.textContent = "¡Excelente trabajo!";
+        motTexto.textContent = "Tu desempeño se nota y hace la diferencia.";
+      } else if (promedio >= 3.5) {
+        motTitulo.textContent = "¡Sigue así!";
+        motTexto.textContent = "Tu esfuerzo también se nota.";
+      } else {
+        motTitulo.textContent = "Vamos mejorando";
+        motTexto.textContent = "Revisa tus reseñas recientes para ver dónde puedes reforzar.";
+      }
+
+      // Vista Historial / Mi rendimiento: datos de contacto.
+      document.getElementById("histFoto").src = sesion.fotoUrl || "";
+      document.getElementById("histNombre").textContent = primerNombre || "—";
+      document.getElementById("rendNombre").textContent = sesion.nombre || "—";
+      document.getElementById("rendRestaurante").textContent = sesion.restaurante || "—";
+      document.getElementById("rendTelefono").textContent = sesion.telefono || "—";
+
+      // Vista Cuenta.
+      document.getElementById("cuentaNombre").textContent = sesion.nombre || "—";
+      document.getElementById("cuentaTelefono").textContent = sesion.telefono || "—";
+      document.getElementById("cuentaCorreo").textContent = sesion.email || "—";
+      document.getElementById("cuentaRestaurante").textContent = sesion.restaurante || "—";
+
+      // Gráfico "Comparativa semanal" (Lun..Dom).
+      const ordenLunADom = [1, 2, 3, 4, 5, 6, 0];
+      const maxDia = Math.max(0.1, ...porDia);
+      document.getElementById("weekdayChart").innerHTML = ordenLunADom.map(i => {
+        const alto = Math.max((porDia[i] / 5) * 100, porDia[i] > 0 ? 4 : 1);
+        return `<div class="weekday-col" title="${NOMBRES_DIA[i]}: ${porDia[i] ? porDia[i].toFixed(1) : "sin datos"}"><div class="weekday-bar" style="height:${alto}%;"></div></div>`;
+      }).join("");
+
+      // "Evolución de tu rating": promedio acumulado reseña a reseña, de la más antigua a la más reciente.
+      const cronologico = [...reviews].sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+      let acumSuma = 0;
+      const evolucion = cronologico.map((r, i) => { acumSuma += r.estrellas || 0; return acumSuma / (i + 1); });
+      document.getElementById("evolChart").innerHTML = evolucion.length
+        ? evolucion.map(v => `<div class="weekday-col"><div class="weekday-bar" style="height:${Math.max((v / 5) * 100, 4)}%;"></div></div>`).join("")
+        : '<div class="empty-state" style="width:100%;">Todavía no hay suficientes reseñas para ver tu evolución.</div>';
+
+      renderReviews(reviews);
+      renderReseñasRecientes(reviews.slice(0, 3));
       cargarVacantesParaTi();
+      cambiarVista("inicio");
+    }
+
+    function renderReseñasRecientes(reviews) {
+      const cont = document.getElementById("reseñasRecientesInicio");
+      if (!reviews.length) {
+        cont.innerHTML = '<div class="empty-state">Todavía no tienes reseñas.</div>';
+        return;
+      }
+      cont.innerHTML = reviews.map(r => {
+        const fecha = new Date(r.fecha);
+        const fechaTexto = isNaN(fecha) ? "" : fecha.toLocaleDateString("es-PE", { day: "numeric", month: "short" });
+        return `
+          <div class="reseña-mini">
+            <div class="rm-top"><span class="rm-stars">${"★".repeat(r.estrellas)}${"☆".repeat(5 - r.estrellas)}</span><span>${fechaTexto}</span></div>
+            ${r.comentario ? `<div class="rm-text">"${escapeHtml(r.comentario)}"</div>` : (r.tags ? `<div class="rm-text">${escapeHtml(r.tags)}</div>` : "")}
+          </div>
+        `;
+      }).join("");
     }
 
     // Solo muestra vacantes cuyo rating mínimo (si tienen uno) es igual o
@@ -745,6 +1293,7 @@
     // partir de sus reseñas) — no algo que el mesero pueda manipular.
     async function cargarVacantesParaTi() {
       const cont = document.getElementById("vacantesParaTiList");
+      const card = document.getElementById("vacantesParaTiCard");
       cont.innerHTML = '<p style="font-size:12.5px; color:var(--ink-soft);">Cargando…</p>';
       try {
         const res = await fetch(`${ENDPOINT}?accion=listar_vacantes`);
@@ -753,9 +1302,10 @@
         const vacantes = (data.vacantes || []).filter(v => (Number(v.ratingMinimo) || 0) <= miPromedio);
 
         if (!vacantes.length) {
-          cont.innerHTML = '<p style="font-size:12.5px; color:var(--ink-soft);">No hay vacantes disponibles para tu rating por ahora.</p>';
+          card.classList.add("hidden");
           return;
         }
+        card.classList.remove("hidden");
 
         cont.innerHTML = vacantes.map(v => {
           const esCorreo = /@/.test(v.contacto);
@@ -774,7 +1324,26 @@
       }
     }
 
-    function renderReviews(reviews) {
+    let todasLasReseñas = [];
+
+    function aplicarFiltrosHistorial() {
+      const minEstrellas = Number(document.getElementById("filtroEstrellas").value) || 0;
+      const q = document.getElementById("buscarHistorial").value.trim().toLowerCase();
+      const filtradas = todasLasReseñas.filter(r => {
+        if (minEstrellas && r.estrellas !== minEstrellas) return false;
+        if (q) {
+          const texto = `${r.comentario || ""} ${r.tags || ""}`.toLowerCase();
+          if (!texto.includes(q)) return false;
+        }
+        return true;
+      });
+      renderReviews(filtradas, true);
+    }
+    document.getElementById("filtroEstrellas").addEventListener("change", aplicarFiltrosHistorial);
+    document.getElementById("buscarHistorial").addEventListener("input", aplicarFiltrosHistorial);
+
+    function renderReviews(reviews, esFiltro) {
+      if (!esFiltro) todasLasReseñas = reviews;
       const cont = document.getElementById("reviewsList");
       if (!reviews.length) {
         cont.innerHTML = '<div class="empty-state">Todavía no tienes reseñas. ¡Sigue dando un gran servicio!</div>';
@@ -801,18 +1370,16 @@
       return div.innerHTML;
     }
 
-    document.getElementById("cerrarSesionBtn").addEventListener("click", () => {
+    function cerrarSesion() {
       sesion = null;
       borrarSesion();
-      document.getElementById("dashboard").classList.add("hidden");
-      document.getElementById("editCard").classList.add("hidden");
-      document.getElementById("reviewsCard").classList.add("hidden");
-      document.getElementById("vacantesParaTiCard").classList.add("hidden");
-      document.getElementById("authCard").classList.remove("hidden");
+      volverALogin();
       document.getElementById("headerSub").textContent = "Inicia sesión para ver tu rating, tus reseñas y editar tus datos.";
       document.getElementById("loginPassword").value = "";
       document.getElementById("sesionExpiradaMsg").classList.add("hidden");
-    });
+    }
+    document.getElementById("cerrarSesionBtn").addEventListener("click", cerrarSesion);
+    document.getElementById("cerrarSesionBtn2").addEventListener("click", cerrarSesion);
 
     // ---------- Editar perfil ----------
     let editFotoBase64 = null;
@@ -824,16 +1391,24 @@
       document.getElementById("editPhotoPreview").style.display = sesion.fotoUrl ? "block" : "none";
       document.getElementById("editPhotoPlaceholder").style.display = sesion.fotoUrl ? "none" : "block";
       editFotoBase64 = null;
-      document.getElementById("dashboard").classList.add("hidden");
-      document.getElementById("reviewsCard").classList.add("hidden");
-      document.getElementById("vacantesParaTiCard").classList.add("hidden");
-      document.getElementById("editCard").classList.remove("hidden");
+      document.getElementById("panelWrap").classList.add("hidden");
+      document.getElementById("editCardWrap").classList.remove("hidden");
     });
 
     document.getElementById("cancelarEditarBtn").addEventListener("click", () => {
-      document.getElementById("editCard").classList.add("hidden");
-      document.getElementById("dashboard").classList.remove("hidden");
-      document.getElementById("reviewsCard").classList.remove("hidden");
+      document.getElementById("editCardWrap").classList.add("hidden");
+      document.getElementById("panelWrap").classList.remove("hidden");
+    });
+
+    // "Cambiar contraseña" (vista Cuenta): reusa el mismo flujo de verificar
+    // correo + crear contraseña que ya existe para crear la cuenta.
+    document.getElementById("irCambiarPasswordBtn").addEventListener("click", () => {
+      document.getElementById("panelWrap").classList.add("hidden");
+      document.getElementById("sidebar").classList.add("hidden");
+      document.getElementById("loginWrap").classList.remove("hidden");
+      document.getElementById("authCard").classList.remove("hidden");
+      irATabCrear();
+      document.getElementById("crearEmail").value = sesion.email || "";
     });
 
     document.getElementById("editPhotoCircle").addEventListener("click", () => {
@@ -888,9 +1463,7 @@
           msg.className = "msg ok";
           msg.textContent = "¡Cambios guardados!";
           setTimeout(() => {
-            document.getElementById("editCard").classList.add("hidden");
-            document.getElementById("dashboard").classList.remove("hidden");
-            document.getElementById("reviewsCard").classList.remove("hidden");
+            document.getElementById("editCardWrap").classList.add("hidden");
             mostrarDashboard();
             msg.textContent = "";
           }, 900);
