@@ -536,6 +536,11 @@
   // resuelve "un cliente no bloquea a los demás" de forma natural.
   // -----------------------------------------------------------------
   const SESSION_KEY_PREFIX = "tapport_session_";
+  // Después de este tiempo, la sesión guardada deja de considerarse válida
+  // y se trata como una visita nueva (aunque haya quedado en "completed").
+  // Esto evita que un cliente quede bloqueado para siempre: solo se bloquea
+  // el reenvío inmediato (refresh justo después de pagar/calificar).
+  const SESSION_EXPIRATION_MS = 15 * 60 * 1000; // 15 minutos
   let currentSession = null;
 
   function loadSession(cardCode) {
@@ -543,10 +548,15 @@
       const raw = localStorage.getItem(SESSION_KEY_PREFIX + cardCode);
       if (!raw) return null;
       const parsed = JSON.parse(raw);
-      if (parsed && parsed.cardCode === cardCode && parsed.sessionId && parsed.status) {
-        return parsed;
+      if (!parsed || parsed.cardCode !== cardCode || !parsed.sessionId || !parsed.status || !parsed.createdAt) {
+        return null;
       }
-      return null;
+      const ageMs = Date.now() - new Date(parsed.createdAt).getTime();
+      if (isNaN(ageMs) || ageMs > SESSION_EXPIRATION_MS) {
+        // La sesión expiró: se trata como si no existiera (nueva visita).
+        return null;
+      }
+      return parsed;
     } catch (e) {
       return null;
     }
