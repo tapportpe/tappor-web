@@ -578,6 +578,46 @@
 
   .view { display: block; }
   .view.hidden { display: none; }
+
+  .leyenda-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
+  .leyenda-item { font-size: 11.5px; color: var(--ink-soft); display: flex; align-items: center; }
+
+  .detalle-row { display: flex; gap: 12px; padding: 9px 0; border-top: 1px solid var(--line); font-size: 12.5px; }
+  .detalle-row:first-child { border-top: none; }
+  .detalle-row .dr-hora { color: var(--ink-soft); width: 42px; flex-shrink: 0; }
+  .detalle-row .dr-stars { color: var(--star); width: 70px; flex-shrink: 0; white-space: nowrap; }
+  .detalle-row .dr-texto { color: var(--ink); flex: 1; }
+  .detalle-row .dr-mesero { color: var(--ink-soft); font-weight: 600; }
+
+  /* --- Vista Personal --- */
+  .personal-full-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .personal-full-table th { text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--ink-soft); padding: 0 10px 10px; font-weight: 700; }
+  .personal-full-table td { padding: 11px 10px; border-top: 1px solid var(--line); vertical-align: middle; }
+  .personal-full-table tr:hover td { background: var(--bg); }
+  .pft-persona { display: flex; align-items: center; gap: 10px; }
+  .pft-persona img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; background: var(--accent-soft); flex-shrink: 0; }
+  .pft-persona .pft-name { font-weight: 700; font-size: 13px; }
+  .pft-persona .pft-code { font-size: 11px; color: var(--ink-soft); }
+
+  /* --- Vista Cuenta --- */
+  .cuenta-row { display: flex; justify-content: space-between; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .cuenta-row:last-child { border-bottom: none; }
+  .cuenta-row .cr-label { color: var(--ink-soft); font-size: 11px; }
+  .cuenta-row .cr-value { font-weight: 600; text-align: right; }
+
+  /* --- Administrar: tool cards --- */
+  .tool-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  @media (min-width: 700px) { .tool-grid { grid-template-columns: 1fr 1fr; } }
+  .tool-card {
+    display: flex; align-items: flex-start; gap: 14px; text-align: left;
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px;
+    cursor: pointer; font-family: inherit; box-shadow: var(--shadow);
+  }
+  .tool-card:hover { border-color: var(--accent); }
+  .tool-card .tc-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .tool-card .tc-title { font-size: 14.5px; font-weight: 750; margin: 0 0 3px; }
+  .tool-card .tc-desc { font-size: 12px; color: var(--ink-soft); margin: 0; line-height: 1.4; }
+  .tool-card .tc-meta { font-size: 11px; color: var(--accent); font-weight: 700; margin-top: 8px; }
 </style>
 </head>
 <body>
@@ -596,6 +636,14 @@
       <button type="button" class="sidebar-link" data-view="historial">
         <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
         Historial
+      </button>
+      <button type="button" class="sidebar-link" data-view="personal">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+        Personal
+      </button>
+      <button type="button" class="sidebar-link" data-view="cuenta">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg></span>
+        Cuenta
       </button>
       <button type="button" class="sidebar-link" data-view="administrar">
         <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 15 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg></span>
@@ -814,15 +862,89 @@
           </div>
 
         </div>
+
+        <div class="card" style="margin-top:16px;">
+          <p class="chart-title" style="margin-top:0;">Rendimiento por hora</p>
+          <p style="font-size:11.5px; color:var(--ink-soft); margin:-8px 0 12px;">Rating promedio de cada mesero, hora por hora, en el día seleccionado.</p>
+          <div id="graficoPorHora"></div>
+          <div id="leyendaPorHora" style="display:flex; flex-wrap:wrap; gap:12px; margin-top:10px;"></div>
+        </div>
+
+        <div class="card" style="margin-top:16px;">
+          <p class="chart-title" style="margin-top:0;">Detalle del día</p>
+          <div id="detalleDelDia"></div>
+        </div>
       </div>
 
-      <!-- ============ VISTA: ADMINISTRAR ============ -->
-      <div class="view hidden" id="view-administrar">
+      <!-- ============ VISTA: PERSONAL ============ -->
+      <div class="view hidden" id="view-personal">
         <div class="card">
-          <p class="view-title" style="margin-top:0;">Administrar</p>
-          <button type="button" class="btn-secondary" id="toggleEditarNegocioBtn2" style="margin-top:0;">Editar perfil del negocio</button>
-          <button type="button" class="btn-secondary" id="togglePublicarVacanteBtn2">+ Publicar vacante</button>
-          <button type="button" class="btn-secondary" id="toggleMisVacantesBtn2">Ver mis vacantes</button>
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+            <div>
+              <p class="view-title" style="margin:0;">Personal</p>
+              <p style="font-size:12.5px; color:var(--ink-soft); margin:2px 0 0;">Tu equipo de meseros en Tapport.</p>
+            </div>
+            <input type="text" id="buscarPersonal" placeholder="Buscar por nombre o código…" style="border:1px solid var(--line); border-radius:9px; padding:9px 12px; font-size:13px; font-family:inherit; min-width:220px;">
+          </div>
+          <table class="personal-full-table" style="margin-top:16px;">
+            <thead><tr><th>Mesero</th><th>Teléfono</th><th>Reseñas</th><th style="text-align:right;">Rating</th></tr></thead>
+            <tbody id="personalFullTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ============ VISTA: CUENTA ============ -->
+      <div class="view hidden" id="view-cuenta">
+        <div class="row-2col even">
+          <div class="card">
+            <p class="view-title" style="margin-top:0;">Datos de la cuenta</p>
+            <div class="cuenta-row"><span class="cr-label">Nombre</span><span class="cr-value" id="cuentaNombre">—</span></div>
+            <div class="cuenta-row"><span class="cr-label">Teléfono</span><span class="cr-value" id="cuentaTelefono">—</span></div>
+            <div class="cuenta-row"><span class="cr-label">Correo</span><span class="cr-value" id="cuentaEmail">—</span></div>
+            <div class="cuenta-row"><span class="cr-label">DNI</span><span class="cr-value" id="cuentaDni">—</span></div>
+          </div>
+          <div class="card">
+            <p class="view-title" style="margin-top:0;">Restaurante</p>
+            <div class="cuenta-row"><span class="cr-label">Nombre</span><span class="cr-value" id="cuentaRestNombre">—</span></div>
+            <div class="cuenta-row"><span class="cr-label">Dirección</span><span class="cr-value" id="cuentaRestDireccion">—</span></div>
+            <button type="button" class="btn-secondary" id="toggleEditarNegocioBtn3" style="margin-top:14px;">Editar perfil del negocio</button>
+          </div>
+        </div>
+        <div class="card">
+          <p class="view-title" style="margin-top:0;">Seguridad</p>
+          <p style="font-size:12.5px; color:var(--ink-soft); margin:0;">Para cambiar tu contraseña, escríbenos a <a href="mailto:tapport.pe@gmail.com" style="color:var(--accent);">tapport.pe@gmail.com</a> — por ahora no hay un flujo de autoservicio para cuentas de administrador.</p>
+        </div>
+      </div>
+
+      <!-- ============ VISTA: ADMINISTRAR (hub) ============ -->
+      <div class="view hidden" id="view-administrar">
+        <div class="row-2col">
+          <div>
+            <p class="view-title" style="margin-top:0;">Herramientas de administración</p>
+            <div class="tool-grid">
+              <button type="button" class="tool-card" data-goto-view="personal">
+                <div class="tc-icon">👥</div>
+                <div><p class="tc-title">Personal</p><p class="tc-desc">Revisa a tu equipo de meseros y su rating.</p><p class="tc-meta" id="toolPersonalMeta">—</p></div>
+              </button>
+              <button type="button" class="tool-card" id="toggleMisVacantesBtn2">
+                <div class="tc-icon">📣</div>
+                <div><p class="tc-title">Vacantes</p><p class="tc-desc">Publica y gestiona oportunidades de trabajo.</p><p class="tc-meta" id="toolVacantesMeta">—</p></div>
+              </button>
+              <button type="button" class="tool-card" id="toggleEditarNegocioBtn2">
+                <div class="tc-icon">🏠</div>
+                <div><p class="tc-title">Perfil del negocio</p><p class="tc-desc">Actualiza logo, portada y dirección.</p><p class="tc-meta" id="toolNegocioMeta">—</p></div>
+              </button>
+              <button type="button" class="tool-card" data-goto-view="cuenta">
+                <div class="tc-icon">⚙</div>
+                <div><p class="tc-title">Cuenta</p><p class="tc-desc">Tus datos y los del restaurante.</p><p class="tc-meta">Ver detalle</p></div>
+              </button>
+            </div>
+          </div>
+          <div class="card">
+            <p class="view-title" style="margin-top:0;">Acciones rápidas</p>
+            <button type="button" class="btn-secondary" id="togglePublicarVacanteBtn2" style="margin-top:0;">+ Publicar vacante</button>
+            <button type="button" class="btn-secondary" data-goto-view="historial">Ver rendimiento</button>
+          </div>
         </div>
       </div>
 
@@ -1094,6 +1216,18 @@
       document.getElementById("adminCardFoto").src = avatarUrl;
       document.getElementById("adminCardFoto").style.visibility = avatarUrl ? "visible" : "hidden";
       document.getElementById("adminCardNombre").textContent = sesion.nombre || "—";
+
+      // Vista Cuenta
+      document.getElementById("cuentaNombre").textContent = sesion.nombre || "—";
+      document.getElementById("cuentaTelefono").textContent = sesion.telefono || "—";
+      document.getElementById("cuentaEmail").textContent = sesion.email || "—";
+      document.getElementById("cuentaDni").textContent = sesion.dni || "—";
+      document.getElementById("cuentaRestNombre").textContent = sesion.restaurante || "—";
+      document.getElementById("cuentaRestDireccion").textContent = sesion.direccion || "Sin registrar";
+
+      // Metadatos de las tool-cards de Administrar
+      const negocioCompleto = sesion.direccion && sesion.logoUrl && sesion.portadaUrl;
+      document.getElementById("toolNegocioMeta").textContent = negocioCompleto ? "Completo" : "Falta completar";
     }
 
     // Tabla de personal (vista Historial): code, nombre, rating.
@@ -1113,6 +1247,34 @@
       `).join("");
     }
 
+    // Tabla completa de personal (vista Personal): foto, código, teléfono, reseñas, rating.
+    let meserosPersonal = [];
+    function renderPersonalCompleto(meseros) {
+      meserosPersonal = meseros;
+      const body = document.getElementById("personalFullTableBody");
+      const q = (document.getElementById("buscarPersonal").value || "").trim().toLowerCase();
+      const filtrados = meseros.filter(m => !q || (m.nombre || "").toLowerCase().includes(q) || (m.codigo || "").toLowerCase().includes(q));
+
+      if (!filtrados.length) {
+        body.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--ink-soft); padding:20px 0;">No encontramos meseros con ese criterio.</td></tr>';
+        return;
+      }
+      body.innerHTML = filtrados.map(m => `
+        <tr>
+          <td>
+            <div class="pft-persona">
+              <img src="${escapeHtml(m.fotoUrl || "")}" onerror="this.style.visibility='hidden'" />
+              <div><div class="pft-name">${escapeHtml(m.nombre || "")}</div><div class="pft-code">${escapeHtml(m.codigo || "")}</div></div>
+            </div>
+          </td>
+          <td>${escapeHtml(m.telefono || "—")}</td>
+          <td>${m.total || 0}</td>
+          <td class="pt-rating">${m.total ? "★" + m.promedio.toFixed(1) : "—"}</td>
+        </tr>
+      `).join("");
+    }
+    document.getElementById("buscarPersonal").addEventListener("input", () => renderPersonalCompleto(meserosPersonal));
+
     // Tarjeta "Anuncios" (vista Inicio): trae las vacantes publicadas y sus vistas,
     // y de paso llena el contador de "Vacantes activas" de Datos Estadísticos.
     async function cargarAnuncios() {
@@ -1126,6 +1288,7 @@
         const data = await res.json();
         const vacantes = (data.ok && data.vacantes) || [];
         document.getElementById("statVacantesActivas").textContent = vacantes.length;
+        document.getElementById("toolVacantesMeta").textContent = vacantes.length ? `${vacantes.length} publicada${vacantes.length === 1 ? "" : "s"}` : "Ninguna publicada";
         if (!vacantes.length) {
           cont.innerHTML = '<div class="empty-state">Todavía no publicaste ninguna vacante.</div>';
           return;
@@ -1200,6 +1363,8 @@
       const meserosOrdenados = [...meseros].sort((a, b) => (b.promedio || 0) - (a.promedio || 0));
       renderTablaPersonal(meserosOrdenados, "personalTableBody");
       renderTablaPersonal(meserosOrdenados.slice(0, 5), "personalMiniTableBody");
+      renderPersonalCompleto(meserosOrdenados);
+      document.getElementById("toolPersonalMeta").textContent = `${meseros.length} mesero${meseros.length === 1 ? "" : "s"}`;
       inicializarRendimientoDiario(meseros);
       cargarAnuncios();
       cambiarVista("inicio");
@@ -1249,6 +1414,7 @@
     // Los botones duplicados de la vista "Administrar" disparan el mismo
     // flujo que los originales (evita repetir toda la lógica de cada uno).
     document.getElementById("toggleEditarNegocioBtn2").addEventListener("click", () => document.getElementById("toggleEditarNegocioBtn").click());
+    document.getElementById("toggleEditarNegocioBtn3").addEventListener("click", () => document.getElementById("toggleEditarNegocioBtn").click());
     document.getElementById("togglePublicarVacanteBtn2").addEventListener("click", () => document.getElementById("togglePublicarVacanteBtn").click());
     document.getElementById("toggleMisVacantesBtn2").addEventListener("click", () => document.getElementById("toggleMisVacantesBtn").click());
     document.getElementById("bannerEditBtn").addEventListener("click", () => document.getElementById("toggleEditarNegocioBtn").click());
@@ -1297,6 +1463,8 @@
     function renderRendimientoDiario(fechaStr) {
       const mapa = agruparServiciosPorDia(meserosRendimiento);
       const dia = mapa.get(fechaStr) || { total: 0, sumaEstrellas: 0, porMesero: {} };
+      renderGraficoPorHora(fechaStr);
+      renderDetalleDelDia(fechaStr);
 
       document.getElementById("dailyTotalServicios").textContent = dia.total;
       document.getElementById("dailyPromedioDia").textContent = dia.total
@@ -1324,6 +1492,78 @@
           </div>
         `;
       }).join("");
+    }
+
+    const PALETA_LINEAS = ["#2E6CF6", "#F5A524", "#1FA971", "#C4452E", "#8B5CF6", "#0EA5E9"];
+
+    // Gráfico de líneas: rating promedio por hora, uno por mesero, para el día seleccionado.
+    function renderGraficoPorHora(fechaStr) {
+      const cont = document.getElementById("graficoPorHora");
+      const leyenda = document.getElementById("leyendaPorHora");
+      const W = 600, H = 180, PAD = 24;
+
+      const series = meserosRendimiento.map(m => {
+        const porHora = Array.from({ length: 24 }, () => ({ suma: 0, total: 0 }));
+        (m.reviews || []).forEach(r => {
+          const f = new Date(r.fecha);
+          if (isNaN(f) || formatFechaLocal(f) !== fechaStr) return;
+          const h = porHora[f.getHours()];
+          h.suma += r.estrellas || 0;
+          h.total += 1;
+        });
+        const puntos = [];
+        porHora.forEach((h, hora) => { if (h.total) puntos.push({ hora, valor: h.suma / h.total }); });
+        return { nombre: m.nombre, puntos };
+      }).filter(s => s.puntos.length);
+
+      if (!series.length) {
+        cont.innerHTML = '<div class="daily-empty">Ningún mesero tiene reseñas ese día.</div>';
+        leyenda.innerHTML = "";
+        return;
+      }
+
+      const x = h => PAD + (h / 23) * (W - PAD * 2);
+      const y = v => H - PAD - ((v - 3) / 2) * (H - PAD * 2); // escala 3.0–5.0
+
+      const lineas = series.map((s, i) => {
+        const color = PALETA_LINEAS[i % PALETA_LINEAS.length];
+        const pts = s.puntos.map(p => `${x(p.hora).toFixed(1)},${Math.max(PAD, Math.min(H - PAD, y(p.valor))).toFixed(1)}`).join(" ");
+        const circles = s.puntos.map(p => `<circle cx="${x(p.hora).toFixed(1)}" cy="${Math.max(PAD, Math.min(H - PAD, y(p.valor))).toFixed(1)}" r="2.5" fill="${color}"/>`).join("");
+        return `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>${circles}`;
+      }).join("");
+
+      cont.innerHTML = `<svg viewBox="0 0 ${W} ${H}" style="width:100%; height:auto;">
+        <line x1="${PAD}" y1="${H - PAD}" x2="${W - PAD}" y2="${H - PAD}" stroke="var(--line)" stroke-width="1"/>
+        ${lineas}
+      </svg>`;
+
+      leyenda.innerHTML = series.map((s, i) => `<span class="leyenda-item"><span class="leyenda-dot" style="background:${PALETA_LINEAS[i % PALETA_LINEAS.length]};"></span>${escapeHtml(s.nombre)}</span>`).join("");
+    }
+
+    // Lista cronológica de todas las reseñas del equipo en el día seleccionado.
+    function renderDetalleDelDia(fechaStr) {
+      const cont = document.getElementById("detalleDelDia");
+      const todas = [];
+      meserosRendimiento.forEach(m => {
+        (m.reviews || []).forEach(r => {
+          const f = new Date(r.fecha);
+          if (isNaN(f) || formatFechaLocal(f) !== fechaStr) return;
+          todas.push({ fecha: f, mesero: m.nombre, estrellas: r.estrellas || 0, comentario: r.comentario || r.tags || "" });
+        });
+      });
+      todas.sort((a, b) => b.fecha - a.fecha);
+
+      if (!todas.length) {
+        cont.innerHTML = '<div class="daily-empty">Sin reseñas ese día.</div>';
+        return;
+      }
+      cont.innerHTML = todas.map(r => `
+        <div class="detalle-row">
+          <div class="dr-hora">${r.fecha.toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" })}</div>
+          <div class="dr-stars">${"★".repeat(r.estrellas)}${"☆".repeat(5 - r.estrellas)}</div>
+          <div class="dr-texto"><span class="dr-mesero">${escapeHtml(r.mesero)}</span>${r.comentario ? " — " + escapeHtml(r.comentario) : ""}</div>
+        </div>
+      `).join("");
     }
 
     // Barras de los últimos 14 días con el total de servicios (de todo el equipo) por día.
