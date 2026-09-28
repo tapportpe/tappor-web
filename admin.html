@@ -618,6 +618,14 @@
   .tool-card .tc-title { font-size: 14.5px; font-weight: 750; margin: 0 0 3px; }
   .tool-card .tc-desc { font-size: 12px; color: var(--ink-soft); margin: 0; line-height: 1.4; }
   .tool-card .tc-meta { font-size: 11px; color: var(--accent); font-weight: 700; margin-top: 8px; }
+
+  /* --- Ajuste de pantalla: nada se sale del ancho disponible --- */
+  html, body { max-width: 100%; overflow-x: hidden; }
+  .main { overflow-x: hidden; }
+  .kpi-row > *, .row-2col > *, .hist-grid > *, .tool-grid > *, .stat-row-4 > * { min-width: 0; }
+  .card, .chart-card { overflow-wrap: anywhere; }
+  .personal-full-table, .personal-table { display: block; overflow-x: auto; max-width: 100%; }
+  @media (max-width: 859px) { .main .wrap { padding: 0 14px; } .topbar { margin: 0 -14px 16px; padding: 12px 14px; gap: 10px; } }
 </style>
 </head>
 <body>

@@ -532,6 +532,17 @@
   .weekday-bar { width: 100%; max-width: 26px; background: var(--gold); border-radius: 4px 4px 0 0; min-height: 3px; }
   .weekday-labels { display: flex; gap: 6px; margin-top: 6px; }
   .weekday-labels span { flex: 1; text-align: center; font-size: 9.5px; color: var(--ink-soft); }
+
+  /* --- Modo app: al iniciar sesión el panel ocupa TODA la pantalla --- */
+  html, body { max-width: 100%; overflow-x: hidden; }
+  body.app-mode { display: block; padding: 0; background: var(--bg); }
+  body.app-mode .shell { width: 100%; }
+  .shell .main { overflow-x: hidden; }
+  .shell .main .shell-wrap { width: 100%; }
+  .topbar { margin: 0 0 20px; padding: 14px 20px; }
+  .rend-grid > *, .cuenta-grid > *, .row-2col > *, .stat-row-4 > * { min-width: 0; }
+  .dash-card { overflow-wrap: anywhere; }
+  @media (max-width: 859px) { body.app-mode .shell .main { padding-bottom: 110px; } .topbar { padding: 12px 14px; gap: 10px; } .shell .main .shell-wrap { padding: 0 14px 40px; } }
 </style>
 </head>
 <body>
@@ -1059,6 +1070,7 @@
     }
 
     function volverALogin() {
+      document.body.classList.remove("app-mode");
       document.getElementById("panelWrap").classList.add("hidden");
       document.getElementById("editCardWrap").classList.add("hidden");
       document.getElementById("sidebar").classList.add("hidden");
@@ -1326,6 +1338,7 @@
 
     // ---------- Dashboard ----------
     function mostrarDashboard() {
+      document.body.classList.add("app-mode");
       document.getElementById("loginWrap").classList.add("hidden");
       document.getElementById("panelWrap").classList.remove("hidden");
       document.getElementById("sidebar").classList.remove("hidden");
