@@ -293,6 +293,8 @@
     padding: 22px 16px;
     position: fixed;
     top: 0; bottom: 0; left: 0;
+    height: 100vh;
+    height: 100dvh;
     transform: translateX(-100%);
     transition: transform 0.2s ease;
     z-index: 60;
@@ -305,7 +307,9 @@
     pointer-events: none;
   }
   .sidebar.open { transform: translateX(0); }
-  @media (min-width: 860px) { .sidebar { position: sticky; transform: none; height: 100vh; } }
+  @media (min-width: 860px) {
+    .sidebar { position: sticky; transform: none; top: 0; height: 100vh; height: 100dvh; }
+  }
 
   .sidebar-brand {
     font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 750;
