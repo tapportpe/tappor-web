@@ -626,6 +626,146 @@
   .card, .chart-card { overflow-wrap: anywhere; }
   .personal-full-table, .personal-table { display: block; overflow-x: auto; max-width: 100%; }
   @media (max-width: 859px) { .main .wrap { padding: 0 14px; } .topbar { margin: 0 -14px 16px; padding: 12px 14px; gap: 10px; } }
+
+  /* =====================================================================
+     REDISEÑO ADMIN — replica de los mockups (sidebar navy, hero, cards, tablas)
+     ===================================================================== */
+  #panel .card { margin: 0; padding: 20px; border-radius: 16px; box-shadow: 0 6px 24px rgba(22,26,46,0.05); border: 1px solid #EEF1F8; }
+  .stack { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .main-side { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: start; }
+  @media (min-width: 1100px) { .main-side { grid-template-columns: minmax(0, 1fr) 340px; } .main-side.hist-side { grid-template-columns: minmax(0, 1fr) 370px; } }
+
+  i[data-ic], .ic { display: inline-flex; align-items: center; justify-content: center; font-style: normal; }
+  i[data-ic] svg, .ic svg { width: 16px; height: 16px; }
+  .ico { width: 40px; height: 40px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .ico svg { width: 20px; height: 20px; }
+  .ico.lg { width: 50px; height: 50px; } .ico.lg svg { width: 24px; height: 24px; }
+  .ico.xl { width: 56px; height: 56px; } .ico.xl svg { width: 26px; height: 26px; }
+  .ico.green { background: #E6F7EF; color: #1FA971; } .ico.amber { background: #FFF3DC; color: #F5A524; } .ico.gray { background: #EEF0F5; color: #6B7488; }
+  .dotbig { width: 16px; height: 16px; border-radius: 50%; background: #1FA971; display: block; }
+
+  /* Sidebar navy */
+  .sidebar { background: linear-gradient(180deg, #0B2A6B 0%, #0A1F52 100%); color: #fff; border-right: none; }
+  .sidebar::after { content: ""; position: absolute; left: -60px; bottom: 40px; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(76,141,255,0.22), transparent 70%); pointer-events: none; }
+  .sidebar-brand { color: #fff; }
+  .sidebar-nav { gap: 4px; }
+  .sidebar-link { color: rgba(255,255,255,0.75); padding: 11px 12px; gap: 12px; }
+  .sidebar-link:hover { color: #fff; background: rgba(255,255,255,0.07); }
+  .sidebar-link.active { color: #fff; background: #1E4FC9; }
+  .nav-ic { display: inline-flex; width: 20px; height: 20px; } .nav-ic svg { width: 20px; height: 20px; } .nav-ic.sm svg { width: 16px; height: 16px; }
+  .sidebar-restcard { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); margin-top: 22px; position: relative; z-index: 1; }
+  .sidebar-restcard .rc-name { color: #fff; } .sidebar-restcard .rc-tag { color: rgba(255,255,255,0.6); } .sidebar-restcard .rc-status { color: #4ADE9C; } .sidebar-restcard .rc-status::before { background: #4ADE9C; }
+  .sidebar-restcard img { background: rgba(255,255,255,0.15); }
+  .sidebar-support { margin-top: auto; display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,0.85); text-decoration: none; font-size: 13px; font-weight: 700; padding: 14px 8px; border-top: 1px solid rgba(255,255,255,0.12); position: relative; z-index: 1; }
+  .sidebar-support span { flex: 1; } .sidebar-support small { display: block; font-weight: 400; opacity: 0.7; font-size: 11px; }
+
+  .link { background: none; border: none; color: var(--accent); font-weight: 700; font-size: 12px; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 5px; padding: 0; white-space: nowrap; }
+  .btn-cta { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: #fff; border: none; border-radius: 10px; padding: 11px 18px; font-weight: 700; font-size: 13px; cursor: pointer; text-decoration: none; font-family: inherit; box-shadow: 0 8px 18px rgba(46,108,246,0.25); white-space: nowrap; }
+  .btn-cta:hover { background: var(--accent-dark); }
+  .btn-ghost { display: inline-flex; align-items: center; gap: 8px; background: #fff; color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 10px 16px; font-weight: 700; font-size: 13px; cursor: pointer; text-decoration: none; font-family: inherit; white-space: nowrap; }
+  .btn-ghost.sm { padding: 8px 12px; font-size: 12px; }
+
+  .pill { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
+  .pill-blue { background: #E3EDFF; color: #2E6CF6; } .pill-green { background: #E6F7EF; color: #1FA971; } .pill-amber { background: #FFF3DC; color: #C77F00; } .pill-gray { background: #EEF0F5; color: #6B7488; }
+  .pill .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+  .pg-head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; }
+  .pg-head .pg-t { flex: 1; min-width: 200px; } .pg-t h1, .pg-h1 { font-size: 26px; font-weight: 800; color: var(--ink); margin: 0; } .pg-t p, .pg-sub { font-size: 13.5px; color: var(--ink-soft); margin: 4px 0 0; }
+  .pg-h1.xl { font-size: 30px; margin-top: 4px; } .pg-sub { margin-bottom: 18px; }
+  .crumb { font-size: 12.5px; color: var(--ink-soft); display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .crumb i svg { width: 12px; height: 12px; }
+  .ct { font-size: 15px; font-weight: 800; margin: 0 0 4px; } .cs { font-size: 12px; color: var(--ink-soft); margin: 0 0 14px; } .soft { color: var(--ink-soft); font-weight: 600; }
+  .empty { padding: 22px 0; text-align: center; color: var(--ink-soft); font-size: 12.5px; }
+
+  .card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .card-head.wrapping { flex-wrap: wrap; }
+  .ch-t { flex: 1; min-width: 0; } .ch-t h3 { font-size: 15px; font-weight: 800; margin: 0; } .ch-t p { font-size: 12px; color: var(--ink-soft); margin: 2px 0 0; }
+
+  .av { width: var(--s, 36px); height: var(--s, 36px); border-radius: 50%; overflow: hidden; background: var(--accent-soft); color: var(--accent); display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: calc(var(--s, 36px) * 0.36); flex-shrink: 0; }
+  .av img { width: 100%; height: 100%; object-fit: cover; }
+  .up { color: #1FA971; font-weight: 700; } .down { color: #D9483B; font-weight: 700; } .flat { color: var(--ink-soft); font-weight: 700; }
+
+  /* Hero */
+  .hero { position: relative; overflow: hidden; border-radius: 18px; background: linear-gradient(100deg, #D6E6FE 0%, #EAF2FF 55%, #DCE9FD 100%); padding: 28px 28px; min-height: 176px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 16px; }
+  .hero-photo { position: absolute; top: 0; right: 0; bottom: 0; width: 58%; background-size: cover; background-position: center; -webkit-mask-image: linear-gradient(90deg, transparent, #000 45%); mask-image: linear-gradient(90deg, transparent, #000 45%); }
+  .hero-left, .hero-card { position: relative; z-index: 1; }
+  .hero-title { font-size: 30px; font-weight: 800; color: #0B1F4D; margin: 0; } .hero-sub { font-size: 14px; color: #3B5387; margin: 6px 0 14px; }
+  .hero-chips { display: flex; flex-wrap: wrap; gap: 20px; font-size: 12.5px; color: #1B2C57; } .hero-chips span { display: inline-flex; align-items: center; gap: 7px; } .hero-chips i svg { width: 18px; height: 18px; color: var(--accent); }
+  .hero-card { background: #fff; border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; box-shadow: 0 14px 34px rgba(11,31,77,0.14); }
+  .hero-card small { display: block; font-size: 11.5px; color: var(--ink-soft); max-width: 150px; line-height: 1.35; } .hero-big { display: flex; align-items: baseline; gap: 10px; } .hero-big span { font-size: 34px; font-weight: 800; } .hero-big em { font-style: normal; font-size: 11px; color: var(--ink-soft); }
+
+  /* Stats */
+  .stat4 { display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 16px; }
+  @media (min-width: 640px) { .stat4 { grid-template-columns: 1fr 1fr; } } @media (min-width: 1100px) { .stat4 { grid-template-columns: repeat(4, 1fr); } }
+  .stat-card { display: flex; align-items: center; gap: 14px; background: #fff; border: 1px solid #EEF1F8; border-radius: 16px; padding: 16px 18px; text-align: left; font-family: inherit; box-shadow: 0 6px 24px rgba(22,26,46,0.05); }
+  button.stat-card { cursor: pointer; } button.stat-card:hover { border-color: var(--accent); }
+  .sc-body { flex: 1; min-width: 0; } .sc-body small { display: block; font-size: 12px; color: var(--ink-soft); } .sc-body strong { display: block; font-size: 26px; font-weight: 800; line-height: 1.15; } .sc-body em { font-style: normal; font-size: 11.5px; color: var(--ink-soft); }
+  .stat-card .chev svg { width: 16px; height: 16px; color: var(--ink-soft); }
+  .stat4.sm .stat-card { padding: 14px 16px; } .stat4.sm .sc-body strong { font-size: 24px; }
+
+  .act-row { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; background: none; border: none; border-top: 1px solid var(--line); padding: 12px 0; cursor: pointer; font-family: inherit; }
+  .act-row:first-of-type { border-top: none; }
+  .act-row .ar-t { flex: 1; min-width: 0; } .act-row .ar-t b { display: block; font-size: 13.5px; } .act-row .ar-t small { display: block; font-size: 12px; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .act-row time { font-size: 11.5px; color: var(--ink-soft); white-space: nowrap; } .act-row > i svg { width: 14px; height: 14px; color: var(--ink-soft); }
+  .tip { display: flex; align-items: center; gap: 14px; background: #EEF4FF; border-radius: 14px; padding: 14px 18px; flex-wrap: wrap; } .tip .ico { background: #fff; } .tip-t { flex: 1; min-width: 200px; } .tip-t b { font-size: 13px; } .tip-t p { font-size: 12px; color: var(--ink-soft); margin: 2px 0 0; }
+
+  .qa-grid { display: grid; grid-template-columns: 1fr; gap: 10px; } @media (min-width: 520px) { .qa-grid { grid-template-columns: 1fr 1fr; } } @media (min-width: 1100px) { .qa-grid { grid-template-columns: 1fr; } } @media (min-width: 1500px) { .qa-grid { grid-template-columns: 1fr 1fr; } }
+  .qa { display: flex; align-items: center; gap: 10px; background: #F6F8FD; border: 1px solid #EEF1F8; border-radius: 12px; padding: 12px; cursor: pointer; text-align: left; font-family: inherit; }
+  .qa:hover { border-color: var(--accent); } .qa-t { flex: 1; min-width: 0; } .qa-t b { display: block; font-size: 12.5px; } .qa-t small { display: block; font-size: 11px; color: var(--ink-soft); } .qa > i svg { width: 14px; height: 14px; color: var(--ink-soft); }
+  .promo { display: flex; align-items: center; gap: 16px; background: linear-gradient(135deg, #E4EEFF, #F3F7FF); border-radius: 16px; padding: 20px; }
+  .promo-art { width: 84px; height: 110px; border-radius: 18px; background: linear-gradient(160deg, #2E6CF6, #1E40AF); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 34px; font-weight: 800; transform: rotate(-8deg); flex-shrink: 0; box-shadow: 0 14px 28px rgba(30,64,175,0.35); }
+  .promo-art.store { transform: none; width: 64px; height: 64px; border-radius: 16px; } .promo-art.store svg { width: 30px; height: 30px; }
+  .promo-t b { font-size: 14.5px; } .promo-t p { font-size: 12px; color: var(--ink-soft); margin: 4px 0 12px; line-height: 1.45; }
+
+  /* Tablas */
+  .tbl-wrap { overflow-x: auto; } .tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .tbl th { text-align: left; font-size: 11.5px; color: var(--ink-soft); font-weight: 700; padding: 10px 12px; background: #F6F8FD; white-space: nowrap; } .tbl th.sortable { cursor: pointer; }
+  .tbl td { padding: 12px; border-top: 1px solid var(--line); vertical-align: middle; } .tbl tr.sel td { background: #F3F7FF; } .tbl tbody tr[data-sel] { cursor: pointer; } .tbl tbody tr:hover td { background: #F8FAFF; }
+  .ta-r { text-align: right !important; } .pcell { display: flex; align-items: center; gap: 12px; } .pcell b { display: block; font-size: 13.5px; } .pcell small { color: var(--ink-soft); font-size: 11.5px; }
+  .ico-btn { background: none; border: none; font-size: 18px; color: var(--ink-soft); cursor: pointer; padding: 2px 8px; }
+  .tbl-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 14px; font-size: 12px; color: var(--ink-soft); flex-wrap: wrap; }
+  .pager { display: flex; gap: 6px; } .pager button { min-width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--line); background: #fff; cursor: pointer; font-weight: 700; font-family: inherit; } .pager button.on { background: var(--accent); border-color: var(--accent); color: #fff; } .pager button:disabled { opacity: 0.4; cursor: default; }
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ctl { display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 0 12px; height: 42px; color: var(--ink-soft); } .ctl.sm { height: 38px; } .ctl.grow { flex: 1; min-width: 200px; }
+  .ctl input, .ctl select { border: none; outline: none; background: none; font: inherit; font-size: 13px; color: var(--ink); min-width: 0; } .ctl.grow input { width: 100%; }
+  .role-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; } .rr-t { flex: 1; } .rr-t b { display: block; font-size: 13.5px; } .rr-t small { color: var(--ink-soft); font-size: 11.5px; } .rr-n { font-weight: 800; }
+  .cta-soft { display: flex; gap: 14px; align-items: flex-start; background: #EEF4FF !important; } .cs-t b { font-size: 14px; } .cs-t p { font-size: 12px; color: var(--ink-soft); margin: 4px 0 12px; line-height: 1.45; }
+  .mini-act { display: flex; gap: 10px; padding: 9px 0; font-size: 12.5px; } .mini-act .bullet { width: 8px; height: 8px; border-radius: 50%; background: #1FA971; margin-top: 5px; flex-shrink: 0; } .mini-act small { display: block; color: var(--ink-soft); font-size: 11px; }
+
+  /* Historial */
+  .hist-controls { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; align-items: center; } .hist-controls .ctl { min-width: 200px; } .hist-controls .btn-ghost { margin-left: auto; height: 42px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 8px; font-size: 12px; color: var(--ink-soft); } .legend span { display: inline-flex; align-items: center; gap: 6px; } .legend i { width: 18px; height: 3px; border-radius: 2px; display: inline-block; }
+  .prof-card { background: linear-gradient(180deg, #EAF2FF, #fff 60%) !important; } .pf-top { display: flex; align-items: center; gap: 16px; } .pf-top h3 { font-size: 19px; margin: 0; } .pf-top small { color: var(--ink-soft); } .pf-rate { display: flex; align-items: center; gap: 8px; margin-top: 4px; font-size: 12px; color: var(--ink-soft); } .pf-rate b { font-size: 28px; color: var(--ink); } .pf-rate .st { color: var(--accent); font-size: 22px; }
+  .pf-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 16px 0; padding-top: 14px; border-top: 1px solid var(--line); text-align: center; } .pf-stats b { display: block; font-size: 15px; } .pf-stats small { font-size: 11px; color: var(--ink-soft); }
+  .pf-tip { display: flex; gap: 12px; background: #E8F0FF; border-radius: 12px; padding: 12px; } .pf-tip b { font-size: 13px; } .pf-tip p { font-size: 11.5px; color: var(--ink-soft); margin: 2px 0 0; line-height: 1.4; }
+  .det-row { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); font-size: 12px; } .det-row:first-child { border-top: none; } .det-row time { width: 40px; color: var(--ink-soft); flex-shrink: 0; } .det-row .stars { color: var(--accent); white-space: nowrap; letter-spacing: 1px; } .det-row b { width: 24px; } .det-row q { color: var(--ink-soft); quotes: none; flex: 1; }
+
+  /* Cuenta */
+  .plan-banner { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; background: linear-gradient(100deg, #E4EEFF, #F3F7FF); border-radius: 18px; padding: 22px 26px; margin-bottom: 16px; }
+  .pb-main small { color: var(--ink-soft); font-size: 12px; } .pb-big { font-size: 30px; font-weight: 800; display: flex; align-items: center; gap: 12px; margin: 2px 0; }
+  .pb-list { list-style: none; margin: 0; padding: 0 0 0 24px; border-left: 1px solid #C9D9F5; flex: 1; min-width: 220px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; } .pb-list li { display: flex; align-items: center; gap: 8px; } .pb-list i svg { color: var(--accent); width: 16px; height: 16px; }
+  .info-grid { display: grid; grid-template-columns: 1fr; gap: 16px 24px; } @media (min-width: 720px) { .info-grid { grid-template-columns: 1fr 1fr; } }
+  .info-it { display: flex; gap: 12px; align-items: flex-start; } .info-it .ico { width: 34px; height: 34px; } .info-it .ico svg { width: 16px; height: 16px; } .info-it small { display: block; font-size: 11.5px; color: var(--ink-soft); } .info-it b { font-size: 13.5px; word-break: break-word; }
+  .pn-grid { display: grid; grid-template-columns: 1fr; gap: 12px; } @media (min-width: 720px) { .pn-grid { grid-template-columns: repeat(3, 1fr); } }
+  .pn-it { border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: flex; align-items: center; gap: 12px; } .pn-it img { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; background: var(--accent-soft); } .pn-it b { display: block; font-size: 13px; } .pn-it small { font-size: 11.5px; color: var(--ink-soft); }
+  .sec-grid { display: grid; grid-template-columns: 1fr; gap: 12px; } @media (min-width: 720px) { .sec-grid { grid-template-columns: 1fr 1fr; } }
+  .sec-item { display: flex; align-items: center; gap: 12px; border: 1px solid var(--line); border-radius: 12px; padding: 14px; text-decoration: none; color: inherit; } .si-t { flex: 1; } .si-t b { display: block; font-size: 13.5px; } .si-t small { font-size: 11.5px; color: var(--ink-soft); } .sec-item > i svg { width: 14px; height: 14px; color: var(--ink-soft); }
+  .vac-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); cursor: pointer; width: 100%; background: none; border-left: none; border-right: none; border-bottom: none; text-align: left; font-family: inherit; } .vac-row:first-of-type { border-top: none; } .vac-row .vr-t { flex: 1; min-width: 0; } .vac-row b { display: block; font-size: 13.5px; } .vac-row small { color: var(--ink-soft); font-size: 11.5px; }
+  .help-card { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: #F3F7FF !important; }
+
+  /* Administrar */
+  .admin-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 8px; } .admin-top > div:first-child { flex: 1; min-width: 260px; }
+  .rest-mini { display: flex !important; align-items: center; gap: 16px; padding: 14px 18px !important; } .rest-mini img { width: 84px; height: 66px; border-radius: 12px; object-fit: cover; background: var(--accent-soft); } .rm-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; } .rm-main b { font-size: 16px; } .rm-main small { font-size: 11px; color: var(--ink-soft); } .ok-txt { color: #1FA971; font-weight: 700; font-size: 12px; } .addr { display: flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--ink-soft); }
+  .strip4 { display: grid !important; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 16px; } @media (min-width: 1000px) { .strip4 { grid-template-columns: repeat(4, 1fr); } }
+  .strip-it { display: flex; align-items: center; gap: 14px; } .strip-it strong { display: block; font-size: 26px; font-weight: 800; line-height: 1.1; } .strip-it small { display: block; font-size: 12.5px; color: var(--ink-soft); } .strip-it em { font-style: normal; font-size: 11px; color: var(--ink-soft); }
+  .tool-grid2 { display: grid; grid-template-columns: 1fr; gap: 14px; } @media (min-width: 720px) { .tool-grid2 { grid-template-columns: 1fr 1fr; } }
+  .tool2 { display: flex; align-items: flex-start; gap: 14px; text-align: left; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 18px; cursor: pointer; font-family: inherit; } .tool2:hover { border-color: var(--accent); }
+  .t2-t { flex: 1; min-width: 0; } .t2-t b { display: block; font-size: 15px; } .t2-t small { display: block; font-size: 12px; color: var(--ink-soft); margin: 4px 0 10px; line-height: 1.4; } .t2-meta { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--ink-soft); } .t2-meta i svg { width: 14px; height: 14px; color: var(--accent); } .tool2 .arr svg { width: 16px; height: 16px; color: var(--accent); }
+  .qrow { display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px 0; border: none; border-top: 1px solid var(--line); background: none; cursor: pointer; text-align: left; font-family: inherit; text-decoration: none; color: inherit; } .qrow:first-of-type { border-top: none; } .qrow > i svg { width: 14px; height: 14px; color: var(--ink-soft); }
+
+  html, body { max-width: 100%; overflow-x: hidden; }
+  .topbar { margin: 0 -20px 20px; }
+
 </style>
 </head>
 <body>
@@ -634,32 +774,19 @@
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
   <aside class="sidebar hidden" id="sidebar">
-    <div class="sidebar-brand">Tapport<sup style="font-size:10px;">®</sup></div>
+    <div class="sidebar-brand">
+      <svg width="26" height="26" viewBox="0 0 32 32"><path d="M6 4h20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-7v16a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V10H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="#4C8DFF"/></svg>
+      Tapport<sup style="font-size:10px;">®</sup>
+    </div>
 
     <nav class="sidebar-nav">
-      <button type="button" class="sidebar-link active" data-view="inicio">
-        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg></span>
-        Inicio
-      </button>
-      <button type="button" class="sidebar-link" data-view="historial">
-        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
-        Historial
-      </button>
-      <button type="button" class="sidebar-link" data-view="personal">
-        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
-        Personal
-      </button>
-      <button type="button" class="sidebar-link" data-view="cuenta">
-        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg></span>
-        Cuenta
-      </button>
-      <button type="button" class="sidebar-link" data-view="administrar">
-        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 15 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg></span>
-        Administrar
-      </button>
+      <button type="button" class="sidebar-link active" data-view="inicio"><i class="nav-ic" data-ic="home"></i>Inicio</button>
+      <button type="button" class="sidebar-link" data-view="historial"><i class="nav-ic" data-ic="clock"></i>Historial</button>
+      <button type="button" class="sidebar-link" data-view="personal"><i class="nav-ic" data-ic="users"></i>Personal</button>
+      <button type="button" class="sidebar-link" data-view="cuenta"><i class="nav-ic" data-ic="user"></i>Cuenta</button>
+      <button type="button" class="sidebar-link" data-view="administrar"><i class="nav-ic" data-ic="gear"></i>Administrar</button>
     </nav>
 
-    <div class="sidebar-section-label">Restaurante</div>
     <div class="sidebar-restcard">
       <img id="sidebarLogo" src="" alt="" />
       <div style="min-width:0;">
@@ -669,11 +796,11 @@
       </div>
     </div>
 
-    <div class="sidebar-footer">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg>
-      Powered by
-      <strong>Tapport</strong>
-    </div>
+    <a class="sidebar-support" href="mailto:tapport.pe@gmail.com?subject=Soporte%20Tapport">
+      <i class="nav-ic" data-ic="headset"></i>
+      <span>Soporte<small>¿Necesitas ayuda?</small></span>
+      <i class="nav-ic sm" data-ic="chevron"></i>
+    </a>
   </aside>
 
   <div class="main">
@@ -730,228 +857,291 @@
     <!-- ============ PANEL (tras login) ============ -->
     <div class="hidden" id="panel">
 
-      <!-- Banner del restaurante, siempre visible arriba de las 3 vistas -->
-      <div class="rest-banner" id="panelCover">
-        <button type="button" class="rest-banner-edit" id="bannerEditBtn">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
-          Editar
-        </button>
-        <div class="rest-banner-inner">
-          <img class="rest-banner-logo hidden" id="panelLogo" />
-          <div class="rest-banner-text">
-            <p class="rest-banner-name" id="panelRestaurante"></p>
-            <p class="rest-banner-address hidden" id="panelAddress">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-              <span id="panelAddressText"></span>
-            </p>
-          </div>
-        </div>
+      <!-- Botones originales (los usan los formularios de vacantes y perfil del negocio) -->
+      <div hidden>
+        <button type="button" id="toggleEditarNegocioBtn"></button>
+        <button type="button" id="togglePublicarVacanteBtn"></button>
+        <button type="button" id="toggleMisVacantesBtn"></button>
       </div>
 
       <!-- ============ VISTA: INICIO ============ -->
       <div class="view" id="view-inicio">
-
-        <!-- Fila 1: 4 KPI cards -->
-        <div class="kpi-row">
-
-          <div class="card kpi-card">
-            <p class="kpi-title"><span class="kpi-icon">★</span>Rating total</p>
-            <div class="kpi-ring-wrap">
-              <div class="kpi-ring-num"><span id="panelPromedio">—</span><label>Excelente</label></div>
-              <svg viewBox="0 0 80 80" class="kpi-ring"><circle cx="40" cy="40" r="34" class="ring-bg"/><circle cx="40" cy="40" r="34" class="ring-fg" id="ratingRingFg"/></svg>
+        <div class="hero">
+          <div class="hero-photo" id="heroPhoto"></div>
+          <div class="hero-left">
+            <h2 class="hero-title">¡Hola, <span id="heroNombre">—</span>!</h2>
+            <p class="hero-sub">Todo en orden con tu equipo y restaurante.</p>
+            <div class="hero-chips">
+              <span><i data-ic="pin"></i><b id="heroUbicacion">—</b></span>
+              <span><i data-ic="calendar"></i><b id="heroFecha">—</b></span>
             </div>
           </div>
-
-          <div class="card kpi-card">
-            <p class="kpi-title"><span class="kpi-icon">▤</span>Datos del restaurante</p>
-            <div class="data-row"><span class="data-label">Dirección</span><span class="data-value" id="dataDireccion">Sin registrar</span></div>
-            <div class="data-row"><span class="data-label">Logo</span><span class="data-value" id="dataLogo">Sin subir</span></div>
-            <div class="data-row"><span class="data-label">Portada</span><span class="data-value" id="dataPortada">Sin subir</span></div>
-          </div>
-
-          <div class="card kpi-card">
-            <p class="kpi-title"><span class="kpi-icon">☺</span>Administrador</p>
-            <div class="kpi-person">
-              <img id="adminCardFoto" src="" alt="" />
-              <div><div class="kp-name" id="adminCardNombre">—</div><div class="kp-role">Administrador</div></div>
-            </div>
-            <button type="button" class="btn-link" data-goto-view="administrar" style="margin-top:10px;">Ver perfil →</button>
-          </div>
-
-          <div class="card kpi-card">
-            <p class="kpi-title" style="display:flex; justify-content:space-between;"><span><span class="kpi-icon">▶</span>Anuncios</span><button type="button" class="btn-link" id="verTodosAnunciosBtn" style="font-size:11px;">Ver todos →</button></p>
-            <div id="anunciosList"><div class="empty-state">Cargando…</div></div>
-          </div>
-
-        </div>
-
-        <!-- Fila 2: gráfico + estadísticas -->
-        <div class="row-2col">
-          <div class="chart-card" id="chartCard">
-            <p class="chart-title">Rating por mesero</p>
-            <div id="graficoMeseros"></div>
-          </div>
-          <div class="card">
-            <p class="view-title" style="margin-top:0;">Datos estadísticos</p>
-            <div class="stat-grid-2x2">
-              <div class="mini-stat"><span id="statTotalResenas">—</span><label>Total reseñas</label></div>
-              <div class="mini-stat"><span id="statPersonalActivo">—</span><label>Personal activo</label></div>
-              <div class="mini-stat"><span id="statResenasMes">—</span><label>Reseñas este mes</label></div>
-              <div class="mini-stat"><span id="statVacantesActivas">—</span><label>Vacantes activas</label></div>
-            </div>
+          <div class="hero-card">
+            <div class="ico lg" data-ic="star"></div>
+            <div><small>Tu equipo tiene un rating promedio de</small>
+              <div class="hero-big"><span id="heroRating">—</span><em id="heroTrend"></em></div></div>
           </div>
         </div>
 
-        <!-- Fila 3: personal + motivacional -->
-        <div class="row-2col">
-          <div class="card">
-            <p class="view-title" style="margin-top:0;">Personal</p>
-            <table class="personal-table">
-              <thead><tr><th>Code</th><th>Nombre</th><th style="text-align:right;">Rating</th></tr></thead>
-              <tbody id="personalMiniTableBody"></tbody>
-            </table>
+        <div class="stat4">
+          <button type="button" class="stat-card" data-goto-view="personal">
+            <div class="ico lg" data-ic="users"></div>
+            <div class="sc-body"><small>Total de miembros</small><strong id="stTotal">—</strong><em id="stTotalSub"></em></div>
+            <i class="chev" data-ic="chevron"></i>
+          </button>
+          <button type="button" class="stat-card" data-goto-view="personal">
+            <div class="ico lg green"><span class="dotbig"></span></div>
+            <div class="sc-body"><small>Activos</small><strong id="stActivos">—</strong><em id="stActivosSub"></em></div>
+            <i class="chev" data-ic="chevron"></i>
+          </button>
+          <button type="button" class="stat-card" data-goto-view="personal">
+            <div class="ico lg amber" data-ic="pause"></div>
+            <div class="sc-body"><small>Sin actividad</small><strong id="stInactivos">—</strong><em id="stInactivosSub"></em></div>
+            <i class="chev" data-ic="chevron"></i>
+          </button>
+          <button type="button" class="stat-card" data-goto-view="historial">
+            <div class="ico lg" data-ic="star"></div>
+            <div class="sc-body"><small>Rating promedio</small><strong id="stRating">—</strong><em id="stRatingSub"></em></div>
+            <i class="chev" data-ic="chevron"></i>
+          </button>
+        </div>
+
+        <div class="main-side">
+          <div class="stack">
+            <div class="card">
+              <div class="card-head">
+                <div class="ico" data-ic="bolt"></div>
+                <div class="ch-t"><h3>Actividad reciente</h3><p>Lo más importante de tu restaurante en un solo lugar.</p></div>
+                <button type="button" class="link" data-goto-view="historial">Ver todas →</button>
+              </div>
+              <div id="actividadReciente"></div>
+            </div>
+            <div class="tip">
+              <div class="ico" data-ic="bulb"></div>
+              <div class="tip-t"><b>Tip de Tapport</b><p>Puedes ver el rendimiento de tu equipo día por día desde la sección Historial.</p></div>
+              <button type="button" class="link" data-goto-view="historial">Ir a rendimiento →</button>
+            </div>
           </div>
-          <div class="card motivational-card">
-            <div class="mot-icon">✓</div>
-            <div>
-              <p class="mot-title" id="motivationalTitle">¡Buen trabajo!</p>
-              <p class="mot-text" id="motivationalText">Sigue así.</p>
-              <button type="button" class="btn-link" data-goto-view="historial" style="color:#fff;">Ver detalles →</button>
+
+          <div class="stack">
+            <div class="card">
+              <div class="card-head"><div class="ico" data-ic="bolt"></div><div class="ch-t"><h3>Acciones rápidas</h3></div></div>
+              <div class="qa-grid">
+                <button type="button" class="qa" data-goto-view="historial"><div class="ico" data-ic="chart"></div><div class="qa-t"><b>Ver reporte</b><small>Rendimiento y estadísticas</small></div><i data-ic="chevron"></i></button>
+                <button type="button" class="qa" data-goto-view="personal"><div class="ico" data-ic="users"></div><div class="qa-t"><b>Gestionar equipo</b><small>Personal y ratings</small></div><i data-ic="chevron"></i></button>
+                <button type="button" class="qa" data-action="publicar-vacante"><div class="ico" data-ic="briefcase"></div><div class="qa-t"><b>Publicar vacante</b><small>Encuentra talento</small></div><i data-ic="chevron"></i></button>
+                <button type="button" class="qa" data-action="editar-negocio"><div class="ico" data-ic="store"></div><div class="qa-t"><b>Perfil del negocio</b><small>Logo, portada y dirección</small></div><i data-ic="chevron"></i></button>
+              </div>
+            </div>
+            <div class="promo">
+              <div class="promo-art"><span>T</span></div>
+              <div class="promo-t"><b>Tu restaurante, más conectado</b><p>Aprovecha todo el potencial de Tapport para un mejor control de tu equipo.</p>
+                <button type="button" class="btn-cta" data-goto-view="administrar">Ver más →</button></div>
             </div>
           </div>
         </div>
-
-        <!-- Accesos rápidos -->
-        <div class="quick-actions">
-          <button type="button" class="btn-secondary" id="togglePublicarVacanteBtn">+ Publicar vacante</button>
-          <button type="button" class="btn-secondary" id="toggleMisVacantesBtn">Vacantes y postulantes</button>
-          <button type="button" class="btn-secondary" id="toggleEditarNegocioBtn">Editar perfil del negocio</button>
-        </div>
-
       </div>
 
       <!-- ============ VISTA: HISTORIAL ============ -->
       <div class="view hidden" id="view-historial">
-        <div class="hist-grid">
+        <div class="crumb">Historial <i data-ic="chevron"></i> Rendimiento por día</div>
+        <h1 class="pg-h1">Rendimiento por día</h1>
+        <p class="pg-sub">Analiza el desempeño de tu equipo con métricas de rating, volumen de servicios y evolución durante el día seleccionado.</p>
 
-          <div class="card">
-            <p class="view-title" style="margin-top:0;">Personal</p>
-            <table class="personal-table">
-              <thead><tr><th>Code</th><th>Nombre</th><th style="text-align:right;">Rating</th></tr></thead>
-              <tbody id="personalTableBody"></tbody>
-            </table>
-          </div>
-
-          <div class="card">
-            <div class="daily-header">
-              <p class="chart-title" style="margin:0;">Gráfico de barras con historial</p>
-              <input type="date" id="dailyDatePicker" class="daily-date-input">
-            </div>
-            <div class="daily-quicklinks" id="dailyQuicklinks">
-              <button type="button" class="daily-quicklink" data-dias="0">Hoy</button>
-              <button type="button" class="daily-quicklink" data-dias="1">Ayer</button>
-            </div>
-
-            <div class="daily-stats-row" style="margin-top:14px;">
-              <div class="daily-stat"><span id="dailyTotalServicios">0</span><label>Servicios ese día</label></div>
-              <div class="daily-stat"><span id="dailyPromedioDia">—</span><label>Rating del día</label></div>
-            </div>
-
-            <p class="chart-title">Servicios del día por mesero</p>
-            <div id="graficoMeserosDia"></div>
-
-            <div class="trend-wrap">
-              <p class="chart-title">Tendencia — últimos 14 días</p>
-              <div class="trend-chart" id="trendChart"></div>
-              <div class="trend-labels" id="trendLabels"></div>
-            </div>
-
-            <div id="listaMeseros" style="margin-top:6px;"></div>
-          </div>
-
+        <div class="hist-controls">
+          <label class="ctl"><i data-ic="calendar"></i><input type="date" id="histFecha" /></label>
+          <label class="ctl"><i data-ic="user"></i><select id="histMesero"><option value="">Todos los trabajadores</option></select></label>
+          <label class="ctl grow"><i data-ic="search"></i><input type="text" id="histBuscar" placeholder="Buscar trabajador…" /></label>
+          <button type="button" class="btn-ghost" id="histExportar"><i data-ic="download"></i> Exportar</button>
         </div>
 
-        <div class="card" style="margin-top:16px;">
-          <p class="chart-title" style="margin-top:0;">Rendimiento por hora</p>
-          <p style="font-size:11.5px; color:var(--ink-soft); margin:-8px 0 12px;">Rating promedio de cada mesero, hora por hora, en el día seleccionado.</p>
-          <div id="graficoPorHora"></div>
-          <div id="leyendaPorHora" style="display:flex; flex-wrap:wrap; gap:12px; margin-top:10px;"></div>
-        </div>
-
-        <div class="card" style="margin-top:16px;">
-          <p class="chart-title" style="margin-top:0;">Detalle del día</p>
-          <div id="detalleDelDia"></div>
+        <div class="main-side hist-side">
+          <div class="stack">
+            <div class="card">
+              <h3 class="ct">Rendimiento por hora</h3>
+              <p class="cs">Evolución del rating promedio durante el día seleccionado.</p>
+              <div id="histChart"></div>
+              <div class="legend" id="histLegend"></div>
+            </div>
+            <div class="card">
+              <h3 class="ct">Desempeño del equipo — <span class="soft" id="histFechaTxt"></span></h3>
+              <div class="tbl-wrap">
+                <table class="tbl">
+                  <thead><tr><th>Trabajador</th><th>Servicios</th><th>Rating promedio</th><th>Tendencia</th><th>Último servicio</th><th></th></tr></thead>
+                  <tbody id="histTabla"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="card prof-card" id="histPerfil"></div>
+            <div class="card">
+              <h3 class="ct">Detalle del día</h3>
+              <div id="histDetalle"></div>
+              <button type="button" class="link" id="histVerTodas">Ver todas las reseñas →</button>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- ============ VISTA: PERSONAL ============ -->
       <div class="view hidden" id="view-personal">
-        <div class="card">
-          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
-            <div>
-              <p class="view-title" style="margin:0;">Personal</p>
-              <p style="font-size:12.5px; color:var(--ink-soft); margin:2px 0 0;">Tu equipo de meseros en Tapport.</p>
+        <div class="pg-head">
+          <div class="ico xl" data-ic="users"></div>
+          <div class="pg-t"><h1>Personal</h1><p>Gestiona tu equipo y revisa el rendimiento de cada mesero.</p></div>
+          <a class="btn-cta" href="registro.html" target="_blank" rel="noopener"><i data-ic="userplus"></i> Agregar miembro</a>
+        </div>
+
+        <div class="stat4 sm">
+          <div class="stat-card"><div class="ico lg" data-ic="users"></div><div class="sc-body"><small>Total de personal</small><strong id="pTotal">—</strong><em id="pTotalSub"></em></div></div>
+          <div class="stat-card"><div class="ico lg green"><span class="dotbig"></span></div><div class="sc-body"><small>Activos</small><strong id="pActivos">—</strong><em id="pActivosSub"></em></div></div>
+          <div class="stat-card"><div class="ico lg amber" data-ic="pause"></div><div class="sc-body"><small>Sin actividad</small><strong id="pInactivos">—</strong><em id="pInactivosSub"></em></div></div>
+          <div class="stat-card"><div class="ico lg gray" data-ic="user"></div><div class="sc-body"><small>Sin reseñas aún</small><strong id="pNuevos">—</strong><em id="pNuevosSub"></em></div></div>
+        </div>
+
+        <div class="main-side">
+          <div class="stack">
+            <div class="card">
+              <div class="card-head wrapping">
+                <div class="ico" data-ic="users"></div>
+                <div class="ch-t"><h3>Tu equipo</h3><p>Revisa a los miembros de tu equipo y su actividad.</p></div>
+                <div class="filters">
+                  <label class="ctl sm"><i data-ic="search"></i><input type="text" id="buscarPersonal" placeholder="Buscar miembro…" /></label>
+                  <label class="ctl sm"><i data-ic="users"></i><select id="filtroRol"><option>Todos los roles</option><option>Mesero</option></select></label>
+                  <label class="ctl sm"><i data-ic="check"></i><select id="filtroEstado"><option value="">Todos los estados</option><option value="activo">Activo</option><option value="inactivo">Sin actividad</option><option value="nuevo">Sin reseñas</option></select></label>
+                </div>
+              </div>
+              <div class="tbl-wrap">
+                <table class="tbl">
+                  <thead><tr><th class="sortable" data-sort="nombre">Nombre ⇅</th><th>Rol</th><th>Estado</th><th class="sortable" data-sort="ultima">Última reseña ⇅</th><th class="ta-r">Acciones</th></tr></thead>
+                  <tbody id="personalBody"></tbody>
+                </table>
+              </div>
+              <div class="tbl-foot"><span id="personalCount"></span><div class="pager" id="personalPager"></div></div>
             </div>
-            <input type="text" id="buscarPersonal" placeholder="Buscar por nombre o código…" style="border:1px solid var(--line); border-radius:9px; padding:9px 12px; font-size:13px; font-family:inherit; min-width:220px;">
+            <div class="tip">
+              <div class="ico" data-ic="shield"></div>
+              <div class="tip-t"><b>Tu equipo, siempre seguro</b><p>Cada mesero entra con su propio correo y contraseña, y solo tú ves los datos de tu equipo.</p></div>
+            </div>
           </div>
-          <table class="personal-full-table" style="margin-top:16px;">
-            <thead><tr><th>Mesero</th><th>Teléfono</th><th>Reseñas</th><th style="text-align:right;">Rating</th></tr></thead>
-            <tbody id="personalFullTableBody"></tbody>
-          </table>
+
+          <div class="stack">
+            <div class="card">
+              <div class="card-head"><div class="ico" data-ic="users"></div><div class="ch-t"><h3>Roles del personal</h3><p>Los roles disponibles en tu restaurante.</p></div></div>
+              <div class="role-row"><div class="ico" data-ic="bolt"></div><div class="rr-t"><b>Mesero/a</b><small>Atiende a los clientes</small></div><span class="rr-n" id="pRolMesero">0</span></div>
+            </div>
+            <div class="card cta-soft">
+              <div class="ico lg" data-ic="users"></div>
+              <div class="cs-t"><b>¿Necesitas más miembros?</b><p>Comparte el enlace de registro con tu nuevo mesero para que cree su tarjeta Tapport.</p>
+                <a class="btn-cta" href="registro.html" target="_blank" rel="noopener">+ Agregar miembro</a></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><div class="ico" data-ic="clock"></div><div class="ch-t"><h3>Actividad reciente</h3></div><button type="button" class="link" data-goto-view="historial">Ver todo →</button></div>
+              <div id="personalActividad"></div>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- ============ VISTA: CUENTA ============ -->
       <div class="view hidden" id="view-cuenta">
-        <div class="row-2col even">
-          <div class="card">
-            <p class="view-title" style="margin-top:0;">Datos de la cuenta</p>
-            <div class="cuenta-row"><span class="cr-label">Nombre</span><span class="cr-value" id="cuentaNombre">—</span></div>
-            <div class="cuenta-row"><span class="cr-label">Teléfono</span><span class="cr-value" id="cuentaTelefono">—</span></div>
-            <div class="cuenta-row"><span class="cr-label">Correo</span><span class="cr-value" id="cuentaEmail">—</span></div>
-            <div class="cuenta-row"><span class="cr-label">DNI</span><span class="cr-value" id="cuentaDni">—</span></div>
-          </div>
-          <div class="card">
-            <p class="view-title" style="margin-top:0;">Restaurante</p>
-            <div class="cuenta-row"><span class="cr-label">Nombre</span><span class="cr-value" id="cuentaRestNombre">—</span></div>
-            <div class="cuenta-row"><span class="cr-label">Dirección</span><span class="cr-value" id="cuentaRestDireccion">—</span></div>
-            <button type="button" class="btn-secondary" id="toggleEditarNegocioBtn3" style="margin-top:14px;">Editar perfil del negocio</button>
-          </div>
+        <div class="pg-head">
+          <div class="ico xl" data-ic="user"></div>
+          <div class="pg-t"><h1>Cuenta</h1><p>Gestiona la información de tu cuenta, tu restaurante y tu seguridad.</p></div>
         </div>
-        <div class="card">
-          <p class="view-title" style="margin-top:0;">Seguridad</p>
-          <p style="font-size:12.5px; color:var(--ink-soft); margin:0;">Para cambiar tu contraseña, escríbenos a <a href="mailto:tapport.pe@gmail.com" style="color:var(--accent);">tapport.pe@gmail.com</a> — por ahora no hay un flujo de autoservicio para cuentas de administrador.</p>
+
+        <div class="plan-banner">
+          <div class="ico xl" data-ic="shield"></div>
+          <div class="pb-main"><small>Estado de la cuenta</small><div class="pb-big">Activa <span class="pill pill-green">Verificada</span></div><small id="cuentaResumen"></small></div>
+          <ul class="pb-list">
+            <li><i data-ic="check"></i><span id="cuentaChk1"></span></li>
+            <li><i data-ic="check"></i><span id="cuentaChk2"></span></li>
+            <li><i data-ic="check"></i><span id="cuentaChk3"></span></li>
+          </ul>
+          <button type="button" class="btn-cta" data-action="editar-negocio"><i data-ic="edit"></i> Editar perfil</button>
+        </div>
+
+        <div class="main-side">
+          <div class="stack">
+            <div class="card">
+              <div class="card-head"><div class="ico" data-ic="user"></div><div class="ch-t"><h3>Información de la cuenta</h3><p>Datos del restaurante y del administrador.</p></div><button type="button" class="link" data-action="editar-negocio"><i data-ic="edit"></i> Editar</button></div>
+              <div class="info-grid" id="cuentaInfo"></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><div class="ico" data-ic="store"></div><div class="ch-t"><h3>Perfil del negocio</h3><p>Lo que ven los meseros y candidatos de tu restaurante.</p></div><button type="button" class="btn-ghost sm" data-action="editar-negocio"><i data-ic="edit"></i> Editar</button></div>
+              <div class="pn-grid" id="cuentaNegocio"></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><div class="ico" data-ic="shield"></div><div class="ch-t"><h3>Seguridad</h3><p>Protege tu cuenta y tu información.</p></div></div>
+              <div class="sec-grid">
+                <a class="sec-item" href="mailto:tapport.pe@gmail.com?subject=Cambiar%20contrase%C3%B1a%20de%20administrador"><div class="ico" data-ic="lock"></div><div class="si-t"><b>Cambiar contraseña</b><small>Escríbenos y te ayudamos a cambiarla.</small></div><i data-ic="chevron"></i></a>
+                <div class="sec-item"><div class="ico" data-ic="shield"></div><div class="si-t"><b>Cierre automático de sesión</b><small>Tu sesión se cierra tras 10 minutos de inactividad.</small></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack">
+            <div class="card">
+              <div class="card-head"><div class="ico" data-ic="file"></div><div class="ch-t"><h3>Vacantes publicadas</h3><p>Revisa tus vacantes y sus interesados.</p></div><button type="button" class="link" data-action="mis-vacantes">Ver todas →</button></div>
+              <div id="cuentaVacantes"></div>
+            </div>
+            <div class="card help-card">
+              <div class="ico" data-ic="help"></div>
+              <div class="ch-t"><h3>¿Necesitas ayuda?</h3><p>Nuestro equipo está para ayudarte.</p></div>
+              <a class="btn-ghost" href="mailto:tapport.pe@gmail.com?subject=Soporte%20Tapport"><i data-ic="headset"></i> Contactar soporte</a>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- ============ VISTA: ADMINISTRAR (hub) ============ -->
+      <!-- ============ VISTA: ADMINISTRAR ============ -->
       <div class="view hidden" id="view-administrar">
-        <div class="row-2col">
+        <div class="admin-top">
           <div>
-            <p class="view-title" style="margin-top:0;">Herramientas de administración</p>
-            <div class="tool-grid">
-              <button type="button" class="tool-card" data-goto-view="personal">
-                <div class="tc-icon">👥</div>
-                <div><p class="tc-title">Personal</p><p class="tc-desc">Revisa a tu equipo de meseros y su rating.</p><p class="tc-meta" id="toolPersonalMeta">—</p></div>
-              </button>
-              <button type="button" class="tool-card" id="toggleMisVacantesBtn2">
-                <div class="tc-icon">📣</div>
-                <div><p class="tc-title">Vacantes</p><p class="tc-desc">Publica y gestiona oportunidades de trabajo.</p><p class="tc-meta" id="toolVacantesMeta">—</p></div>
-              </button>
-              <button type="button" class="tool-card" id="toggleEditarNegocioBtn2">
-                <div class="tc-icon">🏠</div>
-                <div><p class="tc-title">Perfil del negocio</p><p class="tc-desc">Actualiza logo, portada y dirección.</p><p class="tc-meta" id="toolNegocioMeta">—</p></div>
-              </button>
-              <button type="button" class="tool-card" data-goto-view="cuenta">
-                <div class="tc-icon">⚙</div>
-                <div><p class="tc-title">Cuenta</p><p class="tc-desc">Tus datos y los del restaurante.</p><p class="tc-meta">Ver detalle</p></div>
-              </button>
+            <div class="crumb">Administrar</div>
+            <h1 class="pg-h1 xl">Gestiona tu restaurante y equipo</h1>
+            <p class="pg-sub">Todo lo que necesitas en un solo lugar: personal, tarjetas, vacantes y más.</p>
+          </div>
+          <div class="card rest-mini">
+            <img id="admLogo" src="" alt="" />
+            <div class="rm-main"><b id="admNombre">—</b><small>RESTAURANTE</small><span class="ok-txt">Activo</span><span class="addr"><i data-ic="pin"></i><span id="admDir"></span></span></div>
+            <button type="button" class="btn-ghost sm" data-action="editar-negocio"><i data-ic="edit"></i> Editar perfil</button>
+          </div>
+        </div>
+
+        <div class="card strip4">
+          <div class="strip-it"><div class="ico lg" data-ic="users"></div><div><strong id="admPersonal">—</strong><small>Personal</small><em id="admPersonalSub"></em></div></div>
+          <div class="strip-it"><div class="ico lg" data-ic="card"></div><div><strong id="admTarjetas">—</strong><small>Tarjetas Tapport</small><em>con código asignado</em></div></div>
+          <div class="strip-it"><div class="ico lg" data-ic="star"></div><div><strong id="admRating">—</strong><small>Rating promedio</small><em id="admRatingSub"></em></div></div>
+          <div class="strip-it"><div class="ico lg" data-ic="briefcase"></div><div><strong id="admVacantes">—</strong><small>Vacantes</small><em id="admVacantesSub"></em></div></div>
+        </div>
+
+        <div class="main-side">
+          <div class="card">
+            <h3 class="ct">Herramientas de administración</h3>
+            <p class="cs">Accede y gestiona todas las funciones de tu restaurante.</p>
+            <div class="tool-grid2">
+              <button type="button" class="tool2" data-goto-view="personal"><div class="ico lg" data-ic="users"></div><div class="t2-t"><b>Personal</b><small>Gestiona tu equipo y revisa su rating.</small><span class="t2-meta"><i data-ic="users"></i><span id="toolPersonal">—</span></span></div><i class="arr" data-ic="arrow"></i></button>
+              <button type="button" class="tool2" data-goto-view="personal"><div class="ico lg" data-ic="card"></div><div class="t2-t"><b>Tarjetas Tapport</b><small>Cada mesero tiene su código y su tarjeta NFC.</small><span class="t2-meta"><i data-ic="card"></i><span id="toolTarjetas">—</span></span></div><i class="arr" data-ic="arrow"></i></button>
+              <button type="button" class="tool2" data-action="mis-vacantes"><div class="ico lg" data-ic="megaphone"></div><div class="t2-t"><b>Vacantes</b><small>Publica y gestiona oportunidades de trabajo.</small><span class="t2-meta"><i data-ic="briefcase"></i><span id="toolVacantes">—</span></span></div><i class="arr" data-ic="arrow"></i></button>
+              <button type="button" class="tool2" data-action="editar-negocio"><div class="ico lg" data-ic="store"></div><div class="t2-t"><b>Perfil del negocio</b><small>Actualiza la información de tu restaurante.</small><span class="t2-meta"><i data-ic="check"></i><span id="toolNegocio">—</span></span></div><i class="arr" data-ic="arrow"></i></button>
+              <button type="button" class="tool2" data-goto-view="historial"><div class="ico lg" data-ic="chart"></div><div class="t2-t"><b>Historial</b><small>Rendimiento de tu equipo día por día.</small><span class="t2-meta"><i data-ic="file"></i><span id="toolHistorial">—</span></span></div><i class="arr" data-ic="arrow"></i></button>
+              <button type="button" class="tool2" data-goto-view="cuenta"><div class="ico lg" data-ic="gear"></div><div class="t2-t"><b>Cuenta</b><small>Tus datos, los del restaurante y tu seguridad.</small><span class="t2-meta"><i data-ic="user"></i><span>Ver detalle</span></span></div><i class="arr" data-ic="arrow"></i></button>
             </div>
           </div>
-          <div class="card">
-            <p class="view-title" style="margin-top:0;">Acciones rápidas</p>
-            <button type="button" class="btn-secondary" id="togglePublicarVacanteBtn2" style="margin-top:0;">+ Publicar vacante</button>
-            <button type="button" class="btn-secondary" data-goto-view="historial">Ver rendimiento</button>
+
+          <div class="stack">
+            <div class="promo">
+              <div class="promo-art store"><i data-ic="store"></i></div>
+              <div class="promo-t"><b>Tu restaurante, en buenas manos</b><p>Con Tapport gestionas a tu equipo, mejoras la experiencia de tus clientes y haces crecer tu negocio.</p>
+                <a class="btn-cta" href="mailto:tapport.pe@gmail.com?subject=Centro%20de%20ayuda">Ver centro de ayuda →</a></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><div class="ico" data-ic="bolt"></div><div class="ch-t"><h3>Acciones rápidas</h3></div></div>
+              <a class="qrow" href="registro.html" target="_blank" rel="noopener"><div class="ico" data-ic="userplus"></div><div class="qa-t"><b>Agregar trabajador</b><small>Nuevo miembro del equipo</small></div><i data-ic="chevron"></i></a>
+              <button type="button" class="qrow" data-action="publicar-vacante"><div class="ico" data-ic="briefcase"></div><div class="qa-t"><b>Publicar vacante</b><small>Encuentra talento</small></div><i data-ic="chevron"></i></button>
+              <button type="button" class="qrow" data-goto-view="historial"><div class="ico" data-ic="chart"></div><div class="qa-t"><b>Ver rendimiento</b><small>Historial por día</small></div><i data-ic="chevron"></i></button>
+            </div>
           </div>
         </div>
       </div>
@@ -1066,6 +1256,48 @@
   <script>
     const ENDPOINT = "https://script.google.com/macros/s/AKfycbx9nTiQEr_2AvK0bc3hIyJPao5PqtADFeRQKuhR6_XFV_rR0FG0UsZ5sexFrkyJIdJW/exec";
 
+    // ---------- Iconos: rellena cada <i data-ic="..."></i> con su SVG ----------
+    const ICONOS = {
+      home: 'M3 11.5 12 4l9 7.5M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9',
+      clock: 'M12 7v5l3.5 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+      users: 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75',
+      user: 'M20 21a8 8 0 1 0-16 0M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z',
+      gear: 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 15 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z',
+      headset: 'M3 12a9 9 0 0 1 18 0v5a2 2 0 0 1-2 2h-1v-7h3M3 17v-5h3v7H5a2 2 0 0 1-2-2Z',
+      chevron: 'm9 18 6-6-6-6',
+      pin: 'M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0ZM12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z',
+      calendar: 'M8 2v4M16 2v4M3 9h18M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z',
+      star: 'm12 2 3.1 6.6 7.2.9-5.3 5 1.4 7.2L12 18.3l-6.4 3.4 1.4-7.2-5.3-5 7.2-.9L12 2Z',
+      pause: 'M7 4h3v16H7zM14 4h3v16h-3z',
+      bolt: 'M13 2 3 14h7l-1 8 10-12h-7l1-8Z',
+      bulb: 'M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1v.2h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z',
+      chart: 'M3 3v18h18M7 15l4-4 3 3 5-6',
+      briefcase: 'M3 7h18v13H3zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2',
+      store: 'M3 9l1-5h16l1 5M4 9v11h16V9M4 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0',
+      search: 'M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16ZM21 21l-4.35-4.35',
+      download: 'M12 3v12m0 0-4-4m4 4 4-4M4 19h16',
+      check: 'm5 12 5 5L20 7',
+      edit: 'M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z',
+      lock: 'M3 11h18v10H3zM7 11V7a5 5 0 0 1 10 0v4',
+      shield: 'M12 2 4 5v6c0 5.5 3.4 9.7 8 11 4.6-1.3 8-5.5 8-11V5l-8-3Z',
+      file: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6ZM14 2v6h6',
+      help: 'M9.1 9a3 3 0 1 1 5.8 1c0 2-3 2-3 4M12 17.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+      card: 'M2 7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7ZM2 10h20',
+      megaphone: 'M3 11v2a2 2 0 0 0 2 2h1l3 5V9L6 4H5a2 2 0 0 0-2 2v2M9 9l9-5v16l-9-5',
+      arrow: 'M5 12h14M13 6l6 6-6 6',
+      userplus: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM19 8v6M22 11h-6'
+    };
+    function pintarIconos(root) {
+      (root || document).querySelectorAll("i[data-ic]").forEach(el => {
+        const d = ICONOS[el.dataset.ic];
+        if (!d || el.dataset.done) return;
+        el.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d.split(/(?=M)/).filter(Boolean).map(seg => `<path d="${seg.trim()}"/>`).join("")}</svg>`;
+        el.dataset.done = "1";
+      });
+    }
+
+    pintarIconos();
+
     let sesion = null; // { email, password, restaurante, meseros, direccion, logoUrl, portadaUrl }
 
     // ---------- Mostrar / ocultar contraseña ----------
@@ -1178,33 +1410,48 @@
       return `<img src="${escapeHtml(fotoUrl)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" /><span style="display:none;">${ini}</span>`;
     }
 
-    // ---------- Panel ----------
+    // ---------- Panel: helpers de datos reales ----------
+    function avatarHtml(fotoUrl, nombre, size) {
+      const ini = escapeHtml(iniciales(nombre));
+      const s = size || 36;
+      if (!fotoUrl) return `<span class="av" style="--s:${s}px">${ini}</span>`;
+      return `<span class="av" style="--s:${s}px"><img src="${escapeHtml(fotoUrl)}" onerror="this.parentElement.textContent='${ini}'" /></span>`;
+    }
+    function diasDesde(fecha) {
+      const f = new Date(fecha);
+      if (isNaN(f)) return Infinity;
+      return (Date.now() - f.getTime()) / 86400000;
+    }
+    function ultimaReseña(m) {
+      const revs = (m.reviews || []).slice().sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+      return revs[0] || null;
+    }
+    function estadoMesero(m) {
+      if (!m.total) return { key: "nuevo", label: "Sin reseñas", pill: "pill-gray" };
+      const ult = ultimaReseña(m);
+      if (ult && diasDesde(ult.fecha) <= 30) return { key: "activo", label: "Activo", pill: "pill-green" };
+      return { key: "inactivo", label: "Sin actividad", pill: "pill-amber" };
+    }
+    function todasLasReseñasEquipo(meseros) {
+      const todas = [];
+      meseros.forEach(m => (m.reviews || []).forEach(r => todas.push({ ...r, mesero: m.nombre, fotoUrl: m.fotoUrl })));
+      return todas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+    }
+    function hace(fecha) {
+      const f = new Date(fecha);
+      if (isNaN(f)) return "";
+      const mins = Math.round((Date.now() - f.getTime()) / 60000);
+      if (mins < 1) return "ahora";
+      if (mins < 60) return `hace ${mins} min`;
+      const horas = Math.round(mins / 60);
+      if (horas < 24) return `hace ${horas} h`;
+      const dias = Math.round(horas / 24);
+      if (dias < 7) return `hace ${dias} d`;
+      return f.toLocaleDateString("es-PE", { day: "numeric", month: "short" });
+    }
+
+    // ---------- Cabecera (sidebar + topbar + hero + admin-top) ----------
     function pintarCabeceraNegocio() {
-      const cover = document.getElementById("panelCover");
-      if (sesion.portadaUrl) {
-        cover.style.backgroundImage = `url('${sesion.portadaUrl}')`;
-        cover.classList.add("has-photo");
-      } else {
-        cover.style.backgroundImage = "";
-        cover.classList.remove("has-photo");
-      }
-
-      const logoEl = document.getElementById("panelLogo");
-      if (sesion.logoUrl) {
-        logoEl.src = sesion.logoUrl;
-        logoEl.classList.remove("hidden");
-      } else {
-        logoEl.classList.add("hidden");
-      }
-
-      const addressEl = document.getElementById("panelAddress");
-      if (sesion.direccion) {
-        document.getElementById("panelAddressText").textContent = sesion.direccion;
-        addressEl.classList.remove("hidden");
-      } else {
-        addressEl.classList.add("hidden");
-      }
-
       document.getElementById("sidebarRestaurante").textContent = sesion.restaurante || "Panel de gerente";
       const sidebarLogoEl = document.getElementById("sidebarLogo");
       sidebarLogoEl.src = sesion.logoUrl || "";
@@ -1213,80 +1460,192 @@
       const avatarUrl = sesion.fotoUrl || sesion.logoUrl || "";
       document.getElementById("topbarAvatar").src = avatarUrl;
       document.getElementById("topbarAvatar").style.visibility = avatarUrl ? "visible" : "hidden";
-      document.getElementById("topbarNombre").textContent = sesion.nombre || sesion.restaurante || "—";
+      document.getElementById("topbarNombre").textContent = sesion.nombre || "—";
 
-      // Tarjeta "Datos del restaurante" (vista Inicio)
-      document.getElementById("dataDireccion").textContent = sesion.direccion || "Sin registrar";
-      document.getElementById("dataLogo").textContent = sesion.logoUrl ? "Subido" : "Sin subir";
-      document.getElementById("dataPortada").textContent = sesion.portadaUrl ? "Subida" : "Sin subir";
+      const heroPhoto = document.getElementById("heroPhoto");
+      heroPhoto.style.backgroundImage = sesion.portadaUrl ? `url('${sesion.portadaUrl}')` : "";
+      document.getElementById("heroNombre").textContent = (sesion.nombre || "").split(" ")[0] || "—";
+      document.getElementById("heroUbicacion").textContent = [sesion.restaurante, sesion.direccion].filter(Boolean).join(" - ") || sesion.restaurante || "—";
+      document.getElementById("heroFecha").textContent = "Hoy, " + new Date().toLocaleDateString("es-PE", { day: "numeric", month: "short", year: "numeric" });
 
-      // Tarjeta "Administrador" (vista Inicio)
-      document.getElementById("adminCardFoto").src = avatarUrl;
-      document.getElementById("adminCardFoto").style.visibility = avatarUrl ? "visible" : "hidden";
-      document.getElementById("adminCardNombre").textContent = sesion.nombre || "—";
-
-      // Vista Cuenta
-      document.getElementById("cuentaNombre").textContent = sesion.nombre || "—";
-      document.getElementById("cuentaTelefono").textContent = sesion.telefono || "—";
-      document.getElementById("cuentaEmail").textContent = sesion.email || "—";
-      document.getElementById("cuentaDni").textContent = sesion.dni || "—";
-      document.getElementById("cuentaRestNombre").textContent = sesion.restaurante || "—";
-      document.getElementById("cuentaRestDireccion").textContent = sesion.direccion || "Sin registrar";
-
-      // Metadatos de las tool-cards de Administrar
-      const negocioCompleto = sesion.direccion && sesion.logoUrl && sesion.portadaUrl;
-      document.getElementById("toolNegocioMeta").textContent = negocioCompleto ? "Completo" : "Falta completar";
+      document.getElementById("admLogo").src = sesion.logoUrl || sesion.portadaUrl || "";
+      document.getElementById("admNombre").textContent = sesion.restaurante || "—";
+      document.getElementById("admDir").textContent = sesion.direccion || "Sin dirección registrada";
     }
 
-    // Tabla de personal (vista Historial): code, nombre, rating.
-    function renderTablaPersonal(meseros, targetId) {
-      const body = document.getElementById(targetId || "personalTableBody");
-      if (!body) return;
-      if (!meseros.length) {
-        body.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--ink-soft); padding:16px 0;">Todavía no tienes meseros registrados.</td></tr>';
-        return;
-      }
-      body.innerHTML = meseros.map(m => `
-        <tr>
-          <td class="pt-code">${escapeHtml(m.codigo || "")}</td>
-          <td>${escapeHtml(m.nombre || "")}</td>
-          <td class="pt-rating">${m.total ? "★" + m.promedio.toFixed(1) : "—"}</td>
-        </tr>
-      `).join("");
+    // ---------- Vista Inicio ----------
+    function renderInicio(meseros) {
+      const totalResenas = meseros.reduce((a, m) => a + (m.total || 0), 0);
+      const promedio = totalResenas
+        ? Math.round((meseros.reduce((a, m) => a + (m.promedio || 0) * (m.total || 0), 0) / totalResenas) * 10) / 10
+        : 0;
+      document.getElementById("heroRating").textContent = totalResenas ? promedio.toFixed(1) : "—";
+
+      const activos = meseros.filter(m => estadoMesero(m).key === "activo").length;
+      const sinActividad = meseros.filter(m => estadoMesero(m).key === "inactivo").length;
+
+      document.getElementById("stTotal").textContent = meseros.length;
+      document.getElementById("stTotalSub").textContent = meseros.length ? `${meseros.length} en tu equipo` : "Agrega tu primer mesero";
+      document.getElementById("stActivos").textContent = activos;
+      document.getElementById("stActivosSub").textContent = meseros.length ? Math.round((activos / meseros.length) * 100) + "% del equipo" : "—";
+      document.getElementById("stInactivos").textContent = sinActividad;
+      document.getElementById("stInactivosSub").textContent = "sin reseñas en 30 días";
+      document.getElementById("stRating").textContent = totalResenas ? promedio.toFixed(1) : "—";
+      document.getElementById("stRatingSub").textContent = totalResenas ? `${totalResenas} reseña${totalResenas === 1 ? "" : "s"} en total` : "Sin reseñas todavía";
+
+      const todas = todasLasReseñasEquipo(meseros).slice(0, 6);
+      const cont = document.getElementById("actividadReciente");
+      cont.innerHTML = todas.length
+        ? todas.map(r => `
+          <button type="button" class="act-row" data-goto-view="historial">
+            ${avatarHtml(r.fotoUrl, r.mesero, 36)}
+            <div class="ar-t"><b>${escapeHtml(r.mesero)}</b><small>Recibió una reseña de ${r.estrellas}★${r.comentario ? " — " + escapeHtml(r.comentario) : ""}</small></div>
+            <time>${hace(r.fecha)}</time>
+          </button>`).join("")
+        : '<div class="empty">Todavía no hay actividad — comparte los códigos de tus meseros.</div>';
+      pintarIconos(cont);
+      document.querySelectorAll('#view-inicio [data-goto-view]').forEach(b => b.addEventListener("click", () => cambiarVista(b.dataset.gotoView)));
     }
 
-    // Tabla completa de personal (vista Personal): foto, código, teléfono, reseñas, rating.
-    let meserosPersonal = [];
-    function renderPersonalCompleto(meseros) {
-      meserosPersonal = meseros;
-      const body = document.getElementById("personalFullTableBody");
+    // ---------- Acciones genéricas (data-action) ----------
+    document.querySelectorAll("[data-action]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const a = btn.dataset.action;
+        if (a === "editar-negocio") document.getElementById("toggleEditarNegocioBtn").click();
+        if (a === "publicar-vacante") document.getElementById("togglePublicarVacanteBtn").click();
+        if (a === "mis-vacantes") document.getElementById("toggleMisVacantesBtn").click();
+      });
+    });
+
+    // ---------- Vista Personal ----------
+    let personalState = { pagina: 1, orden: "nombre", dir: 1 };
+    function renderPersonal(meseros) {
+      const activos = meseros.filter(m => estadoMesero(m).key === "activo").length;
+      const sinActividad = meseros.filter(m => estadoMesero(m).key === "inactivo").length;
+      const nuevos = meseros.filter(m => estadoMesero(m).key === "nuevo").length;
+      document.getElementById("pTotal").textContent = meseros.length;
+      document.getElementById("pTotalSub").textContent = meseros.length ? `${meseros.length} en tu equipo` : "—";
+      document.getElementById("pActivos").textContent = activos;
+      document.getElementById("pActivosSub").textContent = meseros.length ? Math.round((activos / meseros.length) * 100) + "% del equipo" : "—";
+      document.getElementById("pInactivos").textContent = sinActividad;
+      document.getElementById("pInactivosSub").textContent = meseros.length ? Math.round((sinActividad / meseros.length) * 100) + "% del equipo" : "—";
+      document.getElementById("pNuevos").textContent = nuevos;
+      document.getElementById("pNuevosSub").textContent = "todavía sin calificar";
+      document.getElementById("pRolMesero").textContent = meseros.length;
+
+      const cont = document.getElementById("personalActividad");
+      const recientes = todasLasReseñasEquipo(meseros).slice(0, 4);
+      cont.innerHTML = recientes.length
+        ? recientes.map(r => `<div class="mini-act"><span class="bullet"></span><div><b>${escapeHtml(r.mesero)}</b> recibió ${r.estrellas}★<small>${hace(r.fecha)}</small></div></div>`).join("")
+        : '<div class="empty">Sin actividad reciente.</div>';
+
+      dibujarTablaPersonal(meseros);
+    }
+
+    function dibujarTablaPersonal(meserosBase) {
       const q = (document.getElementById("buscarPersonal").value || "").trim().toLowerCase();
-      const filtrados = meseros.filter(m => !q || (m.nombre || "").toLowerCase().includes(q) || (m.codigo || "").toLowerCase().includes(q));
+      const estadoF = document.getElementById("filtroEstado").value;
+      let filtrados = meserosBase.filter(m => {
+        if (q && !(m.nombre || "").toLowerCase().includes(q) && !(m.codigo || "").toLowerCase().includes(q)) return false;
+        if (estadoF && estadoMesero(m).key !== estadoF) return false;
+        return true;
+      });
+      filtrados.sort((a, b) => {
+        let va, vb;
+        if (personalState.orden === "ultima") {
+          const ua = ultimaReseña(a), ub = ultimaReseña(b);
+          va = ua ? new Date(ua.fecha).getTime() : 0; vb = ub ? new Date(ub.fecha).getTime() : 0;
+        } else { va = (a.nombre || "").toLowerCase(); vb = (b.nombre || "").toLowerCase(); }
+        return va > vb ? personalState.dir : va < vb ? -personalState.dir : 0;
+      });
 
-      if (!filtrados.length) {
-        body.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--ink-soft); padding:20px 0;">No encontramos meseros con ese criterio.</td></tr>';
-        return;
-      }
-      body.innerHTML = filtrados.map(m => `
-        <tr>
-          <td>
-            <div class="pft-persona">
-              <img src="${escapeHtml(m.fotoUrl || "")}" onerror="this.style.visibility='hidden'" />
-              <div><div class="pft-name">${escapeHtml(m.nombre || "")}</div><div class="pft-code">${escapeHtml(m.codigo || "")}</div></div>
-            </div>
-          </td>
-          <td>${escapeHtml(m.telefono || "—")}</td>
-          <td>${m.total || 0}</td>
-          <td class="pt-rating">${m.total ? "★" + m.promedio.toFixed(1) : "—"}</td>
-        </tr>
-      `).join("");
+      const PAGE = 7;
+      const totalPag = Math.max(1, Math.ceil(filtrados.length / PAGE));
+      if (personalState.pagina > totalPag) personalState.pagina = totalPag;
+      const desde = (personalState.pagina - 1) * PAGE;
+      const pagina = filtrados.slice(desde, desde + PAGE);
+
+      const body = document.getElementById("personalBody");
+      body.innerHTML = pagina.length ? pagina.map(m => {
+        const est = estadoMesero(m);
+        const ult = ultimaReseña(m);
+        return `
+        <tr data-sel data-codigo="${escapeHtml(m.codigo || "")}">
+          <td><div class="pcell">${avatarHtml(m.fotoUrl, m.nombre, 36)}<div><b>${escapeHtml(m.nombre || "")}</b><small>${escapeHtml(m.codigo || "")}${m.telefono ? " · " + escapeHtml(m.telefono) : ""}</small></div></div></td>
+          <td><span class="pill pill-blue">Mesero</span></td>
+          <td><span class="pill ${est.pill}"><span class="dot"></span>${est.label}</span></td>
+          <td>${ult ? hace(ult.fecha) : "Nunca"}</td>
+          <td class="ta-r"><button type="button" class="ico-btn" data-ver="${escapeHtml(m.codigo || "")}">›</button></td>
+        </tr>`;
+      }).join("") : '<tr><td colspan="5" class="empty">No encontramos meseros con ese criterio.</td></tr>';
+
+      document.getElementById("personalCount").textContent = filtrados.length
+        ? `Mostrando ${Math.min(desde + 1, filtrados.length)}–${Math.min(desde + PAGE, filtrados.length)} de ${filtrados.length} miembros`
+        : "Sin resultados";
+
+      const pager = document.getElementById("personalPager");
+      let pagerHtml = `<button type="button" data-pg="${personalState.pagina - 1}" ${personalState.pagina <= 1 ? "disabled" : ""}>‹</button>`;
+      for (let i = 1; i <= totalPag; i++) pagerHtml += `<button type="button" data-pg="${i}" class="${i === personalState.pagina ? "on" : ""}">${i}</button>`;
+      pagerHtml += `<button type="button" data-pg="${personalState.pagina + 1}" ${personalState.pagina >= totalPag ? "disabled" : ""}>›</button>`;
+      pager.innerHTML = pagerHtml;
+      pager.querySelectorAll("button[data-pg]").forEach(b => b.addEventListener("click", () => { personalState.pagina = Number(b.dataset.pg); dibujarTablaPersonal(meserosBase); }));
+
+      body.querySelectorAll("tr[data-sel]").forEach(tr => {
+        tr.addEventListener("click", (e) => {
+          if (e.target.closest("button")) return;
+          irAHistorialDeMesero(tr.dataset.codigo);
+        });
+      });
+      body.querySelectorAll("[data-ver]").forEach(b => b.addEventListener("click", (e) => { e.stopPropagation(); irAHistorialDeMesero(b.dataset.ver); }));
     }
-    document.getElementById("buscarPersonal").addEventListener("input", () => renderPersonalCompleto(meserosPersonal));
+    ["buscarPersonal", "filtroEstado", "filtroRol"].forEach(id => {
+      document.getElementById(id).addEventListener("input", () => { personalState.pagina = 1; dibujarTablaPersonal(meserosRendimiento); });
+    });
+    document.querySelectorAll(".sortable").forEach(th => th.addEventListener("click", () => {
+      const campo = th.dataset.sort;
+      personalState.dir = personalState.orden === campo ? -personalState.dir : 1;
+      personalState.orden = campo;
+      dibujarTablaPersonal(meserosRendimiento);
+    }));
+    function irAHistorialDeMesero(codigo) {
+      cambiarVista("historial");
+      const sel = document.getElementById("histMesero");
+      if (sel) { sel.value = codigo; renderHistorial(); }
+    }
 
-    // Tarjeta "Anuncios" (vista Inicio): trae las vacantes publicadas y sus vistas,
-    // y de paso llena el contador de "Vacantes activas" de Datos Estadísticos.
-    async function cargarAnuncios() {
-      const cont = document.getElementById("anunciosList");
+    // ---------- Vista Cuenta ----------
+    function renderCuenta() {
+      const meseros = meserosRendimiento;
+      const totalResenas = meseros.reduce((a, m) => a + (m.total || 0), 0);
+      document.getElementById("cuentaResumen").textContent = `${sesion.restaurante || "Tu restaurante"} · administrado por ${sesion.nombre || "—"}`;
+      document.getElementById("cuentaChk1").textContent = `${meseros.length} miembro${meseros.length === 1 ? "" : "s"} en tu equipo`;
+      document.getElementById("cuentaChk2").textContent = "Contraseña guardada de forma cifrada";
+      document.getElementById("cuentaChk3").textContent = `${totalResenas} reseña${totalResenas === 1 ? "" : "s"} recibidas en total`;
+
+      const infoItems = [
+        ["user", "Nombre", sesion.nombre],
+        ["phone" in ICONOS ? "phone" : "user", "Teléfono", sesion.telefono],
+        ["file", "DNI", sesion.dni],
+        ["store", "Correo", sesion.email],
+        ["store", "Restaurante", sesion.restaurante],
+        ["pin", "Dirección", sesion.direccion || "Sin registrar"],
+      ];
+      document.getElementById("cuentaInfo").innerHTML = infoItems.map(([ic, label, val]) =>
+        `<div class="info-it"><div class="ico" data-ic="${ic}"></div><div><small>${label}</small><b>${escapeHtml(val || "—")}</b></div></div>`).join("");
+
+      const negocioItems = [
+        [sesion.logoUrl, "Logo", sesion.logoUrl ? "Subido" : "Sin subir"],
+        [sesion.portadaUrl, "Portada", sesion.portadaUrl ? "Subida" : "Sin subir"],
+        [null, "Dirección", sesion.direccion || "Sin registrar"],
+      ];
+      document.getElementById("cuentaNegocio").innerHTML = negocioItems.map(([img, label, val]) =>
+        `<div class="pn-it">${img ? `<img src="${escapeHtml(img)}" />` : '<div class="ico" data-ic="store"></div>'}<div><b>${label}</b><small>${escapeHtml(val)}</small></div></div>`).join("");
+
+      cargarVacantesEnCuenta();
+      pintarIconos(document.getElementById("view-cuenta"));
+    }
+    async function cargarVacantesEnCuenta() {
+      const cont = document.getElementById("cuentaVacantes");
       try {
         const res = await fetch(ENDPOINT, {
           method: "POST",
@@ -1295,31 +1654,219 @@
         });
         const data = await res.json();
         const vacantes = (data.ok && data.vacantes) || [];
-        document.getElementById("statVacantesActivas").textContent = vacantes.length;
-        document.getElementById("toolVacantesMeta").textContent = vacantes.length ? `${vacantes.length} publicada${vacantes.length === 1 ? "" : "s"}` : "Ninguna publicada";
-        if (!vacantes.length) {
-          cont.innerHTML = '<div class="empty-state">Todavía no publicaste ninguna vacante.</div>';
-          return;
-        }
-        cont.innerHTML = vacantes.slice(0, 3).map(v => `
-          <div class="anuncio-row">
-            <h4>${escapeHtml(v.puesto || "")}</h4>
-            <p>${v.vistas || 0} vista${v.vistas === 1 ? "" : "s"} · ${(v.postulaciones || []).length} interesado${(v.postulaciones || []).length === 1 ? "" : "s"}</p>
-          </div>
-        `).join("");
-      } catch (err) {
-        cont.innerHTML = '<div class="empty-state">No se pudo cargar. Intenta de nuevo.</div>';
-      }
+        cont.innerHTML = vacantes.length
+          ? vacantes.slice(0, 4).map(v => `<button type="button" class="vac-row" data-action="mis-vacantes"><div class="vr-t"><b>${escapeHtml(v.puesto || "")}</b><small>${v.vistas || 0} vistas · ${(v.postulaciones || []).length} interesados</small></div><i data-ic="chevron"></i></button>`).join("")
+          : '<div class="empty">Todavía no publicaste ninguna vacante.</div>';
+        cont.querySelectorAll("[data-action]").forEach(b => b.addEventListener("click", () => document.getElementById("toggleMisVacantesBtn").click()));
+        pintarIconos(cont);
+      } catch (e) { cont.innerHTML = '<div class="empty">No se pudo cargar.</div>'; }
     }
 
-    // Anillo de "Rating total" — circunferencia r=34 → perímetro ≈ 213.6
-    function pintarAnilloRating(promedio) {
-      const circ = 2 * Math.PI * 34;
-      const pct = Math.max(0, Math.min(1, promedio / 5));
-      const ring = document.getElementById("ratingRingFg");
-      ring.style.strokeDasharray = circ.toFixed(1);
-      ring.style.strokeDashoffset = (circ * (1 - pct)).toFixed(1);
+    // ---------- Vista Administrar (hub) ----------
+    async function renderAdministrar(meseros) {
+      const totalResenas = meseros.reduce((a, m) => a + (m.total || 0), 0);
+      const promedio = totalResenas
+        ? Math.round((meseros.reduce((a, m) => a + (m.promedio || 0) * (m.total || 0), 0) / totalResenas) * 10) / 10
+        : 0;
+      document.getElementById("admPersonal").textContent = meseros.length;
+      document.getElementById("admPersonalSub").textContent = "meseros registrados";
+      document.getElementById("admTarjetas").textContent = meseros.length;
+      document.getElementById("admRating").textContent = totalResenas ? promedio.toFixed(1) : "—";
+      document.getElementById("admRatingSub").textContent = totalResenas ? `de ${totalResenas} reseñas` : "sin reseñas aún";
+
+      document.getElementById("toolPersonal").textContent = `${meseros.length} trabajador${meseros.length === 1 ? "" : "es"}`;
+      document.getElementById("toolTarjetas").textContent = `${meseros.length} con código`;
+      document.getElementById("toolNegocio").textContent = (sesion.direccion && sesion.logoUrl && sesion.portadaUrl) ? "Completo al 100%" : "Falta completar";
+      document.getElementById("toolHistorial").textContent = totalResenas ? `${totalResenas} reseñas registradas` : "Sin datos aún";
+
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "listar_postulaciones_vacantes", email: sesion.email, password: sesion.password })
+        });
+        const data = await res.json();
+        const vacantes = (data.ok && data.vacantes) || [];
+        document.getElementById("admVacantes").textContent = vacantes.length;
+        document.getElementById("admVacantesSub").textContent = vacantes.length ? "publicadas" : "ninguna publicada";
+        document.getElementById("toolVacantes").textContent = vacantes.length ? `${vacantes.length} publicada${vacantes.length === 1 ? "" : "s"}` : "Ninguna publicada";
+      } catch (e) {}
     }
+
+    // ---------- Vista Historial: gráfico por hora, tabla del equipo, perfil, detalle ----------
+    const PALETA_LINEAS = ["#2E6CF6", "#F5A524", "#1FA971", "#C4452E", "#8B5CF6", "#0EA5E9"];
+    let histMeseroSel = null;
+
+    function inicializarHistorial(meseros) {
+      const sel = document.getElementById("histMesero");
+      sel.innerHTML = '<option value="">Todos los trabajadores</option>' + meseros.map(m => `<option value="${escapeHtml(m.codigo)}">${escapeHtml(m.nombre)}</option>`).join("");
+      document.getElementById("histFecha").value = formatFechaLocal(new Date());
+      document.getElementById("histFecha").max = formatFechaLocal(new Date());
+      renderHistorial();
+    }
+    ["histFecha", "histMesero", "histBuscar"].forEach(id => {
+      const evt = id === "histBuscar" ? "input" : "change";
+      document.getElementById(id).addEventListener(evt, renderHistorial);
+    });
+    document.getElementById("histVerTodas").addEventListener("click", () => { document.getElementById("histMesero").value = ""; renderHistorial(); });
+    document.getElementById("histExportar").addEventListener("click", () => {
+      const fechaStr = document.getElementById("histFecha").value;
+      const filas = [["Mesero", "Hora", "Estrellas", "Comentario"]];
+      todasLasReseñasEquipo(meserosRendimiento).filter(r => formatFechaLocal(new Date(r.fecha)) === fechaStr).forEach(r => {
+        filas.push([r.mesero, new Date(r.fecha).toLocaleTimeString("es-PE"), r.estrellas, (r.comentario || "").replace(/\n/g, " ")]);
+      });
+      const csv = filas.map(f => f.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `rendimiento-${fechaStr}.csv`;
+      a.click();
+    });
+
+    function renderHistorial() {
+      const fechaStr = document.getElementById("histFecha").value || formatFechaLocal(new Date());
+      const meseroFiltro = document.getElementById("histMesero").value;
+      const q = (document.getElementById("histBuscar").value || "").trim().toLowerCase();
+      document.getElementById("histFechaTxt").textContent = new Date(fechaStr + "T00:00:00").toLocaleDateString("es-PE", { day: "numeric", month: "short", year: "numeric" });
+
+      let meseros = meserosRendimiento;
+      if (meseroFiltro) meseros = meseros.filter(m => m.codigo === meseroFiltro);
+      if (q) meseros = meseros.filter(m => (m.nombre || "").toLowerCase().includes(q));
+
+      // -- gráfico por hora --
+      const W = 640, H = 220, PAD = 30;
+      const series = meseros.map(m => {
+        const porHora = Array.from({ length: 24 }, () => ({ suma: 0, total: 0 }));
+        (m.reviews || []).forEach(r => {
+          const f = new Date(r.fecha);
+          if (isNaN(f) || formatFechaLocal(f) !== fechaStr) return;
+          const h = porHora[f.getHours()];
+          h.suma += r.estrellas || 0; h.total += 1;
+        });
+        const puntos = [];
+        porHora.forEach((h, hora) => { if (h.total) puntos.push({ hora, valor: h.suma / h.total }); });
+        return { nombre: m.nombre, puntos };
+      }).filter(s => s.puntos.length);
+
+      const cont = document.getElementById("histChart");
+      const leyenda = document.getElementById("histLegend");
+      if (!series.length) {
+        cont.innerHTML = '<div class="empty">Nadie tiene reseñas ese día con ese filtro.</div>';
+        leyenda.innerHTML = "";
+      } else {
+        const horas = [...new Set(series.flatMap(s => s.puntos.map(p => p.hora)))].sort((a, b) => a - b);
+        const hMin = horas[0], hMax = horas[horas.length - 1] || hMin + 1;
+        const x = h => PAD + ((h - hMin) / Math.max(1, hMax - hMin)) * (W - PAD * 2);
+        const y = v => H - PAD - ((v - 3) / 2) * (H - PAD * 2);
+        const lineas = series.map((s, i) => {
+          const color = PALETA_LINEAS[i % PALETA_LINEAS.length];
+          const pts = s.puntos.map(p => `${x(p.hora).toFixed(1)},${Math.max(PAD, Math.min(H - PAD, y(p.valor))).toFixed(1)}`).join(" ");
+          const circles = s.puntos.map(p => `<circle cx="${x(p.hora).toFixed(1)}" cy="${Math.max(PAD, Math.min(H - PAD, y(p.valor))).toFixed(1)}" r="3" fill="${color}"/>`).join("");
+          return `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>${circles}`;
+        }).join("");
+        const ejeX = horas.filter((h, i) => i % Math.ceil(horas.length / 10 || 1) === 0)
+          .map(h => `<text x="${x(h).toFixed(1)}" y="${H - 8}" font-size="10" fill="#8A90A0" text-anchor="middle">${String(h).padStart(2, "0")}:00</text>`).join("");
+        cont.innerHTML = `<svg viewBox="0 0 ${W} ${H}" style="width:100%; height:auto;">
+          <line x1="${PAD}" y1="${H - PAD}" x2="${W - PAD}" y2="${H - PAD}" stroke="var(--line)" stroke-width="1"/>
+          ${lineas}${ejeX}
+        </svg>`;
+        leyenda.innerHTML = series.map((s, i) => `<span><i style="background:${PALETA_LINEAS[i % PALETA_LINEAS.length]};"></i>${escapeHtml(s.nombre)}</span>`).join("");
+      }
+
+      // -- tabla del equipo ese día --
+      const filasTabla = meseros.map(m => {
+        const reseñasDia = (m.reviews || []).filter(r => formatFechaLocal(new Date(r.fecha)) === fechaStr);
+        if (!reseñasDia.length) return null;
+        const avgDia = reseñasDia.reduce((a, r) => a + r.estrellas, 0) / reseñasDia.length;
+        const otras = (m.reviews || []).filter(r => formatFechaLocal(new Date(r.fecha)) !== fechaStr);
+        const avgOtras = otras.length ? otras.reduce((a, r) => a + r.estrellas, 0) / otras.length : avgDia;
+        const tendPct = avgOtras ? Math.round(((avgDia - avgOtras) / avgOtras) * 100) : 0;
+        const ultima = reseñasDia.slice().sort((a, b) => new Date(b.fecha) - new Date(a.fecha))[0];
+        return { m, servicios: reseñasDia.length, avgDia, tendPct, ultima };
+      }).filter(Boolean).sort((a, b) => b.servicios - a.servicios);
+
+      document.getElementById("histTabla").innerHTML = filasTabla.length ? filasTabla.map(f => `
+        <tr data-sel data-codigo="${escapeHtml(f.m.codigo)}">
+          <td><div class="pcell">${avatarHtml(f.m.fotoUrl, f.m.nombre, 32)}<b>${escapeHtml(f.m.nombre)}</b></div></td>
+          <td>${f.servicios}</td>
+          <td><span style="color:var(--accent); font-weight:700;">★ ${f.avgDia.toFixed(1)}</span></td>
+          <td class="${f.tendPct > 0 ? "up" : f.tendPct < 0 ? "down" : "flat"}">${f.tendPct === 0 ? "—" : (f.tendPct > 0 ? "↑ " : "↓ ") + Math.abs(f.tendPct) + "%"}</td>
+          <td>${new Date(f.ultima.fecha).toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" })}</td>
+          <td class="ta-r">›</td>
+        </tr>`).join("") : `<tr><td colspan="6" class="empty">Nadie tiene reseñas ese día.</td></tr>`;
+      document.getElementById("histTabla").querySelectorAll("tr[data-sel]").forEach(tr => tr.addEventListener("click", () => {
+        histMeseroSel = tr.dataset.codigo; pintarPerfilHistorial(fechaStr);
+      }));
+
+      // -- detalle del día --
+      const todasDia = meseros.flatMap(m => (m.reviews || [])
+        .filter(r => formatFechaLocal(new Date(r.fecha)) === fechaStr)
+        .map(r => ({ ...r, mesero: m.nombre })))
+        .sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+      document.getElementById("histDetalle").innerHTML = todasDia.length ? todasDia.slice(0, 8).map(r => `
+        <div class="det-row"><time>${new Date(r.fecha).toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" })}</time><span class="stars">${"★".repeat(r.estrellas)}${"☆".repeat(5 - r.estrellas)}</span><q>${r.comentario ? escapeHtml(r.comentario) : escapeHtml(r.mesero)}</q></div>
+      `).join("") : '<div class="empty">Sin reseñas ese día.</div>';
+
+      if (!histMeseroSel && filasTabla[0]) histMeseroSel = filasTabla[0].m.codigo;
+      pintarPerfilHistorial(fechaStr);
+    }
+
+    function pintarPerfilHistorial(fechaStr) {
+      const cont = document.getElementById("histPerfil");
+      const m = meserosRendimiento.find(x => x.codigo === histMeseroSel) || meserosRendimiento[0];
+      if (!m) { cont.innerHTML = '<div class="empty">Agrega meseros para ver su detalle.</div>'; return; }
+      const reseñasDia = (m.reviews || []).filter(r => formatFechaLocal(new Date(r.fecha)) === fechaStr).sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+      const primero = reseñasDia[0], ultimo = reseñasDia[reseñasDia.length - 1];
+      const avgDia = reseñasDia.length ? (reseñasDia.reduce((a, r) => a + r.estrellas, 0) / reseñasDia.length) : null;
+      const otras = (m.reviews || []).filter(r => formatFechaLocal(new Date(r.fecha)) !== fechaStr);
+      const avgOtras = otras.length ? otras.reduce((a, r) => a + r.estrellas, 0) / otras.length : null;
+      const tip = avgDia == null ? "Todavía no tiene reseñas ese día."
+        : (avgOtras == null ? "Es su primer día con reseñas registradas."
+          : `Su rating de ese día es ${(avgDia - avgOtras >= 0 ? "+" : "")}${(avgDia - avgOtras).toFixed(1)} puntos ${avgDia >= avgOtras ? "mayor" : "menor"} que su promedio habitual.`);
+      cont.innerHTML = `
+        <div class="pf-top">${avatarHtml(m.fotoUrl, m.nombre, 58)}<div><h3>${escapeHtml(m.nombre)}</h3><small>Mesero</small>
+          <div class="pf-rate"><span class="st">★</span><b>${m.total ? m.promedio.toFixed(1) : "—"}</b><span>vs. tu promedio general</span></div></div></div>
+        <div class="pf-stats">
+          <div><b>${reseñasDia.length}</b><small>Reseñas</small></div>
+          <div><b>${primero ? new Date(primero.fecha).toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" }) : "—"}</b><small>Primer servicio</small></div>
+          <div><b>${ultimo ? new Date(ultimo.fecha).toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" }) : "—"}</b><small>Último servicio</small></div>
+        </div>
+        <div class="pf-tip"><div class="ico" data-ic="bulb"></div><div><b>${avgDia != null ? "Buen desempeño" : "Sin datos"}</b><p>${tip}</p></div></div>
+      `;
+      pintarIconos(cont);
+    }
+
+    // ---------- Navegación del panel: sidebar + vistas ----------
+    function cambiarVista(nombre) {
+      document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
+      const vista = document.getElementById("view-" + nombre);
+      if (vista) vista.classList.remove("hidden");
+      document.querySelectorAll(".sidebar-link[data-view]").forEach(link => link.classList.toggle("active", link.dataset.view === nombre));
+      if (nombre === "historial") renderHistorial();
+      if (nombre === "cuenta") renderCuenta();
+      if (nombre === "administrar") renderAdministrar(meserosRendimiento);
+      cerrarSidebar();
+      window.scrollTo(0, 0);
+    }
+    function abrirSidebar() { document.getElementById("sidebar").classList.add("open"); document.getElementById("sidebarOverlay").classList.add("show"); }
+    function cerrarSidebar() { document.getElementById("sidebar").classList.remove("open"); document.getElementById("sidebarOverlay").classList.remove("show"); }
+
+    document.getElementById("hamburgerBtn").addEventListener("click", abrirSidebar);
+    document.getElementById("sidebarOverlay").addEventListener("click", cerrarSidebar);
+    document.getElementById("topbarSearch").addEventListener("input", (e) => {
+      const q = e.target.value.trim();
+      if (q) { cambiarVista("personal"); document.getElementById("buscarPersonal").value = q; personalState.pagina = 1; dibujarTablaPersonal(meserosRendimiento); }
+    });
+    document.querySelectorAll(".sidebar-link[data-view]").forEach(link => link.addEventListener("click", () => cambiarVista(link.dataset.view)));
+    document.querySelectorAll("[data-goto-view]").forEach(btn => btn.addEventListener("click", () => cambiarVista(btn.dataset.gotoView)));
+
+    // ---------- formatFechaLocal: usado por Historial ----------
+    function formatFechaLocal(d) {
+      const y = d.getFullYear(), m = String(d.getMonth() + 1).padStart(2, "0"), day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    }
+
+    let meserosRendimiento = [];
 
     function mostrarPanel() {
       document.getElementById("authCard").classList.add("hidden");
@@ -1332,387 +1879,14 @@
       document.getElementById("sidebar").classList.remove("hidden");
       document.getElementById("topbar").classList.remove("hidden");
 
-      document.getElementById("panelRestaurante").innerHTML = `${escapeHtml(sesion.restaurante || "")} <span class="rc-status">Activo</span>`;
+      meserosRendimiento = sesion.meseros || [];
       pintarCabeceraNegocio();
-
-      const meseros = sesion.meseros || [];
-      const totalResenas = meseros.reduce((acc, m) => acc + (m.total || 0), 0);
-      const promedioGeneral = meseros.length
-        ? Math.round((meseros.reduce((acc, m) => acc + (m.promedio || 0) * (m.total || 0), 0) / (totalResenas || 1)) * 10) / 10
-        : 0;
-
-      document.getElementById("panelPromedio").textContent = totalResenas ? promedioGeneral.toFixed(1) : "—";
-      pintarAnilloRating(promedioGeneral);
-
-      const inicioMes = new Date(); inicioMes.setDate(1); inicioMes.setHours(0, 0, 0, 0);
-      const resenasEsteMes = meseros.reduce((acc, m) => acc + (m.reviews || []).filter(r => new Date(r.fecha) >= inicioMes).length, 0);
-      document.getElementById("statTotalResenas").textContent = totalResenas;
-      document.getElementById("statPersonalActivo").textContent = meseros.length;
-      document.getElementById("statResenasMes").textContent = resenasEsteMes;
-
-      const motTitulo = document.getElementById("motivationalTitle");
-      const motTexto = document.getElementById("motivationalText");
-      if (!totalResenas) {
-        motTitulo.textContent = "Vamos arrancando";
-        motTexto.textContent = "Todavía no tienes reseñas — comparte los códigos de tus meseros para que empiecen a llegar.";
-      } else if (promedioGeneral >= 4.5) {
-        motTitulo.textContent = "¡Excelente trabajo!";
-        motTexto.textContent = "Tu equipo mantiene un nivel de servicio sobresaliente.";
-      } else if (promedioGeneral >= 3.5) {
-        motTitulo.textContent = "¡Buen trabajo!";
-        motTexto.textContent = "Tu equipo mantiene un buen nivel de satisfacción.";
-      } else {
-        motTitulo.textContent = "Hay espacio para mejorar";
-        motTexto.textContent = "Revisa el historial por mesero para ver dónde reforzar al equipo.";
-      }
-
-      renderGraficoMeseros(meseros);
-      renderMeseros(meseros);
-      const meserosOrdenados = [...meseros].sort((a, b) => (b.promedio || 0) - (a.promedio || 0));
-      renderTablaPersonal(meserosOrdenados, "personalTableBody");
-      renderTablaPersonal(meserosOrdenados.slice(0, 5), "personalMiniTableBody");
-      renderPersonalCompleto(meserosOrdenados);
-      document.getElementById("toolPersonalMeta").textContent = `${meseros.length} mesero${meseros.length === 1 ? "" : "s"}`;
-      inicializarRendimientoDiario(meseros);
-      cargarAnuncios();
+      renderInicio(meserosRendimiento);
+      renderPersonal(meserosRendimiento);
+      inicializarHistorial(meserosRendimiento);
+      pintarIconos();
       cambiarVista("inicio");
     }
-
-    // ---------- Navegación del panel: sidebar + atajos ----------
-    function cambiarVista(nombre) {
-      document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
-      const vista = document.getElementById("view-" + nombre);
-      if (vista) vista.classList.remove("hidden");
-
-      document.querySelectorAll(".sidebar-link[data-view]").forEach(link => {
-        link.classList.toggle("active", link.dataset.view === nombre);
-      });
-
-      cerrarSidebar();
-    }
-
-    function abrirSidebar() {
-      document.getElementById("sidebar").classList.add("open");
-      document.getElementById("sidebarOverlay").classList.add("show");
-    }
-    function cerrarSidebar() {
-      document.getElementById("sidebar").classList.remove("open");
-      document.getElementById("sidebarOverlay").classList.remove("show");
-    }
-
-    document.getElementById("hamburgerBtn").addEventListener("click", abrirSidebar);
-
-    // Buscador de la topbar: filtra la tabla de Personal (vista Historial) por nombre o código.
-    document.getElementById("topbarSearch").addEventListener("input", (e) => {
-      const q = e.target.value.trim().toLowerCase();
-      document.querySelectorAll("#personalTableBody tr").forEach(tr => {
-        tr.style.display = !q || tr.textContent.toLowerCase().includes(q) ? "" : "none";
-      });
-      if (q) cambiarVista("historial");
-    });
-    document.getElementById("sidebarOverlay").addEventListener("click", cerrarSidebar);
-
-    document.querySelectorAll(".sidebar-link[data-view]").forEach(link => {
-      link.addEventListener("click", () => cambiarVista(link.dataset.view));
-    });
-    document.querySelectorAll("[data-goto-view]").forEach(btn => {
-      btn.addEventListener("click", () => cambiarVista(btn.dataset.gotoView));
-    });
-
-    // Los botones duplicados de la vista "Administrar" disparan el mismo
-    // flujo que los originales (evita repetir toda la lógica de cada uno).
-    document.getElementById("toggleEditarNegocioBtn2").addEventListener("click", () => document.getElementById("toggleEditarNegocioBtn").click());
-    document.getElementById("toggleEditarNegocioBtn3").addEventListener("click", () => document.getElementById("toggleEditarNegocioBtn").click());
-    document.getElementById("togglePublicarVacanteBtn2").addEventListener("click", () => document.getElementById("togglePublicarVacanteBtn").click());
-    document.getElementById("toggleMisVacantesBtn2").addEventListener("click", () => document.getElementById("toggleMisVacantesBtn").click());
-    document.getElementById("bannerEditBtn").addEventListener("click", () => document.getElementById("toggleEditarNegocioBtn").click());
-
-    // ---------- Rendimiento por día ----------
-    let meserosRendimiento = [];
-
-    function formatFechaLocal(d) {
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
-      const day = String(d.getDate()).padStart(2, "0");
-      return `${y}-${m}-${day}`;
-    }
-
-    // Agrupa todas las reseñas (de todos los meseros) por día (YYYY-MM-DD local).
-    // Devuelve un Map: fecha -> { total, sumaEstrellas, porMesero: { nombre: {count, suma} } }
-    function agruparServiciosPorDia(meseros) {
-      const mapa = new Map();
-      meseros.forEach(m => {
-        (m.reviews || []).forEach(r => {
-          const fecha = new Date(r.fecha);
-          if (isNaN(fecha)) return;
-          const key = formatFechaLocal(fecha);
-          if (!mapa.has(key)) mapa.set(key, { total: 0, sumaEstrellas: 0, porMesero: {} });
-          const dia = mapa.get(key);
-          dia.total += 1;
-          dia.sumaEstrellas += (r.estrellas || 0);
-          if (!dia.porMesero[m.nombre]) dia.porMesero[m.nombre] = { count: 0, suma: 0 };
-          dia.porMesero[m.nombre].count += 1;
-          dia.porMesero[m.nombre].suma += (r.estrellas || 0);
-        });
-      });
-      return mapa;
-    }
-
-    function inicializarRendimientoDiario(meseros) {
-      meserosRendimiento = meseros;
-      const hoy = new Date();
-      const input = document.getElementById("dailyDatePicker");
-      input.value = formatFechaLocal(hoy);
-      input.max = formatFechaLocal(hoy);
-      renderRendimientoDiario(input.value);
-      renderTendencia(input.value);
-    }
-
-    function renderRendimientoDiario(fechaStr) {
-      const mapa = agruparServiciosPorDia(meserosRendimiento);
-      const dia = mapa.get(fechaStr) || { total: 0, sumaEstrellas: 0, porMesero: {} };
-      renderGraficoPorHora(fechaStr);
-      renderDetalleDelDia(fechaStr);
-
-      document.getElementById("dailyTotalServicios").textContent = dia.total;
-      document.getElementById("dailyPromedioDia").textContent = dia.total
-        ? (dia.sumaEstrellas / dia.total).toFixed(1)
-        : "—";
-
-      const cont = document.getElementById("graficoMeserosDia");
-      const filas = Object.entries(dia.porMesero)
-        .map(([nombre, d]) => ({ nombre, count: d.count, promedio: d.suma / d.count }))
-        .sort((a, b) => b.count - a.count);
-
-      if (!filas.length) {
-        cont.innerHTML = '<div class="daily-empty">Ningún mesero registró servicios calificados ese día.</div>';
-        return;
-      }
-
-      const maxCount = Math.max(...filas.map(f => f.count));
-      cont.innerHTML = filas.map(f => {
-        const anchoPorc = Math.max((f.count / maxCount) * 100, 6);
-        return `
-          <div class="chart-row">
-            <div class="chart-name">${escapeHtml(f.nombre)}</div>
-            <div class="chart-track"><div class="chart-fill" style="width:${anchoPorc}%;"></div></div>
-            <div class="chart-value">${f.count} · ★${f.promedio.toFixed(1)}</div>
-          </div>
-        `;
-      }).join("");
-    }
-
-    const PALETA_LINEAS = ["#2E6CF6", "#F5A524", "#1FA971", "#C4452E", "#8B5CF6", "#0EA5E9"];
-
-    // Gráfico de líneas: rating promedio por hora, uno por mesero, para el día seleccionado.
-    function renderGraficoPorHora(fechaStr) {
-      const cont = document.getElementById("graficoPorHora");
-      const leyenda = document.getElementById("leyendaPorHora");
-      const W = 600, H = 180, PAD = 24;
-
-      const series = meserosRendimiento.map(m => {
-        const porHora = Array.from({ length: 24 }, () => ({ suma: 0, total: 0 }));
-        (m.reviews || []).forEach(r => {
-          const f = new Date(r.fecha);
-          if (isNaN(f) || formatFechaLocal(f) !== fechaStr) return;
-          const h = porHora[f.getHours()];
-          h.suma += r.estrellas || 0;
-          h.total += 1;
-        });
-        const puntos = [];
-        porHora.forEach((h, hora) => { if (h.total) puntos.push({ hora, valor: h.suma / h.total }); });
-        return { nombre: m.nombre, puntos };
-      }).filter(s => s.puntos.length);
-
-      if (!series.length) {
-        cont.innerHTML = '<div class="daily-empty">Ningún mesero tiene reseñas ese día.</div>';
-        leyenda.innerHTML = "";
-        return;
-      }
-
-      const x = h => PAD + (h / 23) * (W - PAD * 2);
-      const y = v => H - PAD - ((v - 3) / 2) * (H - PAD * 2); // escala 3.0–5.0
-
-      const lineas = series.map((s, i) => {
-        const color = PALETA_LINEAS[i % PALETA_LINEAS.length];
-        const pts = s.puntos.map(p => `${x(p.hora).toFixed(1)},${Math.max(PAD, Math.min(H - PAD, y(p.valor))).toFixed(1)}`).join(" ");
-        const circles = s.puntos.map(p => `<circle cx="${x(p.hora).toFixed(1)}" cy="${Math.max(PAD, Math.min(H - PAD, y(p.valor))).toFixed(1)}" r="2.5" fill="${color}"/>`).join("");
-        return `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>${circles}`;
-      }).join("");
-
-      cont.innerHTML = `<svg viewBox="0 0 ${W} ${H}" style="width:100%; height:auto;">
-        <line x1="${PAD}" y1="${H - PAD}" x2="${W - PAD}" y2="${H - PAD}" stroke="var(--line)" stroke-width="1"/>
-        ${lineas}
-      </svg>`;
-
-      leyenda.innerHTML = series.map((s, i) => `<span class="leyenda-item"><span class="leyenda-dot" style="background:${PALETA_LINEAS[i % PALETA_LINEAS.length]};"></span>${escapeHtml(s.nombre)}</span>`).join("");
-    }
-
-    // Lista cronológica de todas las reseñas del equipo en el día seleccionado.
-    function renderDetalleDelDia(fechaStr) {
-      const cont = document.getElementById("detalleDelDia");
-      const todas = [];
-      meserosRendimiento.forEach(m => {
-        (m.reviews || []).forEach(r => {
-          const f = new Date(r.fecha);
-          if (isNaN(f) || formatFechaLocal(f) !== fechaStr) return;
-          todas.push({ fecha: f, mesero: m.nombre, estrellas: r.estrellas || 0, comentario: r.comentario || r.tags || "" });
-        });
-      });
-      todas.sort((a, b) => b.fecha - a.fecha);
-
-      if (!todas.length) {
-        cont.innerHTML = '<div class="daily-empty">Sin reseñas ese día.</div>';
-        return;
-      }
-      cont.innerHTML = todas.map(r => `
-        <div class="detalle-row">
-          <div class="dr-hora">${r.fecha.toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" })}</div>
-          <div class="dr-stars">${"★".repeat(r.estrellas)}${"☆".repeat(5 - r.estrellas)}</div>
-          <div class="dr-texto"><span class="dr-mesero">${escapeHtml(r.mesero)}</span>${r.comentario ? " — " + escapeHtml(r.comentario) : ""}</div>
-        </div>
-      `).join("");
-    }
-
-    // Barras de los últimos 14 días con el total de servicios (de todo el equipo) por día.
-    function renderTendencia(fechaSeleccionada) {
-      const mapa = agruparServiciosPorDia(meserosRendimiento);
-      const dias = [];
-      const hoy = new Date();
-      for (let i = 13; i >= 0; i--) {
-        const d = new Date(hoy);
-        d.setDate(d.getDate() - i);
-        const key = formatFechaLocal(d);
-        dias.push({ key, total: (mapa.get(key) || {}).total || 0, fechaObj: d });
-      }
-      const max = Math.max(1, ...dias.map(d => d.total));
-
-      const chart = document.getElementById("trendChart");
-      const labels = document.getElementById("trendLabels");
-
-      chart.innerHTML = dias.map(d => {
-        const alturaPorc = Math.max((d.total / max) * 100, d.total > 0 ? 4 : 1);
-        const seleccionado = d.key === fechaSeleccionada ? " is-selected" : "";
-        const fechaLegible = d.fechaObj.toLocaleDateString("es-PE", { day: "numeric", month: "short" });
-        return `
-          <div class="trend-bar-col${seleccionado}" data-fecha="${d.key}" title="${fechaLegible}: ${d.total} servicio${d.total === 1 ? "" : "s"}">
-            <div class="trend-bar" style="height:${alturaPorc}%;"></div>
-          </div>
-        `;
-      }).join("");
-
-      labels.innerHTML = dias.map((d, i) => {
-        // Solo mostramos la etiqueta cada 2 días para que no se amontonen.
-        const mostrar = i % 2 === 0;
-        return `<div class="trend-label-col">${mostrar ? d.fechaObj.getDate() : ""}</div>`;
-      }).join("");
-
-      chart.querySelectorAll(".trend-bar-col").forEach(col => {
-        col.addEventListener("click", () => {
-          const fecha = col.dataset.fecha;
-          document.getElementById("dailyDatePicker").value = fecha;
-          renderRendimientoDiario(fecha);
-          renderTendencia(fecha);
-          document.querySelectorAll(".daily-quicklink").forEach(b => b.classList.remove("active"));
-        });
-      });
-    }
-
-    document.getElementById("dailyDatePicker").addEventListener("change", (e) => {
-      const fecha = e.target.value;
-      if (!fecha) return;
-      renderRendimientoDiario(fecha);
-      renderTendencia(fecha);
-      document.querySelectorAll(".daily-quicklink").forEach(b => b.classList.remove("active"));
-    });
-
-    document.querySelectorAll(".daily-quicklink").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const dias = parseInt(btn.dataset.dias, 10);
-        const d = new Date();
-        d.setDate(d.getDate() - dias);
-        const fecha = formatFechaLocal(d);
-        document.getElementById("dailyDatePicker").value = fecha;
-        renderRendimientoDiario(fecha);
-        renderTendencia(fecha);
-        document.querySelectorAll(".daily-quicklink").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-      });
-    });
-
-    // Gráfico de barras horizontal (sin librerías externas) comparando el
-    // rating de cada mesero del restaurante, ordenado de mayor a menor.
-    function renderGraficoMeseros(meseros) {
-      const cont = document.getElementById("graficoMeseros");
-      if (!meseros.length) {
-        cont.innerHTML = '<div class="chart-empty">Todavía no hay meseros para graficar.</div>';
-        return;
-      }
-
-      const ordenados = meseros.slice().sort((a, b) => (b.promedio || 0) - (a.promedio || 0));
-
-      cont.innerHTML = ordenados.map(m => {
-        const promedio = m.promedio || 0;
-        const anchoPorc = Math.max((promedio / 5) * 100, promedio > 0 ? 4 : 0);
-        const valorTexto = promedio > 0 ? promedio.toFixed(1) : "—";
-        return `
-          <div class="chart-row">
-            <div class="chart-name">${escapeHtml(m.nombre)}</div>
-            <div class="chart-track"><div class="chart-fill" style="width:${anchoPorc}%;"></div></div>
-            <div class="chart-value">${valorTexto}</div>
-          </div>
-        `;
-      }).join("");
-    }
-
-    function renderMeseros(meseros) {
-      const cont = document.getElementById("listaMeseros");
-      if (!meseros.length) {
-        cont.innerHTML = '<div class="empty-state">Todavía no hay meseros registrados en tu restaurante.</div>';
-        return;
-      }
-
-      cont.innerHTML = meseros.map((m, idx) => {
-        const promedioTexto = m.promedio > 0 ? m.promedio.toFixed(1) : "Sin reseñas";
-        const reviews = m.reviews || [];
-        const reviewsHtml = reviews.length
-          ? reviews.map(r => {
-              const estrellas = "★".repeat(r.estrellas) + "☆".repeat(5 - r.estrellas);
-              const fecha = new Date(r.fecha);
-              const fechaTexto = isNaN(fecha) ? "" : fecha.toLocaleDateString("es-PE", { day: "numeric", month: "short", year: "numeric" });
-              return `
-                <div class="review-item">
-                  <div class="review-stars">${estrellas}</div>
-                  ${r.tags ? `<div class="review-tags">${escapeHtml(r.tags)}</div>` : ""}
-                  ${r.comentario ? `<div class="review-comment">"${escapeHtml(r.comentario)}"</div>` : ""}
-                  <div class="review-date">${fechaTexto}</div>
-                </div>
-              `;
-            }).join("")
-          : '<div class="empty-state">Todavía no tiene reseñas.</div>';
-
-        return `
-          <div class="mesero-row" data-idx="${idx}">
-            <div class="mesero-row-top">
-              <div class="mesero-photo">${fotoConRespaldoHtml(m.fotoUrl, m.nombre)}</div>
-              <div>
-                <p class="mesero-nombre">${escapeHtml(m.nombre)}</p>
-                <p class="mesero-rating">★ ${promedioTexto}<span class="count">(${m.total} reseña${m.total === 1 ? '' : 's'})</span></p>
-              </div>
-              <span class="mesero-toggle">Ver reseñas ▾</span>
-            </div>
-            <div class="mesero-reviews" id="reviews-${idx}">${reviewsHtml}</div>
-          </div>
-        `;
-      }).join("");
-
-      cont.querySelectorAll(".mesero-row").forEach(row => {
-        row.addEventListener("click", () => {
-          document.getElementById(`reviews-${row.dataset.idx}`).classList.toggle("show");
-        });
-      });
-    }
-
     document.getElementById("cerrarSesionBtn").addEventListener("click", () => {
       sesion = null;
       borrarSesion();
@@ -1854,7 +2028,6 @@
       document.getElementById("misVacantesCard").classList.remove("hidden");
       cargarMisVacantes();
     });
-    document.getElementById("verTodosAnunciosBtn").addEventListener("click", () => document.getElementById("toggleMisVacantesBtn").click());
     document.getElementById("cerrarMisVacantesBtn").addEventListener("click", () => {
       document.getElementById("misVacantesCard").classList.add("hidden");
       document.getElementById("panel").classList.remove("hidden");
