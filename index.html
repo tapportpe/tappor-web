@@ -44,86 +44,76 @@
     max-width: 380px;
     background: var(--card);
     border-radius: 28px;
-    padding: 30px 28px 28px;
+    padding: 0 0 28px;
     box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55);
     position: relative;
     overflow: hidden;
   }
-  .card::before {
+  .body-pad { padding: 0 26px; }
+
+  .header-bar {
+    background: linear-gradient(135deg, #1E40AF, #16307E);
+    padding: 22px 26px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header-bar::after {
     content: "";
-    position: absolute;
-    top: 0; right: 0;
-    width: 90px; height: 90px;
-    background: linear-gradient(135deg, #DCE9FD 0%, transparent 70%);
-    border-bottom-left-radius: 100%;
-    pointer-events: none;
+    position: absolute; top: 14px; right: 26px; width: 30px; height: 26px;
+    background:
+      linear-gradient(115deg, transparent 46%, #7FB0FF 46%, #7FB0FF 54%, transparent 54%),
+      linear-gradient(115deg, transparent 46%, #B9D3FF 46%, #B9D3FF 54%, transparent 54%);
+    background-size: 10px 100%, 10px 100%;
+    background-position: 0 0, 16px 6px;
+    background-repeat: no-repeat;
+    opacity: 0.9;
   }
 
-  .brand-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 22px;
-    position: relative;
-    z-index: 1;
-  }
+  .brand-row { display: flex; align-items: center; gap: 8px; }
   .brand-row .mark { flex-shrink: 0; }
-  .brand-row .word {
-    font-weight: 800;
-    font-size: 16.5px;
-    color: var(--ink);
-    letter-spacing: -0.01em;
-  }
+  .brand-row .word { font-weight: 800; font-size: 17px; color: #fff; letter-spacing: -0.01em; }
   .brand-row .word sup { font-size: 9px; }
 
+  .identity-wrap {
+    background: var(--card);
+    border-radius: 24px 24px 0 0;
+    margin-top: -26px;
+    position: relative;
+    z-index: 1;
+    padding: 18px 26px 0;
+  }
+  .identity { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+
   .avatar {
-    width: 84px;
-    height: 84px;
+    width: 72px;
+    height: 72px;
     border-radius: 50%;
     background: linear-gradient(155deg, #DCE3F0, #C7D0E3);
-    margin: 4px auto 18px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    font-size: 28px;
+    font-size: 24px;
     color: #4B5670;
     overflow: hidden;
-    box-shadow: 0 0 0 6px var(--gold-soft);
+    box-shadow: 0 0 0 4px #fff, 0 6px 16px rgba(20,40,90,0.18);
+    flex-shrink: 0;
   }
   .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-  .identity { text-align: center; margin-bottom: 26px; }
-
-  .name {
-    font-weight: 800;
-    font-size: 24px;
-    letter-spacing: -0.01em;
-    margin: 0 0 6px;
-    line-height: 1.1;
-  }
-
-  .role {
-    font-size: 14.5px;
-    color: var(--slate);
-    margin: 0;
-    font-weight: 500;
-  }
+  .name { font-weight: 800; font-size: 21px; letter-spacing: -0.01em; margin: 0 0 3px; line-height: 1.15; }
+  .role { font-size: 13.5px; color: var(--slate); margin: 0; font-weight: 500; }
   .role b { color: var(--ink); font-weight: 600; }
 
-  .divider {
-    height: 1px;
-    background: var(--line);
-    margin: 24px 0 22px;
+  .badge-pill {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--gold-soft); color: var(--navy);
+    border-radius: 999px; padding: 8px 14px;
+    font-size: 12.5px; font-weight: 700; margin-bottom: 22px;
   }
 
-  .prompt {
-    text-align: center;
-    font-size: 15px;
-    color: var(--ink);
-    font-weight: 600;
-    margin: 0 0 16px;
-  }
+  .prompt { font-size: 18px; color: var(--ink); font-weight: 800; margin: 0 0 3px; }
+  .prompt-sub { font-size: 12.5px; color: var(--slate-soft); margin: 0 0 16px; font-weight: 600; }
 
   .stars {
     display: flex;
@@ -149,9 +139,9 @@
   .star-btn:active svg { transform: scale(0.88); }
 
   .star-path {
-    fill: #E7E9EE;
-    stroke: #D7DAE2;
-    stroke-width: 1.2;
+    fill: #fff;
+    stroke: var(--gold);
+    stroke-width: 1.6;
     transition: fill 0.15s ease, stroke 0.15s ease;
   }
   .star-btn.filled .star-path {
@@ -160,13 +150,18 @@
   }
 
   .star-label {
+    display: none;
     text-align: center;
-    font-size: 13px;
-    color: var(--slate-soft);
-    height: 18px;
-    margin-bottom: 22px;
-    font-weight: 600;
+    font-size: 12.5px;
+    color: var(--navy);
+    background: var(--gold-soft);
+    border-radius: 999px;
+    padding: 6px 14px;
+    margin: 0 auto 22px;
+    font-weight: 700;
+    width: fit-content;
   }
+  .star-label.show { display: block; }
 
   .tags-section {
     display: none;
@@ -175,36 +170,37 @@
   .tags-section.show { display: block; }
 
   .tags-heading {
-    font-size: 13px;
-    color: var(--slate);
-    font-weight: 600;
-    margin: 0 0 10px;
-    text-align: center;
+    font-size: 15px;
+    color: var(--ink);
+    font-weight: 800;
+    margin: 0 0 2px;
+    text-align: left;
   }
+  .tags-sub { font-size: 12px; color: var(--slate-soft); font-weight: 600; margin: 0 0 12px; }
 
   .tags-wrap {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
+    gap: 9px;
   }
 
   .tag-chip {
+    display: inline-flex; align-items: center; gap: 7px;
     border: 1.5px solid var(--line);
-    background: #FAFAFB;
+    background: #fff;
     color: var(--ink);
     border-radius: 999px;
-    padding: 8px 14px;
+    padding: 9px 15px;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   }
   .tag-chip:active { transform: scale(0.97); }
   .tag-chip.selected {
-    background: var(--ink);
-    border-color: var(--ink);
+    background: var(--gold);
+    border-color: var(--gold);
     color: #fff;
   }
 
@@ -259,15 +255,22 @@
   .submit:not(:disabled):hover { filter: brightness(1.05); }
   .submit:not(:disabled):active { transform: scale(0.985); }
 
+  .shield-note {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    text-align: center; font-size: 11.5px; color: var(--slate-soft);
+    margin: 14px 0 0; font-weight: 600;
+  }
   .powered {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
     text-align: center;
-    font-size: 11px;
+    font-size: 11.5px;
     color: var(--slate-soft);
-    margin-top: 18px;
+    margin-top: 16px;
     font-weight: 600;
     letter-spacing: 0.01em;
   }
-  .powered b { color: var(--slate); }
+  .powered b { color: var(--ink); font-weight: 800; }
+  .powered .pline { flex: 1; max-width: 46px; height: 1px; background: var(--line); }
 
   .cta-link {
     display: block;
@@ -292,20 +295,28 @@
   }
   .success.show { display: block; }
   .success-icon {
-    width: 56px;
-    height: 56px;
+    width: 62px;
+    height: 62px;
     border-radius: 50%;
     background: #E7F5EC;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto 18px;
+    position: relative;
   }
+  .success-icon::before, .success-icon::after {
+    content: ""; position: absolute; top: 50%; width: 14px; height: 3px; border-radius: 3px; background: var(--gold); opacity: 0.55;
+  }
+  .success-icon::before { left: -26px; transform: rotate(-20deg); }
+  .success-icon::after { right: -26px; transform: rotate(20deg); }
   .success h2 {
-    font-size: 19px;
+    font-size: 21px;
     margin: 0 0 8px;
     font-weight: 800;
+    line-height: 1.25;
   }
+  .success h2 .blue { color: var(--gold); display: block; }
   .success p {
     font-size: 14px;
     color: var(--slate);
@@ -334,26 +345,31 @@
   <div class="card">
 
     <div class="form-wrap" id="formWrap">
-      <div class="brand-row">
-        <svg class="mark" width="26" height="26" viewBox="0 0 32 32"><path d="M6 4h20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-7v16a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V10H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="url(#tGrad)"/><defs><linearGradient id="tGrad" x1="0" y1="0" x2="32" y2="32"><stop offset="0" stop-color="#4C8DFF"/><stop offset="1" stop-color="#1E40AF"/></linearGradient></defs></svg>
-        <span class="word">Tapport<sup>®</sup></span>
+      <div class="header-bar">
+        <div class="brand-row">
+          <svg class="mark" width="24" height="24" viewBox="0 0 32 32"><path d="M6 4h20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-7v16a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V10H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="#fff"/></svg>
+          <span class="word">Tapport<sup>®</sup></span>
+        </div>
       </div>
 
-      <div class="avatar" id="avatar">
-        <img id="avatarImg" style="display:none" alt="" />
-        <span id="avatarIniciales">SC</span>
-      </div>
+      <div class="identity-wrap">
+        <div class="identity">
+          <div class="avatar" id="avatar">
+            <img id="avatarImg" style="display:none" alt="" />
+            <span id="avatarIniciales">SC</span>
+          </div>
+          <div>
+            <p class="name" id="waiterName">Cargando…</p>
+            <p class="role" id="waiterRole">&nbsp;</p>
+          </div>
+        </div>
 
-      <div class="identity">
-        <p class="name" id="waiterName">Cargando…</p>
-        <p class="role" id="waiterRole">&nbsp;</p>
-      </div>
+        <div class="badge-pill">🙂 Tu atención hace la diferencia</div>
 
-      <div class="divider"></div>
+        <p class="prompt">¿Cómo fue tu atención?</p>
+        <p class="prompt-sub">Califica del 1 al 5</p>
 
-      <p class="prompt">¿Cómo fue tu atención?</p>
-
-      <div class="error-banner" id="errorBanner">No pudimos identificar al mesero. Vuelve a escanear el código QR.</div>
+        <div class="error-banner" id="errorBanner">No pudimos identificar al mesero. Vuelve a escanear el código QR.</div>
 
       <div class="stars" id="stars">
         <button class="star-btn" data-value="1" aria-label="1 estrella"><svg viewBox="0 0 24 24"><path class="star-path" d="M12 2.5l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg></button>
@@ -365,36 +381,45 @@
       <div class="star-label" id="starLabel">&nbsp;</div>
 
       <div class="tags-section" id="tagsSection">
-        <p class="tags-heading">¿Qué destacarías? (elige al menos una)</p>
+        <p class="tags-heading">¿Qué destacó de su atención?</p>
+        <p class="tags-sub">Puedes seleccionar varias opciones.</p>
         <div class="tags-wrap" id="tagsWrap"></div>
       </div>
 
+      <p class="tags-heading" style="display:flex; align-items:center; gap:8px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg>¿Quieres contarnos algo más?</p>
+      <p class="tags-sub">Tu comentario es opcional.</p>
       <div class="textarea-wrap">
         <svg class="ta-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg>
         <textarea id="comment" placeholder="Cuéntanos algo más (opcional)" maxlength="400"></textarea>
         <span class="ta-count" id="commentCount">0/400</span>
       </div>
 
+      </div><!-- /identity-wrap -->
+
+      <div class="body-pad">
       <button class="submit" id="submitBtn" disabled>
-        Enviar calificación
+        <span id="submitLabel">ENVIAR CALIFICACIÓN</span>
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </button>
 
-      <div class="powered">Powered by <b>Tapport</b></div>
+      <p class="shield-note"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5.5 3.4 9.7 8 11 4.6-1.3 8-5.5 8-11V5l-8-3Z"/></svg>Tu opinión ayuda al equipo a mejorar.</p>
+
+      <div class="powered"><span class="pline"></span>Powered by <svg width="13" height="13" viewBox="0 0 32 32"><path d="M6 4h20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-7v16a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V10H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="var(--gold)"/></svg><b>Tapport<sup>&reg;</sup></b><span class="pline"></span></div>
+      </div><!-- /body-pad -->
     </div>
 
-    <div class="success" id="successState">
+    <div class="success body-pad" id="successState" style="padding-top:20px;">
       <div class="success-icon">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
           <path d="M4 12.5L9.5 18L20 6" stroke="#2F8F5B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
-      <h2 id="successTitle">¡Gracias por tu calificación!</h2>
+      <h2 id="successTitle">¡Gracias por tu<span class="blue">calificación!</span></h2>
       <p id="successSub">Tu opinión ayuda a que este mesero construya su reputación.</p>
 
-      <a href="directorio.html" id="verDirectorioBtn" class="cta-link">Conoce más de nuestro personal</a>
+      <a href="directorio.html" id="verDirectorioBtn" class="cta-link">Conoce más de nuestro personal →</a>
 
-      <div class="powered">Powered by <b>Tapport</b></div>
+      <div class="powered"><span class="pline"></span>Powered by <svg width="13" height="13" viewBox="0 0 32 32"><path d="M6 4h20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-7v16a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V10H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="var(--gold)"/></svg><b>Tapport<sup>&reg;</sup></b><span class="pline"></span></div>
     </div>
   </div>
 
@@ -444,8 +469,8 @@
   let selectedTags = [];
   const labels = ["", "Muy mala", "Mala", "Buena", "Muy buena", "Excelente"];
 
-  const TAGS_POSITIVE = ["Rápido", "Es atento", "Conoce el menú", "Tuvo paciencia"];
-  const TAGS_CONSTRUCTIVE = ["Faltó atención", "Se demoró mucho", "Fue cortante", "Se puso impaciente"];
+  const TAGS_POSITIVE = [["⚡","Rápido"], ["🙂","Amable"], ["☰","Conoce el menú"], ["👁","Atento"], ["🧍","Paciente"]];
+  const TAGS_CONSTRUCTIVE = [["⚠️","Faltó atención"], ["🐢","Se demoró mucho"], ["😐","Fue cortante"], ["😕","Se puso impaciente"]];
 
   const tagsSection = document.getElementById("tagsSection");
   const tagsWrap = document.getElementById("tagsWrap");
@@ -458,11 +483,11 @@
     const list = forRating >= 3 ? TAGS_POSITIVE : TAGS_CONSTRUCTIVE;
     selectedTags = [];
     tagsWrap.innerHTML = "";
-    list.forEach((tag) => {
+    list.forEach(([icon, tag]) => {
       const chip = document.createElement("button");
       chip.type = "button";
       chip.className = "tag-chip";
-      chip.textContent = tag;
+      chip.innerHTML = `<span aria-hidden="true">${icon}</span>${tag}`;
       chip.addEventListener("click", () => {
         chip.classList.toggle("selected");
         if (selectedTags.includes(tag)) {
@@ -615,6 +640,7 @@
       s.classList.toggle("filled", i < rating);
     });
     els.starLabel.textContent = labels[rating];
+    els.starLabel.classList.add("show");
     renderTags(rating);
     updateSubmitState();
   });
@@ -622,7 +648,7 @@
   els.submitBtn.addEventListener("click", async () => {
     if (!rating) return;
     els.submitBtn.disabled = true;
-    els.submitBtn.textContent = "Enviando…";
+    document.getElementById("submitLabel").textContent = "ENVIANDO…";
     els.errorBanner.classList.remove("show");
     try {
       // mode: "no-cors" evita que un bloqueo de lectura de CORS (típico en
@@ -652,7 +678,7 @@
       // El envío falló de verdad: la sesión sigue "pending" y el cliente
       // puede volver a intentarlo.
       els.submitBtn.disabled = false;
-      els.submitBtn.textContent = "Enviar calificación";
+      document.getElementById("submitLabel").textContent = "ENVIAR CALIFICACIÓN";
       els.errorBanner.textContent = "No pudimos enviar tu calificación. Verifica tu conexión e inténtalo de nuevo.";
       els.errorBanner.classList.add("show");
     }
