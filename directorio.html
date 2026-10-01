@@ -478,25 +478,99 @@
 
     .modal { max-width: 520px; padding: 28px; }
   }
+
+  .dir-topbar { background: transparent !important; box-shadow: none; align-items: center; }
+  .dir-logo { display: flex; align-items: center; gap: 8px; color: #fff; font-weight: 800; font-size: 17px; text-decoration: none; }
+  .dir-nav { display: flex; align-items: center; gap: 14px; }
+  .dir-nav a { color: rgba(255,255,255,0.85); font-size: 13.5px; font-weight: 700; text-decoration: none; }
+
+  .dir-hero { padding: 18px 20px 6px; position: relative; }
+  .dir-eyebrow { color: #8FD3FF; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .dir-title { color: #fff; font-size: 30px; font-weight: 800; margin: 0 0 8px; line-height: 1.15; }
+  .dir-title span { color: #6FE0FF; }
+  .dir-sub { color: rgba(255,255,255,0.65); font-size: 13.5px; margin: 0; max-width: 46ch; }
+  .dir-note { position: absolute; top: 14px; right: 20px; color: #BFE0FF; font-size: 11.5px; font-style: italic; text-align: right; opacity: 0.8; display: none; }
+  @media (min-width: 720px) { .dir-note { display: block; } }
+
+  .dir-search-row { padding: 18px 20px 0; }
+  .dir-search { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); border-radius: 12px; padding: 12px 16px; }
+  .dir-search input { background: none; border: none; outline: none; color: #fff; font-size: 14px; width: 100%; font-family: inherit; }
+  .dir-search input::placeholder { color: rgba(255,255,255,0.45); }
+
+  .dir-pills { display: flex; gap: 8px; flex-wrap: wrap; padding: 12px 20px 4px; }
+  .dir-pill { border: 1px solid rgba(255,255,255,0.25); background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.8); border-radius: 999px; padding: 8px 14px; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .dir-pill.on { background: #2E6CF6; border-color: #2E6CF6; color: #fff; }
+
+  .dir-grid { display: grid; grid-template-columns: 1fr; gap: 10px; padding: 0 20px; }
+  @media (min-width: 720px) { .dir-grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1100px) { .dir-grid { grid-template-columns: 1fr 1fr 1fr 1fr; } }
+  .feed-section-title { padding-left: 20px; padding-right: 20px; color: #fff; }
+  .feed-section-title .count { color: rgba(255,255,255,0.5); }
+
+  .dir-grid .waiter-card, #resultadosBusqueda .waiter-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    padding: 16px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .dir-grid .waiter-photo, #resultadosBusqueda .waiter-photo { width: 56px; height: 56px; }
+  .dir-grid .waiter-name, #resultadosBusqueda .waiter-name { color: #fff; font-size: 16px; }
+  .dir-grid .waiter-rest, #resultadosBusqueda .waiter-rest { color: #8FC0FF; }
+  .dir-grid .waiter-rating, #resultadosBusqueda .waiter-rating { color: #6FE0FF; }
+  .dir-grid .waiter-rating .count, #resultadosBusqueda .waiter-rating .count { color: rgba(255,255,255,0.5); }
+  .dir-grid .waiter-card::after, #resultadosBusqueda .waiter-card::after { content: "Ver perfil \203A"; align-self: flex-end; font-size: 11.5px; font-weight: 700; color: #6FE0FF; }
+
+
+  /* Modal de perfil: estilo oscuro a juego con el directorio */
+  #overlayPerfil .modal { background: #16307E; border: 1px solid rgba(255,255,255,0.12); }
+  #overlayPerfil .modal-close { color: rgba(255,255,255,0.7); }
+  #overlayPerfil .modal-name { color: #fff; }
+  #overlayPerfil .modal-rest { color: #8FC0FF; }
+  #overlayPerfil .modal-address, #overlayPerfil .modal-stats, #overlayPerfil .modal-section-title { color: rgba(255,255,255,0.7); }
+  #overlayPerfil .stat-box, #overlayPerfil .review-item { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); color: #fff; }
+  #overlayPerfil .stat-box .num { color: #fff; }
+  #overlayPerfil .stat-box .label, #overlayPerfil .review-date, #overlayPerfil .review-text { color: rgba(255,255,255,0.65); }
+  #overlayPerfil .modal-contact a { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.18); color: #fff; }
+
 </style>
 </head>
 <body>
   <div class="app">
-    <div class="topbar">
-      <div>
-        <div class="eyebrow">Tapport</div>
-        <h1 id="topTitle">Home</h1>
+    <div class="topbar dir-topbar">
+      <a class="dir-logo" href="inicio.html"><svg width="24" height="24" viewBox="0 0 32 32"><path d="M6 4h20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-7v16a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V10H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="#4C8DFF"/></svg>Tapport</a>
+      <div class="dir-nav">
+        <a href="inicio.html">🏠 Inicio</a>
+        <button type="button" class="help-btn" id="abrirTutorialBtn" title="Cómo funciona Tapport">?</button>
       </div>
-      <button type="button" class="help-btn" id="abrirTutorialBtn" title="Cómo funciona Tapport">?</button>
     </div>
 
     <!-- ============ HOME (FEED) ============ -->
     <div class="view active" id="viewHome">
+      <div class="dir-hero">
+        <div class="dir-eyebrow">DIRECTORIO</div>
+        <h1 class="dir-title">Conoce a nuestro <span>equipo</span></h1>
+        <p class="dir-sub">Aquí puedes encontrar a todos los meseros y su rating real.</p>
+        <div class="dir-note">Tu experiencia<br>también cuenta</div>
+      </div>
+
+      <div class="dir-search-row">
+        <div class="dir-search"><span>🔎</span><input type="text" id="dirBuscar" placeholder="Buscar por nombre o restaurante…" /></div>
+      </div>
+      <div class="dir-pills" id="dirPills">
+        <button type="button" class="dir-pill on" data-min="0">Todos</button>
+        <button type="button" class="dir-pill" data-min="4">4★ o más</button>
+        <button type="button" class="dir-pill" data-min="4.5">4.5★ o más</button>
+        <button type="button" class="dir-pill" data-min="5">5★</button>
+      </div>
+
       <div class="feed-section-title">Restaurantes buscando personal</div>
       <div id="feedVacantes"><div class="loading-state">Cargando…</div></div>
 
       <div class="feed-section-title">Meseros destacados <span class="count" id="destacadosCount"></span></div>
-      <div id="feedDestacados"><div class="loading-state">Cargando…</div></div>
+      <div id="feedDestacados" class="dir-grid"><div class="loading-state">Cargando…</div></div>
     </div>
 
     <!-- ============ BUSCAR ============ -->
@@ -868,26 +942,45 @@
       }
     });
 
+    let destacadosTodos = [];
     async function cargarDestacados() {
       const cont = document.getElementById("feedDestacados");
       try {
-        const res = await fetch(`${ENDPOINT}?accion=buscar_meseros&minRating=4`);
+        const res = await fetch(`${ENDPOINT}?accion=buscar_meseros&minRating=0`);
         const data = await res.json();
-        const lista = (data.resultados || []).slice(0, 10);
-
-        document.getElementById("destacadosCount").textContent = lista.length ? `(${lista.length})` : "";
-
-        if (!lista.length) {
-          cont.innerHTML = '<div class="empty-state">Todavía no hay meseros con reseñas suficientes.</div>';
-          return;
-        }
-
-        cont.innerHTML = `<div class="waiter-carousel">${lista.map(renderWaiterChip).join("")}</div>`;
-        adjuntarClicksWaiterCards(cont);
+        destacadosTodos = data.resultados || [];
+        pintarDestacados();
       } catch (err) {
         cont.innerHTML = '<div class="empty-state">No se pudo cargar el feed.</div>';
       }
     }
+
+    function pintarDestacados() {
+      const cont = document.getElementById("feedDestacados");
+      const q = (document.getElementById("dirBuscar").value || "").trim().toLowerCase();
+      const minBtn = document.querySelector(".dir-pill.on");
+      const min = minBtn ? Number(minBtn.dataset.min) : 0;
+
+      const lista = destacadosTodos.filter(r => {
+        if (r.promedio < min) return false;
+        if (q && !(r.nombre || "").toLowerCase().includes(q) && !(r.restaurante || "").toLowerCase().includes(q)) return false;
+        return true;
+      });
+
+      document.getElementById("destacadosCount").textContent = lista.length ? `(${lista.length})` : "";
+      if (!lista.length) {
+        cont.innerHTML = '<div class="empty-state">No encontramos meseros con ese criterio.</div>';
+        return;
+      }
+      cont.innerHTML = lista.map(renderWaiterCard).join("");
+      adjuntarClicksWaiterCards(cont);
+    }
+    document.getElementById("dirBuscar").addEventListener("input", pintarDestacados);
+    document.querySelectorAll(".dir-pill").forEach(btn => btn.addEventListener("click", () => {
+      document.querySelectorAll(".dir-pill").forEach(b => b.classList.remove("on"));
+      btn.classList.add("on");
+      pintarDestacados();
+    }));
 
     function renderWaiterChip(r) {
       const promedioTexto = r.promedio > 0 ? "★ " + r.promedio.toFixed(1) : "Sin reseñas";
