@@ -364,6 +364,13 @@
   .topbar-search svg { flex-shrink: 0; opacity: 0.6; }
   .topbar-search input { border: none; background: none; outline: none; font: inherit; color: var(--ink); width: 100%; }
   .topbar-bell { position: relative; width: 38px; height: 38px; border-radius: 50%; background: var(--bg); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+  .notif-wrap { position: relative; }
+  .notif-panel { position: absolute; top: 46px; right: 0; width: 280px; max-height: 340px; overflow-y: auto; background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 16px 40px rgba(22,26,46,0.16); z-index: 80; }
+  .notif-head { font-size: 12.5px; font-weight: 800; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+  .notif-item { display: flex; gap: 10px; padding: 10px 14px; border-top: 1px solid var(--line); text-align: left; width: 100%; background: none; border-left: none; border-right: none; border-bottom: none; cursor: pointer; font-family: inherit; }
+  .notif-item:first-of-type { border-top: none; }
+  .notif-item b { display: block; font-size: 12.5px; } .notif-item small { display: block; font-size: 11.5px; color: var(--ink-soft); }
+  .notif-empty { padding: 18px 14px; font-size: 12px; color: var(--ink-soft); text-align: center; }
   .topbar-bell::after { content: ""; position: absolute; top: 8px; right: 9px; width: 7px; height: 7px; border-radius: 50%; background: var(--error); border: 1.5px solid #fff; }
   .topbar-user { display: flex; align-items: center; gap: 9px; flex-shrink: 0; }
   .topbar-user img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: var(--accent-soft); }
@@ -677,9 +684,15 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
         <input type="text" placeholder="Buscar en Tapport…" />
       </div>
-      <button type="button" class="topbar-bell" aria-label="Notificaciones">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
-      </button>
+      <div class="notif-wrap">
+        <button type="button" class="topbar-bell" id="bellBtn" aria-label="Notificaciones">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        </button>
+        <div class="notif-panel hidden" id="notifPanel">
+          <div class="notif-head">Notificaciones</div>
+          <div id="notifList"></div>
+        </div>
+      </div>
       <div class="topbar-user">
         <img id="topbarAvatar" src="" alt="" onerror="this.style.visibility='hidden'" />
         <div>
@@ -1341,6 +1354,23 @@
     const NOMBRES_DIA = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 
     // ---------- Dashboard ----------
+    document.getElementById("bellBtn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      const panel = document.getElementById("notifPanel");
+      panel.classList.toggle("hidden");
+      if (!panel.classList.contains("hidden")) {
+        const recientes = (sesion.reviews || []).slice(0, 6);
+        document.getElementById("notifList").innerHTML = recientes.length
+          ? recientes.map(r => {
+              const f = new Date(r.fecha);
+              const txt = isNaN(f) ? "" : f.toLocaleDateString("es-PE", { day: "numeric", month: "short" });
+              return `<div class="notif-item"><span>⭐</span><div><b>Recibiste ${r.estrellas}★</b><small>${r.comentario ? escapeHtml(r.comentario) + " · " : ""}${txt}</small></div></div>`;
+            }).join("")
+          : '<div class="notif-empty">Sin notificaciones por ahora.</div>';
+      }
+    });
+    document.addEventListener("click", () => document.getElementById("notifPanel").classList.add("hidden"));
+
     function mostrarDashboard() {
       document.body.classList.add("app-mode");
       document.getElementById("loginWrap").classList.add("hidden");
