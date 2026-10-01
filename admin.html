@@ -439,6 +439,17 @@
     background: var(--bg); border: none; display: flex; align-items: center; justify-content: center;
     cursor: pointer; flex-shrink: 0;
   }
+  .notif-wrap { position: relative; }
+  .notif-panel {
+    position: absolute; top: 46px; right: 0; width: 300px; max-height: 360px; overflow-y: auto;
+    background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 16px 40px rgba(22,26,46,0.16);
+    z-index: 80;
+  }
+  .notif-head { font-size: 12.5px; font-weight: 800; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+  .notif-item { display: flex; gap: 10px; padding: 10px 14px; border-top: 1px solid var(--line); text-align: left; width: 100%; background: none; border-left: none; border-right: none; border-bottom: none; cursor: pointer; font-family: inherit; }
+  .notif-item:first-of-type { border-top: none; }
+  .notif-item b { display: block; font-size: 12.5px; } .notif-item small { display: block; font-size: 11.5px; color: var(--ink-soft); }
+  .notif-empty { padding: 18px 14px; font-size: 12px; color: var(--ink-soft); text-align: center; }
   .topbar-bell::after {
     content: ""; position: absolute; top: 8px; right: 9px; width: 7px; height: 7px;
     border-radius: 50%; background: var(--error); border: 1.5px solid #fff;
@@ -813,9 +824,15 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
         <input type="text" id="topbarSearch" placeholder="Buscar por nombre, código o cargo…" />
       </div>
-      <button type="button" class="topbar-bell" aria-label="Notificaciones">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
-      </button>
+      <div class="notif-wrap">
+        <button type="button" class="topbar-bell" id="bellBtn" aria-label="Notificaciones">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        </button>
+        <div class="notif-panel hidden" id="notifPanel">
+          <div class="notif-head">Notificaciones</div>
+          <div id="notifList"></div>
+        </div>
+      </div>
       <div class="topbar-user">
         <img id="topbarAvatar" src="" alt="" />
         <div>
@@ -1123,7 +1140,7 @@
             <h3 class="ct">Herramientas de administración</h3>
             <p class="cs">Accede y gestiona todas las funciones de tu restaurante.</p>
             <div class="tool-grid2">
-              <button type="button" class="tool2" data-goto-view="personal"><div class="ico lg" data-ic="users"></div><div class="t2-t"><b>Personal</b><small>Gestiona tu equipo y revisa su rating.</small><span class="t2-meta"><i data-ic="users"></i><span id="toolPersonal">—</span></span></div><i class="arr" data-ic="arrow"></i></button>
+              <a class="tool2" href="admin.html?view=personal" target="_blank" rel="noopener"><div class="ico lg" data-ic="users"></div><div class="t2-t"><b>Personal</b><small>Gestiona tu equipo y revisa su rating.</small><span class="t2-meta"><i data-ic="users"></i><span id="toolPersonal">—</span></span></div><i class="arr" data-ic="arrow"></i></a>
               <button type="button" class="tool2" data-goto-view="personal"><div class="ico lg" data-ic="card"></div><div class="t2-t"><b>Tarjetas Tapport</b><small>Cada mesero tiene su código y su tarjeta NFC.</small><span class="t2-meta"><i data-ic="card"></i><span id="toolTarjetas">—</span></span></div><i class="arr" data-ic="arrow"></i></button>
               <button type="button" class="tool2" data-action="mis-vacantes"><div class="ico lg" data-ic="megaphone"></div><div class="t2-t"><b>Vacantes</b><small>Publica y gestiona oportunidades de trabajo.</small><span class="t2-meta"><i data-ic="briefcase"></i><span id="toolVacantes">—</span></span></div><i class="arr" data-ic="arrow"></i></button>
               <button type="button" class="tool2" data-action="editar-negocio"><div class="ico lg" data-ic="store"></div><div class="t2-t"><b>Perfil del negocio</b><small>Actualiza la información de tu restaurante.</small><span class="t2-meta"><i data-ic="check"></i><span id="toolNegocio">—</span></span></div><i class="arr" data-ic="arrow"></i></button>
@@ -1290,7 +1307,7 @@
       userplus: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM19 8v6M22 11h-6'
     };
     function pintarIconos(root) {
-      (root || document).querySelectorAll("i[data-ic]").forEach(el => {
+      (root || document).querySelectorAll("[data-ic]").forEach(el => {
         const d = ICONOS[el.dataset.ic];
         if (!d || el.dataset.done) return;
         el.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d.split(/(?=M)/).filter(Boolean).map(seg => `<path d="${seg.trim()}"/>`).join("")}</svg>`;
@@ -1870,6 +1887,20 @@
 
     let meserosRendimiento = [];
 
+    document.getElementById("bellBtn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      const panel = document.getElementById("notifPanel");
+      panel.classList.toggle("hidden");
+      if (!panel.classList.contains("hidden")) {
+        const recientes = todasLasReseñasEquipo(meserosRendimiento).slice(0, 6);
+        document.getElementById("notifList").innerHTML = recientes.length
+          ? recientes.map(r => `<button type="button" class="notif-item" data-goto-view="historial"><span>⭐</span><div><b>${escapeHtml(r.mesero)} recibió ${r.estrellas}★</b><small>${hace(r.fecha)}</small></div></button>`).join("")
+          : '<div class="notif-empty">Sin notificaciones por ahora.</div>';
+        document.querySelectorAll("#notifList [data-goto-view]").forEach(b => b.addEventListener("click", () => { panel.classList.add("hidden"); cambiarVista(b.dataset.gotoView); }));
+      }
+    });
+    document.addEventListener("click", () => document.getElementById("notifPanel").classList.add("hidden"));
+
     function mostrarPanel() {
       document.getElementById("authCard").classList.add("hidden");
       document.getElementById("loginHeader").classList.add("hidden");
@@ -1887,7 +1918,8 @@
       renderPersonal(meserosRendimiento);
       inicializarHistorial(meserosRendimiento);
       pintarIconos();
-      cambiarVista("inicio");
+      const vistaUrl = new URLSearchParams(location.search).get("view");
+      cambiarVista(vistaUrl && document.getElementById("view-" + vistaUrl) ? vistaUrl : "inicio");
     }
     document.getElementById("cerrarSesionBtn").addEventListener("click", () => {
       sesion = null;
