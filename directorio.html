@@ -534,6 +534,7 @@
   #overlayPerfil .stat-box .num { color: #fff; }
   #overlayPerfil .stat-box .label, #overlayPerfil .review-date, #overlayPerfil .review-text { color: rgba(255,255,255,0.65); }
   #overlayPerfil .modal-contact a { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.18); color: #fff; }
+  #overlayPerfil .contact-btn { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.25); color: #fff; }
   #overlayPerfil .review-tags { color: #8FD3FF; }
   #overlayPerfil .stat-box .num { color: #fff; }
   #overlayPerfil .modal { box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(111,224,255,0.15); }
@@ -693,6 +694,7 @@
       <div id="m2PanelReseñas">
         <h2 class="section-title">Reseñas de clientes</h2>
         <div id="modalReviews"></div>
+        <button type="button" class="btn-secondary hidden" id="verTodasReseñasBtn" style="margin-top:12px;">Ver todas las reseñas</button>
       </div>
       <div id="m2PanelInfo" class="hidden">
         <div class="m2-info-row"><span class="m2-ic">🏠</span><div><small>Restaurante</small><b id="infoRest"></b></div></div>
@@ -1155,10 +1157,10 @@
 
         const reviews = data.reviews || [];
         const reviewsCont = document.getElementById("modalReviews");
-        if (!reviews.length) {
-          reviewsCont.innerHTML = '<div class="empty-state">Todavía no tiene reseñas.</div>';
-        } else {
-          reviewsCont.innerHTML = reviews.map(r => {
+        const verTodasBtn = document.getElementById("verTodasReseñasBtn");
+
+        function pintarReseñas(lista) {
+          reviewsCont.innerHTML = lista.map(r => {
             const estrellas = "★".repeat(r.estrellas) + "☆".repeat(5 - r.estrellas);
             const fecha = new Date(r.fecha);
             const fechaTexto = isNaN(fecha) ? "" : fecha.toLocaleDateString("es-PE", { day: "numeric", month: "short", year: "numeric" });
@@ -1178,6 +1180,21 @@
               </div>
             `;
           }).join("");
+        }
+
+        if (!reviews.length) {
+          reviewsCont.innerHTML = '<div class="empty-state">Todavía no tiene reseñas.</div>';
+          verTodasBtn.classList.add("hidden");
+        } else {
+          const LIMITE = 4;
+          pintarReseñas(reviews.slice(0, LIMITE));
+          if (reviews.length > LIMITE) {
+            verTodasBtn.classList.remove("hidden");
+            verTodasBtn.textContent = `Ver las ${reviews.length} reseñas`;
+            verTodasBtn.onclick = () => { pintarReseñas(reviews); verTodasBtn.classList.add("hidden"); };
+          } else {
+            verTodasBtn.classList.add("hidden");
+          }
         }
       } catch (err) {
         document.getElementById("modalReviews").innerHTML = '<div class="empty-state">Error al cargar el perfil.</div>';
