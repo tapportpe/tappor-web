@@ -545,6 +545,34 @@
   .job-card a.contact-btn { box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
   #overlayPerfil .modal-contact a:first-child { background: linear-gradient(135deg, #4C8DFF, #2E6CF6); border: none; box-shadow: 0 8px 20px rgba(46,108,246,0.4); }
 
+
+  /* Modal de perfil v2 */
+  .modal2 { max-width: 620px; }
+  .m2-pill-role { display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.1); border-radius: 999px; padding: 3px 10px; font-size: 11.5px; font-weight: 700; margin-right: 8px; }
+  .m2-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 16px 0; }
+  .m2-stat { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; }
+  .m2-stat b { display: block; font-size: 17px; color: #fff; } .m2-stat small { font-size: 10.5px; color: rgba(255,255,255,0.6); }
+  .m2-ic { font-size: 16px; flex-shrink: 0; }
+  .m2-buttons { gap: 10px; }
+  .m2-buttons .contact-btn { flex: 1; text-align: center; display: flex; align-items: center; justify-content: center; gap: 7px; }
+  .m2-tabs { display: flex; gap: 6px; margin: 18px 0 10px; border-bottom: 1px solid rgba(255,255,255,0.12); }
+  .m2-tab { background: none; border: none; color: rgba(255,255,255,0.55); font-weight: 700; font-size: 13px; padding: 9px 14px; cursor: pointer; font-family: inherit; border-bottom: 2px solid transparent; }
+  .m2-tab.on { color: #fff; border-bottom-color: #2E6CF6; }
+  .m2-info-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.1); }
+  .m2-info-row:first-child { border-top: none; }
+  .m2-info-row small { display: block; font-size: 10.5px; color: rgba(255,255,255,0.55); }
+  .m2-info-row b { font-size: 13.5px; color: #fff; }
+
+  .review-item2 { display: flex; gap: 12px; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.1); }
+  .review-item2:first-child { border-top: none; }
+  .review-ava { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #fff; font-size: 14px; flex-shrink: 0; }
+  .review-body { flex: 1; min-width: 0; }
+  .review-top-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .review-item2 .review-stars { color: #6FE0FF; font-size: 12.5px; }
+  .review-item2 .review-comment { color: #fff; font-size: 13px; margin: 4px 0 3px; }
+  .review-item2 .review-date { color: rgba(255,255,255,0.5); font-size: 11px; }
+  .review-tag-pill { background: rgba(255,255,255,0.1); color: #fff; border-radius: 999px; padding: 4px 10px; font-size: 10.5px; font-weight: 700; white-space: nowrap; }
+
 </style>
 </head>
 <body>
@@ -635,26 +663,43 @@
 
   <!-- Modal: perfil completo de un mesero -->
   <div class="overlay" id="overlayPerfil">
-    <div class="modal">
+    <div class="modal modal2">
       <button class="modal-close" id="cerrarPerfilBtn">×</button>
       <div class="modal-header">
         <div class="modal-photo" id="modalFotoWrap"><img id="modalFoto" style="display:none;" /><span id="modalFotoIniciales"></span></div>
         <div>
           <p class="modal-name" id="modalNombre"></p>
-          <p class="modal-rest" id="modalRest"></p>
+          <p class="modal-rest"><span class="m2-pill-role">🪪 Mesero</span><span id="modalRest"></span></p>
           <p class="modal-address hidden" id="modalDireccion"></p>
         </div>
       </div>
-      <div class="stats-row">
-        <div class="stat-box"><div class="num" id="modalPromedio">—</div><div class="label">Rating promedio</div></div>
-        <div class="stat-box"><div class="num" id="modalTotal">—</div><div class="label">Reseñas totales</div></div>
+
+      <div class="m2-stats">
+        <div class="m2-stat"><span class="m2-ic">★</span><div><b id="modalPromedio">—</b><small>Rating promedio</small></div></div>
+        <div class="m2-stat"><span class="m2-ic">💬</span><div><b id="modalTotal">—</b><small>Reseñas totales</small></div></div>
+        <div class="m2-stat"><span class="m2-ic">🏠</span><div><b id="modalRestNum">—</b><small>Restaurante</small></div></div>
       </div>
-      <div class="contact-row">
-        <a href="#" class="contact-btn primary" id="contactoTelefono">Llamar</a>
-        <a href="#" class="contact-btn" id="contactoEmail">Enviar correo</a>
+
+      <div class="contact-row m2-buttons">
+        <a href="#" class="contact-btn primary" id="contactoTelefono">💬 Contactar</a>
+        <a href="#" class="contact-btn" id="contactoEmail">✉️ Enviar correo</a>
       </div>
-      <h2 class="section-title">Reseñas de clientes</h2>
-      <div id="modalReviews"></div>
+
+      <div class="m2-tabs">
+        <button type="button" class="m2-tab on" data-tab="reseñas">★ Reseñas</button>
+        <button type="button" class="m2-tab" data-tab="info">👤 Información</button>
+      </div>
+
+      <div id="m2PanelReseñas">
+        <h2 class="section-title">Reseñas de clientes</h2>
+        <div id="modalReviews"></div>
+      </div>
+      <div id="m2PanelInfo" class="hidden">
+        <div class="m2-info-row"><span class="m2-ic">🏠</span><div><small>Restaurante</small><b id="infoRest"></b></div></div>
+        <div class="m2-info-row"><span class="m2-ic">📍</span><div><small>Dirección</small><b id="infoDir">Sin registrar</b></div></div>
+        <div class="m2-info-row"><span class="m2-ic">📞</span><div><small>Teléfono</small><b id="infoTel">No disponible</b></div></div>
+        <div class="m2-info-row"><span class="m2-ic">✉️</span><div><small>Correo</small><b id="infoEmail">No disponible</b></div></div>
+      </div>
     </div>
   </div>
 
@@ -1062,6 +1107,13 @@
     });
 
     // ---------- Modal perfil ----------
+    document.querySelectorAll(".m2-tab").forEach(btn => btn.addEventListener("click", () => {
+      document.querySelectorAll(".m2-tab").forEach(b => b.classList.remove("on"));
+      btn.classList.add("on");
+      document.getElementById("m2PanelReseñas").classList.toggle("hidden", btn.dataset.tab !== "reseñas");
+      document.getElementById("m2PanelInfo").classList.toggle("hidden", btn.dataset.tab !== "info");
+    }));
+
     async function abrirPerfil(code) {
       const overlay = document.getElementById("overlayPerfil");
       overlay.classList.add("show");
@@ -1088,9 +1140,18 @@
 
         document.getElementById("modalPromedio").textContent = data.promedio > 0 ? data.promedio.toFixed(1) : "—";
         document.getElementById("modalTotal").textContent = data.totalReviews || 0;
+        document.getElementById("modalRestNum").textContent = data.restaurante || "—";
 
         document.getElementById("contactoTelefono").href = data.telefono ? `tel:${data.telefono}` : "#";
         document.getElementById("contactoEmail").href = data.email ? `mailto:${data.email}` : "#";
+
+        document.getElementById("infoRest").textContent = data.restaurante || "—";
+        document.getElementById("infoDir").textContent = data.negocioDireccion || "Sin registrar";
+        document.getElementById("infoTel").textContent = data.telefono || "No disponible";
+        document.getElementById("infoEmail").textContent = data.email || "No disponible";
+
+        const COLORES_AVA = ["#2E6CF6","#1FA971","#8B5CF6","#F5A524","#0EA5E9","#C4452E"];
+        function colorAva(letra) { return COLORES_AVA[letra.charCodeAt(0) % COLORES_AVA.length]; }
 
         const reviews = data.reviews || [];
         const reviewsCont = document.getElementById("modalReviews");
@@ -1101,12 +1162,19 @@
             const estrellas = "★".repeat(r.estrellas) + "☆".repeat(5 - r.estrellas);
             const fecha = new Date(r.fecha);
             const fechaTexto = isNaN(fecha) ? "" : fecha.toLocaleDateString("es-PE", { day: "numeric", month: "short", year: "numeric" });
+            const primerTag = (r.tags || "").split(",")[0].trim();
+            const letra = "C";
             return `
-              <div class="review-item">
-                <div class="review-stars">${estrellas}</div>
-                ${r.tags ? `<div class="review-tags">${escapeHtml(r.tags)}</div>` : ""}
-                ${r.comentario ? `<div class="review-comment">"${escapeHtml(r.comentario)}"</div>` : ""}
-                <div class="review-date">${fechaTexto}</div>
+              <div class="review-item2">
+                <div class="review-ava" style="background:${colorAva(letra)}">${letra}</div>
+                <div class="review-body">
+                  <div class="review-top-row">
+                    <span class="review-stars">${estrellas}</span>
+                    ${primerTag ? `<span class="review-tag-pill">${escapeHtml(primerTag)}</span>` : ""}
+                  </div>
+                  ${r.comentario ? `<div class="review-comment">${escapeHtml(r.comentario)}</div>` : ""}
+                  <div class="review-date">${fechaTexto}</div>
+                </div>
               </div>
             `;
           }).join("");
