@@ -1471,23 +1471,42 @@
         return `<div class="weekday-col" title="${NOMBRES_DIA[i]}: ${porDia[i] ? porDia[i].toFixed(1) : "sin datos"}"><div class="weekday-bar" style="height:${alto}%;"></div></div>`;
       }).join("");
 
-      // "Evolución de tu rating": promedio acumulado reseña a reseña, como línea SVG.
+      // "Evolución de tu rating": promedio acumulado reseña a reseña, con fechas y N° de servicio.
       const cronologico = [...reviews].sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
       let acumSuma = 0;
-      const evolucion = cronologico.map((r, i) => { acumSuma += r.estrellas || 0; return acumSuma / (i + 1); });
+      const evolucion = cronologico.map((r, i) => { acumSuma += r.estrellas || 0; return { valor: acumSuma / (i + 1), fecha: r.fecha, servicio: i + 1 }; });
       const evolCont = document.getElementById("evolChartSvg");
       if (evolucion.length < 2) {
         evolCont.innerHTML = '<div class="empty-state">Todavía no hay suficientes reseñas para ver tu evolución.</div>';
       } else {
-        const W = 560, H = 140, PAD = 16;
-        const xs = evolucion.map((_, i) => PAD + (i / (evolucion.length - 1)) * (W - PAD * 2));
-        const ys = evolucion.map(v => H - PAD - ((Math.max(1, Math.min(5, v)) - 1) / 4) * (H - PAD * 2));
+        const W = 560, H = 190, PAD = 16, PAD_BOTTOM = 34;
+        const n = evolucion.length;
+        const xs = evolucion.map((_, i) => PAD + (i / (n - 1)) * (W - PAD * 2));
+        const ys = evolucion.map(e => (H - PAD_BOTTOM) - ((Math.max(1, Math.min(5, e.valor)) - 1) / 4) * (H - PAD_BOTTOM - PAD));
         const pts = xs.map((x, i) => `${x.toFixed(1)},${ys[i].toFixed(1)}`).join(" ");
-        const area = `${PAD},${H - PAD} ${pts} ${W - PAD},${H - PAD}`;
-        evolCont.innerHTML = `<svg viewBox="0 0 ${W} ${H}" style="width:100%; height:auto;">
-          <polygon points="${area}" fill="var(--accent-soft)"/>
-          <polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
-        </svg>`;
+        const area = `${PAD},${H - PAD_BOTTOM} ${pts} ${W - PAD},${H - PAD_BOTTOM}`;
+
+        const fmt = (f) => { const d = new Date(f); return isNaN(d) ? "" : d.toLocaleDateString("es-PE", { day: "numeric", month: "short" }); };
+
+        // Muestra hasta 5 fechas en el eje X (primer, último y repartidos en medio) para no amontonarlas.
+        const idxEtiquetas = n <= 5 ? evolucion.map((_, i) => i) : [0, Math.round((n - 1) * 0.25), Math.round((n - 1) * 0.5), Math.round((n - 1) * 0.75), n - 1];
+        const etiquetasX = [...new Set(idxEtiquetas)].map(i =>
+          `<text x="${xs[i].toFixed(1)}" y="${H - 10}" font-size="10" fill="#8A90A0" text-anchor="middle">${fmt(evolucion[i].fecha)}</text>`
+        ).join("");
+
+        const puntos = evolucion.map((e, i) =>
+          `<circle cx="${xs[i].toFixed(1)}" cy="${ys[i].toFixed(1)}" r="3" fill="var(--accent)"><title>Servicio #${e.servicio} · ${fmt(e.fecha)} · promedio ${e.valor.toFixed(1)}★</title></circle>`
+        ).join("");
+
+        evolCont.innerHTML = `
+          <p style="font-size:11.5px; color:var(--ink-soft); margin:0 0 6px;">${n} servicio${n === 1 ? "" : "s"} registrados, del ${fmt(evolucion[0].fecha)} al ${fmt(evolucion[n - 1].fecha)}.</p>
+          <svg viewBox="0 0 ${W} ${H}" style="width:100%; height:auto;">
+            <polygon points="${area}" fill="var(--accent-soft)"/>
+            <polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+            ${puntos}
+            <line x1="${PAD}" y1="${H - PAD_BOTTOM}" x2="${W - PAD}" y2="${H - PAD_BOTTOM}" stroke="var(--line)" stroke-width="1"/>
+            ${etiquetasX}
+          </svg>`;
       }
 
       // "Reseñas recientes" con formato de avatar (columna central de Mi rendimiento).
