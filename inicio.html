@@ -170,11 +170,14 @@
 
   /* ---------- HERO ---------- */
   .hero {
-    background:
-      radial-gradient(circle at 85% 10%, #2452C7 0%, transparent 45%),
-      linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%);
+    background: var(--navy);
+    background-image:
+      radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
+    background-size: 16px 16px;
+    background-position: -8px -8px;
     color: #fff;
     padding: 76px 0 96px;
+    position: relative;
   }
   .hero-grid {
     display: grid;
@@ -187,13 +190,21 @@
   }
 
   .hero h1 {
-    font-size: 42px;
-    line-height: 1.15;
+    font-size: 46px;
+    line-height: 1.08;
     font-weight: 600;
-    max-width: 15ch;
+    max-width: 13ch;
+    letter-spacing: -0.02em;
+  }
+  .hero h1 em {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 0.72em;
+    color: rgba(255,255,255,0.6);
+    display: block;
   }
   @media (max-width: 500px) {
-    .hero h1 { font-size: 32px; }
+    .hero h1 { font-size: 34px; }
   }
 
   .hero p.sub {
@@ -224,14 +235,18 @@
   .btn-secondary {
     background: transparent;
     color: #fff;
-    border: 1.5px solid rgba(255,255,255,0.28);
-    border-radius: 12px;
-    padding: 13px 22px;
+    border: none;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-color: rgba(255,255,255,0.4);
+    padding: 13px 4px;
     font-weight: 600;
     font-size: 15px;
-    text-decoration: none;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
   }
+  .btn-secondary:hover { text-decoration-color: #fff; }
 
   /* ---------- hero illustration ---------- */
   .illo-wrap {
@@ -377,33 +392,19 @@
 
   /* ---------- HUB ---------- */
   .hub {
-    background:
-      radial-gradient(circle at 15% 20%, #2452C7 0%, transparent 50%),
-      linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%);
+    background: var(--navy-2);
+    background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
+    background-size: 16px 16px;
     color: #fff;
     padding: 92px 0;
-    text-align: center;
+    text-align: left;
   }
-  .hub-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--gold-soft);
-    background: rgba(216,161,58,0.12);
-    border: 1px solid rgba(216,161,58,0.35);
-    border-radius: 999px;
-    padding: 7px 16px;
-    margin-bottom: 22px;
-  }
+  .hub .wrap { max-width: 720px; }
   .hub h2 {
-    font-size: 32px;
+    font-size: 34px;
     font-weight: 600;
-    max-width: 20ch;
-    margin: 0 auto;
+    max-width: 18ch;
+    margin: 0;
   }
   .hub p.hub-sub {
     margin: 18px auto 0;
@@ -562,7 +563,7 @@
 <header class="hero">
   <div class="wrap hero-grid">
     <div>
-      <h1>La reputación de un mesero, fuera del restaurante.</h1>
+      <h1>La reputación de un mesero<em>no debería quedarse en el restaurante.</em></h1>
       <p class="sub">Cada cliente califica el servicio al pagar, con solo tocar su celular contra una tarjeta. Esas calificaciones construyen un historial que el mesero se lleva a su próximo trabajo.</p>
       <div class="hero-ctas">
         <a class="btn-primary" href="https://mail.google.com/mail/?view=cm&fs=1&to=tapport.pe@gmail.com" target="_blank" rel="noopener">Quiero contratar Tapport</a>
@@ -609,15 +610,14 @@
 
 <section class="hub" id="hub">
   <div class="wrap">
-    <div class="hub-eyebrow">✦ Nuevo</div>
     <h2>Entra al Feed: la comunidad Tapport en vivo</h2>
     <p class="hub-sub">Perfiles de meseros, vacantes y reseñas reales de restaurantes — todo en un solo lugar. Explora el Feed y descubre quién está construyendo su reputación hoy.</p>
-    <div class="hub-stats">
+    <div class="hub-stats" style="justify-content:flex-start;">
       <div class="hub-stat"><strong>Meseros</strong><span>perfiles con historial verificable</span></div>
       <div class="hub-stat"><strong>Restaurantes</strong><span>vacantes y equipos calificados</span></div>
       <div class="hub-stat"><strong>Reseñas</strong><span>calificaciones reales de clientes</span></div>
     </div>
-    <div class="hub-ctas">
+    <div class="hub-ctas" style="justify-content:flex-start;">
       <a class="btn-primary" href="https://tapportpe.github.io/tappor-web/directorio.html">Explorar el Feed</a>
       <a class="btn-secondary" href="#como-funciona">Ver cómo funciona</a>
     </div>
