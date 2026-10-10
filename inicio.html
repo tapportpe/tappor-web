@@ -392,10 +392,16 @@
   }
   .insight .wrap { max-width: 720px; }
   .insight p {
-    font-size: 24px;
-    line-height: 1.5;
-    font-weight: 500;
+    font-size: 27px;
+    line-height: 1.42;
+    font-weight: 600;
+    letter-spacing: -0.01em;
     color: var(--ink);
+  }
+  .insight p i {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--gold);
   }
   .insight p.support {
     margin-top: 18px;
@@ -409,9 +415,16 @@
   .steps {
     padding: 40px 0 88px;
   }
-  .steps h2 {
-    font-size: 28px;
+  .steps .eyebrow {
+    font-size: 13px;
     font-weight: 600;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .steps h2 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
     margin-bottom: 40px;
   }
   .step-list {
@@ -471,9 +484,18 @@
   @media (max-width: 720px) {
     .aud-col.right { padding-left: 0; }
   }
-  .aud-col h3 {
-    font-size: 21px;
+  .aud-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
     font-weight: 600;
+    color: var(--gold-soft);
+    opacity: 0.8;
+    margin-bottom: 10px;
+  }
+  .aud-col h3 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
     margin-bottom: 20px;
   }
   .aud-col ul {
@@ -501,10 +523,16 @@
   }
   .hub .wrap { max-width: 720px; }
   .hub h2 {
-    font-size: 34px;
-    font-weight: 600;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
     max-width: 18ch;
     margin: 0;
+  }
+  .hub h2 i {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--gold-soft);
   }
   .hub p.hub-sub {
     margin: 18px auto 0;
@@ -587,8 +615,9 @@
     flex-wrap: wrap;
   }
   .contact h2 {
-    font-size: 27px;
-    font-weight: 600;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
   }
   .contact p {
     margin-top: 10px;
@@ -729,14 +758,14 @@
 
 <section class="insight">
   <div class="wrap">
-    <p>Un mesero puede trabajar diez años y pasar por diez restaurantes distintos, sin que ninguna de esas experiencias quede registrada en ningún lado.</p>
+    <p>Un mesero puede trabajar diez años y pasar por diez restaurantes distintos, sin que <i>ninguna</i> de esas experiencias quede registrada en ningún lado.</p>
     <p class="support">Cuando busca su siguiente trabajo, todo lo que tiene es su palabra. Tapport le da un historial verificable — calificado por las personas que de verdad lo vieron trabajar: los clientes.</p>
   </div>
 </section>
 
 <section class="hub" id="hub">
   <div class="wrap">
-    <h2>Entra al Feed: la comunidad Tapport en vivo</h2>
+    <h2>Entra al <i>Feed</i>: la comunidad Tapport en vivo</h2>
     <p class="hub-sub">Perfiles de meseros, vacantes y reseñas reales de restaurantes — todo en un solo lugar. Explora el Feed y descubre quién está construyendo su reputación hoy.</p>
     <div class="hub-stats" style="justify-content:flex-start;">
       <div class="hub-stat"><strong>Meseros</strong><span>perfiles con historial verificable</span></div>
@@ -752,6 +781,7 @@
 
 <section class="steps" id="como-funciona">
   <div class="wrap">
+    <div class="eyebrow">01 — 03</div>
     <h2>Cómo funciona</h2>
     <div class="step-list">
       <div class="step">
@@ -782,6 +812,7 @@
 <section class="audiences">
   <div class="wrap aud-grid">
     <div class="aud-col left" id="meseros">
+      <div class="aud-num">01</div>
       <h3>Para meseros</h3>
       <ul>
         <li>Construyes un historial verificable de tu desempeño, calificación tras calificación.</li>
@@ -790,6 +821,7 @@
       </ul>
     </div>
     <div class="aud-col right" id="restaurantes">
+      <div class="aud-num">02</div>
       <h3>Para restaurantes</h3>
       <ul>
         <li>Feedback real de cada mesa, sin encuestas ni fricción para el cliente.</li>
