@@ -6,7 +6,7 @@
 <title>Tapport — La reputación de un mesero, fuera del restaurante</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --navy: #1E40AF;
@@ -20,6 +20,8 @@
     --gold-soft: #EAF1FE;
     --line: #E3E6ED;
     --line-dark: rgba(255,255,255,0.12);
+    --mono: 'JetBrains Mono', monospace;
+    --glow: 0 0 0 1px rgba(46,108,246,0.35), 0 0 32px rgba(46,108,246,0.22);
   }
 
   /* ---------- PRELOADER ---------- */
@@ -117,6 +119,15 @@
     font-weight: 700;
     font-size: 19px;
     color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo::before {
+    content: "";
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 10px var(--gold);
   }
   .nav-links {
     display: flex;
@@ -172,12 +183,21 @@
   .hero {
     background: var(--navy);
     background-image:
-      radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
-    background-size: 16px 16px;
-    background-position: -8px -8px;
+      linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px),
+      radial-gradient(ellipse 700px 420px at 78% 18%, rgba(46,108,246,0.5), transparent 70%);
+    background-size: 40px 40px, 40px 40px, 100% 100%;
     color: #fff;
     padding: 76px 0 96px;
     position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 60%, var(--navy) 100%);
+    pointer-events: none;
   }
   .hero-grid {
     display: grid;
@@ -199,8 +219,29 @@
   .hero h1 i {
     font-style: italic;
     font-weight: 500;
-    color: var(--gold-soft);
+    background: linear-gradient(90deg, #8FB2FF, #fff 60%, #8FB2FF);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: #8FB2FF;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .hero-eyebrow .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #4ADE80;
+    box-shadow: 0 0 8px #4ADE80;
+    animation: pulseDot 1.6s ease-in-out infinite;
+  }
+  @keyframes pulseDot { 0%,100%{opacity:1;} 50%{opacity:0.35;} }
   .hero h1 .lead-small {
     display: block;
     font-weight: 500;
@@ -236,6 +277,12 @@
     font-size: 15px;
     text-decoration: none;
     cursor: pointer;
+    box-shadow: 0 0 0 1px rgba(46,108,246,0.4), 0 8px 24px rgba(46,108,246,0.35);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .btn-primary:hover {
+    box-shadow: 0 0 0 1px rgba(46,108,246,0.6), 0 8px 32px rgba(46,108,246,0.55);
+    transform: translateY(-1px);
   }
   .btn-secondary {
     background: transparent;
@@ -259,14 +306,32 @@
     display: flex;
     justify-content: center;
   }
+  .illo-wrap::before {
+    content: "";
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(46,108,246,0.35), transparent 70%);
+    filter: blur(10px);
+    z-index: 0;
+  }
   .phone {
     width: 260px;
     background: #0E1530;
-    border: 1px solid rgba(255,255,255,0.14);
+    border: 1px solid rgba(143,178,255,0.35);
     border-radius: 30px;
     padding: 10px;
-    box-shadow: 0 30px 70px rgba(0,0,0,0.35);
+    box-shadow: var(--glow), 0 30px 70px rgba(0,0,0,0.45);
+    position: relative;
+    z-index: 1;
+    animation: floatY 4s ease-in-out infinite;
   }
+  @keyframes floatY {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  @media (prefers-reduced-motion: reduce) { .phone { animation: none; } }
   .phone-screen {
     background: var(--paper);
     border-radius: 20px;
@@ -367,13 +432,15 @@
     padding: 28px 22px;
   }
   .result-num {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 34px;
-    font-weight: 700;
+    font-family: var(--mono);
+    font-size: 30px;
+    font-weight: 600;
     color: var(--gold);
-    opacity: 0.35;
-    letter-spacing: -0.02em;
+    opacity: 0.4;
+    letter-spacing: -0.01em;
   }
+  .result-card { position: relative; transition: background 0.2s ease; }
+  .result-card:hover { background: var(--gold-soft); }
   .result-card h4 {
     font-size: 16px;
     font-weight: 600;
@@ -416,8 +483,10 @@
     padding: 40px 0 88px;
   }
   .steps .eyebrow {
-    font-size: 13px;
-    font-weight: 600;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
     color: var(--gold);
     margin-bottom: 10px;
   }
@@ -440,11 +509,11 @@
   }
   .step:last-child { border-bottom: 1px solid var(--line); }
   .step-num {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 28px;
-    font-weight: 700;
+    font-family: var(--mono);
+    font-size: 24px;
+    font-weight: 600;
     color: var(--gold);
-    opacity: 0.4;
+    opacity: 0.45;
     padding-top: 2px;
   }
   .step h3 {
@@ -485,11 +554,12 @@
     .aud-col.right { padding-left: 0; }
   }
   .aud-num {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--gold-soft);
-    opacity: 0.8;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: #8FB2FF;
+    opacity: 0.85;
     margin-bottom: 10px;
   }
   .aud-col h3 {
@@ -515,8 +585,10 @@
   /* ---------- HUB ---------- */
   .hub {
     background: var(--navy-2);
-    background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
-    background-size: 16px 16px;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size: 36px 36px;
     color: #fff;
     padding: 92px 0;
     text-align: left;
@@ -553,9 +625,11 @@
   }
   .hub-stat strong {
     display: block;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 22px;
-    color: #fff;
+    font-family: var(--mono);
+    font-size: 20px;
+    font-weight: 600;
+    color: #8FB2FF;
+    text-shadow: 0 0 16px rgba(143,178,255,0.5);
   }
   .hub-stat span {
     font-size: 13.5px;
@@ -692,6 +766,7 @@
 <header class="hero">
   <div class="wrap hero-grid">
     <div>
+      <div class="hero-eyebrow"><span class="dot"></span>TAP.TO.RATE — SISTEMA EN VIVO</div>
       <h1>¿La reputación de tu mesero se <i>queda</i> en el restaurante?<span class="lead-small">No debería. Con Tapport, se la lleva a donde trabaje después.</span></h1>
       <p class="sub">Cada cliente califica el servicio al pagar, con solo tocar su celular contra una tarjeta. Esas calificaciones construyen un historial que el mesero se lleva a su próximo trabajo.</p>
       <div class="hero-ctas">
