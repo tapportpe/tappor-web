@@ -6,7 +6,7 @@
 <title>Tapport — La reputación de un mesero, fuera del restaurante</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --navy: #1E40AF;
@@ -20,8 +20,6 @@
     --gold-soft: #EAF1FE;
     --line: #E3E6ED;
     --line-dark: rgba(255,255,255,0.12);
-    --mono: 'JetBrains Mono', monospace;
-    --glow: 0 0 0 1px rgba(46,108,246,0.35), 0 0 32px rgba(46,108,246,0.22);
   }
 
   /* ---------- PRELOADER ---------- */
@@ -119,15 +117,6 @@
     font-weight: 700;
     font-size: 19px;
     color: #fff;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .logo::before {
-    content: "";
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--gold);
-    box-shadow: 0 0 10px var(--gold);
   }
   .nav-links {
     display: flex;
@@ -183,21 +172,12 @@
   .hero {
     background: var(--navy);
     background-image:
-      linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px),
-      radial-gradient(ellipse 700px 420px at 78% 18%, rgba(46,108,246,0.5), transparent 70%);
-    background-size: 40px 40px, 40px 40px, 100% 100%;
+      radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
+    background-size: 16px 16px;
+    background-position: -8px -8px;
     color: #fff;
     padding: 76px 0 96px;
     position: relative;
-    overflow: hidden;
-  }
-  .hero::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, transparent 60%, var(--navy) 100%);
-    pointer-events: none;
   }
   .hero-grid {
     display: grid;
@@ -210,47 +190,21 @@
   }
 
   .hero h1 {
-    font-size: 48px;
-    line-height: 1.12;
-    font-weight: 700;
-    max-width: 15ch;
+    font-size: 46px;
+    line-height: 1.08;
+    font-weight: 600;
+    max-width: 13ch;
     letter-spacing: -0.02em;
   }
-  .hero h1 i {
-    font-style: italic;
+  .hero h1 em {
+    font-style: normal;
     font-weight: 500;
-    background: linear-gradient(90deg, #8FB2FF, #fff 60%, #8FB2FF);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-  .hero-eyebrow {
-    font-family: var(--mono);
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    color: #8FB2FF;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 18px;
-  }
-  .hero-eyebrow .dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: #4ADE80;
-    box-shadow: 0 0 8px #4ADE80;
-    animation: pulseDot 1.6s ease-in-out infinite;
-  }
-  @keyframes pulseDot { 0%,100%{opacity:1;} 50%{opacity:0.35;} }
-  .hero h1 .lead-small {
-    display: block;
-    font-weight: 500;
-    font-size: 0.68em;
+    font-size: 0.72em;
     color: rgba(255,255,255,0.6);
-    margin-top: 10px;
+    display: block;
   }
   @media (max-width: 500px) {
-    .hero h1 { font-size: 32px; }
+    .hero h1 { font-size: 34px; }
   }
 
   .hero p.sub {
@@ -277,12 +231,6 @@
     font-size: 15px;
     text-decoration: none;
     cursor: pointer;
-    box-shadow: 0 0 0 1px rgba(46,108,246,0.4), 0 8px 24px rgba(46,108,246,0.35);
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
-  }
-  .btn-primary:hover {
-    box-shadow: 0 0 0 1px rgba(46,108,246,0.6), 0 8px 32px rgba(46,108,246,0.55);
-    transform: translateY(-1px);
   }
   .btn-secondary {
     background: transparent;
@@ -300,157 +248,43 @@
   }
   .btn-secondary:hover { text-decoration-color: #fff; }
 
-  /* ---------- hero illustration: phone mockup ---------- */
+  /* ---------- hero illustration ---------- */
   .illo-wrap {
     position: relative;
     display: flex;
     justify-content: center;
   }
-  .illo-wrap::before {
-    content: "";
-    position: absolute;
-    width: 360px;
-    height: 360px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(46,108,246,0.35), transparent 70%);
-    filter: blur(10px);
-    z-index: 0;
+  .illo-card {
+    width: 100%;
+    max-width: 300px;
   }
-  .phone {
-    width: 260px;
-    background: #0E1530;
-    border: 1px solid rgba(143,178,255,0.35);
-    border-radius: 30px;
-    padding: 10px;
-    box-shadow: var(--glow), 0 30px 70px rgba(0,0,0,0.45);
-    position: relative;
-    z-index: 1;
-    animation: floatY 4s ease-in-out infinite;
-  }
-  @keyframes floatY {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-  }
-  @media (prefers-reduced-motion: reduce) { .phone { animation: none; } }
-  .phone-screen {
-    background: var(--paper);
-    border-radius: 20px;
-    padding: 22px 18px 20px;
-    text-align: center;
-  }
-  .phone-tapicon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--gold-soft);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 10px;
-  }
-  .phone-screen .p-name {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 15px;
-    color: var(--ink);
-  }
-  .phone-screen .p-sub {
-    font-size: 11.5px;
-    color: var(--slate);
-    margin-top: 2px;
-  }
-  .phone-stars {
-    display: flex;
-    justify-content: center;
-    gap: 5px;
-    margin: 16px 0 14px;
-  }
-  .phone-stars svg {
-    width: 24px;
-    height: 24px;
+  .illo-star {
     opacity: 0.25;
-    animation: starFill 1.8s ease forwards;
+    transform-origin: center;
+    animation: starFill 2.2s ease forwards;
   }
-  .phone-stars svg:nth-child(1) { animation-delay: 0.4s; }
-  .phone-stars svg:nth-child(2) { animation-delay: 0.6s; }
-  .phone-stars svg:nth-child(3) { animation-delay: 0.8s; }
-  .phone-stars svg:nth-child(4) { animation-delay: 1s; }
-  .phone-stars svg:nth-child(5) { animation-delay: 1.2s; }
+  .illo-star:nth-child(1) { animation-delay: 0.5s; }
+  .illo-star:nth-child(2) { animation-delay: 0.75s; }
+  .illo-star:nth-child(3) { animation-delay: 1s; }
+  .illo-star:nth-child(4) { animation-delay: 1.25s; }
+  .illo-star:nth-child(5) { animation-delay: 1.5s; }
   @keyframes starFill {
     0% { opacity: 0.25; }
-    45% { opacity: 1; transform: scale(1.15); }
+    40% { opacity: 1; transform: scale(1.12); }
     100% { opacity: 1; transform: scale(1); }
   }
-  .phone-tag {
-    display: inline-block;
-    background: var(--gold-soft);
-    color: var(--navy);
-    font-size: 10.5px;
-    font-weight: 600;
-    padding: 5px 10px;
-    border-radius: 100px;
-    margin: 0 3px 6px;
-  }
-  .phone-btn {
-    margin-top: 14px;
-    background: var(--gold);
-    color: #fff;
-    font-size: 12.5px;
-    font-weight: 600;
-    text-align: center;
-    border-radius: 10px;
-    padding: 11px;
-  }
-  .phone-waves circle {
-    stroke: rgba(46,108,246,0.45);
+  .illo-wave {
+    stroke: rgba(216,161,58,0.5);
     animation: waveOut 2.4s ease-out infinite;
   }
-  .phone-waves circle:nth-child(2) { animation-delay: 0.5s; }
-  .phone-waves circle:nth-child(3) { animation-delay: 1s; }
+  .illo-wave:nth-child(2) { animation-delay: 0.5s; }
+  .illo-wave:nth-child(3) { animation-delay: 1s; }
   @keyframes waveOut {
     0% { opacity: 0.7; transform: scale(0.85); }
-    100% { opacity: 0; transform: scale(1.3); }
+    100% { opacity: 0; transform: scale(1.15); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .phone-stars svg, .phone-waves circle { animation: none; opacity: 1; }
-  }
-
-  /* ---------- RESULTS ---------- */
-  .results { padding: 72px 0 0; }
-  .results-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1px;
-    background: var(--line);
-    border: 1px solid var(--line);
-  }
-  @media (max-width: 860px) {
-    .results-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-  .result-card {
-    background: var(--paper);
-    padding: 28px 22px;
-  }
-  .result-num {
-    font-family: var(--mono);
-    font-size: 30px;
-    font-weight: 600;
-    color: var(--gold);
-    opacity: 0.4;
-    letter-spacing: -0.01em;
-  }
-  .result-card { position: relative; transition: background 0.2s ease; }
-  .result-card:hover { background: var(--gold-soft); }
-  .result-card h4 {
-    font-size: 16px;
-    font-weight: 600;
-    margin: 6px 0 6px;
-  }
-  .result-card p {
-    font-size: 13.5px;
-    color: var(--slate);
-    line-height: 1.55;
-    margin: 0;
+    .illo-star, .illo-wave { animation: none; opacity: 1; }
   }
 
   /* ---------- INSIGHT ---------- */
@@ -459,16 +293,10 @@
   }
   .insight .wrap { max-width: 720px; }
   .insight p {
-    font-size: 27px;
-    line-height: 1.42;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--ink);
-  }
-  .insight p i {
-    font-style: italic;
+    font-size: 24px;
+    line-height: 1.5;
     font-weight: 500;
-    color: var(--gold);
+    color: var(--ink);
   }
   .insight p.support {
     margin-top: 18px;
@@ -482,18 +310,9 @@
   .steps {
     padding: 40px 0 88px;
   }
-  .steps .eyebrow {
-    font-family: var(--mono);
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    color: var(--gold);
-    margin-bottom: 10px;
-  }
   .steps h2 {
-    font-size: 32px;
-    font-weight: 700;
-    letter-spacing: -0.015em;
+    font-size: 28px;
+    font-weight: 600;
     margin-bottom: 40px;
   }
   .step-list {
@@ -509,11 +328,10 @@
   }
   .step:last-child { border-bottom: 1px solid var(--line); }
   .step-num {
-    font-family: var(--mono);
-    font-size: 24px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
     font-weight: 600;
     color: var(--gold);
-    opacity: 0.45;
     padding-top: 2px;
   }
   .step h3 {
@@ -553,19 +371,9 @@
   @media (max-width: 720px) {
     .aud-col.right { padding-left: 0; }
   }
-  .aud-num {
-    font-family: var(--mono);
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    color: #8FB2FF;
-    opacity: 0.85;
-    margin-bottom: 10px;
-  }
   .aud-col h3 {
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: -0.015em;
+    font-size: 21px;
+    font-weight: 600;
     margin-bottom: 20px;
   }
   .aud-col ul {
@@ -585,26 +393,18 @@
   /* ---------- HUB ---------- */
   .hub {
     background: var(--navy-2);
-    background-image:
-      linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
-    background-size: 36px 36px;
+    background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
+    background-size: 16px 16px;
     color: #fff;
     padding: 92px 0;
     text-align: left;
   }
   .hub .wrap { max-width: 720px; }
   .hub h2 {
-    font-size: 36px;
-    font-weight: 700;
-    letter-spacing: -0.015em;
+    font-size: 34px;
+    font-weight: 600;
     max-width: 18ch;
     margin: 0;
-  }
-  .hub h2 i {
-    font-style: italic;
-    font-weight: 500;
-    color: var(--gold-soft);
   }
   .hub p.hub-sub {
     margin: 18px auto 0;
@@ -625,11 +425,9 @@
   }
   .hub-stat strong {
     display: block;
-    font-family: var(--mono);
-    font-size: 20px;
-    font-weight: 600;
-    color: #8FB2FF;
-    text-shadow: 0 0 16px rgba(143,178,255,0.5);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    color: #fff;
   }
   .hub-stat span {
     font-size: 13.5px;
@@ -689,9 +487,8 @@
     flex-wrap: wrap;
   }
   .contact h2 {
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: -0.015em;
+    font-size: 27px;
+    font-weight: 600;
   }
   .contact p {
     margin-top: 10px;
@@ -749,8 +546,8 @@
   <div class="nav-inner">
     <div class="logo">Tapport</div>
     <ul class="nav-links nav-mobile-hide">
-      <li><a href="#hub">El Feed</a></li>
       <li><a href="#como-funciona">Cómo funciona</a></li>
+      <li><a href="#hub">El Feed</a></li>
       <li><a href="#contacto">Contacto</a></li>
     </ul>
     <div class="nav-right">
@@ -766,8 +563,7 @@
 <header class="hero">
   <div class="wrap hero-grid">
     <div>
-      <div class="hero-eyebrow"><span class="dot"></span>TAP.TO.RATE — SISTEMA EN VIVO</div>
-      <h1>¿La reputación de tu mesero se <i>queda</i> en el restaurante?<span class="lead-small">No debería. Con Tapport, se la lleva a donde trabaje después.</span></h1>
+      <h1>La reputación de un mesero<em>no debería quedarse en el restaurante.</em></h1>
       <p class="sub">Cada cliente califica el servicio al pagar, con solo tocar su celular contra una tarjeta. Esas calificaciones construyen un historial que el mesero se lleva a su próximo trabajo.</p>
       <div class="hero-ctas">
         <a class="btn-primary" href="https://mail.google.com/mail/?view=cm&fs=1&to=tapport.pe@gmail.com" target="_blank" rel="noopener">Quiero contratar Tapport</a>
@@ -776,87 +572,45 @@
     </div>
 
     <div class="illo-wrap">
-      <div class="phone">
-        <div class="phone-screen">
-          <div class="phone-tapicon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12" cy="9" r="4" fill="#1E40AF"/>
-              <circle cx="12" cy="9" r="7.5" stroke="#1E40AF" stroke-width="1.4" opacity="0.4"/>
-            </svg>
-          </div>
-          <div class="p-name">Calificar a Erick M.</div>
-          <div class="p-sub">Mesa 12 · Bistro Lima</div>
-          <div class="phone-stars">
-            <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
-            <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
-            <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
-            <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
-            <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
-          </div>
-          <div>
-            <span class="phone-tag">⚡ Rápido</span>
-            <span class="phone-tag">🙂 Amable</span>
-          </div>
-          <div class="phone-btn">Enviar calificación →</div>
-        </div>
-      </div>
+      <svg class="illo-card" viewBox="0 0 320 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- tarjeta -->
+        <rect x="30" y="60" width="200" height="260" rx="22" fill="#FFFFFF"/>
+        <circle cx="130" cy="130" r="36" fill="#DCE3F0"/>
+        <rect x="70" y="182" width="120" height="12" rx="6" fill="#161A2E"/>
+        <rect x="70" y="204" width="88" height="9" rx="4.5" fill="#C7CBD6"/>
+
+        <!-- telefono tapeando -->
+        <rect x="196" y="24" width="94" height="170" rx="20" fill="#161A2E" stroke="#33529E" stroke-width="2"/>
+        <rect x="206" y="40" width="74" height="138" rx="6" fill="#1B3FA0"/>
+
+        <!-- ondas de tap -->
+        <circle class="illo-wave" cx="222" cy="70" r="16" stroke-width="2"/>
+        <circle class="illo-wave" cx="222" cy="70" r="16" stroke-width="2"/>
+        <circle class="illo-wave" cx="222" cy="70" r="16" stroke-width="2"/>
+
+        <!-- estrellas -->
+        <g transform="translate(50,250)">
+          <path class="illo-star" d="M20 0l5.2 11.3 12.4 1.3-9.3 8.4 2.7 12.2L20 27.1l-11 6.1 2.7-12.2-9.3-8.4 12.4-1.3z" fill="#2E6CF6"/>
+          <path class="illo-star" transform="translate(30,0)" d="M20 0l5.2 11.3 12.4 1.3-9.3 8.4 2.7 12.2L20 27.1l-11 6.1 2.7-12.2-9.3-8.4 12.4-1.3z" fill="#2E6CF6"/>
+          <path class="illo-star" transform="translate(60,0)" d="M20 0l5.2 11.3 12.4 1.3-9.3 8.4 2.7 12.2L20 27.1l-11 6.1 2.7-12.2-9.3-8.4 12.4-1.3z" fill="#2E6CF6"/>
+          <path class="illo-star" transform="translate(90,0)" d="M20 0l5.2 11.3 12.4 1.3-9.3 8.4 2.7 12.2L20 27.1l-11 6.1 2.7-12.2-9.3-8.4 12.4-1.3z" fill="#2E6CF6"/>
+          <path class="illo-star" transform="translate(120,0)" d="M20 0l5.2 11.3 12.4 1.3-9.3 8.4 2.7 12.2L20 27.1l-11 6.1 2.7-12.2-9.3-8.4 12.4-1.3z" fill="#2E6CF6"/>
+        </g>
+      </svg>
     </div>
   </div>
 </header>
 
-<section class="results">
-  <div class="wrap">
-    <div class="results-grid">
-      <div class="result-card">
-        <div class="result-num">01</div>
-        <h4>Tap y listo</h4>
-        <p>El cliente califica en segundos, sin crear cuenta ni dejar su correo.</p>
-      </div>
-      <div class="result-card">
-        <div class="result-num">02</div>
-        <h4>Historial real</h4>
-        <p>Cada calificación queda registrada con fecha, estrellas y comentario.</p>
-      </div>
-      <div class="result-card">
-        <div class="result-num">03</div>
-        <h4>Reputación portátil</h4>
-        <p>El historial es del mesero, no del restaurante — lo acompaña siempre.</p>
-      </div>
-      <div class="result-card">
-        <div class="result-num">04</div>
-        <h4>Gratis para meseros</h4>
-        <p>Tarjeta, perfil y calificaciones, sin costo alguno para ellos.</p>
-      </div>
-    </div>
-  </div>
-</section>
 
 <section class="insight">
   <div class="wrap">
-    <p>Un mesero puede trabajar diez años y pasar por diez restaurantes distintos, sin que <i>ninguna</i> de esas experiencias quede registrada en ningún lado.</p>
+    <p>Un mesero puede trabajar diez años y pasar por diez restaurantes distintos, sin que ninguna de esas experiencias quede registrada en ningún lado.</p>
     <p class="support">Cuando busca su siguiente trabajo, todo lo que tiene es su palabra. Tapport le da un historial verificable — calificado por las personas que de verdad lo vieron trabajar: los clientes.</p>
-  </div>
-</section>
-
-<section class="hub" id="hub">
-  <div class="wrap">
-    <h2>Entra al <i>Feed</i>: la comunidad Tapport en vivo</h2>
-    <p class="hub-sub">Perfiles de meseros, vacantes y reseñas reales de restaurantes — todo en un solo lugar. Explora el Feed y descubre quién está construyendo su reputación hoy.</p>
-    <div class="hub-stats" style="justify-content:flex-start;">
-      <div class="hub-stat"><strong>Meseros</strong><span>perfiles con historial verificable</span></div>
-      <div class="hub-stat"><strong>Restaurantes</strong><span>vacantes y equipos calificados</span></div>
-      <div class="hub-stat"><strong>Reseñas</strong><span>calificaciones reales de clientes</span></div>
-    </div>
-    <div class="hub-ctas" style="justify-content:flex-start;">
-      <a class="btn-primary" href="https://tapportpe.github.io/tappor-web/directorio.html">Explorar el Feed</a>
-      <a class="btn-secondary" href="#como-funciona">Ver cómo funciona</a>
-    </div>
   </div>
 </section>
 
 <section class="steps" id="como-funciona">
   <div class="wrap">
-    <div class="eyebrow">01 — 03</div>
     <h2>Cómo funciona</h2>
     <div class="step-list">
       <div class="step">
@@ -887,7 +641,6 @@
 <section class="audiences">
   <div class="wrap aud-grid">
     <div class="aud-col left" id="meseros">
-      <div class="aud-num">01</div>
       <h3>Para meseros</h3>
       <ul>
         <li>Construyes un historial verificable de tu desempeño, calificación tras calificación.</li>
@@ -896,13 +649,28 @@
       </ul>
     </div>
     <div class="aud-col right" id="restaurantes">
-      <div class="aud-num">02</div>
       <h3>Para restaurantes</h3>
       <ul>
         <li>Feedback real de cada mesa, sin encuestas ni fricción para el cliente.</li>
         <li>Meseros más motivados: su esfuerzo por fin queda registrado.</li>
         <li>Implementación simple, sin fricción para tu operación diaria.</li>
       </ul>
+    </div>
+  </div>
+</section>
+
+<section class="hub" id="hub">
+  <div class="wrap">
+    <h2>Entra al Feed: la comunidad Tapport en vivo</h2>
+    <p class="hub-sub">Perfiles de meseros, vacantes y reseñas reales de restaurantes — todo en un solo lugar. Explora el Feed y descubre quién está construyendo su reputación hoy.</p>
+    <div class="hub-stats" style="justify-content:flex-start;">
+      <div class="hub-stat"><strong>Meseros</strong><span>perfiles con historial verificable</span></div>
+      <div class="hub-stat"><strong>Restaurantes</strong><span>vacantes y equipos calificados</span></div>
+      <div class="hub-stat"><strong>Reseñas</strong><span>calificaciones reales de clientes</span></div>
+    </div>
+    <div class="hub-ctas" style="justify-content:flex-start;">
+      <a class="btn-primary" href="https://tapportpe.github.io/tappor-web/directorio.html">Explorar el Feed</a>
+      <a class="btn-secondary" href="#contacto">Hablar con nosotros</a>
     </div>
   </div>
 </section>
