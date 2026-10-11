@@ -248,34 +248,41 @@
   }
   .btn-secondary:hover { text-decoration-color: #fff; }
 
-  /* ---------- hero illustration ---------- */
+  /* ---------- hero illustration: la reputación viajando ---------- */
   .illo-wrap {
     position: relative;
     display: flex;
     justify-content: center;
+    height: 360px;
   }
-  .illo-card {
+  .rep-anim {
+    position: relative;
     width: 100%;
     max-width: 300px;
+    height: 100%;
   }
-  .illo-star {
-    opacity: 0.25;
-    transform-origin: center;
-    animation: starFill 2.2s ease forwards;
+  .rep-tap, .rep-journey {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
-  .illo-star:nth-child(1) { animation-delay: 0.5s; }
-  .illo-star:nth-child(2) { animation-delay: 0.75s; }
-  .illo-star:nth-child(3) { animation-delay: 1s; }
-  .illo-star:nth-child(4) { animation-delay: 1.25s; }
-  .illo-star:nth-child(5) { animation-delay: 1.5s; }
-  @keyframes starFill {
-    0% { opacity: 0.25; }
-    40% { opacity: 1; transform: scale(1.12); }
-    100% { opacity: 1; transform: scale(1); }
+  .rep-tap { animation: tapPhase 11s ease-in-out infinite; }
+  .rep-journey { animation: journeyPhase 11s ease-in-out infinite; }
+  @keyframes tapPhase {
+    0%, 24% { opacity: 1; }
+    32%, 100% { opacity: 0; }
+  }
+  @keyframes journeyPhase {
+    0%, 30% { opacity: 0; }
+    38%, 90% { opacity: 1; }
+    98%, 100% { opacity: 0; }
   }
   .illo-wave {
-    stroke: rgba(216,161,58,0.5);
-    animation: waveOut 2.4s ease-out infinite;
+    stroke: rgba(46,108,246,0.5);
+    animation: waveOut 2.2s ease-out infinite;
   }
   .illo-wave:nth-child(2) { animation-delay: 0.5s; }
   .illo-wave:nth-child(3) { animation-delay: 1s; }
@@ -283,8 +290,114 @@
     0% { opacity: 0.7; transform: scale(0.85); }
     100% { opacity: 0; transform: scale(1.15); }
   }
+
+  /* la cadena de restaurantes que la reputación recorre */
+  .journey-line {
+    width: 2px;
+    height: 230px;
+    background: rgba(255,255,255,0.18);
+    position: relative;
+  }
+  .journey-track {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    position: relative;
+  }
+  .journey-track::before {
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 10px;
+    bottom: 10px;
+    width: 2px;
+    background: rgba(255,255,255,0.16);
+  }
+  .journey-node {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 0;
+    position: relative;
+  }
+  .node-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.14);
+    border: 2px solid rgba(255,255,255,0.3);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .node-text { display: flex; flex-direction: column; }
+  .node-place {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.55);
+  }
+  .node-score {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+  }
+  .n1 .node-dot { animation: node1Fill 11s ease-in-out infinite; }
+  .n1 .node-place, .n1 .node-score { animation: node1Text 11s ease-in-out infinite; }
+  .n2 .node-dot { animation: node2Fill 11s ease-in-out infinite; }
+  .n2 .node-place, .n2 .node-score { animation: node2Text 11s ease-in-out infinite; }
+  .n3 .node-dot { animation: node3Fill 11s ease-in-out infinite; }
+  .n3 .node-place, .n3 .node-score { animation: node3Text 11s ease-in-out infinite; }
+  @keyframes node1Fill {
+    0%, 38% { background: rgba(255,255,255,0.14); transform: scale(1); }
+    42% { background: var(--gold); transform: scale(1.35); }
+    45%, 100% { background: var(--gold); transform: scale(1); }
+  }
+  @keyframes node1Text {
+    0%, 38% { color: rgba(255,255,255,0.4); }
+    42%, 100% { color: #fff; }
+  }
+  @keyframes node2Fill {
+    0%, 54% { background: rgba(255,255,255,0.14); transform: scale(1); }
+    58% { background: var(--gold); transform: scale(1.35); }
+    61%, 100% { background: var(--gold); transform: scale(1); }
+  }
+  @keyframes node2Text {
+    0%, 54% { color: rgba(255,255,255,0.4); }
+    58%, 100% { color: #fff; }
+  }
+  @keyframes node3Fill {
+    0%, 70% { background: rgba(255,255,255,0.14); transform: scale(1); }
+    74% { background: var(--gold); transform: scale(1.35); }
+    77%, 100% { background: var(--gold); transform: scale(1); }
+  }
+  @keyframes node3Text {
+    0%, 70% { color: rgba(255,255,255,0.4); }
+    74%, 100% { color: #fff; }
+  }
+  .journey-total {
+    margin-top: 14px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    opacity: 0;
+    animation: totalFade 11s ease-in-out infinite;
+  }
+  .journey-total strong {
+    font-family: 'Space Grotesk', sans-serif;
+    color: #fff;
+    font-weight: 700;
+  }
+  @keyframes totalFade {
+    0%, 76% { opacity: 0; transform: translateY(4px); }
+    82%, 100% { opacity: 1; transform: translateY(0); }
+  }
   @media (prefers-reduced-motion: reduce) {
-    .illo-star, .illo-wave { animation: none; opacity: 1; }
+    .rep-tap { display: none; }
+    .rep-journey { position: static; opacity: 1; animation: none; }
+    .node-dot, .journey-total, .n1 .node-place, .n1 .node-score,
+    .n2 .node-place, .n2 .node-score, .n3 .node-place, .n3 .node-score {
+      animation: none; opacity: 1; color: #fff; background: var(--gold); transform: none;
+    }
   }
 
   /* ---------- INSIGHT ---------- */
@@ -439,6 +552,59 @@
     gap: 14px;
     flex-wrap: wrap;
   }
+  .hub-feed {
+    margin-top: 48px;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .hub-feed-track {
+    display: flex;
+    gap: 14px;
+    width: max-content;
+    animation: feedScroll 32s linear infinite;
+  }
+  .hub-feed:hover .hub-feed-track { animation-play-state: paused; }
+  @keyframes feedScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .feed-card {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 11px;
+    padding: 10px 16px;
+    white-space: nowrap;
+  }
+  .feed-card .fc-ava {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .feed-card .fc-name {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .feed-card .fc-meta {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hub-feed-track { animation: none; }
+  }
 
   /* ---------- CTA BANNER ---------- */
   .cta-band {
@@ -572,31 +738,47 @@
     </div>
 
     <div class="illo-wrap">
-      <svg class="illo-card" viewBox="0 0 320 360" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- tarjeta -->
-        <rect x="30" y="60" width="200" height="260" rx="22" fill="#FFFFFF"/>
-        <circle cx="130" cy="130" r="36" fill="#DCE3F0"/>
-        <rect x="70" y="182" width="120" height="12" rx="6" fill="#161A2E"/>
-        <rect x="70" y="204" width="88" height="9" rx="4.5" fill="#C7CBD6"/>
-
-        <!-- telefono tapeando -->
-        <rect x="196" y="24" width="94" height="170" rx="20" fill="#161A2E" stroke="#33529E" stroke-width="2"/>
-        <rect x="206" y="40" width="74" height="138" rx="6" fill="#1B3FA0"/>
-
-        <!-- ondas de tap -->
-        <circle class="illo-wave" cx="222" cy="70" r="16" stroke-width="2"/>
-        <circle class="illo-wave" cx="222" cy="70" r="16" stroke-width="2"/>
-        <circle class="illo-wave" cx="222" cy="70" r="16" stroke-width="2"/>
-
-        <!-- estrellas -->
-        <g transform="translate(50,250)">
-          <path class="illo-star" d="M20 0l5.2 11.3 12.4 1.3-9.3 8.4 2.7 12.2L20 27.1l-11 6.1 2.7-12.2-9.3-8.4 12.4-1.3z" fill="#2E6CF6"/>
-          <path class="illo-star" transform="translate(30,0)" d="M20 0l5.2 11.3 12.4 1.3-9.3 8.4 2.7 12.2L20 27.1l-11 6.1 2.7-12.2-9.3-8.4 12.4-1.3z" fill="#2E6CF6"/>
-          <path class="illo-star" transform="translate(60,0)" d="M20 0l5.2 11.3 12.4 1.3-9.3 8.4 2.7 12.2L20 27.1l-11 6.1 2.7-12.2-9.3-8.4 12.4-1.3z" fill="#2E6CF6"/>
-          <path class="illo-star" transform="translate(90,0)" d="M20 0l5.2 11.3 12.4 1.3-9.3 8.4 2.7 12.2L20 27.1l-11 6.1 2.7-12.2-9.3-8.4 12.4-1.3z" fill="#2E6CF6"/>
-          <path class="illo-star" transform="translate(120,0)" d="M20 0l5.2 11.3 12.4 1.3-9.3 8.4 2.7 12.2L20 27.1l-11 6.1 2.7-12.2-9.3-8.4 12.4-1.3z" fill="#2E6CF6"/>
-        </g>
-      </svg>
+      <div class="rep-anim">
+        <div class="rep-tap">
+          <svg width="220" height="240" viewBox="0 0 220 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="30" width="140" height="180" rx="20" fill="#FFFFFF"/>
+            <circle cx="80" cy="90" r="30" fill="#DCE3F0"/>
+            <rect x="46" y="134" width="88" height="10" rx="5" fill="#161A2E"/>
+            <rect x="46" y="152" width="64" height="8" rx="4" fill="#C7CBD6"/>
+            <rect x="140" y="4" width="70" height="128" rx="16" fill="#161A2E" stroke="#33529E" stroke-width="2"/>
+            <rect x="148" y="16" width="54" height="102" rx="5" fill="#1B3FA0"/>
+            <circle class="illo-wave" cx="160" cy="40" r="14" stroke-width="2"/>
+            <circle class="illo-wave" cx="160" cy="40" r="14" stroke-width="2"/>
+            <circle class="illo-wave" cx="160" cy="40" r="14" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="rep-journey">
+          <div class="journey-track">
+            <div class="journey-node n1">
+              <div class="node-dot"></div>
+              <div class="node-text">
+                <span class="node-place">Bistro Lima</span>
+                <span class="node-score">4.6 ★ · mesero</span>
+              </div>
+            </div>
+            <div class="journey-node n2">
+              <div class="node-dot"></div>
+              <div class="node-text">
+                <span class="node-place">La Terraza</span>
+                <span class="node-score">4.8 ★ · mismo mesero</span>
+              </div>
+            </div>
+            <div class="journey-node n3">
+              <div class="node-dot"></div>
+              <div class="node-text">
+                <span class="node-place">Mar Azul</span>
+                <span class="node-score">4.9 ★ · mismo mesero</span>
+              </div>
+            </div>
+          </div>
+          <p class="journey-total">La reputación se acumula en <strong>un solo perfil</strong>, aunque cambie de restaurante.</p>
+        </div>
+      </div>
     </div>
   </div>
 </header>
@@ -673,6 +855,9 @@
       <a class="btn-secondary" href="#contacto">Hablar con nosotros</a>
     </div>
   </div>
+  <div class="hub-feed">
+    <div class="hub-feed-track" id="hubFeedTrack"></div>
+  </div>
 </section>
 
 <section class="contact" id="contacto">
@@ -702,6 +887,28 @@
       document.body.classList.remove("loading");
     }, 2000);
   });
+
+  // Tira ilustrativa del Feed — ejemplos del tipo de actividad que se ve en el directorio real.
+  const feedEjemplos = [
+    { n: "Erick M.", m: "nueva reseña · Bistro Lima · 5★" },
+    { n: "Daniela R.", m: "subió su promedio a 4.9★" },
+    { n: "Luis F.", m: "nueva vacante abierta · Mar Azul" },
+    { n: "Vanessa Q.", m: "nueva reseña · El Fogón · 4★" },
+    { n: "Jorge P.", m: "cumplió 50 reseñas acumuladas" },
+    { n: "Camila S.", m: "nueva reseña · La Terraza · 5★" },
+  ];
+  const track = document.getElementById("hubFeedTrack");
+  if (track) {
+    const render = () => feedEjemplos.map(f => `
+      <div class="feed-card">
+        <div class="fc-ava">${f.n.charAt(0)}</div>
+        <div>
+          <div class="fc-name">${f.n}</div>
+          <div class="fc-meta">${f.m}</div>
+        </div>
+      </div>`).join("");
+    track.innerHTML = render() + render();
+  }
 </script>
 
 </body>
