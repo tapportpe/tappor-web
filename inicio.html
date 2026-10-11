@@ -302,9 +302,28 @@
   .footer-brand { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px; color: #fff; }
   .footer-tag { font-size: 13px; margin-top: 4px; color: rgba(255,255,255,0.5); }
   .footer-meta { font-size: 13px; color: rgba(255,255,255,0.5); text-align: right; }
+
+  /* ---------- SCROLL PROGRESS + REVEAL ---------- */
+  #scroll-progress {
+    position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+    background: var(--gold); z-index: 40;
+    transition: width 0.1s linear;
+  }
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s cubic-bezier(.2,.7,.3,1), transform 0.7s cubic-bezier(.2,.7,.3,1); }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
+  .reveal-left { opacity: 0; transform: translateX(-32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal-left.in-view { opacity: 1; transform: translateX(0); }
+  .reveal-right { opacity: 0; transform: translateX(32px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal-right.in-view { opacity: 1; transform: translateX(0); }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal-left, .reveal-right { opacity: 1; transform: none; transition: none; }
+    #scroll-progress { display: none; }
+  }
 </style>
 </head>
 <body class="loading">
+
+<div id="scroll-progress"></div>
 
 <div id="preloader">
   <div class="preloader-mark">
@@ -409,12 +428,12 @@
 
 <section class="results">
   <div class="wrap">
-    <div class="results-head">
+    <div class="results-head reveal">
       <div class="results-eyebrow"><span class="dot"></span>Resultados</div>
       <h2>Lo que <i class="accent">gana</i> tu mesero con cada tap.</h2>
     </div>
     <div class="results-grid">
-      <div class="result-card">
+      <div class="result-card reveal" style="transition-delay:0.05s">
         <div class="result-num">01</div>
         <div class="result-icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="4" stroke="#1E40AF" stroke-width="1.8"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6" stroke="#1E40AF" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -422,7 +441,7 @@
         <h4>Historial propio</h4>
         <p>Cada calificación queda ligada a su perfil, no al restaurante donde trabajaba.</p>
       </div>
-      <div class="result-card">
+      <div class="result-card reveal" style="transition-delay:0.12s">
         <div class="result-num">02</div>
         <div class="result-icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L4 14h7l-1 8 9-12h-7z" fill="#1E40AF"/></svg>
@@ -430,7 +449,7 @@
         <h4>Resultado al instante</h4>
         <p>El cliente califica en segundos con un tap, sin crear cuenta ni dar su correo.</p>
       </div>
-      <div class="result-card">
+      <div class="result-card reveal" style="transition-delay:0.19s">
         <div class="result-num">03</div>
         <div class="result-icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 17l6-6 4 4 8-8" stroke="#1E40AF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7h6v6" stroke="#1E40AF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -438,7 +457,7 @@
         <h4>Reputación que crece</h4>
         <p>Las calificaciones se acumulan tap tras tap, en cualquier restaurante donde trabaje después.</p>
       </div>
-      <div class="result-card">
+      <div class="result-card reveal" style="transition-delay:0.26s">
         <div class="result-num">04</div>
         <div class="result-icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z" stroke="#1E40AF" stroke-width="1.8" stroke-linejoin="round"/></svg>
@@ -452,29 +471,29 @@
 
 <section class="insight">
   <div class="wrap">
-    <p>Un mesero puede trabajar diez años y pasar por diez restaurantes distintos, sin que ninguna de esas experiencias quede registrada en ningún lado.</p>
-    <p class="support">Cuando busca su siguiente trabajo, todo lo que tiene es su palabra. Tapport le da un historial verificable — calificado por las personas que de verdad lo vieron trabajar: los clientes.</p>
+    <p class="reveal">Un mesero puede trabajar diez años y pasar por diez restaurantes distintos, sin que ninguna de esas experiencias quede registrada en ningún lado.</p>
+    <p class="support reveal" style="transition-delay:0.1s">Cuando busca su siguiente trabajo, todo lo que tiene es su palabra. Tapport le da un historial verificable — calificado por las personas que de verdad lo vieron trabajar: los clientes.</p>
   </div>
 </section>
 
 <section class="steps" id="como-funciona">
   <div class="wrap">
-    <div class="steps-head">
+    <div class="steps-head reveal">
       <h2>Cómo funciona</h2>
       <p class="steps-sub">Tres pasos, sin apps que instalar ni cuentas que crear.</p>
     </div>
     <div class="step-row">
-      <div class="step">
+      <div class="step reveal" style="transition-delay:0.05s">
         <div class="step-num">01</div>
         <h3>Tarjeta personal</h3>
         <p>Cada mesero recibe su propia tarjeta con chip NFC, con su nombre y foto — no hay catálogo ni selección, cada tarjeta identifica a una sola persona.</p>
       </div>
-      <div class="step">
+      <div class="step reveal" style="transition-delay:0.15s">
         <div class="step-num">02</div>
         <h3>Un tap al pagar</h3>
         <p>El cliente que pagó la cuenta acerca su celular a la tarjeta (o escanea el código QR de respaldo) y califica el servicio en segundos.</p>
       </div>
-      <div class="step">
+      <div class="step reveal" style="transition-delay:0.25s">
         <div class="step-num">03</div>
         <h3>Una reputación que viaja</h3>
         <p>Las calificaciones se acumulan en el perfil del mesero, no en el del restaurante — así lo acompañan a donde trabaje después.</p>
@@ -485,7 +504,7 @@
 
 <section class="audiences">
   <div class="wrap aud-grid">
-    <div class="aud-col left" id="meseros">
+    <div class="aud-col left reveal-left" id="meseros">
       <h3>Para meseros</h3>
       <ul>
         <li>Construyes un historial verificable de tu desempeño, calificación tras calificación.</li>
@@ -493,7 +512,7 @@
         <li>Tu reputación te acompaña de un restaurante a otro, en vez de quedarse atrás.</li>
       </ul>
     </div>
-    <div class="aud-col right" id="restaurantes">
+    <div class="aud-col right reveal-right" id="restaurantes">
       <h3>Para restaurantes</h3>
       <ul>
         <li>Feedback real de cada mesa, sin encuestas ni fricción para el cliente.</li>
@@ -505,7 +524,7 @@
 </section>
 
 <section class="hub" id="hub">
-  <div class="wrap">
+  <div class="wrap reveal">
     <h2>Entra al Feed: la comunidad Tapport en vivo</h2>
     <p class="hub-sub">Perfiles de meseros, vacantes y reseñas reales de restaurantes — todo en un solo lugar. Explora el Feed y descubre quién está construyendo su reputación hoy.</p>
     <div class="hub-stats">
@@ -524,7 +543,7 @@
 </section>
 
 <section class="contact" id="contacto">
-  <div class="wrap contact-inner">
+  <div class="wrap contact-inner reveal">
     <div>
       <h2>Hablemos directamente</h2>
       <p>¿Preguntas sobre el piloto, tu tarjeta o cómo empezar? Escríbenos y te respondemos en menos de 24 horas.</p>
@@ -571,6 +590,42 @@
         </div>
       </div>`).join("");
     track.innerHTML = render() + render();
+  }
+
+  // Barra de progreso de lectura
+  const progressBar = document.getElementById("scroll-progress");
+  function updateProgress() {
+    const h = document.documentElement;
+    const scrolled = h.scrollTop;
+    const max = h.scrollHeight - h.clientHeight;
+    progressBar.style.width = (max > 0 ? (scrolled / max) * 100 : 0) + "%";
+  }
+  window.addEventListener("scroll", updateProgress, { passive: true });
+  updateProgress();
+
+  // Revelado de secciones al hacer scroll hacia abajo
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduceMotion && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -60px 0px" });
+    document.querySelectorAll(".reveal, .reveal-left, .reveal-right").forEach(el => io.observe(el));
+  } else {
+    document.querySelectorAll(".reveal, .reveal-left, .reveal-right").forEach(el => el.classList.add("in-view"));
+  }
+
+  // Leve paralaje del mockup del hero al bajar
+  const deviceStack = document.querySelector(".device-stack");
+  if (deviceStack && !reduceMotion) {
+    window.addEventListener("scroll", () => {
+      const y = Math.min(window.scrollY, 600);
+      deviceStack.style.transform = `translateY(${y * 0.12}px)`;
+    }, { passive: true });
   }
 </script>
 
