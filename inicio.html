@@ -6,11 +6,12 @@
 <title>Tapport — La reputación de un mesero, fuera del restaurante</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root{
     --navy: #1E40AF;
     --navy-2: #1B3FA0;
+    --navy-deep: #13227A;
     --paper: #F3F5F9;
     --card: #FFFFFF;
     --ink: #161A2E;
@@ -24,51 +25,19 @@
 
   /* ---------- PRELOADER ---------- */
   #preloader {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
+    position: fixed; inset: 0; z-index: 100;
     background: var(--navy);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     transition: opacity 0.5s ease, visibility 0.5s ease;
     pointer-events: none;
   }
-  #preloader.hide {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-  }
-  .preloader-mark {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    opacity: 0;
-    animation: markIn 0.6s ease forwards 0.15s;
-  }
-  .preloader-mark svg {
-    width: 26px;
-    height: 26px;
-    animation: markPulse 1.1s ease-in-out infinite 0.6s;
-  }
-  .preloader-mark span {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 26px;
-    color: #fff;
-    letter-spacing: -0.01em;
-  }
-  @keyframes markIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes markPulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.45; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .preloader-mark, .preloader-mark svg { animation: none; opacity: 1; }
-  }
+  #preloader.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+  .preloader-mark { display: flex; align-items: center; gap: 10px; opacity: 0; animation: markIn 0.6s ease forwards 0.15s; }
+  .preloader-mark svg { width: 26px; height: 26px; animation: markPulse 1.1s ease-in-out infinite 0.6s; }
+  .preloader-mark span { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 26px; color: #fff; letter-spacing: -0.01em; }
+  @keyframes markIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes markPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+  @media (prefers-reduced-motion: reduce) { .preloader-mark, .preloader-mark svg { animation: none; opacity: 1; } }
   body.loading { overflow: hidden; }
 
   * { box-sizing: border-box; }
@@ -80,621 +49,259 @@
     color: var(--ink);
     background: var(--paper);
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
 
-  h1, h2, h3, .display {
-    font-family: 'Space Grotesk', 'Inter', sans-serif;
-    letter-spacing: -0.01em;
-    margin: 0;
+  h1, h2, h3, .display { font-family: 'Space Grotesk', 'Inter', sans-serif; letter-spacing: -0.01em; margin: 0; }
+  i.accent {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--gold);
   }
 
   a { color: inherit; }
 
-  .wrap {
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 0 28px;
-  }
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 64px); }
+  .band { width: 100%; }
 
   /* ---------- NAV ---------- */
-  nav {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    background: rgba(10,15,31,0.92);
-    backdrop-filter: blur(8px);
-  }
-  .nav-inner {
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 18px 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .logo {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 19px;
-    color: #fff;
-  }
-  .nav-links {
-    display: flex;
-    gap: 28px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .nav-links a {
-    color: rgba(255,255,255,0.72);
-    text-decoration: none;
-    font-size: 14.5px;
-    font-weight: 500;
-  }
+  nav { position: sticky; top: 0; z-index: 30; background: rgba(13,20,46,0.85); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .nav-inner { max-width: 1320px; margin: 0 auto; padding: 16px clamp(20px, 5vw, 64px); display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 19px; color: #fff; }
+  .nav-links { display: flex; gap: 30px; list-style: none; margin: 0; padding: 0; }
+  .nav-links a { color: rgba(255,255,255,0.72); text-decoration: none; font-size: 14.5px; font-weight: 500; }
   .nav-links a:hover { color: #fff; }
   .nav-cta {
-    background: var(--gold);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 18px;
-    font-weight: 600;
-    font-size: 14px;
-    text-decoration: none;
-    white-space: nowrap;
+    background: var(--gold); color: #fff; border: none; border-radius: 100px;
+    padding: 11px 20px; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 6px;
+    box-shadow: 0 6px 18px rgba(46,108,246,0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
   }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(46,108,246,0.45); }
   .nav-mobile-hide { display: flex; }
-  @media (max-width: 780px) {
-    .nav-mobile-hide { display: none; }
-  }
-  .nav-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .nav-login {
-    display: flex;
-    gap: 8px;
-  }
+  @media (max-width: 860px) { .nav-mobile-hide { display: none; } }
+  .nav-right { display: flex; align-items: center; gap: 10px; }
+  .nav-login { display: flex; gap: 8px; }
   .nav-login a {
-    color: rgba(255,255,255,0.85);
-    text-decoration: none;
-    font-size: 13.5px;
-    font-weight: 500;
-    border: 1.5px solid rgba(255,255,255,0.22);
-    border-radius: 9px;
-    padding: 8px 14px;
-    white-space: nowrap;
+    color: rgba(255,255,255,0.85); text-decoration: none; font-size: 13.5px; font-weight: 500;
+    border: 1.5px solid rgba(255,255,255,0.22); border-radius: 9px; padding: 8px 14px; white-space: nowrap;
   }
   .nav-login a:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
 
-  /* ---------- HERO ---------- */
+  /* ---------- HERO (full screen) ---------- */
   .hero {
-    background: var(--navy);
-    background-image:
-      radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
-    background-size: 16px 16px;
-    background-position: -8px -8px;
+    background: radial-gradient(ellipse 900px 600px at 15% 0%, var(--navy-2), var(--navy-deep) 65%);
     color: #fff;
-    padding: 76px 0 96px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 110px 0 60px;
     position: relative;
+    overflow: hidden;
   }
   .hero-grid {
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 56px;
+    grid-template-columns: 1fr 0.92fr;
+    gap: 60px;
     align-items: center;
+    width: 100%;
   }
-  @media (max-width: 860px) {
-    .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+  @media (max-width: 980px) { .hero-grid { grid-template-columns: 1fr; gap: 64px; } }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13.5px; font-weight: 600; color: rgba(255,255,255,0.65);
+    margin-bottom: 20px;
   }
+  .hero-eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 10px var(--gold); }
 
   .hero h1 {
-    font-size: 46px;
-    line-height: 1.08;
-    font-weight: 600;
-    max-width: 13ch;
+    font-size: clamp(38px, 5.4vw, 64px);
+    line-height: 1.05;
+    font-weight: 700;
     letter-spacing: -0.02em;
-  }
-  .hero h1 em {
-    font-style: normal;
-    font-weight: 500;
-    font-size: 0.72em;
-    color: rgba(255,255,255,0.6);
-    display: block;
-  }
-  @media (max-width: 500px) {
-    .hero h1 { font-size: 34px; }
+    max-width: 14ch;
   }
 
   .hero p.sub {
-    margin-top: 20px;
-    font-size: 16.5px;
+    margin-top: 24px;
+    font-size: 17.5px;
     line-height: 1.6;
     color: rgba(255,255,255,0.72);
     max-width: 46ch;
   }
 
-  .hero-ctas {
-    display: flex;
-    gap: 14px;
-    margin-top: 32px;
-    flex-wrap: wrap;
-  }
+  .hero-ctas { display: flex; gap: 14px; margin-top: 36px; flex-wrap: wrap; align-items: center; }
   .btn-primary {
-    background: var(--gold);
-    color: #fff;
-    border: none;
-    border-radius: 12px;
-    padding: 14px 22px;
-    font-weight: 600;
-    font-size: 15px;
-    text-decoration: none;
-    cursor: pointer;
+    background: var(--gold); color: #fff; border: none; border-radius: 100px;
+    padding: 16px 26px; font-weight: 600; font-size: 15.5px; text-decoration: none; cursor: pointer;
+    box-shadow: 0 10px 28px rgba(46,108,246,0.4);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    display: inline-flex; align-items: center; gap: 8px;
   }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(46,108,246,0.5); }
   .btn-secondary {
-    background: transparent;
-    color: #fff;
-    border: none;
-    text-decoration: underline;
-    text-underline-offset: 4px;
-    text-decoration-color: rgba(255,255,255,0.4);
-    padding: 13px 4px;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
+    background: transparent; color: #fff; border: none;
+    text-decoration: underline; text-underline-offset: 4px; text-decoration-color: rgba(255,255,255,0.4);
+    padding: 13px 4px; font-weight: 600; font-size: 15.5px; cursor: pointer;
+    display: inline-flex; align-items: center;
   }
   .btn-secondary:hover { text-decoration-color: #fff; }
 
-  /* ---------- hero illustration: la reputación viajando ---------- */
-  .illo-wrap {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    height: 360px;
+  .hero-trust { margin-top: 44px; display: flex; gap: 30px; flex-wrap: wrap; }
+  .trust-item strong { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 20px; color: #fff; }
+  .trust-item span { font-size: 12.5px; color: rgba(255,255,255,0.55); }
+
+  /* ---------- hero device stack ---------- */
+  .device-stack { position: relative; width: 100%; max-width: 420px; height: 480px; margin: 0 auto; }
+
+  .dev-browser {
+    position: absolute; top: 0; left: 0; width: 100%;
+    background: #fff; border-radius: 16px; overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+    animation: floatSlow 7s ease-in-out infinite;
   }
-  .rep-anim {
-    position: relative;
-    width: 100%;
-    max-width: 300px;
-    height: 100%;
+  .dev-browser-bar { background: #EDEFF4; padding: 10px 14px; display: flex; gap: 6px; }
+  .dev-browser-bar span { width: 9px; height: 9px; border-radius: 50%; background: #CBD0DC; display: inline-block; }
+  .dev-browser-body { padding: 18px; }
+  .dev-browser-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .dev-browser-row:last-child { margin-bottom: 0; }
+  .dev-ava { width: 34px; height: 34px; border-radius: 50%; background: var(--gold-soft); display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--navy); font-size: 13px; flex-shrink: 0; }
+  .dev-row-text { flex: 1; margin-left: 10px; }
+  .dev-row-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .dev-row-bar { height: 6px; border-radius: 3px; background: var(--line); margin-top: 6px; overflow: hidden; }
+  .dev-row-bar i { display: block; height: 100%; background: var(--gold); border-radius: 3px; }
+  .dev-row-score { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px; color: var(--navy); }
+
+  .dev-phone {
+    position: absolute; bottom: 0; right: 0; width: 210px;
+    background: #0E1530; border: 1px solid rgba(255,255,255,0.14); border-radius: 28px; padding: 9px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.45);
+    animation: floatSlow 7s ease-in-out infinite 0.6s;
   }
-  .rep-tap, .rep-journey {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  .dev-phone-screen { background: var(--paper); border-radius: 19px; padding: 20px 16px 18px; text-align: center; }
+  .dev-tapicon { width: 36px; height: 36px; border-radius: 50%; background: var(--gold-soft); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
+  .dev-phone-screen .p-name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px; color: var(--ink); }
+  .dev-phone-screen .p-sub { font-size: 11px; color: var(--slate); margin-top: 2px; }
+  .dev-stars { display: flex; justify-content: center; gap: 4px; margin: 14px 0 12px; }
+  .dev-stars svg { width: 20px; height: 20px; }
+  .dev-btn { background: var(--gold); color: #fff; font-size: 12px; font-weight: 600; text-align: center; border-radius: 10px; padding: 10px; }
+
+  @keyframes floatSlow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+  .toast-card {
+    position: absolute; top: 56%; left: -6%;
+    background: #fff; color: var(--ink); border-radius: 13px; padding: 11px 16px;
+    display: flex; align-items: center; gap: 10px;
+    box-shadow: 0 18px 36px rgba(0,0,0,0.28);
+    font-size: 13px; font-weight: 600;
+    animation: toastFloat 5.5s ease-in-out infinite;
+    z-index: 3;
   }
-  .rep-tap { animation: tapPhase 11s ease-in-out infinite; }
-  .rep-journey { animation: journeyPhase 11s ease-in-out infinite; }
-  @keyframes tapPhase {
-    0%, 24% { opacity: 1; }
-    32%, 100% { opacity: 0; }
+  .toast-card .tc-dot { width: 8px; height: 8px; border-radius: 50%; background: #22C55E; flex-shrink: 0; }
+  @keyframes toastFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dev-browser, .dev-phone, .toast-card { animation: none; }
   }
-  @keyframes journeyPhase {
-    0%, 30% { opacity: 0; }
-    38%, 90% { opacity: 1; }
-    98%, 100% { opacity: 0; }
-  }
-  .illo-wave {
-    stroke: rgba(46,108,246,0.5);
-    animation: waveOut 2.2s ease-out infinite;
-  }
-  .illo-wave:nth-child(2) { animation-delay: 0.5s; }
-  .illo-wave:nth-child(3) { animation-delay: 1s; }
-  @keyframes waveOut {
-    0% { opacity: 0.7; transform: scale(0.85); }
-    100% { opacity: 0; transform: scale(1.15); }
+  @media (max-width: 980px) {
+    .device-stack { max-width: 340px; height: 400px; }
+    .dev-phone { width: 170px; }
+    .toast-card { left: 0; }
   }
 
-  /* la cadena de restaurantes que la reputación recorre */
-  .journey-line {
-    width: 2px;
-    height: 230px;
-    background: rgba(255,255,255,0.18);
-    position: relative;
+  /* ---------- RESULTS ---------- */
+  .results { padding: 110px 0; }
+  .results-head { max-width: 640px; margin-bottom: 56px; }
+  .results-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: var(--gold); margin-bottom: 16px; }
+  .results-eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
+  .results h2 { font-size: clamp(30px, 3.6vw, 44px); font-weight: 700; letter-spacing: -0.015em; line-height: 1.12; }
+  .results-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  @media (max-width: 980px) { .results-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .results-grid { grid-template-columns: 1fr; } }
+  .result-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+    padding: 30px 24px; transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-  .journey-track {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0;
-    position: relative;
+  .result-card:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgba(30,64,175,0.1); }
+  .result-num { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 40px; color: var(--gold); line-height: 1; }
+  .result-icon {
+    width: 42px; height: 42px; border-radius: 11px; background: var(--gold-soft);
+    display: flex; align-items: center; justify-content: center; margin: 16px 0 14px;
   }
-  .journey-track::before {
-    content: "";
-    position: absolute;
-    left: 7px;
-    top: 10px;
-    bottom: 10px;
-    width: 2px;
-    background: rgba(255,255,255,0.16);
-  }
-  .journey-node {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 13px 0;
-    position: relative;
-  }
-  .node-dot {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.14);
-    border: 2px solid rgba(255,255,255,0.3);
-    flex-shrink: 0;
-    position: relative;
-    z-index: 1;
-  }
-  .node-text { display: flex; flex-direction: column; }
-  .node-place {
-    font-size: 13.5px;
-    font-weight: 600;
-    color: rgba(255,255,255,0.55);
-  }
-  .node-score {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 12px;
-    color: rgba(255,255,255,0.4);
-  }
-  .n1 .node-dot { animation: node1Fill 11s ease-in-out infinite; }
-  .n1 .node-place, .n1 .node-score { animation: node1Text 11s ease-in-out infinite; }
-  .n2 .node-dot { animation: node2Fill 11s ease-in-out infinite; }
-  .n2 .node-place, .n2 .node-score { animation: node2Text 11s ease-in-out infinite; }
-  .n3 .node-dot { animation: node3Fill 11s ease-in-out infinite; }
-  .n3 .node-place, .n3 .node-score { animation: node3Text 11s ease-in-out infinite; }
-  @keyframes node1Fill {
-    0%, 38% { background: rgba(255,255,255,0.14); transform: scale(1); }
-    42% { background: var(--gold); transform: scale(1.35); }
-    45%, 100% { background: var(--gold); transform: scale(1); }
-  }
-  @keyframes node1Text {
-    0%, 38% { color: rgba(255,255,255,0.4); }
-    42%, 100% { color: #fff; }
-  }
-  @keyframes node2Fill {
-    0%, 54% { background: rgba(255,255,255,0.14); transform: scale(1); }
-    58% { background: var(--gold); transform: scale(1.35); }
-    61%, 100% { background: var(--gold); transform: scale(1); }
-  }
-  @keyframes node2Text {
-    0%, 54% { color: rgba(255,255,255,0.4); }
-    58%, 100% { color: #fff; }
-  }
-  @keyframes node3Fill {
-    0%, 70% { background: rgba(255,255,255,0.14); transform: scale(1); }
-    74% { background: var(--gold); transform: scale(1.35); }
-    77%, 100% { background: var(--gold); transform: scale(1); }
-  }
-  @keyframes node3Text {
-    0%, 70% { color: rgba(255,255,255,0.4); }
-    74%, 100% { color: #fff; }
-  }
-  .journey-total {
-    margin-top: 14px;
-    font-size: 13px;
-    color: rgba(255,255,255,0.55);
-    opacity: 0;
-    animation: totalFade 11s ease-in-out infinite;
-  }
-  .journey-total strong {
-    font-family: 'Space Grotesk', sans-serif;
-    color: #fff;
-    font-weight: 700;
-  }
-  @keyframes totalFade {
-    0%, 76% { opacity: 0; transform: translateY(4px); }
-    82%, 100% { opacity: 1; transform: translateY(0); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .rep-tap { display: none; }
-    .rep-journey { position: static; opacity: 1; animation: none; }
-    .node-dot, .journey-total, .n1 .node-place, .n1 .node-score,
-    .n2 .node-place, .n2 .node-score, .n3 .node-place, .n3 .node-score {
-      animation: none; opacity: 1; color: #fff; background: var(--gold); transform: none;
-    }
-  }
+  .result-card h4 { font-size: 16.5px; font-weight: 600; margin-bottom: 7px; }
+  .result-card p { font-size: 13.5px; color: var(--slate); line-height: 1.55; margin: 0; }
 
   /* ---------- INSIGHT ---------- */
-  .insight {
-    padding: 84px 0;
-  }
-  .insight .wrap { max-width: 720px; }
-  .insight p {
-    font-size: 24px;
-    line-height: 1.5;
-    font-weight: 500;
-    color: var(--ink);
-  }
-  .insight p.support {
-    margin-top: 18px;
-    font-size: 15.5px;
-    font-weight: 400;
-    color: var(--slate);
-    line-height: 1.65;
-  }
+  .insight { padding: 0 0 110px; }
+  .insight .wrap { max-width: 760px; }
+  .insight p { font-size: 26px; line-height: 1.48; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
+  .insight p.support { margin-top: 18px; font-size: 15.5px; font-weight: 400; color: var(--slate); line-height: 1.65; }
 
   /* ---------- STEPS ---------- */
-  .steps {
-    padding: 40px 0 88px;
-  }
-  .steps h2 {
-    font-size: 28px;
-    font-weight: 600;
-    margin-bottom: 40px;
-  }
-  .step-list {
-    display: grid;
-    gap: 0;
-  }
-  .step {
-    display: grid;
-    grid-template-columns: 64px 1fr;
-    gap: 20px;
-    padding: 26px 0;
-    border-top: 1px solid var(--line);
-  }
-  .step:last-child { border-bottom: 1px solid var(--line); }
-  .step-num {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--gold);
-    padding-top: 2px;
-  }
-  .step h3 {
-    font-size: 17.5px;
-    font-weight: 600;
-    margin-bottom: 6px;
-  }
-  .step p {
-    font-size: 14.5px;
-    color: var(--slate);
-    line-height: 1.6;
-    max-width: 54ch;
-    margin: 0;
-  }
+  .steps { background: var(--card); padding: 100px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .steps-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; margin-bottom: 50px; flex-wrap: wrap; }
+  .steps h2 { font-size: clamp(28px, 3.2vw, 38px); font-weight: 700; letter-spacing: -0.015em; }
+  .steps-sub { font-size: 15px; color: var(--slate); max-width: 34ch; }
+  .step-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+  @media (max-width: 860px) { .step-row { grid-template-columns: 1fr; } }
+  .step { padding: 30px 28px 30px 0; border-top: 2px solid var(--line); }
+  .step:not(:first-child) { padding-left: 28px; }
+  @media (max-width: 860px) { .step:not(:first-child) { padding-left: 0; } }
+  .step-num { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; color: var(--gold); margin-bottom: 14px; }
+  .step h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+  .step p { font-size: 14.5px; color: var(--slate); line-height: 1.6; margin: 0; }
 
   /* ---------- AUDIENCES ---------- */
-  .audiences {
-    background: var(--navy);
-    color: #fff;
-    padding: 84px 0;
-  }
-  .aud-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-  }
-  @media (max-width: 720px) {
+  .audiences { background: var(--navy); color: #fff; padding: 100px 0; }
+  .aud-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  @media (max-width: 780px) {
     .aud-grid { grid-template-columns: 1fr; }
-    .aud-col.left { border-right: none; border-bottom: 1px solid var(--line-dark); padding-bottom: 40px; margin-bottom: 40px; }
+    .aud-col.left { border-right: none; border-bottom: 1px solid var(--line-dark); padding-bottom: 44px; margin-bottom: 44px; }
   }
-  .aud-col { padding: 0 40px; }
-  .aud-col.left {
-    border-right: 1px solid var(--line-dark);
-    padding-left: 0;
-  }
+  .aud-col { padding: 0 44px; }
+  .aud-col.left { border-right: 1px solid var(--line-dark); padding-left: 0; }
   .aud-col.right { padding-right: 0; }
-  @media (max-width: 720px) {
-    .aud-col.right { padding-left: 0; }
-  }
-  .aud-col h3 {
-    font-size: 21px;
-    font-weight: 600;
-    margin-bottom: 20px;
-  }
-  .aud-col ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .aud-col li {
-    font-size: 15px;
-    line-height: 1.6;
-    color: rgba(255,255,255,0.75);
-    padding: 12px 0;
-    border-top: 1px solid var(--line-dark);
-  }
+  @media (max-width: 780px) { .aud-col.right { padding-left: 0; } }
+  .aud-col h3 { font-size: 24px; font-weight: 700; letter-spacing: -0.015em; margin-bottom: 22px; }
+  .aud-col ul { list-style: none; margin: 0; padding: 0; }
+  .aud-col li { font-size: 15.5px; line-height: 1.6; color: rgba(255,255,255,0.75); padding: 14px 0; border-top: 1px solid var(--line-dark); }
   .aud-col li:first-of-type { border-top: none; }
 
-  /* ---------- HUB ---------- */
-  .hub {
-    background: var(--navy-2);
-    background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
-    background-size: 16px 16px;
-    color: #fff;
-    padding: 92px 0;
-    text-align: left;
-  }
-  .hub .wrap { max-width: 720px; }
-  .hub h2 {
-    font-size: 34px;
-    font-weight: 600;
-    max-width: 18ch;
-    margin: 0;
-  }
-  .hub p.hub-sub {
-    margin: 18px auto 0;
-    font-size: 16px;
-    line-height: 1.6;
-    color: rgba(255,255,255,0.72);
-    max-width: 50ch;
-  }
-  .hub-stats {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    flex-wrap: wrap;
-    margin: 40px 0 36px;
-  }
-  .hub-stat {
-    text-align: left;
-  }
-  .hub-stat strong {
-    display: block;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 22px;
-    color: #fff;
-  }
-  .hub-stat span {
-    font-size: 13.5px;
-    color: rgba(255,255,255,0.6);
-  }
-  .hub-ctas {
-    display: flex;
-    justify-content: center;
-    gap: 14px;
-    flex-wrap: wrap;
-  }
-  .hub-feed {
-    margin-top: 48px;
-    overflow: hidden;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-  }
-  .hub-feed-track {
-    display: flex;
-    gap: 14px;
-    width: max-content;
-    animation: feedScroll 32s linear infinite;
-  }
-  .hub-feed:hover .hub-feed-track { animation-play-state: paused; }
-  @keyframes feedScroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-  .feed-card {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 11px;
-    padding: 10px 16px;
-    white-space: nowrap;
-  }
-  .feed-card .fc-ava {
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    background: var(--gold);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Space Grotesk', sans-serif;
-  }
-  .feed-card .fc-name {
-    font-size: 13.5px;
-    font-weight: 600;
-    color: #fff;
-  }
-  .feed-card .fc-meta {
-    font-size: 12px;
-    color: rgba(255,255,255,0.5);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hub-feed-track { animation: none; }
-  }
+  /* ---------- HUB / FEED ---------- */
+  .hub { background: var(--navy-deep); color: #fff; padding: 110px 0 0; overflow: hidden; }
+  .hub .wrap { max-width: 760px; }
+  .hub h2 { font-size: clamp(30px, 4vw, 42px); font-weight: 700; letter-spacing: -0.015em; max-width: 16ch; margin: 0; }
+  .hub p.hub-sub { margin: 18px 0 0; font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.72); max-width: 50ch; }
+  .hub-stats { display: flex; gap: 44px; flex-wrap: wrap; margin: 42px 0 36px; }
+  .hub-stat strong { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 22px; color: #fff; }
+  .hub-stat span { font-size: 13.5px; color: rgba(255,255,255,0.6); }
+  .hub-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
 
-  /* ---------- CTA BANNER ---------- */
-  .cta-band {
-    background: var(--gold);
-    color: #fff;
-    padding: 64px 0;
-  }
-  .cta-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    flex-wrap: wrap;
-  }
-  .cta-band h2 {
-    font-size: 27px;
-    font-weight: 600;
-    max-width: 20ch;
-  }
-  .cta-band p {
-    margin-top: 8px;
-    font-size: 15px;
-    color: rgba(18,19,26,0.72);
-  }
-  .btn-dark {
-    background: var(--navy);
-    color: #fff;
-    border: none;
-    border-radius: 12px;
-    padding: 15px 24px;
-    font-weight: 600;
-    font-size: 15px;
-    text-decoration: none;
-    white-space: nowrap;
-  }
+  .hub-feed { margin-top: 64px; padding-bottom: 56px; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+  .hub-feed-track { display: flex; gap: 16px; width: max-content; animation: feedScroll 34s linear infinite; }
+  .hub-feed:hover .hub-feed-track { animation-play-state: paused; }
+  @keyframes feedScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .feed-card { flex-shrink: 0; display: flex; align-items: center; gap: 11px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 13px; padding: 12px 18px; white-space: nowrap; }
+  .feed-card .fc-ava { width: 28px; height: 28px; border-radius: 50%; background: var(--gold); color: #fff; font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; flex-shrink: 0; }
+  .feed-card .fc-name { font-size: 13.5px; font-weight: 600; color: #fff; }
+  .feed-card .fc-meta { font-size: 12px; color: rgba(255,255,255,0.5); }
+  @media (prefers-reduced-motion: reduce) { .hub-feed-track { animation: none; } }
 
   /* ---------- CONTACT ---------- */
-  .contact {
-    padding: 76px 0 84px;
-  }
-  .contact-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 32px;
-    flex-wrap: wrap;
-  }
-  .contact h2 {
-    font-size: 27px;
-    font-weight: 600;
-  }
-  .contact p {
-    margin-top: 10px;
-    font-size: 15.5px;
-    color: var(--slate);
-    max-width: 42ch;
-    line-height: 1.6;
-  }
+  .contact { padding: 100px 0 110px; }
+  .contact-inner { display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
+  .contact h2 { font-size: 30px; font-weight: 700; letter-spacing: -0.015em; }
+  .contact p { margin-top: 10px; font-size: 15.5px; color: var(--slate); max-width: 42ch; line-height: 1.6; }
 
   /* ---------- FOOTER ---------- */
-  footer {
-    background: var(--navy);
-    color: rgba(255,255,255,0.6);
-    padding: 44px 0 36px;
-  }
-  .footer-inner {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    flex-wrap: wrap;
-    gap: 20px;
-    border-top: 1px solid var(--line-dark);
-    padding-top: 28px;
-  }
-  .footer-brand {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 16px;
-    color: #fff;
-  }
-  .footer-tag {
-    font-size: 13px;
-    margin-top: 4px;
-    color: rgba(255,255,255,0.5);
-  }
-  .footer-meta {
-    font-size: 13px;
-    color: rgba(255,255,255,0.5);
-    text-align: right;
-  }
+  footer { background: var(--navy); color: rgba(255,255,255,0.6); padding: 44px 0 36px; }
+  .footer-inner { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px; border-top: 1px solid var(--line-dark); padding-top: 28px; }
+  .footer-brand { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px; color: #fff; }
+  .footer-tag { font-size: 13px; margin-top: 4px; color: rgba(255,255,255,0.5); }
+  .footer-meta { font-size: 13px; color: rgba(255,255,255,0.5); text-align: right; }
 </style>
 </head>
 <body class="loading">
@@ -729,60 +336,119 @@
 <header class="hero">
   <div class="wrap hero-grid">
     <div>
-      <h1>La reputación de un mesero<em>no debería quedarse en el restaurante.</em></h1>
+      <div class="hero-eyebrow"><span class="dot"></span>Ya está en pilotaje en Lima</div>
+      <h1>Cada mesero, su propia <i class="accent">reputación</i>.</h1>
       <p class="sub">Cada cliente califica el servicio al pagar, con solo tocar su celular contra una tarjeta. Esas calificaciones construyen un historial que el mesero se lleva a su próximo trabajo.</p>
       <div class="hero-ctas">
         <a class="btn-primary" href="https://mail.google.com/mail/?view=cm&fs=1&to=tapport.pe@gmail.com" target="_blank" rel="noopener">Quiero contratar Tapport</a>
         <a class="btn-secondary" href="#como-funciona">Ver cómo funciona</a>
       </div>
+      <div class="hero-trust">
+        <div class="trust-item"><strong>Gratis</strong><span>para todos los meseros</span></div>
+        <div class="trust-item"><strong>&lt; 5 seg</strong><span>para calificar un servicio</span></div>
+        <div class="trust-item"><strong>1 perfil</strong><span>que viaja con el mesero</span></div>
+      </div>
     </div>
 
-    <div class="illo-wrap">
-      <div class="rep-anim">
-        <div class="rep-tap">
-          <svg width="220" height="240" viewBox="0 0 220 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="10" y="30" width="140" height="180" rx="20" fill="#FFFFFF"/>
-            <circle cx="80" cy="90" r="30" fill="#DCE3F0"/>
-            <rect x="46" y="134" width="88" height="10" rx="5" fill="#161A2E"/>
-            <rect x="46" y="152" width="64" height="8" rx="4" fill="#C7CBD6"/>
-            <rect x="140" y="4" width="70" height="128" rx="16" fill="#161A2E" stroke="#33529E" stroke-width="2"/>
-            <rect x="148" y="16" width="54" height="102" rx="5" fill="#1B3FA0"/>
-            <circle class="illo-wave" cx="160" cy="40" r="14" stroke-width="2"/>
-            <circle class="illo-wave" cx="160" cy="40" r="14" stroke-width="2"/>
-            <circle class="illo-wave" cx="160" cy="40" r="14" stroke-width="2"/>
-          </svg>
-        </div>
-        <div class="rep-journey">
-          <div class="journey-track">
-            <div class="journey-node n1">
-              <div class="node-dot"></div>
-              <div class="node-text">
-                <span class="node-place">Bistro Lima</span>
-                <span class="node-score">4.6 ★ · mesero</span>
-              </div>
+    <div class="device-stack">
+      <div class="dev-browser">
+        <div class="dev-browser-bar"><span></span><span></span><span></span></div>
+        <div class="dev-browser-body">
+          <div class="dev-browser-row">
+            <div class="dev-ava">E</div>
+            <div class="dev-row-text">
+              <div class="dev-row-name">Erick M.</div>
+              <div class="dev-row-bar"><i style="width:94%"></i></div>
             </div>
-            <div class="journey-node n2">
-              <div class="node-dot"></div>
-              <div class="node-text">
-                <span class="node-place">La Terraza</span>
-                <span class="node-score">4.8 ★ · mismo mesero</span>
-              </div>
-            </div>
-            <div class="journey-node n3">
-              <div class="node-dot"></div>
-              <div class="node-text">
-                <span class="node-place">Mar Azul</span>
-                <span class="node-score">4.9 ★ · mismo mesero</span>
-              </div>
-            </div>
+            <div class="dev-row-score">4.9</div>
           </div>
-          <p class="journey-total">La reputación se acumula en <strong>un solo perfil</strong>, aunque cambie de restaurante.</p>
+          <div class="dev-browser-row">
+            <div class="dev-ava">D</div>
+            <div class="dev-row-text">
+              <div class="dev-row-name">Daniela R.</div>
+              <div class="dev-row-bar"><i style="width:88%"></i></div>
+            </div>
+            <div class="dev-row-score">4.6</div>
+          </div>
+          <div class="dev-browser-row">
+            <div class="dev-ava">L</div>
+            <div class="dev-row-text">
+              <div class="dev-row-name">Luis F.</div>
+              <div class="dev-row-bar"><i style="width:91%"></i></div>
+            </div>
+            <div class="dev-row-score">4.8</div>
+          </div>
         </div>
       </div>
+
+      <div class="dev-phone">
+        <div class="dev-phone-screen">
+          <div class="dev-tapicon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="9" r="4" fill="#1E40AF"/>
+              <circle cx="12" cy="9" r="7.5" stroke="#1E40AF" stroke-width="1.4" opacity="0.4"/>
+            </svg>
+          </div>
+          <div class="p-name">Calificar servicio</div>
+          <div class="p-sub">Mesa 12 · Bistro Lima</div>
+          <div class="dev-stars">
+            <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
+          </div>
+          <div class="dev-btn">Enviar calificación</div>
+        </div>
+      </div>
+
+      <div class="toast-card"><span class="tc-dot"></span>Nueva reseña · Erick M. · 5★</div>
     </div>
   </div>
 </header>
 
+<section class="results">
+  <div class="wrap">
+    <div class="results-head">
+      <div class="results-eyebrow"><span class="dot"></span>Resultados</div>
+      <h2>Lo que <i class="accent">gana</i> tu mesero con cada tap.</h2>
+    </div>
+    <div class="results-grid">
+      <div class="result-card">
+        <div class="result-num">01</div>
+        <div class="result-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="4" stroke="#1E40AF" stroke-width="1.8"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6" stroke="#1E40AF" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <h4>Historial propio</h4>
+        <p>Cada calificación queda ligada a su perfil, no al restaurante donde trabajaba.</p>
+      </div>
+      <div class="result-card">
+        <div class="result-num">02</div>
+        <div class="result-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L4 14h7l-1 8 9-12h-7z" fill="#1E40AF"/></svg>
+        </div>
+        <h4>Resultado al instante</h4>
+        <p>El cliente califica en segundos con un tap, sin crear cuenta ni dar su correo.</p>
+      </div>
+      <div class="result-card">
+        <div class="result-num">03</div>
+        <div class="result-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 17l6-6 4 4 8-8" stroke="#1E40AF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7h6v6" stroke="#1E40AF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h4>Reputación que crece</h4>
+        <p>Las calificaciones se acumulan tap tras tap, en cualquier restaurante donde trabaje después.</p>
+      </div>
+      <div class="result-card">
+        <div class="result-num">04</div>
+        <div class="result-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z" stroke="#1E40AF" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </div>
+        <h4>Siempre gratis</h4>
+        <p>Tarjeta, perfil y calificaciones, sin ningún costo para el mesero.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="insight">
   <div class="wrap">
@@ -793,28 +459,25 @@
 
 <section class="steps" id="como-funciona">
   <div class="wrap">
-    <h2>Cómo funciona</h2>
-    <div class="step-list">
+    <div class="steps-head">
+      <h2>Cómo funciona</h2>
+      <p class="steps-sub">Tres pasos, sin apps que instalar ni cuentas que crear.</p>
+    </div>
+    <div class="step-row">
       <div class="step">
         <div class="step-num">01</div>
-        <div>
-          <h3>Tarjeta personal</h3>
-          <p>Cada mesero recibe su propia tarjeta con chip NFC, con su nombre y foto — no hay catálogo ni selección, cada tarjeta identifica a una sola persona.</p>
-        </div>
+        <h3>Tarjeta personal</h3>
+        <p>Cada mesero recibe su propia tarjeta con chip NFC, con su nombre y foto — no hay catálogo ni selección, cada tarjeta identifica a una sola persona.</p>
       </div>
       <div class="step">
         <div class="step-num">02</div>
-        <div>
-          <h3>Un tap al pagar</h3>
-          <p>El cliente que pagó la cuenta acerca su celular a la tarjeta (o escanea el código QR de respaldo) y califica el servicio en segundos, sin crear cuenta ni dar su correo.</p>
-        </div>
+        <h3>Un tap al pagar</h3>
+        <p>El cliente que pagó la cuenta acerca su celular a la tarjeta (o escanea el código QR de respaldo) y califica el servicio en segundos.</p>
       </div>
       <div class="step">
         <div class="step-num">03</div>
-        <div>
-          <h3>Una reputación que viaja</h3>
-          <p>Las calificaciones se acumulan en el perfil del mesero, no en el del restaurante — así lo acompañan a donde trabaje después.</p>
-        </div>
+        <h3>Una reputación que viaja</h3>
+        <p>Las calificaciones se acumulan en el perfil del mesero, no en el del restaurante — así lo acompañan a donde trabaje después.</p>
       </div>
     </div>
   </div>
@@ -845,12 +508,12 @@
   <div class="wrap">
     <h2>Entra al Feed: la comunidad Tapport en vivo</h2>
     <p class="hub-sub">Perfiles de meseros, vacantes y reseñas reales de restaurantes — todo en un solo lugar. Explora el Feed y descubre quién está construyendo su reputación hoy.</p>
-    <div class="hub-stats" style="justify-content:flex-start;">
+    <div class="hub-stats">
       <div class="hub-stat"><strong>Meseros</strong><span>perfiles con historial verificable</span></div>
       <div class="hub-stat"><strong>Restaurantes</strong><span>vacantes y equipos calificados</span></div>
       <div class="hub-stat"><strong>Reseñas</strong><span>calificaciones reales de clientes</span></div>
     </div>
-    <div class="hub-ctas" style="justify-content:flex-start;">
+    <div class="hub-ctas">
       <a class="btn-primary" href="https://tapportpe.github.io/tappor-web/directorio.html">Explorar el Feed</a>
       <a class="btn-secondary" href="#contacto">Hablar con nosotros</a>
     </div>
@@ -885,7 +548,7 @@
     setTimeout(() => {
       document.getElementById("preloader").classList.add("hide");
       document.body.classList.remove("loading");
-    }, 2000);
+    }, 1600);
   });
 
   // Tira ilustrativa del Feed — ejemplos del tipo de actividad que se ve en el directorio real.
