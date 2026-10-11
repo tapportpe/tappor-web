@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tapport — La reputación de un mesero, fuera del restaurante</title>
+<title>Tapport: la reputación de un mesero, fuera del restaurante</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -272,10 +272,27 @@
 
   /* ---------- HUB / FEED ---------- */
   .hub { background: var(--navy-deep); color: #fff; padding: 110px 0 0; overflow: hidden; }
-  .hub .wrap { max-width: 760px; }
+  .hub-grid { display: grid; grid-template-columns: 1fr 0.86fr; gap: 56px; align-items: center; }
+  @media (max-width: 900px) { .hub-grid { grid-template-columns: 1fr; } }
   .hub h2 { font-size: clamp(30px, 4vw, 42px); font-weight: 700; letter-spacing: -0.015em; max-width: 16ch; margin: 0; }
   .hub p.hub-sub { margin: 18px 0 0; font-size: 16px; line-height: 1.6; color: rgba(255,255,255,0.72); max-width: 50ch; }
   .hub-stats { display: flex; gap: 44px; flex-wrap: wrap; margin: 42px 0 36px; }
+
+  /* visual del feed: mini-tarjetas apiladas */
+  .feed-visual { position: relative; height: 320px; display: flex; align-items: center; justify-content: center; }
+  .fv-card {
+    position: absolute; width: 230px; background: #fff; border-radius: 16px; padding: 16px;
+    box-shadow: 0 24px 48px rgba(0,0,0,0.3);
+  }
+  .fv-card .fv-top { display: flex; align-items: center; gap: 10px; }
+  .fv-card .fv-ava { width: 36px; height: 36px; border-radius: 50%; background: var(--gold); color: #fff; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .fv-card .fv-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .fv-card .fv-place { font-size: 11.5px; color: var(--slate); }
+  .fv-card .fv-stars { display: flex; gap: 2px; margin-top: 10px; }
+  .fv-card .fv-stars svg { width: 15px; height: 15px; }
+  .fv-c1 { transform: rotate(-7deg) translate(-78px, -20px); z-index: 1; }
+  .fv-c2 { transform: rotate(3deg) translate(42px, 18px); z-index: 2; }
+  .fv-c3 { transform: rotate(-2deg) translate(-18px, 70px); z-index: 3; }
   .hub-stat strong { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 22px; color: #fff; }
   .hub-stat span { font-size: 13.5px; color: rgba(255,255,255,0.6); }
   .hub-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
@@ -472,7 +489,7 @@
 <section class="insight">
   <div class="wrap">
     <p class="reveal">Un mesero puede trabajar diez años y pasar por diez restaurantes distintos, sin que ninguna de esas experiencias quede registrada en ningún lado.</p>
-    <p class="support reveal" style="transition-delay:0.1s">Cuando busca su siguiente trabajo, todo lo que tiene es su palabra. Tapport le da un historial verificable — calificado por las personas que de verdad lo vieron trabajar: los clientes.</p>
+    <p class="support reveal" style="transition-delay:0.1s">Cuando busca su siguiente trabajo, todo lo que tiene es su palabra. Tapport le da un historial verificable, calificado por las personas que de verdad lo vieron trabajar: sus clientes.</p>
   </div>
 </section>
 
@@ -486,7 +503,7 @@
       <div class="step reveal" style="transition-delay:0.05s">
         <div class="step-num">01</div>
         <h3>Tarjeta personal</h3>
-        <p>Cada mesero recibe su propia tarjeta con chip NFC, con su nombre y foto — no hay catálogo ni selección, cada tarjeta identifica a una sola persona.</p>
+        <p>Cada mesero recibe su propia tarjeta con chip NFC, con su nombre y foto. No hay catálogo: cada tarjeta es de una sola persona.</p>
       </div>
       <div class="step reveal" style="transition-delay:0.15s">
         <div class="step-num">02</div>
@@ -496,7 +513,7 @@
       <div class="step reveal" style="transition-delay:0.25s">
         <div class="step-num">03</div>
         <h3>Una reputación que viaja</h3>
-        <p>Las calificaciones se acumulan en el perfil del mesero, no en el del restaurante — así lo acompañan a donde trabaje después.</p>
+        <p>Las calificaciones se acumulan en el perfil del mesero, no en el del restaurante. Así lo acompañan a donde trabaje después.</p>
       </div>
     </div>
   </div>
@@ -508,7 +525,7 @@
       <h3>Para meseros</h3>
       <ul>
         <li>Construyes un historial verificable de tu desempeño, calificación tras calificación.</li>
-        <li>Es gratis, siempre — no pagas nada por tener tu tarjeta ni por acumular reseñas.</li>
+        <li>Es gratis, siempre. No pagas nada por tener tu tarjeta ni por acumular reseñas.</li>
         <li>Tu reputación te acompaña de un restaurante a otro, en vez de quedarse atrás.</li>
       </ul>
     </div>
@@ -524,17 +541,59 @@
 </section>
 
 <section class="hub" id="hub">
-  <div class="wrap reveal">
-    <h2>Entra al Feed: la comunidad Tapport en vivo</h2>
-    <p class="hub-sub">Perfiles de meseros, vacantes y reseñas reales de restaurantes — todo en un solo lugar. Explora el Feed y descubre quién está construyendo su reputación hoy.</p>
-    <div class="hub-stats">
-      <div class="hub-stat"><strong>Meseros</strong><span>perfiles con historial verificable</span></div>
-      <div class="hub-stat"><strong>Restaurantes</strong><span>vacantes y equipos calificados</span></div>
-      <div class="hub-stat"><strong>Reseñas</strong><span>calificaciones reales de clientes</span></div>
+  <div class="wrap hub-grid">
+    <div class="reveal-left">
+      <h2>Entra al Feed: la comunidad Tapport en vivo</h2>
+      <p class="hub-sub">Perfiles de meseros, vacantes y reseñas reales de restaurantes, todo en un solo lugar. Explora el Feed y mira quién está construyendo su reputación hoy.</p>
+      <div class="hub-stats">
+        <div class="hub-stat"><strong>Meseros</strong><span>perfiles con historial verificable</span></div>
+        <div class="hub-stat"><strong>Restaurantes</strong><span>vacantes y equipos calificados</span></div>
+        <div class="hub-stat"><strong>Reseñas</strong><span>calificaciones reales de clientes</span></div>
+      </div>
+      <div class="hub-ctas">
+        <a class="btn-primary" href="https://tapportpe.github.io/tappor-web/directorio.html">Explorar el Feed</a>
+        <a class="btn-secondary" href="#contacto">Hablar con nosotros</a>
+      </div>
     </div>
-    <div class="hub-ctas">
-      <a class="btn-primary" href="https://tapportpe.github.io/tappor-web/directorio.html">Explorar el Feed</a>
-      <a class="btn-secondary" href="#contacto">Hablar con nosotros</a>
+    <div class="feed-visual reveal-right">
+      <div class="fv-card fv-c1">
+        <div class="fv-top">
+          <div class="fv-ava">D</div>
+          <div><div class="fv-name">Daniela R.</div><div class="fv-place">La Terraza</div></div>
+        </div>
+        <div class="fv-stars">
+          <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
+        </div>
+      </div>
+      <div class="fv-card fv-c2">
+        <div class="fv-top">
+          <div class="fv-ava">E</div>
+          <div><div class="fv-name">Erick M.</div><div class="fv-place">Bistro Lima</div></div>
+        </div>
+        <div class="fv-stars">
+          <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
+        </div>
+      </div>
+      <div class="fv-card fv-c3">
+        <div class="fv-top">
+          <div class="fv-ava">L</div>
+          <div><div class="fv-name">Luis F.</div><div class="fv-place">Mar Azul</div></div>
+        </div>
+        <div class="fv-stars">
+          <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#2E6CF6"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.7 1.5 6.8L12 17.6l-6.1 3.4 1.5-6.8-5.2-4.7 6.9-.7z"/></svg>
+        </div>
+      </div>
     </div>
   </div>
   <div class="hub-feed">
