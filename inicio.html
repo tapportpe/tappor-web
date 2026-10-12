@@ -66,10 +66,20 @@
   .wrap { max-width: 1320px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 64px); }
   .band { width: 100%; }
 
-  /* ---------- NAV ---------- */
-  nav { position: sticky; top: 0; z-index: 30; background: rgba(13,20,46,0.85); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.08); }
-  .nav-inner { max-width: 1320px; margin: 0 auto; padding: 16px clamp(20px, 5vw, 64px); display: flex; align-items: center; justify-content: space-between; }
-  .logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 19px; color: #fff; }
+  /* ---------- NAV (isla flotante) ---------- */
+  nav { position: sticky; top: 0; z-index: 30; padding: 16px clamp(16px, 4vw, 40px) 0; pointer-events: none; }
+  .nav-inner {
+    pointer-events: auto;
+    max-width: 1280px; margin: 0 auto;
+    padding: 10px 10px 10px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(13,20,46,0.78);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 100px;
+    box-shadow: 0 14px 36px rgba(0,0,0,0.3);
+  }
+  .logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 19px; color: #fff; text-decoration: none; display: inline-flex; align-items: center; }
   .nav-links { display: flex; gap: 30px; list-style: none; margin: 0; padding: 0; }
   .nav-links a { color: rgba(255,255,255,0.72); text-decoration: none; font-size: 14.5px; font-weight: 500; }
   .nav-links a:hover { color: #fff; }
@@ -334,6 +344,20 @@
   @media (prefers-reduced-motion: reduce) { .hub-feed-track { animation: none; } }
 
   /* ---------- CONTACT ---------- */
+  /* ---------- NOSOTROS ---------- */
+  .nosotros { padding: 110px 0; }
+  .nosotros-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 64px; align-items: start; }
+  @media (max-width: 860px) { .nosotros-grid { grid-template-columns: 1fr; gap: 40px; } }
+  .nosotros-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: var(--gold); margin-bottom: 16px; }
+  .nosotros-eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
+  .nosotros h2 { font-size: clamp(28px, 3.4vw, 38px); font-weight: 700; letter-spacing: -0.015em; line-height: 1.15; max-width: 12ch; }
+  .nosotros-body p { font-size: 16px; line-height: 1.7; color: var(--slate); margin: 0 0 18px; }
+  .nosotros-body p:last-child { margin-bottom: 0; }
+  .nosotros-body strong { color: var(--ink); }
+  .nosotros-stats { display: flex; gap: 36px; margin-top: 32px; flex-wrap: wrap; }
+  .nosotros-stat strong { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 20px; color: var(--navy); }
+  .nosotros-stat span { font-size: 12.5px; color: var(--slate-soft); }
+
   .contact { padding: 100px 0 110px; }
   .contact-inner { display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
   .contact h2 { font-size: 30px; font-weight: 700; letter-spacing: -0.015em; }
@@ -379,10 +403,11 @@
 
 <nav>
   <div class="nav-inner">
-    <div class="logo">Tapport</div>
+    <a class="logo" href="inicio.html">Tapport</a>
     <ul class="nav-links nav-mobile-hide">
       <li><a href="#como-funciona">Cómo funciona</a></li>
       <li><a href="#hub">El Feed</a></li>
+      <li><a href="#nosotros">Nosotros</a></li>
       <li><a href="#contacto">Contacto</a></li>
     </ul>
     <div class="nav-right">
@@ -570,6 +595,24 @@
       <div class="aud-track" id="audTrack"></div>
     </div>
     <div class="aud-dots" id="audDots"></div>
+  </div>
+</section>
+
+<section class="nosotros" id="nosotros">
+  <div class="wrap nosotros-grid">
+    <div class="reveal">
+      <div class="nosotros-eyebrow"><span class="dot"></span>Nosotros</div>
+      <h2>Por qué construimos Tapport</h2>
+    </div>
+    <div class="nosotros-body reveal" style="transition-delay:0.1s">
+      <p>Tapport nació de un problema simple de ver y difícil de resolver: los restaurantes no tienen forma real de saber cómo atiende cada uno de sus meseros, y los meseros que hacen bien su trabajo no tienen cómo demostrarlo cuando buscan el siguiente.</p>
+      <p>Las encuestas no las llena nadie. Las reseñas en Google hablan del restaurante, nunca de la persona que atendió la mesa. Y cuando un mesero cambia de trabajo, todo su esfuerzo se queda atrás, como si nunca hubiera pasado.</p>
+      <p>Construimos Tapport para resolver los dos lados a la vez: <strong>control de calidad real para el restaurante</strong>, y <strong>una reputación propia que el mesero se lleva a donde vaya</strong>. Hoy estamos en pilotaje con restaurantes en Lima, mejorando el producto mesa por mesa.</p>
+      <div class="nosotros-stats">
+        <div class="nosotros-stat"><strong>Lima, Perú</strong><span>donde empezamos</span></div>
+        <div class="nosotros-stat"><strong>En pilotaje</strong><span>con restaurantes reales</span></div>
+      </div>
+    </div>
   </div>
 </section>
 
