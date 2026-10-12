@@ -272,6 +272,7 @@
   .step-num { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; color: var(--gold); margin-bottom: 14px; }
   .step h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
   .step p { font-size: 14.5px; color: var(--slate); line-height: 1.6; margin: 0; }
+  .step-photo { width: 100%; max-width: 220px; height: 150px; object-fit: cover; border-radius: 14px; margin-bottom: 18px; box-shadow: 0 12px 28px rgba(19,34,122,0.18); }
 
   /* ---------- AUDIENCES CAROUSEL ---------- */
   .audiences { background: var(--navy); color: #fff; padding: 100px 0; overflow: hidden; }
@@ -439,7 +440,7 @@
     <div>
       <div class="hero-eyebrow"><span class="dot"></span>Ya está en pilotaje en Lima</div>
       <h1>Controla la calidad de tu servicio, con <i class="accent">datos</i> reales.</h1>
-      <p class="sub">Cada cliente califica a tu mesero al pagar, con solo tocar su celular contra una tarjeta. Tú ves el promedio, el historial y el rendimiento de cada trabajador en un panel, en tiempo real.</p>
+      <p class="sub">Cada cliente califica a tu mesero al pagar, con solo tocar su celular contra su banda con chip NFC. Tú ves el promedio, el historial y el rendimiento de cada trabajador en un panel, en tiempo real.</p>
       <div class="hero-ctas">
         <a class="btn-primary" href="https://mail.google.com/mail/?view=cm&fs=1&to=tapport.pe@gmail.com" target="_blank" rel="noopener">Quiero Tapport en mi restaurante</a>
         <a class="btn-secondary" href="#como-funciona">Ver cómo funciona</a>
@@ -565,15 +566,16 @@
       <p class="steps-sub">Tres pasos, sin apps que instalar ni cuentas que crear.</p>
     </div>
     <div class="step-row">
-      <div class="step reveal" style="transition-delay:0.05s">
+      <div class="step step-with-photo reveal" style="transition-delay:0.05s">
+        <img class="step-photo" src="assets/banda-tapport.jpg" alt="Banda de silicona Tapport con chip NFC" loading="lazy">
         <div class="step-num">01</div>
-        <h3>Tarjeta personal</h3>
-        <p>Cada mesero recibe su propia tarjeta con chip NFC, con su nombre y foto. No hay catálogo: cada tarjeta es de una sola persona.</p>
+        <h3>Banda personal</h3>
+        <p>Cada mesero recibe su propia banda con chip NFC. No hay catálogo ni modelos que elegir: cada banda es de una sola persona.</p>
       </div>
       <div class="step reveal" style="transition-delay:0.15s">
         <div class="step-num">02</div>
         <h3>Un tap al pagar</h3>
-        <p>El cliente que pagó la cuenta acerca su celular a la tarjeta (o escanea el código QR de respaldo) y califica el servicio en segundos.</p>
+        <p>El cliente que pagó la cuenta acerca su celular a la banda (o escanea el código QR de respaldo) y califica el servicio en segundos.</p>
       </div>
       <div class="step reveal" style="transition-delay:0.25s">
         <div class="step-num">03</div>
@@ -695,7 +697,7 @@
   <div class="wrap contact-inner reveal">
     <div>
       <h2>Hablemos directamente</h2>
-      <p>¿Preguntas sobre el piloto, tu tarjeta o cómo empezar? Escríbenos y te respondemos en menos de 24 horas.</p>
+      <p>¿Preguntas sobre el piloto, tu banda o cómo empezar? Escríbenos y te respondemos en menos de 24 horas.</p>
     </div>
     <a class="btn-primary" href="https://mail.google.com/mail/?view=cm&fs=1&to=tapport.pe@gmail.com" target="_blank" rel="noopener">tapport.pe@gmail.com</a>
   </div>
@@ -813,7 +815,7 @@
       ],
       meseros: [
         "Construyes un historial verificable de tu desempeño, calificación tras calificación.",
-        "Es gratis, siempre. No pagas nada por tener tu tarjeta ni por acumular reseñas.",
+        "Es gratis, siempre. No pagas nada por tener tu banda ni por acumular reseñas.",
         "Tu reputación te acompaña de un restaurante a otro, en vez de quedarse atrás.",
       ],
     };
