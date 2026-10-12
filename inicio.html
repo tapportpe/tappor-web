@@ -245,8 +245,9 @@
   .steps-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; margin-bottom: 50px; flex-wrap: wrap; }
   .steps h2 { font-size: clamp(28px, 3.2vw, 38px); font-weight: 700; letter-spacing: -0.015em; }
   .steps-sub { font-size: 15px; color: var(--slate); max-width: 34ch; }
-  .step-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
-  @media (max-width: 860px) { .step-row { grid-template-columns: 1fr; } }
+  .step-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+  @media (max-width: 980px) { .step-row { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .step-row { grid-template-columns: 1fr; } }
   .step { padding: 30px 28px 30px 0; border-top: 2px solid var(--line); }
   .step:not(:first-child) { padding-left: 28px; }
   @media (max-width: 860px) { .step:not(:first-child) { padding-left: 0; } }
@@ -373,16 +374,16 @@
   <div class="wrap hero-grid">
     <div>
       <div class="hero-eyebrow"><span class="dot"></span>Ya está en pilotaje en Lima</div>
-      <h1>Cada mesero, su propia <i class="accent">reputación</i>.</h1>
-      <p class="sub">Cada cliente califica el servicio al pagar, con solo tocar su celular contra una tarjeta. Esas calificaciones construyen un historial que el mesero se lleva a su próximo trabajo.</p>
+      <h1>Controla la calidad de tu servicio, con <i class="accent">datos</i> reales.</h1>
+      <p class="sub">Cada cliente califica a tu mesero al pagar, con solo tocar su celular contra una tarjeta. Tú ves el promedio, el historial y el rendimiento de cada trabajador en un panel, en tiempo real.</p>
       <div class="hero-ctas">
-        <a class="btn-primary" href="https://mail.google.com/mail/?view=cm&fs=1&to=tapport.pe@gmail.com" target="_blank" rel="noopener">Quiero contratar Tapport</a>
+        <a class="btn-primary" href="https://mail.google.com/mail/?view=cm&fs=1&to=tapport.pe@gmail.com" target="_blank" rel="noopener">Quiero Tapport en mi restaurante</a>
         <a class="btn-secondary" href="#como-funciona">Ver cómo funciona</a>
       </div>
       <div class="hero-trust">
-        <div class="trust-item"><strong>Gratis</strong><span>para todos los meseros</span></div>
-        <div class="trust-item"><strong>&lt; 5 seg</strong><span>para calificar un servicio</span></div>
-        <div class="trust-item"><strong>1 perfil</strong><span>que viaja con el mesero</span></div>
+        <div class="trust-item"><strong>Métricas</strong><span>exactas por mesero y por turno</span></div>
+        <div class="trust-item"><strong>&lt; 5 seg</strong><span>para que un cliente califique</span></div>
+        <div class="trust-item"><strong>0 encuestas</strong><span>ni fricción para tu cliente</span></div>
       </div>
     </div>
 
@@ -446,41 +447,41 @@
 <section class="results">
   <div class="wrap">
     <div class="results-head reveal">
-      <div class="results-eyebrow"><span class="dot"></span>Resultados</div>
-      <h2>Lo que <i class="accent">gana</i> tu mesero con cada tap.</h2>
+      <div class="results-eyebrow"><span class="dot"></span>Para tu restaurante</div>
+      <h2>Lo que <i class="accent">ganas</i> con cada tap.</h2>
     </div>
     <div class="results-grid">
       <div class="result-card reveal" style="transition-delay:0.05s">
         <div class="result-num">01</div>
         <div class="result-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="4" stroke="#1E40AF" stroke-width="1.8"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6" stroke="#1E40AF" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 17l6-6 4 4 8-8" stroke="#1E40AF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7h6v6" stroke="#1E40AF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <h4>Historial propio</h4>
-        <p>Cada calificación queda ligada a su perfil, no al restaurante donde trabajaba.</p>
+        <h4>Control de calidad real</h4>
+        <p>Ves cómo está el servicio de cada mesero, cada día, sin depender de encuestas ni de lo que te cuenten.</p>
       </div>
       <div class="result-card reveal" style="transition-delay:0.12s">
         <div class="result-num">02</div>
         <div class="result-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L4 14h7l-1 8 9-12h-7z" fill="#1E40AF"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="4" stroke="#1E40AF" stroke-width="1.8"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6" stroke="#1E40AF" stroke-width="1.8" stroke-linecap="round"/></svg>
         </div>
-        <h4>Resultado al instante</h4>
-        <p>El cliente califica en segundos con un tap, sin crear cuenta ni dar su correo.</p>
+        <h4>Métricas exactas</h4>
+        <p>Promedio, número de reseñas y rendimiento de cada trabajador, siempre actualizados en tu panel.</p>
       </div>
       <div class="result-card reveal" style="transition-delay:0.19s">
         <div class="result-num">03</div>
         <div class="result-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 17l6-6 4 4 8-8" stroke="#1E40AF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 7h6v6" stroke="#1E40AF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 2L4 14h7l-1 8 9-12h-7z" fill="#1E40AF"/></svg>
         </div>
-        <h4>Reputación que crece</h4>
-        <p>Las calificaciones se acumulan tap tras tap, en cualquier restaurante donde trabaje después.</p>
+        <h4>Feedback al instante</h4>
+        <p>El cliente califica en segundos con un tap, sin encuestas ni fricción que lo saquen de su experiencia.</p>
       </div>
       <div class="result-card reveal" style="transition-delay:0.26s">
         <div class="result-num">04</div>
         <div class="result-icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z" stroke="#1E40AF" stroke-width="1.8" stroke-linejoin="round"/></svg>
         </div>
-        <h4>Siempre gratis</h4>
-        <p>Tarjeta, perfil y calificaciones, sin ningún costo para el mesero.</p>
+        <h4>Equipo más motivado</h4>
+        <p>Cada mesero ve su propio desempeño y mejora con cada calificación que recibe.</p>
       </div>
     </div>
   </div>
@@ -488,8 +489,8 @@
 
 <section class="insight">
   <div class="wrap">
-    <p class="reveal">Un mesero puede trabajar diez años y pasar por diez restaurantes distintos, sin que ninguna de esas experiencias quede registrada en ningún lado.</p>
-    <p class="support reveal" style="transition-delay:0.1s">Cuando busca su siguiente trabajo, todo lo que tiene es su palabra. Tapport le da un historial verificable, calificado por las personas que de verdad lo vieron trabajar: sus clientes.</p>
+    <p class="reveal">Hoy, la mayoría de restaurantes se entera de cómo fue el servicio cuando ya es tarde: una mala reseña en Google, un cliente que no vuelve.</p>
+    <p class="support reveal" style="transition-delay:0.1s">Tapport te da esa información al momento, mesero por mesero. No es una encuesta más: es un tap de tu cliente, al pagar, calificando a la persona que lo atendió.</p>
   </div>
 </section>
 
@@ -512,6 +513,11 @@
       </div>
       <div class="step reveal" style="transition-delay:0.25s">
         <div class="step-num">03</div>
+        <h3>Métricas en tu panel</h3>
+        <p>Tú ves el promedio, el historial y el rendimiento de cada mesero, actualizado en tiempo real.</p>
+      </div>
+      <div class="step reveal" style="transition-delay:0.35s">
+        <div class="step-num">04</div>
         <h3>Una reputación que viaja</h3>
         <p>Las calificaciones se acumulan en el perfil del mesero, no en el del restaurante. Así lo acompañan a donde trabaje después.</p>
       </div>
@@ -521,20 +527,21 @@
 
 <section class="audiences">
   <div class="wrap aud-grid">
-    <div class="aud-col left reveal-left" id="meseros">
+    <div class="aud-col left reveal-left" id="restaurantes">
+      <h3>Para restaurantes</h3>
+      <ul>
+        <li>Mide el desempeño real de cada mesero, con datos y no solo con intuición.</li>
+        <li>Detecta a tiempo quién necesita más apoyo, antes de que se note en una mala reseña.</li>
+        <li>Feedback de cada mesa, sin encuestas ni fricción para tu cliente.</li>
+        <li>Se instala en minutos, sin complicar tu operación diaria.</li>
+      </ul>
+    </div>
+    <div class="aud-col right reveal-right" id="meseros">
       <h3>Para meseros</h3>
       <ul>
         <li>Construyes un historial verificable de tu desempeño, calificación tras calificación.</li>
         <li>Es gratis, siempre. No pagas nada por tener tu tarjeta ni por acumular reseñas.</li>
         <li>Tu reputación te acompaña de un restaurante a otro, en vez de quedarse atrás.</li>
-      </ul>
-    </div>
-    <div class="aud-col right reveal-right" id="restaurantes">
-      <h3>Para restaurantes</h3>
-      <ul>
-        <li>Feedback real de cada mesa, sin encuestas ni fricción para el cliente.</li>
-        <li>Meseros más motivados: su esfuerzo por fin queda registrado.</li>
-        <li>Implementación simple, sin fricción para tu operación diaria.</li>
       </ul>
     </div>
   </div>
@@ -546,8 +553,8 @@
       <h2>Entra al Feed: la comunidad Tapport en vivo</h2>
       <p class="hub-sub">Perfiles de meseros, vacantes y reseñas reales de restaurantes, todo en un solo lugar. Explora el Feed y mira quién está construyendo su reputación hoy.</p>
       <div class="hub-stats">
-        <div class="hub-stat"><strong>Meseros</strong><span>perfiles con historial verificable</span></div>
         <div class="hub-stat"><strong>Restaurantes</strong><span>vacantes y equipos calificados</span></div>
+        <div class="hub-stat"><strong>Meseros</strong><span>perfiles con historial verificable</span></div>
         <div class="hub-stat"><strong>Reseñas</strong><span>calificaciones reales de clientes</span></div>
       </div>
       <div class="hub-ctas">
