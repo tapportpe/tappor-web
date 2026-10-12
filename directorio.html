@@ -683,11 +683,6 @@
         <div class="m2-stat"><span class="m2-ic">🏠</span><div><b id="modalRestNum">—</b><small>Restaurante</small></div></div>
       </div>
 
-      <div class="contact-row m2-buttons">
-        <a href="#" class="contact-btn primary" id="contactoTelefono">💬 Contactar</a>
-        <a href="#" class="contact-btn" id="contactoEmail">✉️ Enviar correo</a>
-      </div>
-
       <div class="m2-tabs">
         <button type="button" class="m2-tab on" data-tab="reseñas">★ Reseñas</button>
         <button type="button" class="m2-tab" data-tab="info">👤 Información</button>
@@ -701,8 +696,6 @@
       <div id="m2PanelInfo" class="hidden">
         <div class="m2-info-row"><span class="m2-ic">🏠</span><div><small>Restaurante</small><b id="infoRest"></b></div></div>
         <div class="m2-info-row"><span class="m2-ic">📍</span><div><small>Dirección</small><b id="infoDir">Sin registrar</b></div></div>
-        <div class="m2-info-row"><span class="m2-ic">📞</span><div><small>Teléfono</small><b id="infoTel">No disponible</b></div></div>
-        <div class="m2-info-row"><span class="m2-ic">✉️</span><div><small>Correo</small><b id="infoEmail">No disponible</b></div></div>
       </div>
     </div>
   </div>
@@ -1146,13 +1139,8 @@
         document.getElementById("modalTotal").textContent = data.totalReviews || 0;
         document.getElementById("modalRestNum").textContent = data.restaurante || "—";
 
-        document.getElementById("contactoTelefono").href = data.telefono ? `tel:${data.telefono}` : "#";
-        document.getElementById("contactoEmail").href = data.email ? `mailto:${data.email}` : "#";
-
         document.getElementById("infoRest").textContent = data.restaurante || "—";
         document.getElementById("infoDir").textContent = data.negocioDireccion || "Sin registrar";
-        document.getElementById("infoTel").textContent = data.telefono || "No disponible";
-        document.getElementById("infoEmail").textContent = data.email || "No disponible";
 
         const COLORES_AVA = ["#2E6CF6","#1FA971","#8B5CF6","#F5A524","#0EA5E9","#C4452E"];
         function colorAva(letra) { return COLORES_AVA[letra.charCodeAt(0) % COLORES_AVA.length]; }
