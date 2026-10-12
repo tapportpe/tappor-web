@@ -67,7 +67,7 @@
   .band { width: 100%; }
 
   /* ---------- NAV (isla flotante) ---------- */
-  nav { position: sticky; top: 0; z-index: 30; padding: 16px clamp(16px, 4vw, 40px) 0; pointer-events: none; }
+  nav { position: fixed; top: 0; left: 0; right: 0; width: 100%; z-index: 30; padding: 16px clamp(16px, 4vw, 40px) 0; pointer-events: none; }
   .nav-inner {
     pointer-events: auto;
     max-width: 1280px; margin: 0 auto;
@@ -810,10 +810,7 @@
   if (!reduceMotion && "IntersectionObserver" in window) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("in-view");
-          io.unobserve(entry.target);
-        }
+        entry.target.classList.toggle("in-view", entry.isIntersecting);
       });
     }, { threshold: 0.15, rootMargin: "0px 0px -60px 0px" });
     document.querySelectorAll(".reveal, .reveal-left, .reveal-right").forEach(el => io.observe(el));
@@ -854,8 +851,14 @@
     if (!track) return;
 
     let current = "restaurantes";
-    let index = 0;
+    let count = data[current].length;
+    let index = 1; // posición real (1..count), 0 y count+1 son los clones
     let autoTimer = null;
+    let animating = false;
+
+    function cardOf(text, i) {
+      return `<div class="aud-card"><div class="aud-card-num">${String(i + 1).padStart(2, "0")}</div><p>${text}</p></div>`;
+    }
 
     function cardWidth() {
       const card = track.querySelector(".aud-card");
@@ -865,31 +868,59 @@
     }
 
     function render() {
-      track.innerHTML = data[current].map((text, i) => `
-        <div class="aud-card">
-          <div class="aud-card-num">${String(i + 1).padStart(2, "0")}</div>
-          <p>${text}</p>
-        </div>`).join("");
-      dotsWrap.innerHTML = data[current].map((_, i) =>
+      const items = data[current];
+      count = items.length;
+      // clon del último al inicio + items reales + clon del primero al final, para loop sin cortes
+      track.innerHTML =
+        cardOf(items[count - 1], count - 1) +
+        items.map((text, i) => cardOf(text, i)).join("") +
+        cardOf(items[0], 0);
+      dotsWrap.innerHTML = items.map((_, i) =>
         `<button class="aud-dot${i === 0 ? " active" : ""}" data-i="${i}" aria-label="Ir a la tarjeta ${i + 1}"></button>`
       ).join("");
-      index = 0;
-      track.style.transform = "translateX(0px)";
+      index = 1;
+      track.style.transition = "none";
+      track.style.transform = `translateX(-${index * cardWidth()}px)`;
+      requestAnimationFrame(() => { track.style.transition = ""; });
     }
 
-    function goTo(i) {
-      const max = data[current].length - 1;
-      index = Math.max(0, Math.min(i, max));
-      track.style.transform = `translateX(-${index * cardWidth()}px)`;
-      dotsWrap.querySelectorAll(".aud-dot").forEach((d, di) => d.classList.toggle("active", di === index));
+    function setActiveDot(realIndex) {
+      dotsWrap.querySelectorAll(".aud-dot").forEach((d, di) => d.classList.toggle("active", di === realIndex));
     }
+
+    function goTo(targetIndex) {
+      if (animating) return;
+      animating = true;
+      index = targetIndex;
+      track.style.transition = "";
+      track.style.transform = `translateX(-${index * cardWidth()}px)`;
+      setActiveDot(((index - 1) % count + count) % count);
+    }
+
+    function onTransitionEnd() {
+      animating = false;
+      if (index === count + 1) {
+        // llegamos al clon del primero: saltamos sin animar al real 1
+        track.style.transition = "none";
+        index = 1;
+        track.style.transform = `translateX(-${index * cardWidth()}px)`;
+        requestAnimationFrame(() => { track.style.transition = ""; });
+      } else if (index === 0) {
+        // llegamos al clon del último: saltamos sin animar al real "count"
+        track.style.transition = "none";
+        index = count;
+        track.style.transform = `translateX(-${index * cardWidth()}px)`;
+        requestAnimationFrame(() => { track.style.transition = ""; });
+      }
+    }
+    track.addEventListener("transitionend", onTransitionEnd);
+
+    function next() { goTo(index + 1); }
+    function prev() { goTo(index - 1); }
 
     function startAuto() {
       stopAuto();
-      autoTimer = setInterval(() => {
-        const max = data[current].length - 1;
-        goTo(index >= max ? 0 : index + 1);
-      }, 4200);
+      autoTimer = setInterval(next, 4200);
     }
     function stopAuto() { if (autoTimer) clearInterval(autoTimer); }
 
@@ -906,12 +937,18 @@
     dotsWrap.addEventListener("click", (e) => {
       const dot = e.target.closest(".aud-dot");
       if (!dot) return;
-      goTo(Number(dot.dataset.i));
+      goTo(Number(dot.dataset.i) + 1);
       startAuto();
     });
 
-    prevBtn.addEventListener("click", () => { goTo(index - 1 < 0 ? data[current].length - 1 : index - 1); startAuto(); });
-    nextBtn.addEventListener("click", () => { goTo(index + 1 > data[current].length - 1 ? 0 : index + 1); startAuto(); });
+    prevBtn.addEventListener("click", () => { prev(); startAuto(); });
+    nextBtn.addEventListener("click", () => { next(); startAuto(); });
+
+    window.addEventListener("resize", () => {
+      track.style.transition = "none";
+      track.style.transform = `translateX(-${index * cardWidth()}px)`;
+      requestAnimationFrame(() => { track.style.transition = ""; });
+    });
 
     const section = document.querySelector(".audiences");
     section.addEventListener("mouseenter", stopAuto);
