@@ -262,21 +262,38 @@
   .step h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
   .step p { font-size: 14.5px; color: var(--slate); line-height: 1.6; margin: 0; }
 
-  /* ---------- AUDIENCES ---------- */
-  .audiences { background: var(--navy); color: #fff; padding: 100px 0; }
-  .aud-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
-  @media (max-width: 780px) {
-    .aud-grid { grid-template-columns: 1fr; }
-    .aud-col.left { border-right: none; border-bottom: 1px solid var(--line-dark); padding-bottom: 44px; margin-bottom: 44px; }
+  /* ---------- AUDIENCES CAROUSEL ---------- */
+  .audiences { background: var(--navy); color: #fff; padding: 100px 0; overflow: hidden; }
+  .aud-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 40px; }
+  .aud-tabs { display: inline-flex; background: rgba(255,255,255,0.08); border-radius: 100px; padding: 5px; gap: 4px; }
+  .aud-tab {
+    border: none; background: transparent; color: rgba(255,255,255,0.65);
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14.5px;
+    padding: 11px 22px; border-radius: 100px; cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease;
   }
-  .aud-col { padding: 0 44px; }
-  .aud-col.left { border-right: 1px solid var(--line-dark); padding-left: 0; }
-  .aud-col.right { padding-right: 0; }
-  @media (max-width: 780px) { .aud-col.right { padding-left: 0; } }
-  .aud-col h3 { font-size: 24px; font-weight: 700; letter-spacing: -0.015em; margin-bottom: 22px; }
-  .aud-col ul { list-style: none; margin: 0; padding: 0; }
-  .aud-col li { font-size: 15.5px; line-height: 1.6; color: rgba(255,255,255,0.75); padding: 14px 0; border-top: 1px solid var(--line-dark); }
-  .aud-col li:first-of-type { border-top: none; }
+  .aud-tab.active { background: var(--gold); color: #fff; }
+  .aud-nav { display: flex; gap: 10px; }
+  .aud-arrow {
+    width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.25);
+    background: transparent; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .aud-arrow:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.5); }
+
+  .aud-track-wrap { overflow: hidden; }
+  .aud-track { display: flex; gap: 20px; transition: transform 0.45s cubic-bezier(.2,.7,.3,1); }
+  .aud-card {
+    flex: 0 0 auto; width: min(340px, 78vw);
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); border-radius: 18px;
+    padding: 28px 26px;
+  }
+  .aud-card-num { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 32px; color: var(--gold-soft); opacity: 0.8; }
+  .aud-card p { margin: 16px 0 0; font-size: 15.5px; line-height: 1.6; color: rgba(255,255,255,0.82); }
+
+  .aud-dots { display: flex; gap: 8px; margin-top: 28px; justify-content: center; }
+  .aud-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.25); border: none; cursor: pointer; padding: 0; transition: background 0.2s ease, width 0.2s ease; }
+  .aud-dot.active { background: var(--gold); width: 20px; border-radius: 4px; }
 
   /* ---------- HUB / FEED ---------- */
   .hub { background: var(--navy-deep); color: #fff; padding: 110px 0 0; overflow: hidden; }
@@ -532,25 +549,26 @@
   </div>
 </section>
 
-<section class="audiences">
-  <div class="wrap aud-grid">
-    <div class="aud-col left reveal-left" id="restaurantes">
-      <h3>Para restaurantes</h3>
-      <ul>
-        <li>Mide el desempeño real de cada mesero, con datos y no solo con intuición.</li>
-        <li>Detecta a tiempo quién necesita más apoyo, antes de que se note en una mala reseña.</li>
-        <li>Feedback de cada mesa, sin encuestas ni fricción para tu cliente.</li>
-        <li>Se instala en minutos, sin complicar tu operación diaria.</li>
-      </ul>
+<section class="audiences" id="restaurantes">
+  <div class="wrap reveal">
+    <div class="aud-head">
+      <div class="aud-tabs" role="tablist">
+        <button class="aud-tab active" data-aud="restaurantes">Para restaurantes</button>
+        <button class="aud-tab" data-aud="meseros">Para meseros</button>
+      </div>
+      <div class="aud-nav">
+        <button class="aud-arrow" id="audPrev" aria-label="Anterior">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="aud-arrow" id="audNext" aria-label="Siguiente">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
     </div>
-    <div class="aud-col right reveal-right" id="meseros">
-      <h3>Para meseros</h3>
-      <ul>
-        <li>Construyes un historial verificable de tu desempeño, calificación tras calificación.</li>
-        <li>Es gratis, siempre. No pagas nada por tener tu tarjeta ni por acumular reseñas.</li>
-        <li>Tu reputación te acompaña de un restaurante a otro, en vez de quedarse atrás.</li>
-      </ul>
+    <div class="aud-track-wrap">
+      <div class="aud-track" id="audTrack"></div>
     </div>
+    <div class="aud-dots" id="audDots"></div>
   </div>
 </section>
 
@@ -700,6 +718,97 @@
       deviceStack.style.transform = `translateY(${y * 0.12}px)`;
     }, { passive: true });
   }
+
+  // Carrusel "Para restaurantes / Para meseros"
+  (function () {
+    const data = {
+      restaurantes: [
+        "Mide el desempeño real de cada mesero, con datos y no solo con intuición.",
+        "Detecta a tiempo quién necesita más apoyo, antes de que se note en una mala reseña.",
+        "Feedback de cada mesa, sin encuestas ni fricción para tu cliente.",
+        "Se instala en minutos, sin complicar tu operación diaria.",
+      ],
+      meseros: [
+        "Construyes un historial verificable de tu desempeño, calificación tras calificación.",
+        "Es gratis, siempre. No pagas nada por tener tu tarjeta ni por acumular reseñas.",
+        "Tu reputación te acompaña de un restaurante a otro, en vez de quedarse atrás.",
+      ],
+    };
+
+    const track = document.getElementById("audTrack");
+    const dotsWrap = document.getElementById("audDots");
+    const tabs = document.querySelectorAll(".aud-tab");
+    const prevBtn = document.getElementById("audPrev");
+    const nextBtn = document.getElementById("audNext");
+    if (!track) return;
+
+    let current = "restaurantes";
+    let index = 0;
+    let autoTimer = null;
+
+    function cardWidth() {
+      const card = track.querySelector(".aud-card");
+      if (!card) return 0;
+      const gap = 20;
+      return card.getBoundingClientRect().width + gap;
+    }
+
+    function render() {
+      track.innerHTML = data[current].map((text, i) => `
+        <div class="aud-card">
+          <div class="aud-card-num">${String(i + 1).padStart(2, "0")}</div>
+          <p>${text}</p>
+        </div>`).join("");
+      dotsWrap.innerHTML = data[current].map((_, i) =>
+        `<button class="aud-dot${i === 0 ? " active" : ""}" data-i="${i}" aria-label="Ir a la tarjeta ${i + 1}"></button>`
+      ).join("");
+      index = 0;
+      track.style.transform = "translateX(0px)";
+    }
+
+    function goTo(i) {
+      const max = data[current].length - 1;
+      index = Math.max(0, Math.min(i, max));
+      track.style.transform = `translateX(-${index * cardWidth()}px)`;
+      dotsWrap.querySelectorAll(".aud-dot").forEach((d, di) => d.classList.toggle("active", di === index));
+    }
+
+    function startAuto() {
+      stopAuto();
+      autoTimer = setInterval(() => {
+        const max = data[current].length - 1;
+        goTo(index >= max ? 0 : index + 1);
+      }, 4200);
+    }
+    function stopAuto() { if (autoTimer) clearInterval(autoTimer); }
+
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        if (tab.dataset.aud === current) return;
+        current = tab.dataset.aud;
+        tabs.forEach(t => t.classList.toggle("active", t === tab));
+        render();
+        startAuto();
+      });
+    });
+
+    dotsWrap.addEventListener("click", (e) => {
+      const dot = e.target.closest(".aud-dot");
+      if (!dot) return;
+      goTo(Number(dot.dataset.i));
+      startAuto();
+    });
+
+    prevBtn.addEventListener("click", () => { goTo(index - 1 < 0 ? data[current].length - 1 : index - 1); startAuto(); });
+    nextBtn.addEventListener("click", () => { goTo(index + 1 > data[current].length - 1 ? 0 : index + 1); startAuto(); });
+
+    const section = document.querySelector(".audiences");
+    section.addEventListener("mouseenter", stopAuto);
+    section.addEventListener("mouseleave", startAuto);
+
+    render();
+    if (!reduceMotion) startAuto();
+  })();
 </script>
 
 </body>
