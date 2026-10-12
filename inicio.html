@@ -254,7 +254,6 @@
 
   /* ---------- INSIGHT ---------- */
   .insight { padding: 0 0 110px; }
-  .insight .wrap { max-width: 760px; }
   .insight p { font-size: 26px; line-height: 1.48; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
   .insight p.support { margin-top: 18px; font-size: 15.5px; font-weight: 400; color: var(--slate); line-height: 1.65; }
 
@@ -272,7 +271,23 @@
   .step-num { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; color: var(--gold); margin-bottom: 14px; }
   .step h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
   .step p { font-size: 14.5px; color: var(--slate); line-height: 1.6; margin: 0; }
-  .step-photo { width: 100%; max-width: 220px; height: 150px; object-fit: cover; border-radius: 14px; margin-bottom: 18px; box-shadow: 0 12px 28px rgba(19,34,122,0.18); }
+
+  /* ---------- INSIGHT VISUAL ---------- */
+  .insight-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 64px; align-items: center; }
+  @media (max-width: 860px) { .insight-grid { grid-template-columns: 1fr; gap: 40px; } }
+  .insight-visual { position: relative; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; }
+  .insight-blob { position: absolute; inset: 0; background: radial-gradient(circle at 32% 28%, var(--navy-2), var(--navy-deep) 72%); border-radius: 42% 58% 55% 45% / 48% 42% 58% 52%; box-shadow: 0 32px 70px rgba(19,34,122,0.3); animation: blobMorph 14s ease-in-out infinite; }
+  @keyframes blobMorph {
+    0%, 100% { border-radius: 42% 58% 55% 45% / 48% 42% 58% 52%; }
+    50% { border-radius: 58% 42% 45% 55% / 42% 56% 44% 58%; }
+  }
+  .insight-card { position: relative; width: 78%; background: var(--card); border-radius: 22px; overflow: hidden; box-shadow: 0 24px 50px rgba(19,34,122,0.28); transform: rotate(-4deg); }
+  .insight-card img { display: block; width: 100%; height: auto; }
+  .insight-card-tag { position: absolute; left: 14px; bottom: 14px; background: rgba(13,20,46,0.82); backdrop-filter: blur(6px); color: #fff; font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 100px; }
+  .insight-detail { position: absolute; width: 36%; bottom: -6%; right: -4%; background: var(--card); border-radius: 16px; overflow: hidden; box-shadow: 0 18px 36px rgba(19,34,122,0.3); transform: rotate(6deg); border: 4px solid var(--paper); }
+  .insight-detail img { display: block; width: 100%; height: auto; }
+  @media (prefers-reduced-motion: reduce) { .insight-blob { animation: none; } }
+  @media (max-width: 600px) { .insight-visual { aspect-ratio: 4 / 3; } .insight-card { width: 72%; } .insight-detail { width: 34%; } }
 
   /* ---------- AUDIENCES CAROUSEL ---------- */
   .audiences { background: var(--navy); color: #fff; padding: 100px 0; overflow: hidden; }
@@ -553,9 +568,21 @@
 </section>
 
 <section class="insight">
-  <div class="wrap">
-    <p class="reveal">Hoy, la mayoría de restaurantes se entera de cómo fue el servicio cuando ya es tarde: una mala reseña en Google, un cliente que no vuelve.</p>
-    <p class="support reveal" style="transition-delay:0.1s">Tapport te da esa información al momento, mesero por mesero. No es una encuesta más: es un tap de tu cliente, al pagar, calificando a la persona que lo atendió.</p>
+  <div class="wrap insight-grid">
+    <div>
+      <p class="reveal">Hoy, la mayoría de restaurantes se entera de cómo fue el servicio cuando ya es tarde: una mala reseña en Google, un cliente que no vuelve.</p>
+      <p class="support reveal" style="transition-delay:0.1s">Tapport te da esa información al momento, mesero por mesero. No es una encuesta más: es un tap de tu cliente, al pagar, calificando a la persona que lo atendió.</p>
+    </div>
+    <div class="insight-visual reveal-right">
+      <div class="insight-blob"></div>
+      <div class="insight-card">
+        <img src="assets/banda-hero.jpg" alt="Banda de silicona Tapport con chip NFC" loading="lazy">
+        <span class="insight-card-tag">Banda Tapport · NFC</span>
+      </div>
+      <div class="insight-detail">
+        <img src="assets/banda-detalle.jpg" alt="Detalle del logo Tapport en la banda" loading="lazy">
+      </div>
+    </div>
   </div>
 </section>
 
@@ -566,8 +593,7 @@
       <p class="steps-sub">Tres pasos, sin apps que instalar ni cuentas que crear.</p>
     </div>
     <div class="step-row">
-      <div class="step step-with-photo reveal" style="transition-delay:0.05s">
-        <img class="step-photo" src="assets/banda-tapport.jpg" alt="Banda de silicona Tapport con chip NFC" loading="lazy">
+      <div class="step reveal" style="transition-delay:0.05s">
         <div class="step-num">01</div>
         <h3>Banda personal</h3>
         <p>Cada mesero recibe su propia banda con chip NFC. No hay catálogo ni modelos que elegir: cada banda es de una sola persona.</p>
