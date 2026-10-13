@@ -833,6 +833,9 @@
   }
 
   // Carrusel "Para restaurantes / Para meseros"
+  // Sin clones ni temporizadores: cada movimiento recalcula el índice con
+  // módulo y vuelve a construir las tarjetas en ese orden, así que no existe
+  // ningún estado "entre medio" en el que se pueda quedar trabado el loop.
   (function () {
     const data = {
       restaurantes: [
@@ -855,72 +858,62 @@
     const nextBtn = document.getElementById("audNext");
     if (!track) return;
 
+    const reduceMotionCarrusel = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
     let current = "restaurantes";
-    let count = data[current].length;
-    let index = 1; // posición real (1..count), 0 y count+1 son los clones
-    let snapTimer = null;
+    let index = 0; // 0..count-1, siempre dentro de rango real (sin clones)
 
-    function cardOf(text, i) {
-      return `<div class="aud-card"><div class="aud-card-num">${String(i + 1).padStart(2, "0")}</div><p>${text}</p></div>`;
+    function cardOf(text, originalIndex) {
+      return `<div class="aud-card"><div class="aud-card-num">${String(originalIndex + 1).padStart(2, "0")}</div><p>${text}</p></div>`;
     }
 
-    function cardWidth() {
-      const card = track.querySelector(".aud-card");
-      if (!card) return 0;
-      const gap = 20;
-      return card.getBoundingClientRect().width + gap;
-    }
-
-    function render() {
+    function renderTrack() {
       const items = data[current];
-      count = items.length;
-      // clon del último al inicio + items reales + clon del primero al final, para loop sin cortes
-      track.innerHTML =
-        cardOf(items[count - 1], count - 1) +
-        items.map((text, i) => cardOf(text, i)).join("") +
-        cardOf(items[0], 0);
+      const count = items.length;
+      // Reordena el arreglo para que empiece en "index", conservando la
+      // numeración original (01-04) de cada tarjeta, no su posición rotada.
+      const ordenado = [];
+      for (let k = 0; k < count; k++) {
+        const originalIndex = (index + k) % count;
+        ordenado.push({ text: items[originalIndex], originalIndex });
+      }
+      track.innerHTML = ordenado.map(item => cardOf(item.text, item.originalIndex)).join("");
+      setActiveDot(index);
+    }
+
+    function renderDots() {
+      const items = data[current];
       dotsWrap.innerHTML = items.map((_, i) =>
         `<button class="aud-dot${i === 0 ? " active" : ""}" data-i="${i}" aria-label="Ir a la tarjeta ${i + 1}"></button>`
       ).join("");
-      index = 1;
-      clearTimeout(snapTimer);
-      track.style.transition = "none";
-      track.style.transform = `translateX(-${index * cardWidth()}px)`;
-      requestAnimationFrame(() => { track.style.transition = ""; });
-      setActiveDot(0);
     }
 
-    function setActiveDot(realIndex) {
-      dotsWrap.querySelectorAll(".aud-dot").forEach((d, di) => d.classList.toggle("active", di === realIndex));
+    function setActiveDot(i) {
+      dotsWrap.querySelectorAll(".aud-dot").forEach((d, di) => d.classList.toggle("active", di === i));
     }
 
-    // Tras cada movimiento, si caemos en un clon (0 o count+1), reprogramamos
-    // un salto instantáneo (sin transición) al real equivalente, con un
-    // temporizador en vez de "transitionend" (que puede no dispararse si el
-    // usuario hace clic varias veces seguidas), para que el loop nunca se trabe.
-    function programarSnap() {
-      clearTimeout(snapTimer);
-      snapTimer = setTimeout(() => {
-        if (index === count + 1) {
-          track.style.transition = "none";
-          index = 1;
-          track.style.transform = `translateX(-${index * cardWidth()}px)`;
-          requestAnimationFrame(() => { track.style.transition = ""; });
-        } else if (index === 0) {
-          track.style.transition = "none";
-          index = count;
-          track.style.transform = `translateX(-${index * cardWidth()}px)`;
-          requestAnimationFrame(() => { track.style.transition = ""; });
-        }
-      }, 480);
+    function render() {
+      index = 0;
+      renderDots();
+      renderTrack();
     }
 
     function goTo(targetIndex) {
-      index = targetIndex;
-      track.style.transition = "";
-      track.style.transform = `translateX(-${index * cardWidth()}px)`;
-      setActiveDot(((index - 1) % count + count) % count);
-      programarSnap();
+      const count = data[current].length;
+      index = ((targetIndex % count) + count) % count;
+      if (reduceMotionCarrusel) {
+        renderTrack();
+        return;
+      }
+      // Breve fundido cosmético: el índice y el contenido ya quedan
+      // correctos de inmediato, así que aunque la animación no llegue a
+      // completarse (resize, clics muy rápidos, etc.) nunca se queda trabado.
+      track.style.transition = "opacity 0.15s ease";
+      track.style.opacity = "0";
+      setTimeout(() => {
+        renderTrack();
+        track.style.opacity = "1";
+      }, 150);
     }
 
     function next() { goTo(index + 1); }
@@ -938,17 +931,11 @@
     dotsWrap.addEventListener("click", (e) => {
       const dot = e.target.closest(".aud-dot");
       if (!dot) return;
-      goTo(Number(dot.dataset.i) + 1);
+      goTo(Number(dot.dataset.i));
     });
 
     prevBtn.addEventListener("click", prev);
     nextBtn.addEventListener("click", next);
-
-    window.addEventListener("resize", () => {
-      track.style.transition = "none";
-      track.style.transform = `translateX(-${index * cardWidth()}px)`;
-      requestAnimationFrame(() => { track.style.transition = ""; });
-    });
 
     render();
   })();
