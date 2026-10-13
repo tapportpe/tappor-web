@@ -308,13 +308,15 @@
   }
   .sidebar.open { transform: translateX(0); }
   @media (min-width: 860px) {
-    .sidebar { position: sticky; transform: none; top: 0; height: 100vh; height: 100dvh; }
+    .sidebar { position: fixed; transform: none; top: 0; left: 0; height: 100vh; height: 100dvh; }
+    .shell .main { margin-left: 250px; }
   }
 
   .sidebar-brand {
     font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 750;
     color: #fff; letter-spacing: -0.01em; padding: 4px 8px 22px;
     display: flex; align-items: center; gap: 7px;
+    text-decoration: none; cursor: pointer;
   }
   .sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
   .sidebar-link {
@@ -366,6 +368,21 @@
   .topbar-bell { position: relative; width: 38px; height: 38px; border-radius: 50%; background: var(--bg); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
   .notif-wrap { position: relative; }
   .notif-panel { position: absolute; top: 46px; right: 0; width: 280px; max-height: 340px; overflow-y: auto; background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 16px 40px rgba(22,26,46,0.16); z-index: 80; }
+
+  /* --- Popup "Cambiar contraseña", flotante en la esquina --- */
+  .pw-popup {
+    position: fixed; bottom: 20px; right: 20px;
+    width: min(340px, calc(100vw - 32px));
+    background: #fff; border-radius: 16px; padding: 20px;
+    box-shadow: 0 20px 50px rgba(22,26,46,0.28); border: 1px solid var(--line);
+    z-index: 90;
+  }
+  .pw-popup.hidden { display: none; }
+  .pw-popup-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .pw-popup-head h3 { font-size: 15px; margin: 0; }
+  .pw-popup-close { background: none; border: none; font-size: 15px; color: var(--ink-soft); cursor: pointer; padding: 4px; line-height: 1; }
+  .pw-popup-close:hover { color: var(--ink); }
+  .pw-popup-sub { font-size: 12.5px; color: var(--ink-soft); margin: 0 0 14px; line-height: 1.5; }
   .notif-head { font-size: 12.5px; font-weight: 800; padding: 12px 14px; border-bottom: 1px solid var(--line); }
   .notif-item { display: flex; gap: 10px; padding: 10px 14px; border-top: 1px solid var(--line); text-align: left; width: 100%; background: none; border-left: none; border-right: none; border-bottom: none; cursor: pointer; font-family: inherit; }
   .notif-item:first-of-type { border-top: none; }
@@ -437,6 +454,9 @@
   .reseña-mini .rm-stars { color: var(--star); font-size: 13px; }
   .reseña-mini .rm-text { font-size: 13px; color: var(--ink); margin-top: 3px; line-height: 1.4; }
 
+  .li-desc.clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .li-vermas { display: block; font-size: 12px; margin-top: 2px; }
+
   /* Item de lista con ícono, badge, título, texto y chevron (Noticias/Reseñas recientes/Historial) */
   .list-item { display: flex; align-items: flex-start; gap: 14px; padding: 14px; border-radius: 14px; background: var(--bg); }
   .list-item + .list-item { margin-top: 10px; }
@@ -495,7 +515,7 @@
 
   /* --- Vista Mi rendimiento: grilla de 3 columnas --- */
   .rend-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
-  @media (min-width: 860px) { .rend-grid { grid-template-columns: 260px 1fr 260px; align-items: start; } }
+  @media (min-width: 860px) { .rend-grid { grid-template-columns: 260px 1fr 260px; } }
 
   .info-list { display: flex; flex-direction: column; gap: 12px; }
   .info-row { display: flex; align-items: center; gap: 10px; }
@@ -562,10 +582,9 @@
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
   <aside class="sidebar hidden" id="sidebar">
-    <div class="sidebar-brand">
-      <svg width="24" height="24" viewBox="0 0 32 32"><path d="M6 4h20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-7v16a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V10H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="#fff"/></svg>
-      Tapport<sup style="font-size:10px;">®</sup>
-    </div>
+    <a class="sidebar-brand" href="inicio.html">
+      <img src="assets/logo-tapport.png" alt="Tapport" style="height:18px; width:auto; display:block;">
+    </a>
 
     <nav class="sidebar-nav">
       <button type="button" class="sidebar-link active" data-view="inicio">
@@ -1001,6 +1020,44 @@
       <button type="button" class="btn-primary" id="guardarCambiosBtn">Guardar cambios</button>
       <button type="button" class="btn-secondary" id="cancelarEditarBtn">Cancelar</button>
       <div class="msg" id="editMsg"></div>
+    </div>
+  </div>
+
+  <!-- ============ CAMBIAR CONTRASEÑA (popup en esquina) ============ -->
+  <div class="pw-popup hidden" id="pwPopup">
+    <div class="pw-popup-head">
+      <h3>Cambiar contraseña</h3>
+      <button type="button" class="pw-popup-close" id="pwCloseBtn" aria-label="Cerrar">✕</button>
+    </div>
+
+    <div id="pwPaso1">
+      <p class="pw-popup-sub">Te enviaremos un código de verificación a <strong id="pwEmailDisplay">—</strong>.</p>
+      <button type="button" class="btn-primary" id="pwEnviarCodigoBtn">Enviar código</button>
+      <div class="msg" id="pwMsg1"></div>
+    </div>
+
+    <div id="pwPaso2" style="display:none;">
+      <div class="field">
+        <label for="pwCodigo">Código que te llegó al correo</label>
+        <input type="text" id="pwCodigo" inputmode="numeric" maxlength="6" placeholder="123456" />
+      </div>
+      <button type="button" class="btn-primary" id="pwVerificarCodigoBtn">Verificar código</button>
+      <div class="msg" id="pwMsg2"></div>
+    </div>
+
+    <div id="pwPaso3" style="display:none;">
+      <div class="field">
+        <label for="pwNuevaPassword">Nueva contraseña (mínimo 6 caracteres)</label>
+        <div class="password-field">
+          <input type="password" id="pwNuevaPassword" />
+          <button type="button" class="toggle-password" data-target="pwNuevaPassword" aria-label="Mostrar contraseña">
+            <svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10.6 10.6 0 0 1 12 19c-7 0-11-7-11-7a18.6 18.6 0 0 1 4.2-5.1M9.9 4.2A9.9 9.9 0 0 1 12 4c7 0 11 7 11 7a18.6 18.6 0 0 1-2.2 3.1M14.1 14.1a3 3 0 1 1-4.2-4.2"/><path d="M1 1l22 22"/></svg>
+          </button>
+        </div>
+      </div>
+      <button type="button" class="btn-primary" id="pwGuardarBtn">Guardar nueva contraseña</button>
+      <div class="msg" id="pwMsg3"></div>
     </div>
   </div>
 
@@ -1641,18 +1698,22 @@
       }
       const PAGE = 8;
       const visibles = esFiltro ? reviews : reviews;
-      cont.innerHTML = visibles.slice(0, window.__histLimite || PAGE).map(r => {
+      cont.innerHTML = visibles.slice(0, window.__histLimite || PAGE).map((r, i) => {
         const estrellas = "★".repeat(r.estrellas) + "☆".repeat(5 - r.estrellas);
         const fecha = new Date(r.fecha);
         const dia = isNaN(fecha) ? "" : fecha.toLocaleDateString("es-PE", { day: "numeric", month: "short", year: "numeric" });
         const hora = isNaN(fecha) ? "" : fecha.toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" });
+        const textoCompleto = `${r.comentario ? escapeHtml(r.comentario) : "Sin comentario."}${r.tags ? " · " + escapeHtml(r.tags) : ""}`;
+        const esLargo = textoCompleto.length > 140;
+        const descId = `liDesc${i}`;
         return `
           <div class="list-item">
             <div class="li-icon">★</div>
             <div class="li-body">
               <span class="li-badge">Reseña recibida</span>
               <p class="li-title">${estrellas}</p>
-              <p class="li-desc">${r.comentario ? escapeHtml(r.comentario) : "Sin comentario."}${r.tags ? " · " + escapeHtml(r.tags) : ""}</p>
+              <p class="li-desc${esLargo ? " clamp-3" : ""}" id="${descId}">${textoCompleto}</p>
+              ${esLargo ? `<button type="button" class="btn-link li-vermas" data-target="${descId}">Ver más</button>` : ""}
               <div class="li-meta"><span>📅 ${dia}</span><span>🕒 ${hora}</span></div>
             </div>
             <div class="li-chevron">›</div>
@@ -1662,6 +1723,14 @@
         ? '<button type="button" class="btn-secondary" id="verMasHistBtn" style="margin-top:12px;">Ver más</button>' : "");
       const masBtn = document.getElementById("verMasHistBtn");
       if (masBtn) masBtn.addEventListener("click", () => { window.__histLimite = (window.__histLimite || PAGE) + PAGE; renderReviews(reviews, true); });
+      cont.querySelectorAll(".li-vermas").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const desc = document.getElementById(btn.dataset.target);
+          const expandiendo = desc.classList.contains("clamp-3");
+          desc.classList.toggle("clamp-3", !expandiendo);
+          btn.textContent = expandiendo ? "Ver menos" : "Ver más";
+        });
+      });
     }
 
     function escapeHtml(str) {
@@ -1702,15 +1771,122 @@
       document.getElementById("panelWrap").classList.remove("hidden");
     });
 
-    // "Cambiar contraseña" (vista Cuenta): reusa el mismo flujo de verificar
-    // correo + crear contraseña que ya existe para crear la cuenta.
-    document.getElementById("irCambiarPasswordBtn").addEventListener("click", () => {
-      document.getElementById("panelWrap").classList.add("hidden");
-      document.getElementById("sidebar").classList.add("hidden");
-      document.getElementById("loginWrap").classList.remove("hidden");
-      document.getElementById("authCard").classList.remove("hidden");
-      irATabCrear();
-      document.getElementById("crearEmail").value = sesion.email || "";
+    // "Cambiar contraseña" (vista Cuenta): popup flotante en la esquina,
+    // sin salir del dashboard. Reusa el mismo flujo de verificar correo +
+    // crear contraseña (código por correo) que ya existe en el backend.
+    function abrirPwPopup() {
+      document.getElementById("pwEmailDisplay").textContent = sesion.email || "";
+      document.getElementById("pwPaso1").style.display = "block";
+      document.getElementById("pwPaso2").style.display = "none";
+      document.getElementById("pwPaso3").style.display = "none";
+      ["pwMsg1", "pwMsg2", "pwMsg3"].forEach(id => { document.getElementById(id).textContent = ""; document.getElementById(id).className = "msg"; });
+      document.getElementById("pwCodigo").value = "";
+      document.getElementById("pwNuevaPassword").value = "";
+      document.getElementById("pwPopup").classList.remove("hidden");
+    }
+    function cerrarPwPopup() { document.getElementById("pwPopup").classList.add("hidden"); }
+
+    document.getElementById("irCambiarPasswordBtn").addEventListener("click", abrirPwPopup);
+    document.getElementById("pwCloseBtn").addEventListener("click", cerrarPwPopup);
+
+    document.getElementById("pwEnviarCodigoBtn").addEventListener("click", async () => {
+      const email = sesion.email || "";
+      const msg = document.getElementById("pwMsg1");
+      const btn = document.getElementById("pwEnviarCodigoBtn");
+      btn.disabled = true;
+      btn.textContent = "Enviando…";
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "enviar_codigo_verificacion", email })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          msg.className = "msg ok";
+          msg.textContent = "Te enviamos un código. Revisa tu correo.";
+          document.getElementById("pwPaso2").style.display = "block";
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.error || "No se pudo enviar el código.";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Enviar código";
+      }
+    });
+
+    document.getElementById("pwVerificarCodigoBtn").addEventListener("click", async () => {
+      const email = sesion.email || "";
+      const codigo = document.getElementById("pwCodigo").value.trim();
+      const msg = document.getElementById("pwMsg2");
+      const btn = document.getElementById("pwVerificarCodigoBtn");
+      if (!codigo) return;
+      btn.disabled = true;
+      btn.textContent = "Verificando…";
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "verificar_codigo", email, codigo })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          msg.className = "msg ok";
+          msg.textContent = "✓ Correo verificado";
+          document.getElementById("pwPaso3").style.display = "block";
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.error || "Código incorrecto.";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Verificar código";
+      }
+    });
+
+    document.getElementById("pwGuardarBtn").addEventListener("click", async () => {
+      const email = sesion.email || "";
+      const password = document.getElementById("pwNuevaPassword").value;
+      const msg = document.getElementById("pwMsg3");
+      const btn = document.getElementById("pwGuardarBtn");
+      if (password.length < 6) {
+        msg.className = "msg error";
+        msg.textContent = "La contraseña debe tener al menos 6 caracteres.";
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = "Guardando…";
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "establecer_password", email, password })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          sesion = { ...sesion, password };
+          guardarSesion(sesion);
+          msg.className = "msg ok";
+          msg.textContent = "✓ Contraseña actualizada";
+          setTimeout(cerrarPwPopup, 1400);
+        } else {
+          msg.className = "msg error";
+          msg.textContent = data.error || "No se pudo actualizar la contraseña.";
+        }
+      } catch (err) {
+        msg.className = "msg error";
+        msg.textContent = "Error de conexión.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Guardar nueva contraseña";
+      }
     });
 
     document.getElementById("editPhotoCircle").addEventListener("click", () => {
