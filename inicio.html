@@ -873,9 +873,11 @@
         `<button class="aud-dot${i === 0 ? " active" : ""}" data-i="${i}" aria-label="Ir a la tarjeta ${i + 1}"></button>`
       ).join("");
       index = 1;
+      animating = false;
       track.style.transition = "none";
       track.style.transform = `translateX(-${index * cardWidth()}px)`;
       requestAnimationFrame(() => { track.style.transition = ""; });
+      setActiveDot(0);
     }
 
     function setActiveDot(realIndex) {

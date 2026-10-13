@@ -359,7 +359,8 @@
   }
   .sidebar.open { transform: translateX(0); }
   @media (min-width: 860px) {
-    .sidebar { position: sticky; transform: none; top: 0; height: 100vh; height: 100dvh; }
+    .sidebar { position: fixed; transform: none; top: 0; left: 0; height: 100vh; height: 100dvh; }
+    .main { margin-left: 250px; }
   }
 
   .sidebar-brand {
@@ -646,6 +647,8 @@
   #panel .card { margin: 0; padding: 20px; border-radius: 16px; box-shadow: 0 6px 24px rgba(22,26,46,0.05); border: 1px solid #EEF1F8; }
   .stack { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
   .main-side { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: start; }
+  #view-personal .main-side { align-items: stretch; }
+  #view-personal .main-side .stack { justify-content: space-between; }
   @media (min-width: 1100px) { .main-side { grid-template-columns: minmax(0, 1fr) 340px; } .main-side.hist-side { grid-template-columns: minmax(0, 1fr) 370px; } }
 
   i[data-ic], .ic { display: inline-flex; align-items: center; justify-content: center; font-style: normal; }
@@ -966,6 +969,27 @@
         <div class="crumb">Historial <i data-ic="chevron"></i> Rendimiento por día</div>
         <h1 class="pg-h1">Rendimiento por día</h1>
         <p class="pg-sub">Analiza el desempeño de tu equipo con métricas de rating, volumen de servicios y evolución durante el día seleccionado.</p>
+
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-head wrapping">
+            <div class="ico" data-ic="calendar"></div>
+            <div class="ch-t"><h3>Reporte mensual</h3><p>Resumen del desempeño de tu equipo, mes a mes.</p></div>
+            <div class="filters">
+              <label class="ctl sm"><i data-ic="calendar"></i><input type="month" id="repMesInput" /></label>
+              <button type="button" class="btn-ghost sm" id="repEnviarBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+                Enviar por correo
+              </button>
+            </div>
+          </div>
+          <div class="stat4 sm" id="repResumen" style="margin-bottom:14px;"></div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr><th>Trabajador</th><th>Reseñas del mes</th><th>Rating promedio</th></tr></thead>
+              <tbody id="repTabla"></tbody>
+            </table>
+          </div>
+        </div>
 
         <div class="hist-controls">
           <label class="ctl"><i data-ic="calendar"></i><input type="date" id="histFecha" /></label>
@@ -1722,7 +1746,65 @@
       document.getElementById("histFecha").value = formatFechaLocal(new Date());
       document.getElementById("histFecha").max = formatFechaLocal(new Date());
       renderHistorial();
+
+      const hoy = new Date();
+      document.getElementById("repMesInput").value = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, "0")}`;
+      document.getElementById("repMesInput").max = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(2, "0")}`;
+      renderReporteMensual();
     }
+    document.getElementById("repMesInput").addEventListener("change", renderReporteMensual);
+
+    function datosReporteMensual() {
+      const [anio, mes] = (document.getElementById("repMesInput").value || "").split("-").map(Number);
+      const porMesero = meserosRendimiento.map(m => {
+        const revsMes = (m.reviews || []).filter(r => {
+          const f = new Date(r.fecha);
+          return !isNaN(f) && f.getFullYear() === anio && f.getMonth() + 1 === mes;
+        });
+        const prom = revsMes.length ? revsMes.reduce((a, r) => a + r.estrellas, 0) / revsMes.length : 0;
+        return { nombre: m.nombre, total: revsMes.length, promedio: prom };
+      });
+      const totalResenas = porMesero.reduce((a, m) => a + m.total, 0);
+      const promGeneral = totalResenas
+        ? porMesero.reduce((a, m) => a + m.promedio * m.total, 0) / totalResenas
+        : 0;
+      const mejor = porMesero.filter(m => m.total > 0).sort((a, b) => b.promedio - a.promedio)[0] || null;
+      const nombreMes = anio && mes ? new Date(anio, mes - 1, 1).toLocaleDateString("es-PE", { month: "long", year: "numeric" }) : "";
+      return { anio, mes, nombreMes, porMesero, totalResenas, promGeneral, mejor };
+    }
+
+    function renderReporteMensual() {
+      const d = datosReporteMensual();
+      document.getElementById("repResumen").innerHTML = `
+        <div class="stat-card"><div class="ico lg" data-ic="users"></div><div class="sc-body"><small>Reseñas del mes</small><strong>${d.totalResenas}</strong></div></div>
+        <div class="stat-card"><div class="ico lg" data-ic="users"></div><div class="sc-body"><small>Rating promedio</small><strong>${d.totalResenas ? d.promGeneral.toFixed(1) : "—"}</strong></div></div>
+        <div class="stat-card"><div class="ico lg green"><span class="dotbig"></span></div><div class="sc-body"><small>Mejor mesero</small><strong style="font-size:15px;">${d.mejor ? escapeHtml(d.mejor.nombre) : "—"}</strong></div></div>
+        <div class="stat-card"><div class="ico lg amber" data-ic="pause"></div><div class="sc-body"><small>Equipo evaluado</small><strong>${d.porMesero.filter(m => m.total > 0).length}/${d.porMesero.length}</strong></div></div>
+      `;
+      document.getElementById("repTabla").innerHTML = d.porMesero.length
+        ? d.porMesero.slice().sort((a, b) => b.total - a.total).map(m => `
+            <tr><td>${escapeHtml(m.nombre)}</td><td>${m.total}</td><td>${m.total ? m.promedio.toFixed(1) + " ★" : "—"}</td></tr>
+          `).join("")
+        : '<tr><td colspan="3" class="empty">Todavía no hay personal registrado.</td></tr>';
+      pintarIconos();
+    }
+
+    document.getElementById("repEnviarBtn").addEventListener("click", () => {
+      const d = datosReporteMensual();
+      const asunto = `Reporte mensual Tapport — ${sesion.restaurante || ""} — ${d.nombreMes}`;
+      const lineas = [
+        `Reporte mensual de ${sesion.restaurante || "tu restaurante"} — ${d.nombreMes}`,
+        "",
+        `Reseñas del mes: ${d.totalResenas}`,
+        `Rating promedio: ${d.totalResenas ? d.promGeneral.toFixed(1) : "—"}`,
+        `Mejor mesero: ${d.mejor ? d.mejor.nombre : "—"}`,
+        "",
+        "Desglose por mesero:",
+        ...d.porMesero.slice().sort((a, b) => b.total - a.total).map(m => `- ${m.nombre}: ${m.total} reseña${m.total === 1 ? "" : "s"}, promedio ${m.total ? m.promedio.toFixed(1) : "—"}`),
+      ];
+      const cuerpo = lineas.join("\n");
+      window.location.href = `mailto:${encodeURIComponent(sesion.email || "")}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
+    });
     ["histFecha", "histMesero", "histBuscar"].forEach(id => {
       const evt = id === "histBuscar" ? "input" : "change";
       document.getElementById(id).addEventListener(evt, renderHistorial);
