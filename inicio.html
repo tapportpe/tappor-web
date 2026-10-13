@@ -847,7 +847,7 @@
     let current = "restaurantes";
     let count = data[current].length;
     let index = 1; // posición real (1..count), 0 y count+1 son los clones
-    let animating = false;
+    let snapTimer = null;
 
     function cardOf(text, i) {
       return `<div class="aud-card"><div class="aud-card-num">${String(i + 1).padStart(2, "0")}</div><p>${text}</p></div>`;
@@ -872,7 +872,7 @@
         `<button class="aud-dot${i === 0 ? " active" : ""}" data-i="${i}" aria-label="Ir a la tarjeta ${i + 1}"></button>`
       ).join("");
       index = 1;
-      animating = false;
+      clearTimeout(snapTimer);
       track.style.transition = "none";
       track.style.transform = `translateX(-${index * cardWidth()}px)`;
       requestAnimationFrame(() => { track.style.transition = ""; });
@@ -883,32 +883,34 @@
       dotsWrap.querySelectorAll(".aud-dot").forEach((d, di) => d.classList.toggle("active", di === realIndex));
     }
 
+    // Tras cada movimiento, si caemos en un clon (0 o count+1), reprogramamos
+    // un salto instantáneo (sin transición) al real equivalente, con un
+    // temporizador en vez de "transitionend" (que puede no dispararse si el
+    // usuario hace clic varias veces seguidas), para que el loop nunca se trabe.
+    function programarSnap() {
+      clearTimeout(snapTimer);
+      snapTimer = setTimeout(() => {
+        if (index === count + 1) {
+          track.style.transition = "none";
+          index = 1;
+          track.style.transform = `translateX(-${index * cardWidth()}px)`;
+          requestAnimationFrame(() => { track.style.transition = ""; });
+        } else if (index === 0) {
+          track.style.transition = "none";
+          index = count;
+          track.style.transform = `translateX(-${index * cardWidth()}px)`;
+          requestAnimationFrame(() => { track.style.transition = ""; });
+        }
+      }, 480);
+    }
+
     function goTo(targetIndex) {
-      if (animating) return;
-      animating = true;
       index = targetIndex;
       track.style.transition = "";
       track.style.transform = `translateX(-${index * cardWidth()}px)`;
       setActiveDot(((index - 1) % count + count) % count);
+      programarSnap();
     }
-
-    function onTransitionEnd() {
-      animating = false;
-      if (index === count + 1) {
-        // llegamos al clon del primero: saltamos sin animar al real 1
-        track.style.transition = "none";
-        index = 1;
-        track.style.transform = `translateX(-${index * cardWidth()}px)`;
-        requestAnimationFrame(() => { track.style.transition = ""; });
-      } else if (index === 0) {
-        // llegamos al clon del último: saltamos sin animar al real "count"
-        track.style.transition = "none";
-        index = count;
-        track.style.transform = `translateX(-${index * cardWidth()}px)`;
-        requestAnimationFrame(() => { track.style.transition = ""; });
-      }
-    }
-    track.addEventListener("transitionend", onTransitionEnd);
 
     function next() { goTo(index + 1); }
     function prev() { goTo(index - 1); }
