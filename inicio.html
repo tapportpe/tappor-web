@@ -847,7 +847,6 @@
     let current = "restaurantes";
     let count = data[current].length;
     let index = 1; // posición real (1..count), 0 y count+1 son los clones
-    let autoTimer = null;
     let animating = false;
 
     function cardOf(text, i) {
@@ -914,19 +913,12 @@
     function next() { goTo(index + 1); }
     function prev() { goTo(index - 1); }
 
-    function startAuto() {
-      stopAuto();
-      autoTimer = setInterval(next, 4200);
-    }
-    function stopAuto() { if (autoTimer) clearInterval(autoTimer); }
-
     tabs.forEach(tab => {
       tab.addEventListener("click", () => {
         if (tab.dataset.aud === current) return;
         current = tab.dataset.aud;
         tabs.forEach(t => t.classList.toggle("active", t === tab));
         render();
-        startAuto();
       });
     });
 
@@ -934,11 +926,10 @@
       const dot = e.target.closest(".aud-dot");
       if (!dot) return;
       goTo(Number(dot.dataset.i) + 1);
-      startAuto();
     });
 
-    prevBtn.addEventListener("click", () => { prev(); startAuto(); });
-    nextBtn.addEventListener("click", () => { next(); startAuto(); });
+    prevBtn.addEventListener("click", prev);
+    nextBtn.addEventListener("click", next);
 
     window.addEventListener("resize", () => {
       track.style.transition = "none";
@@ -946,12 +937,7 @@
       requestAnimationFrame(() => { track.style.transition = ""; });
     });
 
-    const section = document.querySelector(".audiences");
-    section.addEventListener("mouseenter", stopAuto);
-    section.addEventListener("mouseleave", startAuto);
-
     render();
-    if (!reduceMotion) startAuto();
   })();
 </script>
 
