@@ -575,6 +575,46 @@
   .dash-card { overflow-wrap: anywhere; }
   @media (max-width: 859px) { body.app-mode .shell .main { padding-bottom: 110px; } .topbar { padding: 12px 14px; gap: 10px; } .shell .main .shell-wrap { padding: 0 14px 40px; } }
 </style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style id="tapport-futuro">
+/* Tema futurista Tapport: carbón + celeste, igual que la página de inicio */
+:root{--accent:#0E7490!important;--accent-dark:#0B5E75!important;--gold:#0E7490!important;--star:#06B6D4!important;--accent-soft:#E1FAFE!important;--bg:#EEF2F6!important;--line:#E0E6EE!important;--carbon:#080A0F;--navy:#0E1626;--cyan:#22D3EE}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,.sidebar .logo,.logo,.dir-title,[class*="stat"] strong{font-family:'Space Grotesk','Inter',sans-serif}
+/* Pantallas de acceso */
+body:not(.app-mode){background:radial-gradient(circle at 80% 0%,rgba(34,211,238,.22),transparent 45%),radial-gradient(circle at 10% 100%,rgba(14,116,144,.25),transparent 50%),linear-gradient(180deg,#0E1626,#080A0F)!important}
+body:has(#panel:not(.hidden)),body:has(#panelWrap:not(.hidden)){background:var(--bg)!important}
+/* Barra lateral */
+.sidebar{background:radial-gradient(circle at 0% 100%,rgba(34,211,238,.22),transparent 55%),linear-gradient(180deg,#0E1626 0%,#080A0F 100%)!important;border-right:1px solid rgba(255,255,255,.08)!important}
+.sidebar-link{border-radius:12px!important;transition:background .25s,box-shadow .25s,color .25s}
+.sidebar-link:hover{background:rgba(34,211,238,.10)!important}
+.sidebar-link.active{background:rgba(34,211,238,.16)!important;color:#fff!important;box-shadow:inset 3px 0 0 #22D3EE,0 0 24px rgba(34,211,238,.18)}
+.sidebar-link.active svg{color:#22D3EE!important;stroke:#22D3EE}
+/* Tarjetas */
+.card,.stat-card,.p-card,.dir-card,.mesero-card,.review,.panel-card{border:1px solid var(--line)!important;border-radius:20px!important;transition:transform .25s,box-shadow .25s,border-color .25s}
+.card:hover,.stat-card:hover,.dir-card:hover,.mesero-card:hover{border-color:rgba(34,211,238,.7)!important;box-shadow:0 14px 34px rgba(8,10,15,.10),0 0 0 4px rgba(34,211,238,.10)!important;transform:translateY(-2px)}
+/* Banners y portadas */
+.p-banner,.banner,.dir-hero-bg{background:radial-gradient(circle at 85% 0%,rgba(34,211,238,.35),transparent 50%),linear-gradient(135deg,#0E1626,#080A0F)!important;border:1px solid rgba(34,211,238,.25)!important;box-shadow:0 20px 50px rgba(8,10,15,.25),0 0 40px rgba(34,211,238,.08)!important}
+.p-banner *{text-shadow:none}
+.hero{background:linear-gradient(100deg,#D5F7FC 0%,#EAFBFE 55%,#D9F6FB 100%)!important}
+.promo,.plan-banner{background:linear-gradient(135deg,#E1FAFE,#F4FDFF)!important}
+.promo-art{background:linear-gradient(160deg,#22D3EE,#0E7490)!important}
+.prof-card{background:linear-gradient(180deg,#E1FAFE,#fff 60%)!important}
+.pill-blue{background:#E1FAFE!important;color:#0E7490!important}
+/* Botones */
+.btn-primary,button.primary,.btn-accent{background:linear-gradient(135deg,#0E7490,#0B5E75)!important;box-shadow:0 8px 22px rgba(14,116,144,.35);transition:transform .2s,box-shadow .2s}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(34,211,238,.4)}
+/* Inputs */
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:#22D3EE!important;box-shadow:0 0 0 4px rgba(34,211,238,.2)!important}
+/* Directorio */
+.dir-pill.on{background:#0E7490!important;border-color:#22D3EE!important}
+.m2-tab.on{border-bottom-color:#22D3EE!important}
+#overlayPerfil .modal-contact a:first-child{background:linear-gradient(135deg,#22D3EE,#0E7490)!important;box-shadow:0 8px 20px rgba(34,211,238,.4)!important;color:#04222B!important}
+.dir-hero{background:radial-gradient(circle at 15% 0%,rgba(34,211,238,.22),transparent 55%)!important}
+a{text-underline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
 </head>
 <body>
 <div class="shell">
