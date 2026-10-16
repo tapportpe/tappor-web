@@ -608,6 +608,60 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
 .dir-hero{background:radial-gradient(circle at 15% 0%,rgba(46,108,246,.2),transparent 55%)!important}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
+<style id="feed-dinamico">
+.dir-hero{overflow:hidden;border-radius:20px;background:radial-gradient(420px 260px at var(--mx,18%) var(--my,0%),rgba(46,108,246,.38),transparent 70%),radial-gradient(circle at 85% 100%,rgba(30,64,175,.35),transparent 60%)!important;padding:26px 24px 22px!important;margin:6px 0 0;border:1px solid rgba(143,176,255,.14)}
+.fx-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:6px 20px 2px}
+.fx-row .lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-right:2px}
+.fx-chip{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:rgba(255,255,255,.8);border-radius:999px;padding:7px 13px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .2s,border-color .2s,transform .2s}
+.fx-chip:hover{border-color:rgba(143,176,255,.6);transform:translateY(-1px)}
+.fx-chip.on{background:rgba(46,108,246,.25);border-color:#2E6CF6;color:#fff}
+.fx-sel{appearance:none;-webkit-appearance:none;padding-right:28px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23fff' stroke-width='1.6' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;max-width:190px}
+.fx-sel option{color:#111}
+.fx-clear{position:absolute;right:12px;top:50%;transform:translateY(-50%);border:0;background:rgba(255,255,255,.12);color:#fff;width:22px;height:22px;border-radius:50%;cursor:pointer;display:none;line-height:1}
+.dir-search{position:relative;transition:border-color .2s,box-shadow .2s}.dir-search:focus-within{border-color:#2E6CF6!important;box-shadow:0 0 0 3px rgba(46,108,246,.2)}
+.dir-search kbd{margin-left:auto;font:600 11px 'Inter',sans-serif;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:2px 7px}
+@media(max-width:720px){.dir-search kbd{display:none}}
+/* Vacantes: carrusel */
+.vac-wrap{position:relative}
+#feedVacantes{display:flex!important;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 20px 14px;scroll-padding-left:20px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+#feedVacantes::-webkit-scrollbar{display:none}
+#feedVacantes .job-card{flex:0 0 min(340px,84%);scroll-snap-align:start;margin:0!important;border:1px solid rgba(143,176,255,.25);border-radius:18px;background-color:#13306F;background-image:linear-gradient(145deg,rgba(46,108,246,.55),rgba(10,21,48,.95));transition:transform .3s,box-shadow .3s;overflow:hidden}
+#feedVacantes .job-card.has-cover{background-image:linear-gradient(180deg,rgba(6,13,32,.55),rgba(6,13,32,.93)),var(--cover-img)}
+#feedVacantes .job-card:hover{transform:translateY(-4px);box-shadow:0 18px 34px rgba(0,0,0,.4)}
+#feedVacantes .job-card h3,#feedVacantes .job-card p,#feedVacantes .job-rest{text-shadow:0 1px 8px rgba(0,0,0,.45)}
+#feedVacantes .job-card .tag:first-child{background:rgba(111,224,255,.16);color:#BFEAFF}
+.vac-nav{position:absolute;top:calc(50% - 19px);z-index:3;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(8,16,40,.85);color:#fff;font-size:20px;cursor:pointer;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px);transition:transform .2s,background .2s}
+.vac-nav:hover{background:#2E6CF6;transform:scale(1.08)}
+.vac-nav.prev{left:6px}.vac-nav.next{right:6px}
+@media(hover:none){.vac-nav{display:none!important}}
+/* Meseros */
+.dir-grid .waiter-card{position:relative;overflow:hidden;transform:perspective(700px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .18s ease-out,border-color .25s,background .25s,box-shadow .25s;animation:cardIn .55s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i,0)*45ms)}
+.dir-grid .waiter-card::before{content:"";position:absolute;inset:0;background:radial-gradient(220px 160px at var(--gx,50%) var(--gy,0%),rgba(46,108,246,.28),transparent 70%);opacity:0;transition:opacity .25s;pointer-events:none}
+.dir-grid .waiter-card:hover{border-color:rgba(143,176,255,.55)!important;background:rgba(255,255,255,.09)!important;box-shadow:0 16px 34px rgba(0,0,0,.4)}
+.dir-grid .waiter-card:hover::before{opacity:1}
+.dir-grid .waiter-card::after{transition:transform .25s}.dir-grid .waiter-card:hover::after{transform:translateX(4px)}
+@keyframes cardIn{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1}}
+.wc-top{display:flex;align-items:center;justify-content:space-between}
+.wc-rank{font:700 11px 'Space Grotesk',sans-serif;letter-spacing:.06em;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.1);color:#BFD3FF}
+.wc-rank.r1{background:linear-gradient(135deg,#F7D774,#C9962B);color:#2B1E00}.wc-rank.r2{background:linear-gradient(135deg,#E6EBF3,#9FA9BC);color:#1B2230}.wc-rank.r3{background:linear-gradient(135deg,#E7B48A,#A96A37);color:#2B1600}
+.save-btn{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s,background .2s;position:relative;z-index:2}
+.save-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2}
+.save-btn:hover{transform:scale(1.12)}
+.save-btn.on{background:#2E6CF6;border-color:#2E6CF6}.save-btn.on svg{fill:#fff}
+.save-btn.pop{animation:pop .35s}@keyframes pop{50%{transform:scale(1.35)}}
+.wc-id{display:flex;align-items:center;gap:12px}
+.wc-stars{display:inline-block;font-size:15px;letter-spacing:2px;background:linear-gradient(90deg,#6FA0FF var(--p),rgba(255,255,255,.2) var(--p));-webkit-background-clip:text;background-clip:text;color:transparent}
+.wc-meta{display:flex;align-items:baseline;gap:8px}.wc-meta b{font:700 19px 'Space Grotesk',sans-serif;color:#fff}.wc-meta small{font-size:11.5px;color:rgba(255,255,255,.5)}
+.dir-grid .waiter-rating{display:none}
+.dir-grid .waiter-info{display:flex;flex-direction:column;gap:6px}
+/* skeleton */
+.sk-card{height:150px;border-radius:16px;background:linear-gradient(100deg,rgba(255,255,255,.05) 30%,rgba(255,255,255,.12) 50%,rgba(255,255,255,.05) 70%);background-size:200% 100%;animation:sk 1.3s linear infinite}
+@keyframes sk{to{background-position:-200% 0}}
+.fx-empty{text-align:center;padding:34px 20px;color:rgba(255,255,255,.6);grid-column:1/-1}
+.fx-empty button{margin-top:12px;border:0;background:#2E6CF6;color:#fff;font-weight:700;border-radius:10px;padding:9px 16px;cursor:pointer}
+.feed-section-title{opacity:0;transform:translateY(10px);transition:opacity .5s,transform .5s}.feed-section-title.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.dir-grid .waiter-card,.sk-card{animation:none!important}.feed-section-title{opacity:1;transform:none}}
+</style>
 </head>
 <body>
   <div class="app">
@@ -629,7 +683,7 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
       </div>
 
       <div class="dir-search-row">
-        <div class="dir-search"><span>🔎</span><input type="text" id="dirBuscar" placeholder="Buscar por nombre o restaurante…" /></div>
+        <div class="dir-search"><span>🔎</span><input type="text" id="dirBuscar" placeholder="Buscar por nombre o restaurante…" autocomplete="off" /><kbd>/</kbd><button type="button" class="fx-clear" id="fxClear" aria-label="Limpiar">×</button></div>
       </div>
       <div class="dir-pills" id="dirPills">
         <button type="button" class="dir-pill on" data-min="0">Todos</button>
@@ -637,12 +691,20 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
         <button type="button" class="dir-pill" data-min="4.5">4.5★ o más</button>
         <button type="button" class="dir-pill" data-min="5">5★</button>
       </div>
+      <div class="fx-row" id="fxRow">
+        <span class="lbl">Ordenar</span>
+        <button type="button" class="fx-chip on" data-sort="rating">Mejor rating</button>
+        <button type="button" class="fx-chip" data-sort="reviews">Más reseñas</button>
+        <button type="button" class="fx-chip" data-sort="az">A–Z</button>
+        <select class="fx-chip fx-sel" id="fxRest" aria-label="Restaurante"><option value="">Todos los restaurantes</option></select>
+        <button type="button" class="fx-chip" id="fxSaved">♡ Guardados <span id="fxSavedN"></span></button>
+      </div>
 
       <div class="feed-section-title">Restaurantes buscando personal</div>
-      <div id="feedVacantes"><div class="loading-state">Cargando…</div></div>
+      <div class="vac-wrap"><button type="button" class="vac-nav prev" aria-label="Anterior">‹</button><div id="feedVacantes"><div class="sk-card" style="flex:0 0 min(340px,84%)"></div><div class="sk-card" style="flex:0 0 min(340px,84%)"></div></div><button type="button" class="vac-nav next" aria-label="Siguiente">›</button></div>
 
       <div class="feed-section-title">Meseros destacados <span class="count" id="destacadosCount"></span></div>
-      <div id="feedDestacados" class="dir-grid"><div class="loading-state">Cargando…</div></div>
+      <div id="feedDestacados" class="dir-grid"><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div></div>
     </div>
 
     <!-- ============ BUSCAR ============ -->
@@ -917,6 +979,7 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
         const res = await fetch(`${ENDPOINT}?accion=listar_vacantes`);
         const data = await res.json();
         const vacantes = (data.vacantes || []).slice(0, 8);
+        vacantesTotal = vacantes.length; setTimeout(fxVacNav, 80);
 
         if (!vacantes.length) {
           cont.innerHTML = '<div class="empty-state">Ningún restaurante ha publicado anuncios todavía.</div>';
@@ -1026,12 +1089,15 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
     });
 
     let destacadosTodos = [];
+    let vacantesTotal = 0;
+    const FX = { sort: "rating", rest: "", saved: false };
     async function cargarDestacados() {
       const cont = document.getElementById("feedDestacados");
       try {
         const res = await fetch(`${ENDPOINT}?accion=buscar_meseros&minRating=0`);
         const data = await res.json();
         destacadosTodos = data.resultados || [];
+        fxFillRest();
         pintarDestacados();
       } catch (err) {
         cont.innerHTML = '<div class="empty-state">No se pudo cargar el feed.</div>';
@@ -1041,22 +1107,40 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
     function pintarDestacados() {
       const cont = document.getElementById("feedDestacados");
       const q = (document.getElementById("dirBuscar").value || "").trim().toLowerCase();
+      document.getElementById("fxClear").style.display = q ? "block" : "none";
       const minBtn = document.querySelector(".dir-pill.on");
       const min = minBtn ? Number(minBtn.dataset.min) : 0;
+      const guard = fxGuardados();
+      document.getElementById("fxSavedN").textContent = guard.length ? "(" + guard.length + ")" : "";
 
-      const lista = destacadosTodos.filter(r => {
+      let lista = destacadosTodos.filter(r => {
         if (r.promedio < min) return false;
+        if (FX.rest && r.restaurante !== FX.rest) return false;
+        if (FX.saved && !guard.includes(r.codigo)) return false;
         if (q && !(r.nombre || "").toLowerCase().includes(q) && !(r.restaurante || "").toLowerCase().includes(q)) return false;
         return true;
       });
+      const cmp = { rating: (a, b) => b.promedio - a.promedio || b.totalReviews - a.totalReviews, reviews: (a, b) => b.totalReviews - a.totalReviews || b.promedio - a.promedio, az: (a, b) => (a.nombre || "").localeCompare(b.nombre || "", "es") }[FX.sort];
+      lista = lista.slice().sort(cmp);
 
       document.getElementById("destacadosCount").textContent = lista.length ? `(${lista.length})` : "";
       if (!lista.length) {
-        cont.innerHTML = '<div class="empty-state">No encontramos meseros con ese criterio.</div>';
+        cont.innerHTML = `<div class="fx-empty">${FX.saved ? "Aún no guardaste meseros. Toca el corazón en una tarjeta." : "No encontramos meseros con ese criterio."}<br><button type="button" id="fxReset">Limpiar filtros</button></div>`;
+        document.getElementById("fxReset").addEventListener("click", fxReset);
         return;
       }
-      cont.innerHTML = lista.map(renderWaiterCard).join("");
+      const conRank = FX.sort === "rating" && !q && !FX.rest && !FX.saved && min === 0;
+      cont.innerHTML = lista.map((r, i) => renderWaiterCard(r, i, conRank && i < 3 && r.promedio > 0 ? i + 1 : 0)).join("");
       adjuntarClicksWaiterCards(cont);
+    }
+    function fxReset() {
+      FX.sort = "rating"; FX.rest = ""; FX.saved = false;
+      document.getElementById("dirBuscar").value = "";
+      document.getElementById("fxRest").value = "";
+      document.querySelectorAll(".dir-pill").forEach(b => b.classList.toggle("on", b.dataset.min === "0"));
+      document.querySelectorAll("[data-sort]").forEach(b => b.classList.toggle("on", b.dataset.sort === "rating"));
+      document.getElementById("fxSaved").classList.remove("on");
+      pintarDestacados();
     }
     document.getElementById("dirBuscar").addEventListener("input", pintarDestacados);
     document.querySelectorAll(".dir-pill").forEach(btn => btn.addEventListener("click", () => {
@@ -1077,16 +1161,24 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
       `;
     }
 
-    function renderWaiterCard(r) {
-      const promedioTexto = r.promedio > 0 ? r.promedio.toFixed(1) : "Sin reseñas";
+    function fxGuardados() { try { return JSON.parse(localStorage.getItem("tapport_guardados") || "[]"); } catch (e) { return []; } }
+    function fxSetGuardados(a) { try { localStorage.setItem("tapport_guardados", JSON.stringify(a)); } catch (e) {} }
+    function renderWaiterCard(r, i, rank) {
+      const tiene = r.promedio > 0;
+      const pct = Math.max(0, Math.min(100, (r.promedio / 5) * 100));
+      const guardado = fxGuardados().includes(r.codigo);
+      const rk = rank ? `<span class="wc-rank r${rank}">#${rank} TOP</span>` : "<span></span>";
       return `
-        <div class="waiter-card" data-code="${escapeHtml(r.codigo)}">
-          <div class="waiter-photo">${fotoConRespaldoHtml(r.fotoUrl, r.nombre, "")}</div>
-          <div class="waiter-info">
-            <p class="waiter-name">${escapeHtml(r.nombre)}</p>
-            <p class="waiter-rest">${escapeHtml(r.restaurante)}</p>
-            <p class="waiter-rating">★ ${promedioTexto}<span class="count">(${r.totalReviews} reseña${r.totalReviews === 1 ? '' : 's'})</span></p>
+        <div class="waiter-card" data-code="${escapeHtml(r.codigo)}" style="--i:${Math.min(i || 0, 14)}">
+          <div class="wc-top">${rk}<button type="button" class="save-btn${guardado ? " on" : ""}" data-save="${escapeHtml(r.codigo)}" aria-label="Guardar mesero"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.6-9.3-9A5.4 5.4 0 0 1 12 6.2 5.4 5.4 0 0 1 21.3 12C19 16.4 12 21 12 21z"/></svg></button></div>
+          <div class="wc-id">
+            <div class="waiter-photo">${fotoConRespaldoHtml(r.fotoUrl, r.nombre, "")}</div>
+            <div class="waiter-info">
+              <p class="waiter-name">${escapeHtml(r.nombre)}</p>
+              <p class="waiter-rest">${escapeHtml(r.restaurante)}</p>
+            </div>
           </div>
+          <div class="wc-meta">${tiene ? `<b>${r.promedio.toFixed(1)}</b><span class="wc-stars" style="--p:${pct}%">★★★★★</span>` : "<b>—</b>"}<small>${r.totalReviews} reseña${r.totalReviews === 1 ? "" : "s"}</small></div>
         </div>
       `;
     }
@@ -1234,6 +1326,66 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
     // puede publicar, desde su panel en admin.html.
 
     cargarRestaurantes();
+
+    // ---------- Feed dinámico ----------
+    function fxFillRest() {
+      const sel = document.getElementById("fxRest"), cur = sel.value;
+      const rs = [...new Set(destacadosTodos.map(r => r.restaurante).filter(Boolean))].sort((a, b) => a.localeCompare(b, "es"));
+      sel.innerHTML = '<option value="">Todos los restaurantes</option>' + rs.map(r => `<option value="${escapeHtml(r)}">${escapeHtml(r)}</option>`).join("");
+      sel.value = rs.includes(cur) ? cur : "";
+    }
+    function fxVacNav() {
+      const tr = document.getElementById("feedVacantes"), wrap = tr.parentElement;
+      const over = tr.scrollWidth > tr.clientWidth + 8;
+      wrap.querySelector(".prev").style.display = over && tr.scrollLeft > 8 ? "flex" : "none";
+      wrap.querySelector(".next").style.display = over && tr.scrollLeft < tr.scrollWidth - tr.clientWidth - 8 ? "flex" : "none";
+    }
+    (function fxInit() {
+      const tr = document.getElementById("feedVacantes");
+      tr.addEventListener("scroll", fxVacNav, { passive: true });
+      window.addEventListener("resize", fxVacNav);
+      document.querySelector(".vac-nav.prev").addEventListener("click", () => tr.scrollBy({ left: -360, behavior: "smooth" }));
+      document.querySelector(".vac-nav.next").addEventListener("click", () => tr.scrollBy({ left: 360, behavior: "smooth" }));
+      // arrastrar con el mouse
+      let down = false, sx = 0, sl = 0, moved = false;
+      tr.addEventListener("mousedown", e => { if (e.target.closest("a,button")) return; down = true; moved = false; sx = e.pageX; sl = tr.scrollLeft; tr.style.scrollSnapType = "none"; });
+      window.addEventListener("mouseup", () => { if (down) { down = false; tr.style.scrollSnapType = ""; } });
+      window.addEventListener("mousemove", e => { if (!down) return; const dx = e.pageX - sx; if (Math.abs(dx) > 3) moved = true; tr.scrollLeft = sl - dx; });
+      // orden, restaurante, guardados
+      document.querySelectorAll("[data-sort]").forEach(b => b.addEventListener("click", () => { FX.sort = b.dataset.sort; document.querySelectorAll("[data-sort]").forEach(x => x.classList.toggle("on", x === b)); pintarDestacados(); }));
+      document.getElementById("fxRest").addEventListener("change", e => { FX.rest = e.target.value; pintarDestacados(); });
+      document.getElementById("fxSaved").addEventListener("click", e => { FX.saved = !FX.saved; e.currentTarget.classList.toggle("on", FX.saved); pintarDestacados(); });
+      document.getElementById("fxClear").addEventListener("click", () => { const i = document.getElementById("dirBuscar"); i.value = ""; i.focus(); pintarDestacados(); });
+      document.addEventListener("keydown", e => { if (e.key === "/" && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) { e.preventDefault(); document.getElementById("dirBuscar").focus(); } });
+      // corazón (captura para no abrir el perfil)
+      document.addEventListener("click", e => {
+        const h = e.target.closest(".save-btn"); if (!h) return;
+        e.stopPropagation();
+        const code = h.dataset.save; let g = fxGuardados();
+        g = g.includes(code) ? g.filter(c => c !== code) : g.concat(code);
+        fxSetGuardados(g);
+        h.classList.toggle("on", g.includes(code)); h.classList.remove("pop"); void h.offsetWidth; h.classList.add("pop");
+        document.getElementById("fxSavedN").textContent = g.length ? "(" + g.length + ")" : "";
+        if (FX.saved) setTimeout(pintarDestacados, 280);
+      }, true);
+      // brillo + inclinación en tarjetas
+      const grid = document.getElementById("feedDestacados");
+      grid.addEventListener("mousemove", e => {
+        const c = e.target.closest(".waiter-card"); if (!c) return;
+        const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        c.style.setProperty("--ry", ((x - .5) * 7).toFixed(2) + "deg"); c.style.setProperty("--rx", ((.5 - y) * 7).toFixed(2) + "deg");
+        c.style.setProperty("--gx", (x * 100) + "%"); c.style.setProperty("--gy", (y * 100) + "%");
+      });
+      grid.addEventListener("mouseleave", () => grid.querySelectorAll(".waiter-card").forEach(c => { c.style.removeProperty("--rx"); c.style.removeProperty("--ry"); }), true);
+      grid.addEventListener("mouseout", e => { const c = e.target.closest(".waiter-card"); if (c && !c.contains(e.relatedTarget)) { c.style.removeProperty("--rx"); c.style.removeProperty("--ry"); } });
+      // luz que sigue al cursor en el hero
+      const hero = document.querySelector(".dir-hero");
+      hero.addEventListener("mousemove", e => { const r = hero.getBoundingClientRect(); hero.style.setProperty("--mx", (e.clientX - r.left) + "px"); hero.style.setProperty("--my", (e.clientY - r.top) + "px"); });
+      // títulos con aparición suave
+      const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting) { x.target.classList.add("in"); io.unobserve(x.target); } }), { threshold: .2 }) : null;
+      document.querySelectorAll(".feed-section-title").forEach(t => io ? io.observe(t) : t.classList.add("in"));
+    })();
+
     cargarFeed();
 
     // Soporta llegar con ?code=XXXX (abre el perfil directo) o con
