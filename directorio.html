@@ -577,11 +577,42 @@
   .review-tag-pill { background: rgba(255,255,255,0.1); color: #fff; border-radius: 999px; padding: 4px 10px; font-size: 10.5px; font-weight: 700; white-space: nowrap; }
 
 </style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style id="tapport-futuro">
+/* Tema Tapport: negro, azul marino, blanco y acento azul (igual que inicio) */
+:root{--accent:#2E6CF6!important;--accent-dark:#1E40AF!important;--gold:#2E6CF6!important;--star:#2E6CF6!important;--accent-soft:#E8F0FE!important;--bg:#F1F4F9!important;--line:#E1E6EF!important}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,.logo{font-family:'Space Grotesk','Inter',sans-serif}
+body:not(.app-mode){background:radial-gradient(circle at 85% 0%,rgba(46,108,246,.25),transparent 45%),linear-gradient(180deg,#0B1220,#05080F)!important}
+body:has(#panel:not(.hidden)),body:has(#panelWrap:not(.hidden)){background:var(--bg)!important}
+.sidebar{background:linear-gradient(180deg,#0A1530 0%,#060D20 100%)!important;border-right:1px solid rgba(255,255,255,.06)!important}
+.sidebar-link{border-radius:10px!important;transition:background .2s}
+.sidebar-link:hover{background:rgba(255,255,255,.07)!important}
+.sidebar-link.active{background:rgba(46,108,246,.28)!important;color:#fff!important}
+.sidebar-link.active svg{color:#7FA6FF!important;stroke:#7FA6FF}
+.card,.stat-card,.p-card,.dir-card,.mesero-card,.review,.panel-card{border:1px solid var(--line)!important;border-radius:16px!important}
+.card:hover,.stat-card:hover,.dir-card:hover,.mesero-card:hover{border-color:#B8CCF8!important;box-shadow:0 8px 22px rgba(11,18,32,.08)!important}
+.p-banner,.banner,.dir-hero-bg{background:linear-gradient(135deg,#0B1220,#101C36)!important;border:1px solid rgba(255,255,255,.08)!important;box-shadow:0 14px 34px rgba(11,18,32,.2)!important}
+.hero{background:linear-gradient(100deg,#DCE8FE 0%,#EDF3FF 55%,#E1EBFD 100%)!important}
+.promo,.plan-banner{background:linear-gradient(135deg,#E8F0FE,#F5F8FF)!important}
+.promo-art{background:linear-gradient(160deg,#3B82F6,#1E40AF)!important}
+.prof-card{background:linear-gradient(180deg,#E8F0FE,#fff 60%)!important}
+.pill-blue{background:#E8F0FE!important;color:#1E40AF!important}
+.btn-primary,button.primary,.btn-accent{background:#2E6CF6!important;box-shadow:0 6px 16px rgba(46,108,246,.28)}
+.btn-primary:hover{background:#1E40AF!important}
+input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6CF6!important;box-shadow:0 0 0 3px rgba(46,108,246,.18)!important}
+.dir-pill.on{background:#2E6CF6!important;border-color:#2E6CF6!important}
+.m2-tab.on{border-bottom-color:#2E6CF6!important}
+#overlayPerfil .modal-contact a:first-child{background:#2E6CF6!important;box-shadow:0 6px 16px rgba(46,108,246,.35)!important;color:#fff!important}
+.dir-hero{background:radial-gradient(circle at 15% 0%,rgba(46,108,246,.2),transparent 55%)!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
 </head>
 <body>
   <div class="app">
     <div class="topbar dir-topbar">
-      <a class="dir-logo" href="inicio.html"><svg width="24" height="24" viewBox="0 0 32 32"><path d="M6 4h20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-7v16a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V10H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="#4C8DFF"/></svg>Tapport</a>
+      <a class="dir-logo" href="inicio.html"><span class="tp-logo" style="display:inline-flex;align-items:center;gap:9px;color:#fff;font:700 21px 'Space Grotesk',sans-serif;letter-spacing:-.01em"><svg width="24" height="24" viewBox="0 0 32 32"><path d="M6 4h20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-7v16a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V10H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="#fff"/></svg><span>Tapport<sup style="font-size:.43em;margin-left:1px">®</sup></span></span></a>
       <div class="dir-nav">
         <a href="inicio.html">🏠 Inicio</a>
         <button type="button" class="help-btn" id="abrirTutorialBtn" title="Cómo funciona Tapport">?</button>
