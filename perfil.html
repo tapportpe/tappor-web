@@ -606,7 +606,15 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
 .dir-hero{background:radial-gradient(circle at 15% 0%,rgba(46,108,246,.2),transparent 55%)!important}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
-</head>
+<style id="tapport-login-center">
+body:has(#authCard:not(.hidden)) .main{margin-left:0!important;padding:0!important}
+body:has(#authCard:not(.hidden)) #loginWrap{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px 16px!important;box-sizing:border-box}
+body:has(#authCard:not(.hidden)) #loginHeader{text-align:center;width:100%;max-width:460px}
+body:has(#authCard:not(.hidden)) #loginHeader h1{color:#fff}
+body:has(#authCard:not(.hidden)) #loginHeader .sub{color:rgba(255,255,255,.7)}
+body:has(#authCard:not(.hidden)) #authCard{width:100%}
+#sesionExpiradaMsg{margin-bottom:14px;text-align:center}
+</style></head>
 <body>
 <div class="shell">
 
