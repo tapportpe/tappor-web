@@ -89,6 +89,35 @@ nav.solid{background:rgba(5,8,15,.94);backdrop-filter:blur(10px);box-shadow:0 1p
 .pv.big img{height:auto;object-fit:contain}
 .pv figcaption{position:absolute;left:10px;bottom:10px;background:rgba(11,18,32,.88);color:#fff;font-size:11px;padding:5px 10px;border-radius:8px}
 @media(max-width:900px){.prod-grid{grid-template-columns:1fr;gap:36px}.prod-feats{grid-template-columns:1fr 1fr 1fr}}
+
+.trust{background:var(--paper)}
+.trust .wrap>.rv{max-width:640px}
+.flow{display:grid;grid-template-columns:minmax(0,1fr) 64px minmax(0,auto) 64px minmax(0,1fr);align-items:center;margin-top:52px}
+.fl{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+.fl-vis{height:260px;width:100%;display:flex;align-items:center;justify-content:center}
+.fl-cap b{display:block;font:600 14.5px 'Space Grotesk',sans-serif;color:var(--ink)}
+.fl-cap small{display:block;margin-top:2px;font-size:12.5px;color:var(--slate)}
+.fl-band{width:100%;max-width:340px;border-radius:18px;overflow:hidden;border:1px solid #14224A;box-shadow:0 18px 34px rgba(11,18,32,.16)}
+.fl-band img{display:block;width:100%}
+.fl .phone{font-size:12.5px;box-shadow:0 18px 34px rgba(11,18,32,.25)}
+.fl .laptop{width:100%;max-width:360px}
+.fl .lap-screen{box-shadow:0 18px 34px rgba(11,18,32,.22)}
+.fl-arrow{display:flex;justify-content:center;color:var(--blue)}
+.fl-arrow svg{width:56px;height:20px;overflow:visible}
+.fl-arrow line{stroke:currentColor;stroke-width:2;stroke-dasharray:5 6;animation:fldash 1.2s linear infinite}
+.fl-arrow path{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@keyframes fldash{to{stroke-dashoffset:-22}}
+.tr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:56px}
+.tr{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:28px 26px;transition:border-color .25s,box-shadow .25s}
+.tr:hover{border-color:#B8CCF8;box-shadow:0 12px 28px rgba(11,18,32,.07)}
+.tr-top{display:flex;align-items:center;justify-content:space-between}
+.tr-ic{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--paper);color:var(--blue);display:flex;align-items:center;justify-content:center}
+.tr-ic svg{width:21px;height:21px}
+.tr-n{font:600 13px 'Space Grotesk',sans-serif;letter-spacing:.08em;color:#9AA6BC}
+.tr h3{font-size:18px;margin-top:22px}
+.tr p{margin-top:8px;color:var(--slate);font-size:14.5px}
+@media(max-width:940px){.flow{grid-template-columns:1fr;gap:6px}.fl-vis{height:auto;padding:4px 0}.fl-arrow{height:56px;align-items:center}.fl-arrow svg{transform:rotate(90deg)}.tr-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.fl-arrow line{animation:none}}
 @media(max-width:520px){.prod-feats{grid-template-columns:1fr}.prod-vis{grid-template-columns:1fr}.pv.small{min-height:220px}}
 /* como funciona */
 .how{background:linear-gradient(180deg,#0A1530,#060D20);color:#fff}
@@ -184,13 +213,21 @@ nav.solid{background:rgba(5,8,15,.94);backdrop-filter:blur(10px);box-shadow:0 1p
 .feed .hero-cta{margin-top:34px}
 @media(max-width:800px){.feed-tiles{grid-template-columns:1fr}}
 /* contacto */
-.contact{background:radial-gradient(ellipse 700px 300px at 90% 100%,rgba(46,108,246,.25),transparent 70%),#060D20;color:#fff;padding:56px 0}
-.contact-in{display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap}
-.contact h2{font-size:clamp(24px,3vw,34px);max-width:22ch;margin-top:10px}
-.contact p{margin-top:8px;color:rgba(255,255,255,.7);font-size:15px;max-width:50ch}
-.contact-act{display:flex;gap:12px;flex-wrap:wrap}
-.contact-alt{margin-top:14px;font-size:13px;color:rgba(255,255,255,.55);width:100%}
-.contact-alt a{color:#fff;text-decoration:none;margin-right:14px;white-space:nowrap}
+.contact{background:radial-gradient(ellipse 800px 340px at 85% 100%,rgba(46,108,246,.28),transparent 70%),#060D20;color:#fff;padding:56px 0}
+.contact-box{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:44px;align-items:center;padding:38px 42px;border:1px solid rgba(143,176,255,.2);border-radius:24px;background:linear-gradient(135deg,rgba(46,108,246,.12),rgba(255,255,255,.02))}
+.contact h2{font-size:clamp(24px,2.7vw,32px);margin-top:10px}
+.contact p{margin-top:10px;color:rgba(255,255,255,.7);font-size:15px;max-width:40ch}
+.contact-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cc{display:flex;flex-direction:column;gap:4px;padding:20px 20px 18px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);text-decoration:none;color:#fff;transition:transform .25s,background .25s,border-color .25s}
+.cc:hover{transform:translateY(-3px);background:rgba(255,255,255,.1);border-color:rgba(143,176,255,.5)}
+.cc-ic{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;background:var(--blue);color:#fff}
+.cc.wa .cc-ic{background:#25D366;color:#06210F}
+.cc-ic svg{width:21px;height:21px}
+.cc small{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.55);font-weight:600}
+.cc b{font:600 15.5px 'Space Grotesk',sans-serif;word-break:break-word}
+.cc em{font-style:normal;font-size:12.5px;color:var(--blue-l);margin-top:8px}
+@media(max-width:900px){.contact-box{grid-template-columns:1fr;gap:26px;padding:30px 24px}}
+@media(max-width:520px){.contact-cards{grid-template-columns:1fr}}
 /* footer */
 footer{background:#05080F;color:#fff;padding:52px 0 26px}
 .f-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
@@ -232,6 +269,22 @@ footer{background:#05080F;color:#fff;padding:52px 0 26px}
  </div>
 </div></section>
 
+<section class="sec trust" id="confianza"><div class="wrap">
+<div class="rv"><div class="eyebrow">Confianza en cada interacción</div><h2>La confianza se construye con cada experiencia.</h2><p class="lead">En Tapport conectamos la tecnología con la atención humana para ayudar a los restaurantes a comprender mejor el servicio que ofrecen.</p></div>
+<div class="flow">
+<div class="fl rv"><div class="fl-vis"><div class="fl-band"><img src="assets/banda-poster.jpg" alt="Pulsera NFC negra de Tapport"></div></div><div class="fl-cap"><b>Pulsera NFC</b><small>Personal de cada mesero</small></div></div>
+<div class="fl-arrow rv" aria-hidden="true"><svg viewBox="0 0 56 20"><line x1="2" y1="10" x2="46" y2="10"/><path d="M42 4l8 6-8 6"/></svg></div>
+<div class="fl rv"><div class="fl-vis"><div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/resena-b.jpg" alt="Pantalla real de calificación de Tapport"></div></div></div><div class="fl-cap"><b>Experiencia del cliente</b><small>Califica desde su teléfono</small></div></div>
+<div class="fl-arrow rv" aria-hidden="true"><svg viewBox="0 0 56 20"><line x1="2" y1="10" x2="46" y2="10"/><path d="M42 4l8 6-8 6"/></svg></div>
+<div class="fl rv"><div class="fl-vis"><div class="laptop "><div class="lap-screen"><div class="lap-view"><img src="assets/plataforma-inicio.jpg" alt="Panel administrativo de Tapport: inicio" class="active" data-i="0"></div></div><div class="lap-base"></div></div></div><div class="fl-cap"><b>Información en la plataforma</b><small>Panel para el restaurante</small></div></div>
+</div>
+<div class="tr-grid">
+<div class="tr rv"><div class="tr-top"><div class="tr-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="3"/><circle cx="12" cy="10" r="2.5"/><path d="M8 17c.8-1.8 2.2-2.5 4-2.5s3.2.7 4 2.5"/></svg></div><span class="tr-n">01</span></div><h3>Identificación individual</h3><p>Cada mesero cuenta con su propia pulsera NFC, que permite al cliente acceder a la experiencia digital asociada a ese profesional.</p></div>
+<div class="tr rv"><div class="tr-top"><div class="tr-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1.1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h6M9 14h3"/></svg></div><span class="tr-n">02</span></div><h3>Opiniones vinculadas al servicio</h3><p>Facilitamos que los clientes compartan su experiencia y que el restaurante pueda consultar las calificaciones recogidas por la plataforma.</p></div>
+<div class="tr rv"><div class="tr-top"><div class="tr-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><span class="tr-n">03</span></div><h3>Información para mejorar</h3><p>Organiza la información disponible y utiliza las opiniones como una oportunidad para reconocer fortalezas e identificar aspectos que pueden mejorar.</p></div>
+</div>
+</div></section>
+
 <section class="sec" id="beneficios"><div class="wrap"><div class="rv"><div class="eyebrow">Una mejor gestión del servicio</div><h2>Beneficios para tu restaurante</h2></div><div class="ben-grid"><div class="ben rv"><div class="ben-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.7 5.7 6.3.8-4.6 4.3 1.2 6.2L12 17l-5.6 3 1.2-6.2L3 9.5l6.3-.8z"/></svg></div><h3>Conoce mejor la experiencia del cliente</h3><p>Recibe información sobre cómo se percibe la atención.</p></div><div class="ben rv"><div class="ben-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div><h3>Identifica oportunidades de mejora</h3><p>Detecta aspectos del servicio que pueden requerir atención.</p></div><div class="ben rv"><div class="ben-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M5 20a7 7 0 0 1 14 0"/></svg></div><h3>Comprende el rendimiento individual</h3><p>Consulta las evaluaciones asociadas a cada mesero.</p></div><div class="ben rv"><div class="ben-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><h3>Toma decisiones con información</h3><p>Utiliza las evaluaciones disponibles para orientar las mejoras del equipo.</p></div></div></div></section>
 
 <section class="sec plat" id="plataforma"><div class="wrap plat-grid">
@@ -265,9 +318,12 @@ footer{background:#05080F;color:#fff;padding:52px 0 26px}
 <div class="hero-cta"><a class="btn btn-blue" href="https://tapportpe.github.io/tappor-web/directorio.html">Explorar el Feed</a><a class="btn btn-line" href="#contacto">Hablar con nosotros</a></div></div></section>
 </div>
 
-<section class="contact" id="contacto"><div class="wrap contact-in"><div><div class="eyebrow lt">Contáctanos</div><h2>¿Listo para mejorar el servicio de tu restaurante?</h2><p>Escríbenos por WhatsApp o correo electrónico. Te responderemos a la brevedad.</p></div>
-<div class="contact-act"><a class="btn btn-wa" href="https://wa.me/51992346227?text=Hola%2C%20estoy%20interesado%20en%20Tapport%20para%20mi%20restaurante%20y%20quisiera%20recibir%20m%C3%A1s%20informaci%C3%B3n%20sobre%20sus%20planes%20y%20c%C3%B3mo%20funciona%20el%20servicio." target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14.1c-.2.6-1.300 1.200-1.800 1.200-.5.100-1 .2-3.300-.7-2.800-1.100-4.600-4-4.700-4.200-.1-.2-1.100-1.500-1.100-2.800s.7-2 1-2.300c.2-.3.500-.3.700-.3h.5c.2 0 .4 0 .6.500l.8 2c.1.200.1.300 0 .5l-.4.600c-.1.200-.3.300-.1.600.600 1 1.400 1.800 2.400 2.300.3.200.5.100.7-.1l.7-.9c.2-.3.400-.2.600-.1l1.900.9c.3.100.5.200.5.300.1.200.1.800-.1 1.400z"/></svg>WhatsApp</a><a class="btn btn-line" href="https://mail.google.com/mail/?view=cm&fs=1&to=tapport.pe@gmail.com&su=Consulta%20comercial%20%E2%80%94%20Tapport&body=Hola%2C%20equipo%20de%20Tapport%3A%0AEstoy%20interesado%20en%20conocer%20m%C3%A1s%20sobre%20Tapport%20para%20mi%20restaurante.%20Me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20sus%20planes%20y%20las%20pulseras%20NFC.%0AQuedo%20atento%20a%20su%20respuesta.%0ASaludos." target="_blank" rel="noopener">Correo electrónico</a></div>
-<p class="contact-alt">También puedes escribirnos directamente: <a href="https://wa.me/51992346227?text=Hola%2C%20estoy%20interesado%20en%20Tapport%20para%20mi%20restaurante%20y%20quisiera%20recibir%20m%C3%A1s%20informaci%C3%B3n%20sobre%20sus%20planes%20y%20c%C3%B3mo%20funciona%20el%20servicio." target="_blank" rel="noopener">+51 992 346 227</a><a href="mailto:tapport.pe@gmail.com">tapport.pe@gmail.com</a></p></div></section>
+<section class="contact" id="contacto"><div class="wrap"><div class="contact-box">
+<div class="rv"><div class="eyebrow lt">Contáctanos</div><h2>¿Listo para mejorar el servicio de tu restaurante?</h2><p>Escríbenos por WhatsApp o correo electrónico. Te responderemos a la brevedad.</p></div>
+<div class="contact-cards rv">
+<a class="cc wa" href="https://wa.me/51992346227?text=Hola%2C%20estoy%20interesado%20en%20Tapport%20para%20mi%20restaurante%20y%20quisiera%20recibir%20m%C3%A1s%20informaci%C3%B3n%20sobre%20sus%20planes%20y%20c%C3%B3mo%20funciona%20el%20servicio." target="_blank" rel="noopener"><span class="cc-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.3 0 .5l-.4.6c-.1.2-.3.3-.1.6.6 1 1.4 1.8 2.4 2.3.3.2.5.1.7-.1l.7-.9c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.8-.1 1.4z"/></svg></span><small>WhatsApp</small><b>+51 992 346 227</b><em>Escribir ahora →</em></a>
+<a class="cc" href="https://mail.google.com/mail/?view=cm&fs=1&to=tapport.pe@gmail.com&su=Consulta%20comercial%20%E2%80%94%20Tapport&body=Hola%2C%20equipo%20de%20Tapport%3A%0AEstoy%20interesado%20en%20conocer%20m%C3%A1s%20sobre%20Tapport%20para%20mi%20restaurante.%20Me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20sus%20planes%20y%20las%20pulseras%20NFC.%0AQuedo%20atento%20a%20su%20respuesta.%0ASaludos." target="_blank" rel="noopener"><span class="cc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></svg></span><small>Correo</small><b>tapport.pe@gmail.com</b><em>Enviar mensaje →</em></a>
+</div></div></div></section>
 
 <footer><div class="wrap"><div class="f-grid"><div><a class="logo" href="#inicio"><svg class="mark" width="24" height="24" viewBox="0 0 32 32"><path d="M6 4h20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-7v16a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V10H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="#fff"/></svg><span class="word">Tapport<sup>®</sup></span></a><p>La reputación del buen servicio, fuera del restaurante.</p></div>
 <div><h4>Producto</h4><a href="#como-funciona">Cómo funciona</a><a href="#plataforma">Plataforma</a><a href="#producto">La pulsera</a><a href="#hub">El Feed</a><a href="#planes">Planes</a><a href="#faq">Preguntas frecuentes</a></div>

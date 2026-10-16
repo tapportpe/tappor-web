@@ -607,6 +607,7 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 <style id="tapport-login-center">
+body:has(#authCard:not(.hidden)){padding:0!important;margin:0!important}
 body:has(#authCard:not(.hidden)) .main{margin-left:0!important;padding:0!important}
 body:has(#authCard:not(.hidden)) #loginWrap{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px 16px!important;box-sizing:border-box}
 body:has(#authCard:not(.hidden)) #loginHeader{text-align:center;width:100%;max-width:460px}
@@ -662,8 +663,7 @@ body:has(#authCard:not(.hidden)) #authCard{width:100%}
   <div class="main">
   <div class="wrap" id="loginWrap">
     <header id="loginHeader">
-      <div class="eyebrow" style="margin-bottom:6px"><span class="tp-logo" style="display:inline-flex;align-items:center;gap:9px;color:#fff;font:700 22px 'Space Grotesk',sans-serif;letter-spacing:-.01em"><svg width="26" height="26" viewBox="0 0 32 32"><path d="M6 4h20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-7v16a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V10H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="#fff"/></svg><span>Tapport<sup style="font-size:.43em;margin-left:1px">®</sup></span></span></div>
-      <h1>Mi perfil</h1>
+            <h1>Mi perfil</h1>
       <p class="sub" id="headerSub">Inicia sesión para ver tu rating, tus reseñas y editar tus datos.</p>
     </header>
 
