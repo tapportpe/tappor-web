@@ -1765,6 +1765,7 @@ body:has(#authCard:not(.hidden)) #authCard{width:100%}
         ["store", "Restaurante", sesion.restaurante],
         ["pin", "Dirección", sesion.direccion || "Sin registrar"],
       ];
+      if (sesion.planNombre) infoItems.push(["store", "Plan", sesion.planNombre + (sesion.planActivo === false ? " (vencido)" : "") + (sesion.planVence ? " · vence " + new Date(sesion.planVence).toLocaleDateString("es-PE", { day: "numeric", month: "short", year: "numeric" }) : "") + (sesion.maxMeseros && sesion.maxMeseros < 999 ? " · " + meseros.length + " de " + sesion.maxMeseros + " meseros" : "")]);
       document.getElementById("cuentaInfo").innerHTML = infoItems.map(([ic, label, val]) =>
         `<div class="info-it"><div class="ico" data-ic="${ic}"></div><div><small>${label}</small><b>${escapeHtml(val || "—")}</b></div></div>`).join("");
 
@@ -2080,11 +2081,37 @@ body:has(#authCard:not(.hidden)) #authCard{width:100%}
       return r.slice(0, 4);
     }
     function iaDigest(meseros) {
-      const L = [`Fecha de hoy: ${new Date().toLocaleDateString("es-PE")}. Restaurante: ${sesion.restaurante || ""}.`];
-      meseros.forEach(m => { const s = iaStats(m); L.push(`\nMESERO ${m.nombre}: total ${m.total || 0} reseñas, promedio histórico ${m.total ? (m.promedio || 0).toFixed(2) : "s/d"}; últimos 30 días: ${s.m30.length} reseñas, ${s.p30 != null ? s.p30.toFixed(2) : "s/d"}★; últimas 2 semanas ${s.pRec != null ? s.pRec.toFixed(2) : "s/d"}★ vs 2 semanas previas ${s.pPrev != null ? s.pPrev.toFixed(2) : "s/d"}★.`); });
-      L.push("\nRESEÑAS RECIENTES (fecha | mesero | estrellas | comentario):");
-      todasLasReseñasEquipo(meseros).slice(0, 120).forEach(r => L.push(`${new Date(r.fecha).toISOString().slice(0, 10)} | ${r.mesero} | ${r.estrellas} | ${(r.comentario || "").replace(/\s+/g, " ").slice(0, 160)}`));
-      return L.join("\n");
+      const DIAS = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+      const av = a => a.length ? (a.reduce((s, r) => s + (r.estrellas || 0), 0) / a.length) : null;
+      const f2 = v => v == null ? "s/d" : v.toFixed(2);
+      const todas = todasLasReseñasEquipo(meseros).filter(r => iaFecha(r));
+      const L = [`HOY: ${new Date().toLocaleDateString("es-PE", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}. RESTAURANTE: ${sesion.restaurante || "s/d"}. EQUIPO: ${meseros.length} meseros, ${todas.length} reseñas en total (escala 1 a 5 estrellas).`];
+      // Tendencia semanal del equipo (últimas 6 semanas)
+      const sem = [];
+      for (let w = 0; w < 6; w++) { const rs = todas.filter(r => { const d = diasDesde(r.fecha); return d >= w * 7 && d < (w + 1) * 7; }); sem.push(`semana -${w}: ${rs.length} reseñas, ${f2(av(rs))}★`); }
+      L.push("TENDENCIA SEMANAL DEL EQUIPO (0 = últimos 7 días): " + sem.join(" | "));
+      // Por día de la semana y por franja horaria
+      const pd = DIAS.map((n, i) => { const rs = todas.filter(r => iaFecha(r).getDay() === i); return rs.length ? `${n}: ${rs.length} res., ${f2(av(rs))}★` : null; }).filter(Boolean);
+      if (pd.length) L.push("POR DÍA DE LA SEMANA: " + pd.join(" | "));
+      const fr = [["mañana (6-12h)", 6, 12], ["tarde (12-18h)", 12, 18], ["noche (18-24h)", 18, 24], ["madrugada (0-6h)", 0, 6]].map(([n, x, y]) => { const rs = todas.filter(r => { const h = iaFecha(r).getHours(); return h >= x && h < y; }); return rs.length ? `${n}: ${rs.length} res., ${f2(av(rs))}★` : null; }).filter(Boolean);
+      if (fr.length) L.push("POR FRANJA HORARIA: " + fr.join(" | "));
+      const dist = [5, 4, 3, 2, 1].map(n => `${n}★=${todas.filter(r => r.estrellas === n).length}`).join(", ");
+      L.push("DISTRIBUCIÓN DE ESTRELLAS (equipo): " + dist);
+      // Por mesero
+      meseros.forEach(m => {
+        const s = iaStats(m);
+        const d = [5, 4, 3, 2, 1].map(n => `${n}★=${s.rs.filter(r => r.estrellas === n).length}`).join(", ");
+        const ult = s.ult ? `última reseña ${new Date(s.ult.fecha).toISOString().slice(0, 10)}` : "sin reseñas";
+        L.push(`\nMESERO ${m.nombre}: histórico ${m.total || 0} reseñas, ${m.total ? (m.promedio || 0).toFixed(2) : "s/d"}★; últimos 30 días ${s.m30.length} reseñas, ${f2(s.p30)}★; últimas 2 semanas ${f2(s.pRec)}★ vs 2 semanas previas ${f2(s.pPrev)}★; distribución ${d}; ${ult}.`);
+      });
+      // Reseñas con texto (lo más valioso para razonar)
+      const conTxt = todas.filter(r => (r.comentario || "").trim()).slice(0, 80);
+      const sinTxt = todas.filter(r => !(r.comentario || "").trim()).slice(0, 40);
+      L.push("\nRESEÑAS CON COMENTARIO (fecha | día | mesero | estrellas | comentario):");
+      conTxt.forEach(r => L.push(`${new Date(r.fecha).toISOString().slice(0, 10)} | ${DIAS[iaFecha(r).getDay()]} | ${r.mesero} | ${r.estrellas} | ${r.comentario.replace(/\s+/g, " ").slice(0, 220)}`));
+      L.push("RESEÑAS RECIENTES SIN COMENTARIO (fecha | mesero | estrellas):");
+      sinTxt.forEach(r => L.push(`${new Date(r.fecha).toISOString().slice(0, 10)} | ${r.mesero} | ${r.estrellas}`));
+      return L.join("\n").slice(0, 28000);
     }
     function iaMd(t) {
       let h = escapeHtml(t).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
@@ -2093,14 +2120,14 @@ body:has(#authCard:not(.hidden)) #authCard{width:100%}
     }
     async function iaLlamar(modo, pregunta) {
       try {
-        const res = await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "ia_asistente", email: sesion.email, password: sesion.password, modo, pregunta, historial: IA.historial.slice(-6), datos: iaDigest(meserosRendimiento) }) });
+        const res = await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "ia_asistente", email: sesion.email, password: sesion.password, modo, pregunta, historial: IA.historial.slice(-10), datos: iaDigest(meserosRendimiento) }) });
         const j = await res.json();
         if (j && j.ok && j.texto) { iaEstado(true); return j.texto; }
         if (j && j.error && !/acci[oó]n/i.test(j.error)) { iaEstado(true); return "No pude responder con la IA: " + j.error; }
       } catch (e) { /* cae a modo básico */ }
       iaEstado(false); return null;
     }
-    function iaEstado(on) { IA.online = on; const b = document.getElementById("iaEstado2"); if (b) b.textContent = on ? "IA conectada" : "Modo básico (sin IA)"; }
+    function iaEstado(on) { IA.online = on; const b = document.getElementById("iaEstado2"); if (b) b.textContent = on ? "IA conectada" : (sesion && sesion.funciones && sesion.funciones.ia === false ? "Modo básico · IA desde Growth" : "Modo básico (sin IA)"); }
     function iaResumenLocal(meseros) {
       const ins = iaInsights(meseros); if (!ins.length) return "Sin datos suficientes todavía.";
       return ins.map(i => `${i.tipo === "alerta" ? "⚠️" : i.tipo === "ok" ? "✅" : "ℹ️"} **${i.t}** — ${i.d}`).join("\n");
@@ -2118,7 +2145,9 @@ body:has(#authCard:not(.hidden)) #authCard{width:100%}
       if (/promedio|rating|general/.test(t)) { const a = S.flatMap(s => s.m30); return a.length ? `El rating del equipo en 30 días es **${(a.reduce((x, r) => x + r.estrellas, 0) / a.length).toFixed(1)}★** con ${a.length} reseñas.` : "No hay reseñas en los últimos 30 días."; }
       if (/cu[aá]nt/.test(t)) return `Tienes ${meseros.reduce((a, m) => a + (m.total || 0), 0)} reseñas en total y ${S.reduce((a, s) => a + s.m30.length, 0)} en los últimos 30 días.`;
       if (/inactiv|sin actividad|no tiene/.test(t)) { const x = meseros.filter(m => estadoMesero(m).key !== "activo").map(m => m.nombre); return x.length ? "Sin actividad reciente: " + x.join(", ") + "." : "Todo tu equipo tiene actividad reciente."; }
-      return "En modo básico entiendo preguntas como: mejor mesero, quién debe mejorar, promedio del equipo, cuántas reseñas o el nombre de un mesero. Con la IA conectada puedo responder cualquier pregunta sobre tus datos.";
+      if (/tendencia|evoluci|sub[ií]|baj[oó]|semana pasada|este mes|mes pasado/.test(t)) { const a = S.flatMap(x => x.rec), p = S.flatMap(x => x.prev); const m = l => l.length ? l.reduce((x, r) => x + r.estrellas, 0) / l.length : null; return (m(a) != null && m(p) != null) ? `Últimas 2 semanas: **${m(a).toFixed(1)}★** (${a.length} reseñas) vs 2 semanas previas: **${m(p).toFixed(1)}★** (${p.length}). ${m(a) > m(p) + .1 ? "Vas mejorando." : m(a) < m(p) - .1 ? "Hay una caída que conviene revisar." : "Se mantiene estable."}` : "Aún no hay suficientes reseñas en ambos periodos para comparar."; }
+      if (/negativ|mala|1 estrella|2 estrella|comentario/.test(t)) { const n = S.flatMap(x => x.negTxt).slice(0, 5); return n.length ? "Comentarios más críticos recientes:\n" + n.map(r => `- ${r.estrellas}★: “${(r.comentario || "").slice(0, 110)}”`).join("\n") : "No hay comentarios críticos en los últimos 30 días."; }
+      return "Ahora mismo respondo en **modo básico** (reglas simples). Para análisis con razonamiento (causas, comparaciones y planes de acción) hay que activar la conexión de IA del asistente. Mientras tanto puedo decirte: mejor mesero, quién debe mejorar, promedio, tendencia, comentarios críticos o el detalle de un mesero.";
     }
     function iaMsg(rol, html) { const c = document.getElementById("iaMsgs"); const d = document.createElement("div"); d.className = "ia-msg " + (rol === "u" ? "u" : "a"); d.innerHTML = html; c.appendChild(d); c.scrollTop = c.scrollHeight; return d; }
     async function iaPreguntar(q, label) {
@@ -2126,7 +2155,9 @@ body:has(#authCard:not(.hidden)) #authCard{width:100%}
       const resumen = q === "__resumen";
       iaMsg("u", escapeHtml(label || q)); IA.historial.push({ rol: "u", texto: label || q });
       const pend = iaMsg("a", "Pensando…"); const btn = document.getElementById("iaSend"); btn.disabled = true;
-      let txt = await iaLlamar(resumen ? "resumen" : "chat", q); if (txt == null) txt = resumen ? iaResumenLocal(meserosRendimiento) : iaRespuestaLocal(q, meserosRendimiento);
+      const bloqueada = sesion && sesion.funciones && sesion.funciones.ia === false;
+      let txt = bloqueada ? null : await iaLlamar(resumen ? "resumen" : "chat", q); if (txt == null) txt = resumen ? iaResumenLocal(meserosRendimiento) : iaRespuestaLocal(q, meserosRendimiento);
+      if (bloqueada) txt += "\n\n🔒 Respondo en modo básico porque tu plan " + (sesion.planNombre || "actual") + " no incluye el razonamiento con IA (causas, comparaciones y plan de acción). Está disponible desde el plan **Growth**. Escríbenos para mejorar tu plan.";
       pend.innerHTML = iaMd(txt); IA.historial.push({ rol: "ia", texto: txt }); btn.disabled = false;
       document.getElementById("iaMsgs").scrollTop = 1e9;
     }
