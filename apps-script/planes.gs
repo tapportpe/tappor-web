@@ -89,6 +89,38 @@ function infoPlan(restaurante) {
   };
 }
 
+/** Lista desplegable con los 3 planes (se usa en toda la columna Plan). */
+function reglaPlanes_() {
+  return SpreadsheetApp.newDataValidation()
+    .requireValueInList(["starter", "growth", "pro"], true)
+    .setAllowInvalid(false)
+    .setHelpText("Elige el plan del restaurante: starter, growth o pro.")
+    .build();
+}
+
+/**
+ * Deja lista la fila de un restaurante en "Config": lista de planes en J, formato de fecha en K,
+ * cupo (L), meseros usados (M) y total de gente (E). Si todavía no tiene plan, pinta J de amarillo
+ * para recordarte que falta elegirlo (se quita solo cuando eliges uno).
+ * Se llama sola cuando creas un restaurante nuevo (desde onEdit y obtenerOAsignarPrefijo).
+ */
+function prepararFilaPlan(hoja, fila) {
+  const celda = hoja.getRange(fila, COL_PLAN);
+  celda.setDataValidation(reglaPlanes_());
+  hoja.getRange(fila, COL_PLAN_VENCE).setNumberFormat("dd/MM/yyyy");
+  hoja.getRange(fila, 5).setFormula("=C" + fila + "+D" + fila);
+  hoja.getRange(fila, 12).setFormula('=IF(J' + fila + '="pro","Sin límite",IF(J' + fila + '="growth",10,5))');
+  hoja.getRange(fila, 13).setFormula('=C' + fila + '&" de "&L' + fila);
+  if (!String(celda.getValue() || "").trim()) celda.setBackground("#FFF4CC");
+}
+
+/** Diagnóstico: ejecútala desde el editor y mira el Registro de ejecución. Cambia "Tapport" si quieres probar otro restaurante. */
+function probarPlan() {
+  Logger.log("1) Plan que lee de la hoja Config: " + JSON.stringify(infoPlan("Tapport")));
+  Logger.log("2) ¿Code.gs ya manda el plan en el login? " + (loginGerente.toString().indexOf("infoPlan") > -1 ? "SÍ" : "NO → falta pegar el Code.gs nuevo"));
+  Logger.log("3) ¿registrarMesero ya tiene el límite? " + (registrarMesero.toString().indexOf("planDeRestaurante") > -1 ? "SÍ" : "NO → falta pegar el Code.gs nuevo"));
+}
+
 /** Ejecuta UNA vez desde el editor: crea los encabezados J y K en "Config". */
 function prepararColumnasPlan() {
   const hoja = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(HOJA_CONFIG);
@@ -111,7 +143,7 @@ function prepararColumnasPlan() {
  *    PlanVence, Cupo del plan, Meseros usados) con el mismo estilo que la fila 1.
  *  - Borra colores (#RRGGBB) que quedaron sueltos en columnas que no son "Color"
  *    (restos de migraciones viejas que rompían logo/portada/plan).
- *  - Pone "starter" en los restaurantes sin plan y una lista desplegable en la columna Plan.
+ *  - Pone la lista de planes (starter/growth/pro) en TODA la columna Plan y pinta de amarillo los que aún no tienen plan.
  *  - Formatea la fecha de vencimiento, congela la fila 1 y ajusta los anchos.
  * No toca A:E ni los links de logo/portada/dirección.
  */
@@ -135,16 +167,17 @@ function organizarConfig() {
 
   hoja.getRange(2, 10, ult - 1, 4).setBackground(null); // J:M sin el relleno de color suelto
 
-  let conPlan = 0;
+  // La lista de planes queda en TODA la columna J, así cualquier restaurante nuevo ya la trae.
+  const filasTotal = hoja.getMaxRows() - 1;
+  hoja.getRange(2, COL_PLAN, filasTotal, 1).setDataValidation(reglaPlanes_());
+  let sinPlan = 0;
   for (let f = 2; f <= ult; f++) {
     if (!String(hoja.getRange(f, 1).getValue() || "").trim()) continue;
     const c = hoja.getRange(f, COL_PLAN);
-    if (!String(c.getValue() || "").trim()) { c.setValue("starter"); conPlan++; }
+    if (!String(c.getValue() || "").trim()) { c.setBackground("#FFF4CC"); sinPlan++; }
   }
 
-  hoja.getRange(2, COL_PLAN, 199, 1).setDataValidation(
-    SpreadsheetApp.newDataValidation().requireValueInList(["starter", "growth", "pro"], true).setAllowInvalid(false).build());
-  hoja.getRange(2, COL_PLAN_VENCE, 199, 1).setNumberFormat("dd/MM/yyyy");
+  hoja.getRange(2, COL_PLAN_VENCE, filasTotal, 1).setNumberFormat("dd/MM/yyyy");
 
   // E = C + D (total de gente), y cada fila con el color de su restaurante (columna I)
   for (let f = 2; f <= ult; f++) {
@@ -187,7 +220,7 @@ function organizarConfig() {
   // Repinta los meseros y las reseñas con el color de su restaurante (funciones que ya tienes)
   try { colorearFilasExistentes(); reordenarYColorearResenas(); } catch (e) { Logger.log("Colores de Meseros/Reseñas: " + e); }
 
-  Logger.log("Config ordenada. Colores sueltos borrados: " + limpiadas + ". Restaurantes con plan 'starter' asignado: " + conPlan + ". Cambia a 'growth' o 'pro' desde la lista de la columna J.");
+  Logger.log("Config ordenada. Colores sueltos borrados: " + limpiadas + ". Restaurantes sin plan elegido (en amarillo): " + sinPlan + ". Elige el plan en la lista de la columna J.");
 }
 
 /* ==================================================================
