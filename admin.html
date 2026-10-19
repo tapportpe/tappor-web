@@ -2720,11 +2720,26 @@ body:has(#editNegocioCard:not(.hidden)),body:has(#misVacantesCard:not(.hidden)),
     });
 
     // ---------- Revisa si ya hay una sesión activa al cargar ----------
+    // Al abrir el panel se vuelve a pedir el plan al servidor: si cambiaste el plan en la hoja,
+    // el gerente lo ve sin tener que cerrar sesión.
+    async function refrescarPlan() {
+      try {
+        const res = await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "panel_gerente", email: sesion.email, password: sesion.password }) });
+        const d = await res.json();
+        if (!d || !d.ok) return;
+        ["plan", "planNombre", "planVence", "planActivo", "maxMeseros", "funciones"].forEach(k => { if (d[k] !== undefined) sesion[k] = d[k]; });
+        guardarSesion(sesion);
+        renderPlanCard(meserosRendimiento);
+        if (typeof renderCuenta === "function") renderCuenta();
+      } catch (e) { /* sin conexión: se queda con lo que ya tenía */ }
+    }
+
     const sesionGuardada = leerSesion();
     if (sesionGuardada) {
       sesion = sesionGuardada;
       mostrarPanel();
       iniciarVigilanciaSesion();
+      refrescarPlan();
     }
   </script>
 </body>

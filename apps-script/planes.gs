@@ -31,9 +31,7 @@ function planDeRestaurante(restaurante) {
       if (String(datos[i][0] || "").trim().toLowerCase() === norm) {
         const p = String(datos[i][COL_PLAN - 1] || "").trim().toLowerCase();
         if (PLANES[p]) clave = p;
-        const v = datos[i][COL_PLAN_VENCE - 1];
-        if (v instanceof Date) vence = v;
-        else if (v) { const d = new Date(v); if (!isNaN(d)) vence = d; }
+        vence = parsearFecha_(datos[i][COL_PLAN_VENCE - 1]);
         break;
       }
     }
@@ -49,6 +47,21 @@ function planDeRestaurante(restaurante) {
     // Si el plan venció, se bloquean las funciones de pago hasta que renueve.
     ia: def.ia && activo
   };
+}
+
+/** Acepta una fecha real de la hoja o texto como "18/11/26", "18/11/2026" o "2026-11-18". Devuelve Date o null. */
+function parsearFecha_(v) {
+  if (v instanceof Date) return isNaN(v) ? null : v;
+  const s = String(v || "").trim();
+  if (!s) return null;
+  const m = s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})$/);
+  if (m) {
+    let y = Number(m[3]); if (y < 100) y += 2000;
+    const d = new Date(y, Number(m[2]) - 1, Number(m[1]), 23, 59, 59); // vence al final de ese día
+    return isNaN(d) ? null : d;
+  }
+  const d = new Date(s);
+  return isNaN(d) ? null : d;
 }
 
 /** Cuántos meseros tiene hoy un restaurante. */
