@@ -867,7 +867,59 @@ body:has(#authCard:not(.hidden)) #loginHeader .eyebrow{color:#8FB0FF}
 body:has(#authCard:not(.hidden)) #loginHeader .sub{color:rgba(255,255,255,.7)}
 body:has(#authCard:not(.hidden)) #authCard{width:100%}
 #sesionExpiradaMsg{margin-bottom:14px;text-align:center}
-</style></head>
+</style><style id="tp-mejoras">
+/* Acciones rápidas y ayuda: las palabras nunca se parten */
+.qa-grid{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))!important}
+.qa-t b,.qa-t small{overflow-wrap:normal;word-break:normal;hyphens:none}
+.qa .ico,.qrow .ico{flex-shrink:0}
+.help-card .ch-t{flex:1 1 150px;min-width:150px}
+.help-card .btn-ghost{flex:1 1 100%;justify-content:center}
+/* Tarjeta del plan */
+.plan-card{display:grid;gap:14px;padding:20px}
+.pc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.pc-top small{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);font-weight:700}
+.pc-top h3{font-size:24px;margin:2px 0 0;font-family:'Space Grotesk',sans-serif;letter-spacing:-.01em}
+.pc-badge{font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:99px;background:#E7F8EF;color:#12804A;white-space:nowrap}
+.pc-badge.off{background:#FDECEC;color:#B42318}
+.pc-meter-top{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-soft)}.pc-meter-top b{color:var(--ink)}
+.pc-bar{height:8px;border-radius:99px;background:#E8EDF7;margin-top:6px;overflow:hidden}
+.pc-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#2E6CF6,#1E40AF);transition:width .5s}.pc-bar i.full{background:#E5484D}
+.pc-feats{list-style:none;margin:0;padding:0;display:grid;gap:7px;font-size:13px}
+.pc-feats li{display:flex;gap:8px;align-items:center}.pc-feats li.off{color:var(--ink-soft)}.pc-feats em{font-style:normal;font-size:11.5px}
+.pc-feats .ok{color:#12804A;font-weight:700}
+.pc-sub{font-size:12px;color:var(--ink-soft);line-height:1.45}
+.pc-opts-t{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);font-weight:700;margin-bottom:-6px}
+.pc-opts{display:grid;gap:8px}
+.pc-opt{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#F6F8FD;text-decoration:none;color:var(--ink);transition:border-color .15s}
+a.pc-opt:hover{border-color:var(--accent)}.pc-opt.cur{border-color:var(--accent);background:#EEF4FF}
+.pc-on{flex:1;min-width:0}.pc-on b{display:block;font-size:13.5px}.pc-on small{display:block;font-size:11.5px;color:var(--ink-soft)}
+.pc-pr{font-weight:700;font-size:13.5px;white-space:nowrap}.pc-pr small{font-weight:400;font-size:11px;color:var(--ink-soft)}
+.pc-go{font-size:12px;font-weight:700;color:var(--accent);white-space:nowrap}
+/* Editar perfil del negocio */
+#editNegocioCard{max-width:760px;margin-left:auto;margin-right:auto;padding:26px}
+.neg-intro h2{font-size:21px!important;margin:0 0 4px!important;font-family:'Space Grotesk',sans-serif}
+.neg-intro p{margin:0 0 22px;font-size:13px;color:var(--ink-soft)}
+.neg-sec{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 8px}
+#editNegocioCard .negocio-cover-picker{height:170px;margin-bottom:8px;border:1.5px dashed #B6C6E6;border-radius:16px;background-color:#EAF0FD;background-size:cover;background-position:center;background-repeat:no-repeat;align-items:flex-end;justify-content:flex-end;padding:12px;transition:border-color .2s}
+#editNegocioCard .negocio-cover-picker:hover{border-color:var(--accent)}
+#editNegocioCard .negocio-cover-picker span{box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.neg-hint{font-size:12px;color:var(--ink-soft);margin:0 0 20px}
+#editNegocioCard .negocio-photo-row{padding:14px;border:1px solid var(--line);border-radius:14px;background:#F6F8FD;margin-bottom:20px}
+#editNegocioCard .negocio-logo-picker{width:76px;height:76px;border-radius:16px;background:#fff;border:1.5px solid var(--line)}
+#editNegocioCard .negocio-logo-picker img{object-fit:contain;padding:6px;box-sizing:border-box}
+.neg-logo-t b{display:block;font-size:14px}.neg-logo-t small{font-size:12.5px;color:var(--ink-soft)}
+.neg-actions{display:flex;gap:10px;margin-top:22px}.neg-actions button{flex:1;margin:0!important;width:auto!important}
+/* Barra lateral ocultable */
+@media(min-width:860px){
+ .hamburger-btn{display:flex!important}
+ .sidebar{transition:transform .25s ease}.main,.shell .main{transition:margin-left .25s ease}
+ body.sb-collapsed .sidebar{transform:translateX(-100%)}
+ body.sb-collapsed .main,body.sb-collapsed .shell .main{margin-left:0}
+}
+.sidebar{scrollbar-width:none}.sidebar::-webkit-scrollbar{display:none}
+body:has(#editNegocioCard:not(.hidden)),body:has(#misVacantesCard:not(.hidden)),body:has(#editarVacanteCard:not(.hidden)),body:has(#publicarVacanteCard:not(.hidden)){background:var(--bg)!important}
+</style>
+</head>
 <body>
   <button type="button" class="ia-fab hidden" id="iaFab" aria-label="Abrir asistente IA"><span data-ic="sparkle"></span>Asistente IA<span class="nb" id="iaNavBadge"></span></button>
   <section class="ia-win" id="iaWin" aria-label="Asistente IA">
@@ -903,7 +955,7 @@ body:has(#authCard:not(.hidden)) #authCard{width:100%}
       </div>
     </div>
 
-    <a class="sidebar-support" href="mailto:tapport.pe@gmail.com?subject=Soporte%20Tapport">
+    <a class="sidebar-support" href="https://wa.me/51992346227?text=Hola%2C%20necesito%20ayuda%20con%20mi%20cuenta%20de%20Tapport." target="_blank" rel="noopener">
       <i class="nav-ic" data-ic="headset"></i>
       <span>Soporte<small>¿Necesitas ayuda?</small></span>
       <i class="nav-ic sm" data-ic="chevron"></i>
@@ -1208,7 +1260,7 @@ body:has(#authCard:not(.hidden)) #authCard{width:100%}
             <div class="card">
               <div class="card-head"><div class="ico" data-ic="shield"></div><div class="ch-t"><h3>Seguridad</h3><p>Protege tu cuenta y tu información.</p></div></div>
               <div class="sec-grid">
-                <a class="sec-item" href="mailto:tapport.pe@gmail.com?subject=Cambiar%20contrase%C3%B1a%20de%20administrador"><div class="ico" data-ic="lock"></div><div class="si-t"><b>Cambiar contraseña</b><small>Escríbenos y te ayudamos a cambiarla.</small></div><i data-ic="chevron"></i></a>
+                <a class="sec-item" href="https://wa.me/51992346227?text=Hola%2C%20quiero%20cambiar%20la%20contrase%C3%B1a%20de%20mi%20cuenta%20de%20administrador%20de%20Tapport." target="_blank" rel="noopener"><div class="ico" data-ic="lock"></div><div class="si-t"><b>Cambiar contraseña</b><small>Escríbenos y te ayudamos a cambiarla.</small></div><i data-ic="chevron"></i></a>
                 <div class="sec-item"><div class="ico" data-ic="shield"></div><div class="si-t"><b>Cierre automático de sesión</b><small>Tu sesión se cierra tras 10 minutos de inactividad.</small></div></div>
               </div>
             </div>
@@ -1222,7 +1274,7 @@ body:has(#authCard:not(.hidden)) #authCard{width:100%}
             <div class="card help-card">
               <div class="ico" data-ic="help"></div>
               <div class="ch-t"><h3>¿Necesitas ayuda?</h3><p>Nuestro equipo está para ayudarte.</p></div>
-              <a class="btn-ghost" href="mailto:tapport.pe@gmail.com?subject=Soporte%20Tapport"><i data-ic="headset"></i> Contactar soporte</a>
+              <a class="btn-ghost" href="https://wa.me/51992346227?text=Hola%2C%20necesito%20ayuda%20con%20mi%20cuenta%20de%20Tapport." target="_blank" rel="noopener"><i data-ic="headset"></i> Contactar soporte</a>
             </div>
           </div>
         </div>
@@ -1265,10 +1317,13 @@ body:has(#authCard:not(.hidden)) #authCard{width:100%}
           </div>
 
           <div class="stack">
-            <div class="promo">
-              <div class="promo-art store"><i data-ic="store"></i></div>
-              <div class="promo-t"><b>Tu restaurante, en buenas manos</b><p>Con Tapport gestionas a tu equipo, mejoras la experiencia de tus clientes y haces crecer tu negocio.</p>
-                <a class="btn-cta" href="mailto:tapport.pe@gmail.com?subject=Centro%20de%20ayuda">Ver centro de ayuda →</a></div>
+            <div class="card plan-card" id="planCard">
+              <div class="pc-top"><div><small>Tu plan</small><h3 id="pcNombre">—</h3></div><span class="pc-badge" id="pcEstado">Activo</span></div>
+              <div class="pc-meter" id="pcMeter"><div class="pc-meter-top"><span>Meseros registrados</span><b id="pcUso">—</b></div><div class="pc-bar"><i id="pcBar"></i></div></div>
+              <ul class="pc-feats" id="pcFeats"></ul>
+              <div class="pc-sub" id="pcSub"></div>
+              <div class="pc-opts-t">Cambiar de plan</div>
+              <div class="pc-opts" id="pcOpts"></div>
             </div>
             <div class="card">
               <div class="card-head"><div class="ico" data-ic="bolt"></div><div class="ch-t"><h3>Acciones rápidas</h3></div></div>
@@ -1357,30 +1412,34 @@ body:has(#authCard:not(.hidden)) #authCard{width:100%}
 
     <!-- ============ EDITAR PERFIL DEL NEGOCIO ============ -->
     <div class="card hidden" id="editNegocioCard">
-      <h2 style="font-size:16px; margin:0 0 16px;">Editar perfil del negocio</h2>
+      <div class="neg-intro"><h2>Editar perfil del negocio</h2><p>Así verán tu restaurante los meseros y el directorio.</p></div>
 
-      <label>Foto de portada</label>
+      <span class="neg-sec">Foto de portada</span>
       <div class="negocio-cover-picker" id="negocioCoverPicker">
         <span>Toca para elegir una imagen de fondo</span>
       </div>
       <input type="file" id="negocioCoverInput" accept="image/*" style="display:none;" />
+      <p class="neg-hint">Funciona mejor una imagen horizontal (por ejemplo 1200 × 400).</p>
 
+      <span class="neg-sec">Logo</span>
       <div class="negocio-photo-row">
         <div class="negocio-logo-picker" id="negocioLogoPicker">
           <img id="negocioLogoPreview" style="display:none" />
           <span id="negocioLogoPlaceholder">Logo</span>
         </div>
         <input type="file" id="negocioLogoInput" accept="image/*" style="display:none;" />
-        <span style="font-size:12.5px; color:var(--ink-soft);">Toca para elegir el logo de tu restaurante</span>
+        <div class="neg-logo-t"><b>Logo de tu restaurante</b><small>Toca el recuadro para elegir o cambiar la imagen.</small></div>
       </div>
 
       <div class="field">
-        <label for="negocioDireccion">Dirección</label>
+        <label for="negocioDireccion" class="neg-sec">Dirección</label>
         <input type="text" id="negocioDireccion" placeholder="Av. Ejemplo 123, Surco" />
       </div>
 
-      <button type="button" class="btn-primary" id="guardarNegocioBtn">Guardar cambios</button>
-      <button type="button" class="btn-secondary" id="cancelarEditarNegocioBtn">Cancelar</button>
+      <div class="neg-actions">
+        <button type="button" class="btn-secondary" id="cancelarEditarNegocioBtn">Cancelar</button>
+        <button type="button" class="btn-primary" id="guardarNegocioBtn">Guardar cambios</button>
+      </div>
       <div class="msg" id="editNegocioMsg"></div>
     </div>
   </div>
@@ -1800,6 +1859,7 @@ body:has(#authCard:not(.hidden)) #authCard{width:100%}
 
     // ---------- Vista Administrar (hub) ----------
     async function renderAdministrar(meseros) {
+      renderPlanCard(meseros);
       const totalResenas = meseros.reduce((a, m) => a + (m.total || 0), 0);
       const promedio = totalResenas
         ? Math.round((meseros.reduce((a, m) => a + (m.promedio || 0) * (m.total || 0), 0) / totalResenas) * 10) / 10
@@ -2127,6 +2187,34 @@ body:has(#authCard:not(.hidden)) #authCard{width:100%}
       } catch (e) { /* cae a modo básico */ }
       iaEstado(false); return null;
     }
+    const PLANES_UI = [
+      { k: "starter", n: "Starter", p: 125, r: "De 1 a 5 meseros", max: 5 },
+      { k: "growth", n: "Growth", p: 175, r: "De 6 a 10 meseros", max: 10 },
+      { k: "pro", n: "Pro", p: 225, r: "11 meseros en adelante", max: 999 }
+    ];
+    function renderPlanCard(meseros) {
+      const el = document.getElementById("planCard"); if (!el) return;
+      const n = (meseros || []).length, cur = PLANES_UI.find(x => x.k === sesion.plan) || null;
+      const activo = sesion.planActivo !== false, max = sesion.maxMeseros || (cur ? cur.max : null), limitado = max && max < 999;
+      document.getElementById("pcNombre").textContent = cur ? cur.n : "Sin plan asignado";
+      const est = document.getElementById("pcEstado"); est.textContent = !cur ? "Pendiente" : activo ? "Activo" : "Vencido"; est.classList.toggle("off", !cur || !activo);
+      document.getElementById("pcMeter").style.display = cur ? "" : "none";
+      document.getElementById("pcUso").textContent = limitado ? `${n} de ${max}` : `${n} meseros`;
+      const bar = document.getElementById("pcBar"); bar.style.width = limitado ? Math.min(100, Math.round(n / max * 100)) + "%" : "100%"; bar.classList.toggle("full", !!limitado && n >= max);
+      const ia = sesion.funciones ? sesion.funciones.ia !== false : !!cur && cur.k !== "starter";
+      document.getElementById("pcFeats").innerHTML = [["Pulseras NFC incluidas", true], ["Panel de administración", true], ["Asistente IA", ia]]
+        .map(([t, ok]) => `<li class="${ok ? "" : "off"}"><span class="${ok ? "ok" : "no"}">${ok ? "✓" : "🔒"}</span>${t}${ok ? "" : " <em>(desde Growth)</em>"}</li>`).join("");
+      const f = sesion.planVence ? new Date(sesion.planVence).toLocaleDateString("es-PE", { day: "numeric", month: "long", year: "numeric" }) : "";
+      let sub = !cur ? "Escríbenos y activamos el plan de tu restaurante." : f ? `${activo ? "Vigente hasta el" : "Venció el"} ${f}.` : "Sin fecha de vencimiento.";
+      if (limitado && n >= max) sub += " Llegaste al límite de meseros: sube de plan para registrar más.";
+      document.getElementById("pcSub").textContent = sub;
+      document.getElementById("pcOpts").innerHTML = PLANES_UI.map(x => {
+        const body = `<div class="pc-on"><b>${x.n}</b><small>${x.r}</small></div><span class="pc-pr">S/ ${x.p}<small> /mes</small></span>`;
+        if (cur && x.k === cur.k) return `<div class="pc-opt cur">${body}<span class="pc-go">Tu plan</span></div>`;
+        const msg = `Hola, quiero cambiar el plan de ${sesion.restaurante || "mi restaurante"} a ${x.n} (S/ ${x.p} al mes).`;
+        return `<a class="pc-opt" href="https://wa.me/51992346227?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">${body}<span class="pc-go">${cur && x.p < cur.p ? "Cambiar" : "Elegir"} →</span></a>`;
+      }).join("");
+    }
     function iaEstado(on) { IA.online = on; const b = document.getElementById("iaEstado2"); if (b) b.textContent = on ? "IA conectada" : (sesion && sesion.funciones && sesion.funciones.ia === false ? "Modo básico · IA desde Growth" : "Modo básico (sin IA)"); }
     function iaResumenLocal(meseros) {
       const ins = iaInsights(meseros); if (!ins.length) return "Sin datos suficientes todavía.";
@@ -2192,7 +2280,11 @@ body:has(#authCard:not(.hidden)) #authCard{width:100%}
     function abrirSidebar() { document.getElementById("sidebar").classList.add("open"); document.getElementById("sidebarOverlay").classList.add("show"); }
     function cerrarSidebar() { document.getElementById("sidebar").classList.remove("open"); document.getElementById("sidebarOverlay").classList.remove("show"); }
 
-    document.getElementById("hamburgerBtn").addEventListener("click", abrirSidebar);
+    try { if (localStorage.getItem("tp_sb") === "1") document.body.classList.add("sb-collapsed"); } catch (e) { }
+    document.getElementById("hamburgerBtn").addEventListener("click", () => {
+      if (window.innerWidth >= 860) { const c = document.body.classList.toggle("sb-collapsed"); try { localStorage.setItem("tp_sb", c ? "1" : "0"); } catch (e) { } }
+      else abrirSidebar();
+    });
     document.getElementById("sidebarOverlay").addEventListener("click", cerrarSidebar);
     document.getElementById("topbarSearch").addEventListener("input", (e) => {
       const q = e.target.value.trim();

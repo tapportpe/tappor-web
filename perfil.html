@@ -607,15 +607,24 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 <style id="tapport-login-center">
-body:has(#authCard:not(.hidden)){padding:0!important;margin:0!important}
-body:has(#authCard:not(.hidden)) .main{margin-left:0!important;padding:0!important}
-body:has(#authCard:not(.hidden)) #loginWrap{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px 16px!important;box-sizing:border-box}
-body:has(#authCard:not(.hidden)) #loginHeader{text-align:center;width:100%;max-width:460px}
-body:has(#authCard:not(.hidden)) #loginHeader h1{color:#fff}
-body:has(#authCard:not(.hidden)) #loginHeader .sub{color:rgba(255,255,255,.7)}
-body:has(#authCard:not(.hidden)) #authCard{width:100%}
+body:not(.app-mode){padding:0!important;margin:0!important}
+body:not(.app-mode) .main{margin-left:0!important;padding:0!important}
+body:not(.app-mode) #loginWrap{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px 16px!important;box-sizing:border-box}
+body:not(.app-mode) #loginHeader{text-align:center;width:100%;max-width:460px}
+body:not(.app-mode) #loginHeader h1{color:#fff}
+body:not(.app-mode) #loginHeader .sub{color:rgba(255,255,255,.7)}
+body:not(.app-mode) #authCard{width:100%}
 #sesionExpiradaMsg{margin-bottom:14px;text-align:center}
-</style></head>
+</style><style id="tp-mejoras">
+@media(min-width:860px){
+ .hamburger-btn{display:flex!important}
+ .sidebar{transition:transform .25s ease}.shell .main{transition:margin-left .25s ease}
+ body.sb-collapsed .sidebar{transform:translateX(-100%)}
+ body.sb-collapsed .shell .main{margin-left:0}
+}
+.sidebar{scrollbar-width:none}.sidebar::-webkit-scrollbar{display:none}
+</style>
+</head>
 <body>
 <div class="shell">
 
@@ -654,7 +663,7 @@ body:has(#authCard:not(.hidden)) #authCard{width:100%}
       </div>
     </div>
 
-    <a class="sidebar-support" href="mailto:tapport.pe@gmail.com">
+    <a class="sidebar-support" href="https://wa.me/51992346227?text=Hola%2C%20necesito%20ayuda%20con%20mi%20cuenta%20de%20Tapport." target="_blank" rel="noopener">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 18 0v5a2 2 0 0 1-2 2h-1v-7h3M3 17v-5h3v7H5a2 2 0 0 1-2-2Z"/></svg>
       <span>Soporte<small>¿Necesitas ayuda?</small></span>
     </a>
@@ -1428,7 +1437,11 @@ body:has(#authCard:not(.hidden)) #authCard{width:100%}
     function abrirSidebar() { document.getElementById("sidebar").classList.add("open"); document.getElementById("sidebarOverlay").classList.add("show"); }
     function cerrarSidebar() { document.getElementById("sidebar").classList.remove("open"); document.getElementById("sidebarOverlay").classList.remove("show"); }
 
-    document.getElementById("hamburgerBtn").addEventListener("click", abrirSidebar);
+    try { if (localStorage.getItem("tp_sb") === "1") document.body.classList.add("sb-collapsed"); } catch (e) { }
+    document.getElementById("hamburgerBtn").addEventListener("click", () => {
+      if (window.innerWidth >= 860) { const c = document.body.classList.toggle("sb-collapsed"); try { localStorage.setItem("tp_sb", c ? "1" : "0"); } catch (e) { } }
+      else abrirSidebar();
+    });
     document.getElementById("sidebarOverlay").addEventListener("click", cerrarSidebar);
     document.querySelectorAll(".sidebar-link[data-view]").forEach(link => link.addEventListener("click", () => cambiarVista(link.dataset.view)));
     document.querySelectorAll("[data-goto-view]").forEach(btn => btn.addEventListener("click", () => cambiarVista(btn.dataset.gotoView)));
