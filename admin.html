@@ -856,6 +856,28 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
 .ia-head b{display:block;font-size:14.5px}.ia-head small{font-size:11.5px;opacity:.75}
 .ia-head .x{margin-left:auto;background:none;border:0;color:#fff;font-size:22px;cursor:pointer;line-height:1}
 .ia-win .ia-msgs{padding:14px 14px 4px}.ia-win .ia-chips{margin:0;padding:8px 14px}.ia-win .ia-form{padding:10px 14px 14px}
+.ia-hbtns{margin-left:auto;display:flex;gap:4px}
+.ia-hb{background:rgba(255,255,255,.12);border:0;color:#fff;width:32px;height:32px;border-radius:10px;font-size:16px;cursor:pointer;line-height:1}.ia-hb:hover{background:rgba(255,255,255,.24)}.ia-hb.x{font-size:22px;background:none}
+.ia-head .x{margin-left:0}
+.ia-body{flex:1;min-height:0;display:flex;position:relative}
+.ia-main{flex:1;min-width:0;display:flex;flex-direction:column;min-height:0}
+.ia-main .ia-msgs{flex:1;min-height:0}
+.ia-side{display:none;flex-direction:column;gap:8px;padding:12px;background:#F7F9FD;border-right:1px solid var(--line);width:240px;flex:0 0 240px;overflow-y:auto}
+.ia-win.list .ia-side{display:flex;position:absolute;inset:0;width:auto;z-index:3;border-right:0}
+.ia-newchat{border:1px dashed var(--accent);background:#fff;color:var(--accent-dark);border-radius:12px;padding:10px;font-weight:700;font-size:13px;cursor:pointer}
+.ia-chats{display:flex;flex-direction:column;gap:4px}
+.ia-ci{display:flex;align-items:center;gap:6px;border-radius:10px;padding:9px 10px;cursor:pointer;font-size:13px;color:var(--ink)}
+.ia-ci:hover{background:#E9EEF9}.ia-ci.on{background:var(--accent-soft);color:var(--accent-dark);font-weight:700}
+.ia-ci span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ia-ci button{border:0;background:none;color:#8A94AA;cursor:pointer;font-size:15px;padding:0 2px}.ia-ci button:hover{color:#D33}
+.ia-vacio{font-size:12.5px;color:var(--ink-soft);padding:6px}
+.ia-win.full{inset:0;right:0;bottom:0;width:100vw;max-width:100vw;height:100vh;max-height:100vh;border-radius:0;z-index:200}
+.ia-win.full .ia-side{display:flex;position:static}
+.ia-win.full.list .ia-side{position:static}
+.ia-win.full .ia-listbtnhide,.ia-win.full #iaListBtn{display:none}
+.ia-win.full .ia-msgs,.ia-win.full .ia-chips,.ia-win.full .ia-form{width:100%;max-width:820px;margin-left:auto;margin-right:auto}
+.ia-win.full .ia-msg{font-size:14.5px}
+@media(max-width:700px){.ia-win.full .ia-side{display:none}.ia-win.full #iaListBtn{display:block}.ia-win.full.list .ia-side{display:flex;position:absolute;inset:0;width:auto}}
 @media(max-width:520px){.ia-win{right:12px;bottom:78px}.ia-fab{right:14px;bottom:14px}}
 </style><style id="tapport-login-center">
 body:has(#authCard:not(.hidden)){padding:0!important;margin:0!important}
@@ -919,14 +941,33 @@ a.pc-opt:hover{border-color:var(--accent)}.pc-opt.cur{border-color:var(--accent)
 .sidebar{scrollbar-width:none}.sidebar::-webkit-scrollbar{display:none}
 body:has(#editNegocioCard:not(.hidden)),body:has(#misVacantesCard:not(.hidden)),body:has(#editarVacanteCard:not(.hidden)),body:has(#publicarVacanteCard:not(.hidden)){background:var(--bg)!important}
 </style>
+<style id="login-brand-css">
+.login-brand{display:none;position:fixed;top:18px;left:22px;z-index:50;align-items:center;gap:9px;color:#fff;text-decoration:none;font:700 22px 'Space Grotesk',sans-serif;letter-spacing:-.01em}
+.login-brand sup{font-size:.43em;margin-left:1px}
+.login-brand:hover{opacity:.85}
+body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
+@media(max-width:520px){.login-brand{top:14px;left:16px;font-size:20px}}
+</style>
 </head>
 <body>
+<a class="login-brand" href="inicio.html" aria-label="Ir al inicio de Tapport"><svg width="26" height="26" viewBox="0 0 32 32"><path d="M6 4h20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-7v16a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V10H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="#fff"/></svg><span>Tapport<sup>®</sup></span></a>
   <button type="button" class="ia-fab hidden" id="iaFab" aria-label="Abrir asistente IA"><span data-ic="sparkle"></span>Asistente IA<span class="nb" id="iaNavBadge"></span></button>
   <section class="ia-win" id="iaWin" aria-label="Asistente IA">
-    <div class="ia-head"><div class="ico2" data-ic="sparkle"></div><div><b>Asistente Tapport</b><small id="iaEstado2">Modo básico</small></div><button type="button" class="x" id="iaClose" aria-label="Cerrar">×</button></div>
-    <div class="ia-msgs" id="iaMsgs"></div>
-    <div class="ia-chips" id="iaChips"></div>
-    <form class="ia-form" id="iaForm"><input id="iaInput" type="text" maxlength="300" placeholder="Pregúntale a tus datos…" autocomplete="off"><button type="submit" id="iaSend">Enviar</button></form>
+    <div class="ia-head"><div class="ico2" data-ic="sparkle"></div><div><b>Asistente Tapport</b><small id="iaEstado2">Modo básico</small></div>
+      <div class="ia-hbtns">
+        <button type="button" id="iaListBtn" class="ia-hb" aria-label="Mis chats" title="Mis chats">☰</button>
+        <button type="button" id="iaNewBtn" class="ia-hb" aria-label="Nuevo chat" title="Nuevo chat">＋</button>
+        <button type="button" id="iaFullBtn" class="ia-hb" aria-label="Pantalla completa" title="Pantalla completa">⤢</button>
+        <button type="button" class="ia-hb x" id="iaClose" aria-label="Cerrar">×</button>
+      </div></div>
+    <div class="ia-body">
+      <aside class="ia-side" id="iaSide"><button type="button" class="ia-newchat" id="iaNewBtn2">＋ Nuevo chat</button><div class="ia-chats" id="iaChatList"></div></aside>
+      <div class="ia-main">
+        <div class="ia-msgs" id="iaMsgs"></div>
+        <div class="ia-chips" id="iaChips"></div>
+        <form class="ia-form" id="iaForm"><input id="iaInput" type="text" maxlength="300" placeholder="Pregúntale a tus datos…" autocomplete="off"><button type="submit" id="iaSend">Enviar</button></form>
+      </div>
+    </div>
   </section>
 
 <div class="shell">
@@ -2091,7 +2132,36 @@ body:has(#editNegocioCard:not(.hidden)),body:has(#misVacantesCard:not(.hidden)),
     }
 
     // ================= Asistente IA =================
-    const IA = { historial: [], online: null, resumenOk: false };
+    const IA = { historial: [], online: null, resumenOk: false, chats: [], act: null };
+    function iaKey() { return "tp_ia_" + String((sesion && sesion.email) || "").toLowerCase(); }
+    function iaCargar() {
+      try { const j = JSON.parse(localStorage.getItem(iaKey()) || "null"); if (j && Array.isArray(j.chats)) { IA.chats = j.chats; IA.act = j.act; } else { IA.chats = []; IA.act = null; } } catch (e) { IA.chats = []; IA.act = null; }
+      if (!IA.chats.find(c => c.id === IA.act)) iaCrearChat(true);
+      IA.historial = IA.chats.find(c => c.id === IA.act).m;
+    }
+    function iaGuardar() { try { localStorage.setItem(iaKey(), JSON.stringify({ chats: IA.chats.slice(0, 30), act: IA.act })); } catch (e) { } }
+    function iaCrearChat(silencioso) {
+      const cur = IA.chats.find(c => c.id === IA.act);
+      if (cur && !cur.m.length) { IA.historial = cur.m; if (!silencioso) iaRenderChat(); return; } // ya hay uno vacío
+      const c = { id: "c" + Date.now(), t: "Chat nuevo", ts: Date.now(), m: [] };
+      IA.chats.unshift(c); IA.act = c.id; IA.historial = c.m;
+      if (!silencioso) { iaGuardar(); iaRenderChat(); }
+    }
+    function iaAbrirChat(id) { const c = IA.chats.find(x => x.id === id); if (!c) return; IA.act = id; IA.historial = c.m; iaGuardar(); iaRenderChat(); document.getElementById("iaWin").classList.remove("list"); }
+    function iaBorrarChat(id) {
+      IA.chats = IA.chats.filter(c => c.id !== id);
+      if (!IA.chats.length || id === IA.act) { IA.act = null; if (!IA.chats.length) iaCrearChat(true); else IA.act = IA.chats[0].id; }
+      IA.historial = IA.chats.find(c => c.id === IA.act).m; iaGuardar(); iaRenderChat();
+    }
+    function iaRenderChat() {
+      const box = document.getElementById("iaMsgs"); box.innerHTML = "";
+      if (!IA.historial.length) iaMsg("a", "Hola 👋 Soy tu asistente de Tapport. Pregúntame sobre las reseñas y el rendimiento de tu equipo.");
+      IA.historial.forEach(m => iaMsg(m.rol === "u" ? "u" : "a", m.rol === "u" ? escapeHtml(m.texto) : iaMd(m.texto)));
+      const l = document.getElementById("iaChatList");
+      l.innerHTML = IA.chats.map(c => `<div class="ia-ci ${c.id === IA.act ? "on" : ""}" data-id="${c.id}"><span>${escapeHtml(c.t)}</span><button type="button" data-del="${c.id}" aria-label="Borrar chat" title="Borrar">🗑</button></div>`).join("") || '<div class="ia-vacio">Sin chats todavía.</div>';
+      l.querySelectorAll(".ia-ci").forEach(el => el.addEventListener("click", e => { const d = e.target.closest("[data-del]"); if (d) { if (confirm("¿Borrar este chat?")) iaBorrarChat(d.dataset.del); } else iaAbrirChat(el.dataset.id); }));
+      box.scrollTop = 1e9;
+    }
     function iaFecha(r) { const f = new Date(r.fecha); return isNaN(f) ? null : f; }
     function iaTemas(rs) {
       const T = { "demora en el servicio": /lent|demor|tard|esper|tiempo/i, "trato poco amable": /grosero|mal trato|antip|seco|ignor|actitud|malhumor/i, "errores en el pedido": /error|equivoc|olvid|confund|falt[oó]/i, "comida o bebida en mal estado": /fr[ií]o|fr[ií]a|crud|sabor|ra[ñn]|pelo/i, "limpieza": /sucio|limpi|mesa sucia/i };
@@ -2247,17 +2317,24 @@ body:has(#editNegocioCard:not(.hidden)),body:has(#misVacantesCard:not(.hidden)),
       let txt = bloqueada ? null : await iaLlamar(resumen ? "resumen" : "chat", q); if (txt == null) txt = resumen ? iaResumenLocal(meserosRendimiento) : iaRespuestaLocal(q, meserosRendimiento);
       if (bloqueada) txt += "\n\n🔒 Respondo en modo básico porque tu plan " + (sesion.planNombre || "actual") + " no incluye el razonamiento con IA (causas, comparaciones y plan de acción). Está disponible desde el plan **Growth**. Escríbenos para mejorar tu plan.";
       pend.innerHTML = iaMd(txt); IA.historial.push({ rol: "ia", texto: txt }); btn.disabled = false;
+      const ch = IA.chats.find(c => c.id === IA.act); if (ch) { if (ch.t === "Chat nuevo") ch.t = (label || q).slice(0, 38); ch.ts = Date.now(); if (ch.m.length > 60) ch.m.splice(0, ch.m.length - 60); IA.chats.sort((a, b) => b.ts - a.ts); iaGuardar(); iaRenderChat(); }
       document.getElementById("iaMsgs").scrollTop = 1e9;
     }
     function iniciarAsistente() {
       const chips = document.getElementById("iaChips");
-      if (chips.dataset.done) return; chips.dataset.done = "1";
+      if (chips.dataset.done) { iaCargar(); iaRenderChat(); return; } chips.dataset.done = "1";
       [["Resumen del equipo", "__resumen"], ["¿Qué alertas hay?", "alertas"], ["¿Quién rindió mejor?", "¿Quién rindió mejor este mes?"], ["¿Quién necesita mejorar?", "¿Quién necesita mejorar?"], ["Plan para esta semana", "Dame un plan para esta semana"]].forEach(([l, q]) => { const b = document.createElement("button"); b.type = "button"; b.textContent = l; b.addEventListener("click", () => iaPreguntar(q, l)); chips.appendChild(b); });
-      iaMsg("a", "Hola 👋 Soy tu asistente de Tapport. Pregúntame sobre las reseñas y el rendimiento de tu equipo.");
+      iaCargar(); iaRenderChat();
       document.getElementById("iaForm").addEventListener("submit", e => { e.preventDefault(); const i = document.getElementById("iaInput"); const q = i.value; i.value = ""; iaPreguntar(q); });
       const win = document.getElementById("iaWin");
       document.getElementById("iaFab").addEventListener("click", () => { win.classList.toggle("open"); if (win.classList.contains("open")) document.getElementById("iaInput").focus(); });
-      document.getElementById("iaClose").addEventListener("click", () => win.classList.remove("open"));
+      document.getElementById("iaClose").addEventListener("click", () => { win.classList.remove("open", "full", "list"); });
+      const nuevo = () => { iaCrearChat(); win.classList.remove("list"); document.getElementById("iaInput").focus(); };
+      document.getElementById("iaNewBtn").addEventListener("click", nuevo);
+      document.getElementById("iaNewBtn2").addEventListener("click", nuevo);
+      document.getElementById("iaListBtn").addEventListener("click", () => win.classList.toggle("list"));
+      document.getElementById("iaFullBtn").addEventListener("click", e => { const f = win.classList.toggle("full"); win.classList.remove("list"); e.currentTarget.textContent = f ? "⤡" : "⤢"; e.currentTarget.title = f ? "Salir de pantalla completa" : "Pantalla completa"; });
+      document.addEventListener("keydown", e => { if (e.key === "Escape" && win.classList.contains("full")) document.getElementById("iaFullBtn").click(); });
     }
     function actualizarBadgeIA() {
       const n = iaInsights(meserosRendimiento).filter(i => i.tipo === "alerta").length, b = document.getElementById("iaNavBadge");
@@ -2266,7 +2343,9 @@ body:has(#editNegocioCard:not(.hidden)),body:has(#misVacantesCard:not(.hidden)),
     }
 
     // ---------- Navegación del panel: sidebar + vistas ----------
+    function vistaGuardada() { try { const v = sessionStorage.getItem("tp_vista_admin"); return v && document.getElementById("view-" + v) ? v : "inicio"; } catch (e) { return "inicio"; } }
     function cambiarVista(nombre) {
+      try { sessionStorage.setItem("tp_vista_admin", nombre); } catch (e) { }
       document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
       const vista = document.getElementById("view-" + nombre);
       if (vista) vista.classList.remove("hidden");
@@ -2335,9 +2414,10 @@ body:has(#editNegocioCard:not(.hidden)),body:has(#misVacantesCard:not(.hidden)),
       iniciarAsistente();
       actualizarBadgeIA();
       const vistaUrl = new URLSearchParams(location.search).get("view");
-      cambiarVista(vistaUrl && document.getElementById("view-" + vistaUrl) ? vistaUrl : "inicio");
+      cambiarVista(vistaUrl && document.getElementById("view-" + vistaUrl) ? vistaUrl : vistaGuardada());
     }
     document.getElementById("cerrarSesionBtn").addEventListener("click", () => {
+      try { sessionStorage.removeItem("tp_vista_admin"); } catch (e) { }
       document.getElementById("iaFab").classList.add("hidden"); document.getElementById("iaWin").classList.remove("open");
       sesion = null;
       borrarSesion();

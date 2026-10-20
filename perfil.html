@@ -624,8 +624,16 @@ body:not(.app-mode) #authCard{width:100%}
 }
 .sidebar{scrollbar-width:none}.sidebar::-webkit-scrollbar{display:none}
 </style>
+<style id="login-brand-css">
+.login-brand{display:none;position:fixed;top:18px;left:22px;z-index:50;align-items:center;gap:9px;color:#fff;text-decoration:none;font:700 22px 'Space Grotesk',sans-serif;letter-spacing:-.01em}
+.login-brand sup{font-size:.43em;margin-left:1px}
+.login-brand:hover{opacity:.85}
+body:not(.app-mode) .login-brand{display:inline-flex}
+@media(max-width:520px){.login-brand{top:14px;left:16px;font-size:20px}}
+</style>
 </head>
 <body>
+<a class="login-brand" href="inicio.html" aria-label="Ir al inicio de Tapport"><svg width="26" height="26" viewBox="0 0 32 32"><path d="M6 4h20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-7v16a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V10H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="#fff"/></svg><span>Tapport<sup>®</sup></span></a>
 <div class="shell">
 
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -1424,7 +1432,9 @@ body:not(.app-mode) #authCard{width:100%}
     }
 
     // ---------- Navegación del panel: sidebar + vistas ----------
+    function vistaGuardada() { try { const v = sessionStorage.getItem("tp_vista_perfil"); return v && document.getElementById("view-" + v) ? v : "inicio"; } catch (e) { return "inicio"; } }
     function cambiarVista(nombre) {
+      try { sessionStorage.setItem("tp_vista_perfil", nombre); } catch (e) { }
       document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
       const vista = document.getElementById("view-" + nombre);
       if (vista) vista.classList.remove("hidden");
@@ -1660,7 +1670,7 @@ body:not(.app-mode) #authCard{width:100%}
       renderReviews(reviews);
       renderReseñasRecientes(reviews.slice(0, 3));
       cargarVacantesParaTi();
-      cambiarVista("inicio");
+      cambiarVista(vistaGuardada());
     }
 
     function renderReseñasRecientes(reviews) {
@@ -1792,6 +1802,7 @@ body:not(.app-mode) #authCard{width:100%}
     }
 
     function cerrarSesion() {
+      try { sessionStorage.removeItem("tp_vista_perfil"); } catch (e) { }
       sesion = null;
       borrarSesion();
       volverALogin();
