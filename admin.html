@@ -984,6 +984,44 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
 @media(max-width:520px){.sp-ov{padding:0}.sp-win{height:100vh;max-height:100vh;border-radius:0}}
 </style>
 <style>body:has(#authCard:not(.hidden)) .ia-fab,body:has(#authCard:not(.hidden)) .ia-win,body:has(#authCard:not(.hidden)) .sp-ov{display:none!important}</style>
+<style id="vac-ui">
+#misVacantesCard,#editarVacanteCard,#publicarVacanteCard{max-width:860px;margin-left:auto;margin-right:auto;padding:26px 28px!important;border-radius:20px!important;box-shadow:0 10px 30px rgba(10,21,48,.06)}
+.vc-head{display:flex;align-items:center;gap:14px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.vc-head h2{margin:0;font-size:20px;font-family:'Space Grotesk',sans-serif;letter-spacing:-.01em}
+.vc-head p{margin:3px 0 0;font-size:13px;color:var(--ink-soft);line-height:1.45}
+.vc-ic{flex:0 0 46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#2E6CF6,#1E40AF);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px rgba(46,108,246,.35)}
+.vc-ic svg{width:22px;height:22px}
+.vc-new{margin-left:auto;flex:0 0 auto;background:#2E6CF6;color:#fff;border:0;border-radius:12px;padding:10px 16px;font-weight:700;font-size:13.5px;cursor:pointer;box-shadow:0 8px 18px rgba(46,108,246,.3)}
+.vc-new:hover{background:#1E40AF}
+@media(max-width:600px){.vc-head{flex-wrap:wrap}.vc-new{margin-left:0;width:100%}}
+.vacante-item{border:1px solid var(--line)!important;border-radius:16px!important;padding:18px!important;margin-bottom:14px!important;background:#fff;transition:box-shadow .2s,border-color .2s}
+.vacante-item:hover{border-color:#B8CCFA!important;box-shadow:0 10px 26px rgba(46,108,246,.1)}
+.vi-top{display:flex;align-items:flex-start;gap:12px}
+.vi-top .vc-ic{flex-basis:38px;height:38px;border-radius:12px;box-shadow:none}.vi-top .vc-ic svg{width:18px;height:18px}
+.vacante-item h3{font-size:16.5px!important;margin:0 0 2px!important;font-family:'Space Grotesk',sans-serif}
+.vacante-item .vacante-meta{margin:0!important}
+.vi-live{margin-left:auto;font-size:11px;font-weight:700;color:#0E7A47;background:#E6F6EE;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.vi-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 14px}
+.vi-st{background:#F4F7FD;border-radius:12px;padding:10px 12px}
+.vi-st b{display:block;font-size:20px;font-family:'Space Grotesk',sans-serif;line-height:1.1}
+.vi-st span{font-size:11.5px;color:var(--ink-soft)}
+.vi-st.on{background:var(--accent-soft)}.vi-st.on b{color:var(--accent-dark)}
+.vacante-actions{margin-top:14px!important;gap:10px!important}
+.vacante-actions button{padding:10px!important;border-radius:10px!important;font-size:13px!important;transition:transform .15s}
+.vacante-actions button:hover{transform:translateY(-1px)}
+.interesados-toggle{display:flex;align-items:center;justify-content:space-between;width:100%;text-decoration:none!important;background:#F4F7FD!important;border-radius:10px!important;padding:10px 14px!important;font-size:13px!important;color:var(--accent-dark)!important}
+.interesados-toggle::after{content:"▾";font-size:12px}
+.interesado-item{background:#fff!important;border:1px solid var(--line);border-radius:12px!important;padding:12px 14px!important}
+.vc-empty{text-align:center;padding:34px 10px}.vc-empty .vc-ic{margin:0 auto 14px;width:58px;height:58px}.vc-empty h3{margin:0 0 6px;font-size:17px;font-family:'Space Grotesk',sans-serif}.vc-empty p{margin:0 0 16px;font-size:13.5px;color:var(--ink-soft)}
+#editarVacanteCard .field,#publicarVacanteCard .field{margin-bottom:16px}
+#editarVacanteCard label,#publicarVacanteCard label{font-weight:700;font-size:13px;margin-bottom:6px;display:block}
+#editarVacanteCard input,#editarVacanteCard textarea,#editarVacanteCard select,#publicarVacanteCard input,#publicarVacanteCard textarea,#publicarVacanteCard select{border-radius:12px!important;padding:12px 14px!important;font-size:14.5px!important}
+#publicarVacanteCard textarea,#editarVacanteCard textarea{min-height:110px}
+.vc-actions{display:flex;gap:10px;margin-top:6px}
+.vc-actions .btn-primary{flex:2;width:auto!important;margin:0!important}.vc-actions .btn-secondary{flex:1;width:auto!important;margin:0!important}
+#cerrarMisVacantesBtn{width:auto;padding:10px 20px;border-radius:12px}
+@media(max-width:600px){.vi-stats{grid-template-columns:1fr 1fr 1fr;gap:6px}.vi-st b{font-size:17px}.vacante-actions{flex-wrap:wrap}.vacante-actions button{flex:1 1 45%}#misVacantesCard,#editarVacanteCard,#publicarVacanteCard{padding:20px 16px!important}.vc-actions{flex-direction:column-reverse}}
+</style>
 </head>
 <body>
 <a class="login-brand" href="inicio.html" aria-label="Ir al inicio de Tapport"><svg width="26" height="26" viewBox="0 0 32 32"><path d="M6 4h20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-7v16a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V10H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="#fff"/></svg><span>Tapport<sup>®</sup></span></a>
@@ -1416,14 +1454,14 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
 
     <!-- ============ MIS VACANTES (vistas, interesados, editar/eliminar) ============ -->
     <div class="card hidden" id="misVacantesCard">
-      <h2 style="font-size:16px; margin:0 0 16px;">Mis vacantes</h2>
+      <div class="vc-head"><span class="vc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v13H3zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span><div><h2>Mis vacantes</h2><p>Mira cuántas personas vieron y se interesaron en cada anuncio.</p></div><button type="button" class="vc-new" data-action="publicar-vacante">＋ Nueva vacante</button></div>
       <div id="listaVacantes"></div>
       <button type="button" class="btn-secondary" id="cerrarMisVacantesBtn" style="margin-top:14px;">Volver</button>
     </div>
 
     <!-- ============ EDITAR VACANTE ============ -->
     <div class="card hidden" id="editarVacanteCard">
-      <h2 style="font-size:16px; margin:0 0 16px;">Editar vacante</h2>
+      <div class="vc-head"><span class="vc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></span><div><h2>Editar vacante</h2><p>Actualiza los datos del anuncio. Los cambios se ven al instante en el Feed.</p></div></div>
       <input type="hidden" id="evId" />
       <div class="field">
         <label for="evPuesto">Puesto que buscan</label>
@@ -1448,15 +1486,14 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
           <option value="5">5.0★ (solo perfectos)</option>
         </select>
       </div>
-      <button type="button" class="btn-primary" id="guardarVacanteBtn">Guardar cambios</button>
-      <button type="button" class="btn-secondary" id="cancelarEditarVacanteBtn">Cancelar</button>
+      <div class="vc-actions"><button type="button" class="btn-primary" id="guardarVacanteBtn">Guardar cambios</button>
+      <button type="button" class="btn-secondary" id="cancelarEditarVacanteBtn">Cancelar</button></div>
       <div class="msg" id="editarVacanteMsg"></div>
     </div>
 
     <!-- ============ PUBLICAR VACANTE (solo gerente logueado) ============ -->
     <div class="card hidden" id="publicarVacanteCard">
-      <h2 style="font-size:16px; margin:0 0 16px;">Publicar vacante</h2>
-      <p style="font-size:13px; color:var(--ink-soft); margin:-8px 0 16px;">Se publicará a nombre de <strong id="vacanteRestauranteLabel"></strong>.</p>
+      <div class="vc-head"><span class="vc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v13H3zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span><div><h2>Publicar vacante</h2><p>Se publicará a nombre de <strong id="vacanteRestauranteLabel"></strong> y aparecerá en el Feed para los meseros.</p></div></div>
 
       <div class="field">
         <label for="vPuesto">Puesto que buscan</label>
@@ -1482,8 +1519,8 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
         </select>
       </div>
 
-      <button type="button" class="btn-primary" id="publicarVacanteBtn">Publicar anuncio</button>
-      <button type="button" class="btn-secondary" id="cancelarPublicarVacanteBtn">Cancelar</button>
+      <div class="vc-actions"><button type="button" class="btn-primary" id="publicarVacanteBtn">Publicar anuncio</button>
+      <button type="button" class="btn-secondary" id="cancelarPublicarVacanteBtn">Cancelar</button></div>
       <div class="msg" id="publicarVacanteMsg"></div>
     </div>
 
@@ -2544,6 +2581,7 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
       document.getElementById("vRatingMinimo").value = "0";
       document.getElementById("publicarVacanteMsg").textContent = "";
       document.getElementById("panel").classList.add("hidden");
+      document.getElementById("misVacantesCard").classList.add("hidden");
       document.getElementById("publicarVacanteCard").classList.remove("hidden");
     });
 
@@ -2647,7 +2685,8 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
     function renderMisVacantes(vacantes) {
       const cont = document.getElementById("listaVacantes");
       if (!vacantes.length) {
-        cont.innerHTML = '<p style="font-size:13px; color:var(--ink-soft);">Todavía no has publicado ninguna vacante.</p>';
+        cont.innerHTML = '<div class="vc-empty"><span class="vc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v13H3zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span><h3>Aún no publicaste vacantes</h3><p>Publica tu primer anuncio y los meseros del Feed podrán postular.</p><button type="button" class="vc-new" data-action="publicar-vacante" style="margin:0">＋ Publicar vacante</button></div>';
+        cont.querySelectorAll("[data-action=publicar-vacante]").forEach(b => b.addEventListener("click", () => document.getElementById("togglePublicarVacanteBtn").click()));
         return;
       }
 
@@ -2665,14 +2704,13 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
 
         return `
           <div class="vacante-item">
-            <h3>${escapeHtml(v.puesto)}</h3>
-            <div class="vacante-meta">Publicada el ${formatearFecha(v.fecha)}</div>
-            <div class="vacante-badges">
-              <span class="vacante-badge">${v.vistas} vista${v.vistas === 1 ? "" : "s"}</span>
-              <span class="vacante-badge">${v.postulaciones.length} interesado${v.postulaciones.length === 1 ? "" : "s"}</span>
-              ${v.ratingMinimo > 0 ? `<span class="vacante-badge">Requiere ${v.ratingMinimo}★+</span>` : ""}
+            <div class="vi-top"><span class="vc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v13H3zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span><div><h3>${escapeHtml(v.puesto)}</h3><div class="vacante-meta">Publicada el ${formatearFecha(v.fecha)}</div></div><span class="vi-live">● Activa</span></div>
+            <div class="vi-stats">
+              <div class="vi-st"><b>${v.vistas}</b><span>vista${v.vistas === 1 ? "" : "s"}</span></div>
+              <div class="vi-st on"><b>${v.postulaciones.length}</b><span>interesado${v.postulaciones.length === 1 ? "" : "s"}</span></div>
+              <div class="vi-st"><b>${v.ratingMinimo > 0 ? v.ratingMinimo + "★" : "—"}</b><span>${v.ratingMinimo > 0 ? "rating mínimo" : "sin requisito"}</span></div>
             </div>
-            <button type="button" class="interesados-toggle" data-idx="${idx}">Ver interesados</button>
+            <button type="button" class="interesados-toggle" data-idx="${idx}" data-n="${v.postulaciones.length}">Ver interesados (${v.postulaciones.length})</button>
             <div class="interesados-list" id="interesados-${idx}">${interesadosHtml}</div>
             <div class="vacante-actions">
               <button type="button" class="btn-editar" data-id="${escapeHtml(v.id)}" data-puesto="${escapeHtml(v.puesto)}" data-descripcion="${escapeHtml(v.descripcion || "")}" data-contacto="${escapeHtml(v.contacto)}" data-rating="${v.ratingMinimo}">Editar</button>
@@ -2686,7 +2724,7 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
         btn.addEventListener("click", () => {
           const list = document.getElementById("interesados-" + btn.dataset.idx);
           const abierto = list.classList.toggle("show");
-          btn.textContent = abierto ? "Ocultar interesados" : "Ver interesados";
+          btn.textContent = abierto ? "Ocultar interesados" : "Ver interesados (" + (btn.dataset.n || 0) + ")";
         });
       });
 
