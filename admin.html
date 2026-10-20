@@ -1022,6 +1022,36 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
 #cerrarMisVacantesBtn{width:auto;padding:10px 20px;border-radius:12px}
 @media(max-width:600px){.vi-stats{grid-template-columns:1fr 1fr 1fr;gap:6px}.vi-st b{font-size:17px}.vacante-actions{flex-wrap:wrap}.vacante-actions button{flex:1 1 45%}#misVacantesCard,#editarVacanteCard,#publicarVacanteCard{padding:20px 16px!important}.vc-actions{flex-direction:column-reverse}}
 </style>
+<style id="hz-css">
+.hz-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:2px 0 8px;flex-wrap:wrap}
+.hz-range{font-size:12px;color:var(--ink-soft);font-weight:600}
+.hz-btns{display:flex;gap:6px}
+.hz-btns button{border:1px solid var(--line);background:#fff;border-radius:9px;min-width:34px;height:32px;padding:0 10px;font-size:15px;font-weight:700;cursor:pointer;color:var(--ink)}
+.hz-btns button[data-z=reset]{font-size:12px}
+.hz-btns button:hover{border-color:var(--accent);color:var(--accent-dark)}
+.hz-wrap{position:relative}
+.hz-svg{width:100%;height:auto;display:block;touch-action:none;cursor:grab;user-select:none}
+.hz-tip{display:none;position:absolute;transform:translate(-50%,-100%);background:#0B1220;color:#fff;font-size:12px;line-height:1.4;padding:8px 10px;border-radius:10px;pointer-events:none;white-space:nowrap;max-width:240px;white-space:normal;z-index:5;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.hz-tip i{opacity:.8}
+.hz-hint{margin:6px 0 0;font-size:11px;color:var(--ink-soft)}
+</style>
+<style id="rp-css">
+.rp-link{display:block;margin:-4px 0 14px auto;background:none;border:0;padding:0;color:#2E6CF6;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.rp-link:hover{text-decoration:underline}
+.rp-ov{position:fixed;inset:0;z-index:400;background:rgba(10,21,48,.55);display:none;align-items:center;justify-content:center;padding:16px}
+.rp-ov.open{display:flex}
+.rp-box{width:420px;max-width:100%;background:#fff;border-radius:20px;padding:26px 24px 22px;box-shadow:0 24px 60px rgba(10,21,48,.4);font-family:'Inter',sans-serif;color:#0B1220}
+.rp-box h3{margin:0 0 6px;font:700 20px 'Space Grotesk',sans-serif}
+.rp-box p{margin:0 0 16px;font-size:13.5px;color:#64748b;line-height:1.5}
+.rp-box label{display:block;font-size:13px;font-weight:700;margin:0 0 6px}
+.rp-box input{width:100%;box-sizing:border-box;border:1px solid #E2E8F2;border-radius:12px;padding:12px 14px;font-size:15px;font-family:inherit;margin-bottom:14px;outline:none}
+.rp-box input:focus{border-color:#2E6CF6}
+.rp-box .rp-go{width:100%;background:#2E6CF6;color:#fff;border:0;border-radius:12px;padding:13px;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit}
+.rp-box .rp-go:disabled{opacity:.6;cursor:wait}
+.rp-box .rp-x{width:100%;background:none;border:0;color:#64748b;font-size:13px;margin-top:10px;cursor:pointer;font-family:inherit}
+.rp-msg{font-size:13px;margin:0 0 12px;min-height:0}.rp-msg.err{color:#C62828}.rp-msg.ok{color:#0E7A47}
+.rp-steps{display:flex;gap:6px;margin-bottom:16px}.rp-steps i{flex:1;height:4px;border-radius:4px;background:#E2E8F2}.rp-steps i.on{background:#2E6CF6}
+</style>
 </head>
 <body>
 <a class="login-brand" href="inicio.html" aria-label="Ir al inicio de Tapport"><svg width="26" height="26" viewBox="0 0 32 32"><path d="M6 4h20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-7v16a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V10H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="#fff"/></svg><span>Tapport<sup>®</sup></span></a>
@@ -1083,7 +1113,7 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
       <button type="button" class="hamburger-btn" id="hamburgerBtn" aria-label="Abrir menú"></button>
       <div class="topbar-search">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-        <input type="text" id="topbarSearch" placeholder="Buscar por nombre, código o cargo…" />
+        <input type="search" id="topbarSearch" name="tp-busqueda-panel" autocomplete="off" placeholder="Buscar por nombre, código o cargo…" />
       </div>
       <div class="notif-wrap">
         <button type="button" class="topbar-bell" id="bellBtn" aria-label="Notificaciones">
@@ -1129,6 +1159,7 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
             </button>
           </div>
         </div>
+        <button type="button" class="rp-link" id="olvideBtn">¿Olvidaste tu contraseña?</button>
         <button type="button" class="btn-primary" id="loginBtn">Iniciar sesión</button>
         <div class="msg" id="loginMsg"></div>
       </div>
@@ -1307,7 +1338,7 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
                 <div class="ico" data-ic="users"></div>
                 <div class="ch-t"><h3>Tu equipo</h3><p>Revisa a los miembros de tu equipo y su actividad.</p></div>
                 <div class="filters">
-                  <label class="ctl sm"><i data-ic="search"></i><input type="text" id="buscarPersonal" placeholder="Buscar miembro…" /></label>
+                  <label class="ctl sm"><i data-ic="search"></i><input type="search" id="buscarPersonal" name="tp-busqueda-equipo" autocomplete="off" placeholder="Buscar miembro…" /></label>
                   <label class="ctl sm"><i data-ic="users"></i><select id="filtroRol"><option>Todos los roles</option><option>Mesero</option></select></label>
                   <label class="ctl sm"><i data-ic="check"></i><select id="filtroEstado"><option value="">Todos los estados</option><option value="activo">Activo</option><option value="inactivo">Sin actividad</option><option value="nuevo">Sin reseñas</option></select></label>
                 </div>
@@ -2095,6 +2126,87 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
       a.click();
     });
 
+    // ---------- Gráfico por hora con zoom, arrastre y detalle al pasar el cursor ----------
+    let histZoom = null;
+    function renderGraficoHora(cont, series, key) {
+      const W = 640, H = 270, PL = 40, PR = 14, PT = 14, PB = 30, PW = W - PL - PR, PH = H - PT - PB;
+      const todos = series.flatMap(s => s.puntos.map(p => p.min));
+      let fMin = Math.max(0, Math.min(...todos) - 30), fMax = Math.min(1440, Math.max(...todos) + 30);
+      if (fMax - fMin < 60) { const c = (fMin + fMax) / 2; fMin = Math.max(0, c - 30); fMax = Math.min(1440, c + 30); }
+      if (!histZoom || histZoom.key !== key) histZoom = { key, min: fMin, max: fMax, fMin, fMax };
+      const Z = histZoom, MINSPAN = 5;
+      const hhmm = m => String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(Math.floor(m % 60)).padStart(2, "0");
+      const hora12 = f => f.toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" });
+      const xs = m => PL + (m - Z.min) / (Z.max - Z.min) * PW;
+      const ys = v => PT + (5.5 - v) / 5 * PH;
+      cont.innerHTML = `<div class="hz-bar"><span class="hz-range"></span><div class="hz-btns"><button type="button" data-z="out" aria-label="Alejar">−</button><button type="button" data-z="in" aria-label="Acercar">+</button><button type="button" data-z="reset">Restablecer</button></div></div>
+        <div class="hz-wrap"><svg viewBox="0 0 ${W} ${H}" class="hz-svg"></svg><div class="hz-tip"></div></div>
+        <p class="hz-hint">Rueda del mouse o botones para acercar · arrastra para mover · doble clic para acercar</p>`;
+      const svg = cont.querySelector("svg"), tip = cont.querySelector(".hz-tip"), rango = cont.querySelector(".hz-range");
+      function dibujar() {
+        const span = Z.max - Z.min;
+        const pasos = [1, 2, 5, 10, 15, 30, 60, 120, 180, 240];
+        const paso = pasos.find(p => span / p <= 8) || 240;
+        let ejeX = "", grid = "";
+        for (let t = Math.ceil(Z.min / paso) * paso; t <= Z.max; t += paso) {
+          ejeX += `<line x1="${xs(t).toFixed(1)}" y1="${PT}" x2="${xs(t).toFixed(1)}" y2="${H - PB}" stroke="#EEF1F7"/><text x="${xs(t).toFixed(1)}" y="${H - 9}" font-size="12.5" fill="#8A90A0" text-anchor="middle">${hhmm(t)}</text>`;
+        }
+        for (let v = 1; v <= 5; v++) grid += `<line x1="${PL}" y1="${ys(v).toFixed(1)}" x2="${W - PR}" y2="${ys(v).toFixed(1)}" stroke="#EEF1F7"/><text x="${PL - 8}" y="${(ys(v) + 4).toFixed(1)}" font-size="12.5" fill="#8A90A0" text-anchor="end">${v}★</text>`;
+        const lineas = series.map((s, i) => {
+          const c = PALETA_LINEAS[i % PALETA_LINEAS.length];
+          const pts = s.puntos.map(p => `${xs(p.min).toFixed(1)},${ys(p.valor).toFixed(1)}`).join(" ");
+          const dots = s.puntos.map(p => `<circle cx="${xs(p.min).toFixed(1)}" cy="${ys(p.valor).toFixed(1)}" r="4.5" fill="${c}" stroke="#fff" stroke-width="1.5"/>`).join("");
+          return `<polyline points="${pts}" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" opacity=".85"/>${dots}`;
+        }).join("");
+        svg.innerHTML = `<defs><clipPath id="hzClip"><rect x="${PL}" y="${PT - 6}" width="${PW}" height="${PH + 12}"/></clipPath></defs>${grid}<g>${ejeX}</g><line x1="${PL}" y1="${H - PB}" x2="${W - PR}" y2="${H - PB}" stroke="var(--line)"/><g clip-path="url(#hzClip)">${lineas}</g>`;
+        rango.textContent = `Mostrando ${hhmm(Z.min)} – ${hhmm(Z.max)} (${Math.round(span)} min)`;
+      }
+      function aMin(clientX) { const r = svg.getBoundingClientRect(); const xv = (clientX - r.left) / r.width * W; return Z.min + (xv - PL) / PW * (Z.max - Z.min); }
+      function fijar(mn, mx) {
+        let span = Math.min(1440, Math.max(MINSPAN, mx - mn));
+        if (mn < 0) { mn = 0; } if (mn + span > 1440) mn = 1440 - span;
+        Z.min = mn; Z.max = mn + span; dibujar();
+      }
+      function zoom(f, c) { const span = (Z.max - Z.min) * f; const r = (c - Z.min) / (Z.max - Z.min); fijar(c - r * span, c - r * span + span); }
+      cont.querySelectorAll("[data-z]").forEach(b => b.addEventListener("click", () => {
+        const c = (Z.min + Z.max) / 2;
+        if (b.dataset.z === "in") zoom(0.5, c); else if (b.dataset.z === "out") zoom(2, c); else fijar(Z.fMin, Z.fMax);
+      }));
+      svg.addEventListener("wheel", e => { e.preventDefault(); zoom(e.deltaY > 0 ? 1.25 : 0.8, aMin(e.clientX)); }, { passive: false });
+      svg.addEventListener("dblclick", e => zoom(0.5, aMin(e.clientX)));
+      const ptrs = new Map(); let pan = null, pinch = null, movido = false;
+      svg.addEventListener("pointerdown", e => {
+        svg.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, e); movido = false;
+        if (ptrs.size === 1) pan = { x: e.clientX, min: Z.min, max: Z.max };
+        if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch = { d: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY), min: Z.min, max: Z.max, c: aMin((a.clientX + b.clientX) / 2) }; pan = null; }
+        tip.style.display = "none";
+      });
+      svg.addEventListener("pointermove", e => {
+        if (ptrs.has(e.pointerId)) ptrs.set(e.pointerId, e);
+        if (pinch && ptrs.size === 2) {
+          const [a, b] = [...ptrs.values()]; const d = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY) || 1; const span = (pinch.max - pinch.min) * pinch.d / d, r = (pinch.c - pinch.min) / (pinch.max - pinch.min);
+          fijar(pinch.c - r * span, pinch.c - r * span + span); movido = true; return;
+        }
+        if (pan && ptrs.size === 1) {
+          const r = svg.getBoundingClientRect(), dm = -(e.clientX - pan.x) / r.width * W / PW * (pan.max - pan.min);
+          if (Math.abs(e.clientX - pan.x) > 3) { movido = true; fijar(pan.min + dm, pan.max + dm); svg.style.cursor = "grabbing"; return; }
+        }
+        if (e.pointerType === "mouse" && !ptrs.size) mostrarTip(e);
+      });
+      function mostrarTip(e) {
+        const r = svg.getBoundingClientRect(); let mejor = null, md = 18;
+        series.forEach((s, i) => s.puntos.forEach(p => { const px = (xs(p.min) / W) * r.width + r.left, py = (ys(p.valor) / H) * r.height + r.top, d = Math.hypot(px - e.clientX, py - e.clientY); if (d < md) { md = d; mejor = { s, i, p, px, py }; } }));
+        if (!mejor) { tip.style.display = "none"; return; }
+        const w = cont.querySelector(".hz-wrap").getBoundingClientRect();
+        tip.innerHTML = `<b>${escapeHtml(mejor.s.nombre)}</b><br>${hora12(mejor.p.f)} · ${mejor.p.valor}★${mejor.p.comentario ? `<br><i>“${escapeHtml(mejor.p.comentario.slice(0, 90))}”</i>` : ""}`;
+        tip.style.display = "block"; tip.style.left = Math.min(Math.max(mejor.px - w.left, 70), w.width - 70) + "px"; tip.style.top = (mejor.py - w.top - 10) + "px";
+      }
+      const fin = e => { if (!movido && e.pointerType !== "mouse") mostrarTip(e); ptrs.delete(e.pointerId); if (ptrs.size < 2) pinch = null; if (!ptrs.size) pan = null; svg.style.cursor = ""; };
+      svg.addEventListener("pointerup", fin); svg.addEventListener("pointercancel", fin);
+      svg.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") tip.style.display = "none"; });
+      dibujar();
+    }
+
     function renderHistorial() {
       const fechaStr = document.getElementById("histFecha").value || formatFechaLocal(new Date());
       const meseroFiltro = document.getElementById("histMesero").value;
@@ -2105,20 +2217,17 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
       if (meseroFiltro) meseros = meseros.filter(m => m.codigo === meseroFiltro);
       if (q) meseros = meseros.filter(m => (m.nombre || "").toLowerCase().includes(q));
 
-      // -- gráfico por hora --
-      const W = 640, H = 220, PAD = 30;
+      // -- gráfico por hora (cada reseña en su hora y minuto exactos, con zoom) --
       const series = meseros.map(m => {
-        const porHora = Array.from({ length: 24 }, () => ({ suma: 0, total: 0 }));
+        const puntos = [];
         (m.reviews || []).forEach(r => {
           const f = new Date(r.fecha);
           if (isNaN(f) || formatFechaLocal(f) !== fechaStr) return;
-          const h = porHora[f.getHours()];
-          h.suma += r.estrellas || 0; h.total += 1;
+          puntos.push({ min: f.getHours() * 60 + f.getMinutes() + f.getSeconds() / 60, valor: r.estrellas || 0, comentario: r.comentario || "", f });
         });
-        const puntos = [];
-        porHora.forEach((h, hora) => { if (h.total) puntos.push({ hora, valor: h.suma / h.total }); });
+        puntos.sort((p, q2) => p.min - q2.min);
         return { nombre: m.nombre, puntos };
-      }).filter(s => s.puntos.length);
+      }).filter(s2 => s2.puntos.length);
 
       const cont = document.getElementById("histChart");
       const leyenda = document.getElementById("histLegend");
@@ -2126,23 +2235,8 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
         cont.innerHTML = '<div class="empty">Nadie tiene reseñas ese día con ese filtro.</div>';
         leyenda.innerHTML = "";
       } else {
-        const horas = [...new Set(series.flatMap(s => s.puntos.map(p => p.hora)))].sort((a, b) => a - b);
-        const hMin = horas[0], hMax = horas[horas.length - 1] || hMin + 1;
-        const x = h => PAD + ((h - hMin) / Math.max(1, hMax - hMin)) * (W - PAD * 2);
-        const y = v => H - PAD - ((v - 3) / 2) * (H - PAD * 2);
-        const lineas = series.map((s, i) => {
-          const color = PALETA_LINEAS[i % PALETA_LINEAS.length];
-          const pts = s.puntos.map(p => `${x(p.hora).toFixed(1)},${Math.max(PAD, Math.min(H - PAD, y(p.valor))).toFixed(1)}`).join(" ");
-          const circles = s.puntos.map(p => `<circle cx="${x(p.hora).toFixed(1)}" cy="${Math.max(PAD, Math.min(H - PAD, y(p.valor))).toFixed(1)}" r="3" fill="${color}"/>`).join("");
-          return `<polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>${circles}`;
-        }).join("");
-        const ejeX = horas.filter((h, i) => i % Math.ceil(horas.length / 10 || 1) === 0)
-          .map(h => `<text x="${x(h).toFixed(1)}" y="${H - 8}" font-size="10" fill="#8A90A0" text-anchor="middle">${String(h).padStart(2, "0")}:00</text>`).join("");
-        cont.innerHTML = `<svg viewBox="0 0 ${W} ${H}" style="width:100%; height:auto;">
-          <line x1="${PAD}" y1="${H - PAD}" x2="${W - PAD}" y2="${H - PAD}" stroke="var(--line)" stroke-width="1"/>
-          ${lineas}${ejeX}
-        </svg>`;
-        leyenda.innerHTML = series.map((s, i) => `<span><i style="background:${PALETA_LINEAS[i % PALETA_LINEAS.length]};"></i>${escapeHtml(s.nombre)}</span>`).join("");
+        renderGraficoHora(cont, series, fechaStr + "|" + meseroFiltro + "|" + q);
+        leyenda.innerHTML = series.map((s2, i) => `<span><i style="background:${PALETA_LINEAS[i % PALETA_LINEAS.length]};"></i>${escapeHtml(s2.nombre)}</span>`).join("");
       }
 
       // -- tabla del equipo ese día --
@@ -2496,6 +2590,7 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
       document.getElementById("sidebar").classList.remove("hidden");
       document.getElementById("topbar").classList.remove("hidden");
 
+      ["topbarSearch", "buscarPersonal"].forEach(id => { const e = document.getElementById(id); if (e) e.value = ""; });
       meserosRendimiento = sesion.meseros || [];
       pintarCabeceraNegocio();
       renderInicio(meserosRendimiento);
@@ -2906,6 +3001,36 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
       } catch (e) { /* sin conexión: se queda con lo que ya tenía */ }
     }
 
+    // ---------- Actualización automática de datos (sin refrescar la página) ----------
+    let refrescandoAuto = false, ultimoAuto = 0;
+    const huellaPanel = o => JSON.stringify([o.meseros, o.plan, o.planVence, o.planActivo, o.maxMeseros, o.direccion, o.logoUrl, o.portadaUrl, o.nombre, o.fotoUrl]);
+    async function refrescarAuto(forzar) {
+      if (refrescandoAuto || !sesion || document.hidden) return;
+      if (document.getElementById("panel").classList.contains("hidden")) return;
+      if (!forzar && Date.now() - ultimoAuto < 15000) return;
+      refrescandoAuto = true; ultimoAuto = Date.now();
+      try {
+        const res = await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "panel_gerente", email: sesion.email, password: sesion.password }) });
+        const d = await res.json();
+        if (!d || !d.ok || !sesion) return;
+        if (huellaPanel(d) === huellaPanel(sesion)) return;
+        const cambioEquipo = (d.meseros || []).length !== (sesion.meseros || []).length;
+        Object.assign(sesion, d, { email: sesion.email, password: sesion.password });
+        try { const raw = JSON.parse(sessionStorage.getItem(SESION_KEY) || "null"); if (raw) sessionStorage.setItem(SESION_KEY, JSON.stringify({ ...sesion, _loginTime: raw._loginTime })); } catch (e) { }
+        meserosRendimiento = sesion.meseros || [];
+        pintarCabeceraNegocio(); renderInicio(meserosRendimiento); renderPersonal(meserosRendimiento);
+        if (cambioEquipo) inicializarHistorial(meserosRendimiento);
+        else if (!document.getElementById("view-historial").classList.contains("hidden")) renderHistorial();
+        actualizarBadgeIA(); renderPlanCard(meserosRendimiento);
+        if (typeof renderCuenta === "function") renderCuenta();
+        pintarIconos();
+      } catch (e) { /* sin conexión: reintenta en el siguiente ciclo */ }
+      finally { refrescandoAuto = false; }
+    }
+    setInterval(() => refrescarAuto(false), 45000);
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) refrescarAuto(false); });
+    window.addEventListener("focus", () => refrescarAuto(false));
+
     const sesionGuardada = leerSesion();
     if (sesionGuardada) {
       sesion = sesionGuardada;
@@ -2950,6 +3075,49 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
   ov.addEventListener("click",e=>{if(e.target===ov)ov.classList.remove("open");});
   document.getElementById("spForm").addEventListener("submit",e=>{e.preventDefault();const i=document.getElementById("spInput");const q=i.value;i.value="";preguntar(q);});
   document.querySelectorAll(".sidebar-support,[data-soporte]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();window.abrirSoporte();}));
+})();
+</script>
+<div class="rp-ov" id="rpOv"><div class="rp-box" role="dialog" aria-label="Restablecer contraseña">
+<div class="rp-steps"><i class="on"></i><i></i><i></i></div>
+<h3 id="rpT">Restablecer contraseña</h3><p id="rpP">Te enviaremos un código de 6 dígitos a tu correo.</p>
+<div id="rp1"><label for="rpEmail">Correo electrónico</label><input type="email" id="rpEmail" autocomplete="email" placeholder="tucorreo@ejemplo.com"></div>
+<div id="rp2" style="display:none"><label for="rpCodigo">Código de 6 dígitos</label><input type="text" id="rpCodigo" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456"></div>
+<div id="rp3" style="display:none"><label for="rpPass">Nueva contraseña</label><input type="password" id="rpPass" autocomplete="new-password" placeholder="Mínimo 6 caracteres"><label for="rpPass2">Repite la contraseña</label><input type="password" id="rpPass2" autocomplete="new-password"></div>
+<div class="rp-msg" id="rpMsg"></div>
+<button type="button" class="rp-go" id="rpGo">Enviar código</button>
+<button type="button" class="rp-x" id="rpX">Cancelar</button>
+</div></div>
+<script id="rp-js">
+(function(){
+  const TIPO="gerente", EP="https://script.google.com/macros/s/AKfycbx9nTiQEr_2AvK0bc3hIyJPao5PqtADFeRQKuhR6_XFV_rR0FG0UsZ5sexFrkyJIdJW/exec";
+  const $=id=>document.getElementById(id); let paso=1, email="";
+  const post=async b=>{const r=await fetch(EP,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(b)});return r.json();};
+  const msg=(t,c)=>{const m=$("rpMsg");m.textContent=t||"";m.className="rp-msg "+(c||"");};
+  function ver(){["rp1","rp2","rp3"].forEach((id,i)=>$(id).style.display=(i+1===paso)?"":"none");
+    document.querySelectorAll(".rp-steps i").forEach((e,i)=>e.classList.toggle("on",i<paso));
+    $("rpT").textContent=["Restablecer contraseña","Revisa tu correo","Crea tu nueva contraseña"][paso-1];
+    $("rpP").textContent=["Te enviaremos un código de 6 dígitos a tu correo.","Escribe el código que enviamos a "+email+". Si no llega, revisa spam.","Elige una contraseña de al menos 6 caracteres."][paso-1];
+    $("rpGo").textContent=["Enviar código","Verificar código","Guardar contraseña"][paso-1];}
+  function abrir(){paso=1;email=($("loginEmail")&&$("loginEmail").value.trim())||"";$("rpEmail").value=email;["rpCodigo","rpPass","rpPass2"].forEach(i=>$(i).value="");msg("");ver();$("rpOv").classList.add("open");setTimeout(()=>$("rpEmail").focus(),50);}
+  function cerrar(){$("rpOv").classList.remove("open");}
+  async function seguir(){
+    const b=$("rpGo");msg("");
+    try{
+      if(paso===1){email=$("rpEmail").value.trim().toLowerCase();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return msg("Escribe un correo válido.","err");
+        b.disabled=true;b.textContent="Enviando…";const d=await post({action:"enviar_codigo_verificacion",email});
+        if(!d.ok)msg(d.error||"No se pudo enviar el código.","err");else{paso=2;ver();msg("Código enviado.","ok");setTimeout(()=>$("rpCodigo").focus(),50);}}
+      else if(paso===2){const c=$("rpCodigo").value.trim();if(c.length<6)return msg("Escribe los 6 dígitos.","err");
+        b.disabled=true;b.textContent="Verificando…";const d=await post({action:"verificar_codigo",email,codigo:c});
+        if(!d.ok)msg(d.error||"Código incorrecto.","err");else{paso=3;ver();setTimeout(()=>$("rpPass").focus(),50);}}
+      else{const p=$("rpPass").value;if(p.length<6)return msg("La contraseña debe tener al menos 6 caracteres.","err");if(p!==$("rpPass2").value)return msg("Las contraseñas no coinciden.","err");
+        b.disabled=true;b.textContent="Guardando…";const d=await post({action:TIPO==="gerente"?"restablecer_password_gerente":"establecer_password",email,password:p});
+        if(!d.ok)msg(d.error||"No se pudo guardar.","err");else{msg("¡Listo! Ya puedes iniciar sesión con tu nueva contraseña.","ok");const le=$("loginEmail");if(le)le.value=email;const lp=$("loginPassword");if(lp)lp.value="";b.style.display="none";$("rpX").textContent="Ir a iniciar sesión";}}
+    }catch(e){msg("Error de conexión. Intenta de nuevo.","err");}
+    b.disabled=false;ver();
+  }
+  $("olvideBtn").addEventListener("click",abrir);$("rpX").addEventListener("click",()=>{cerrar();$("rpGo").style.display="";});
+  $("rpGo").addEventListener("click",seguir);$("rpOv").addEventListener("click",e=>{if(e.target===$("rpOv"))cerrar();});
+  $("rpOv").addEventListener("keydown",e=>{if(e.key==="Enter")seguir();if(e.key==="Escape")cerrar();});
 })();
 </script>
 </body>
