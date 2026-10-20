@@ -143,6 +143,125 @@
     margin: 0 auto 16px;
   }
   .success h2 { font-size: 18px; text-align: center; margin: 0 0 8px; }
+  .field-error { font-size: 12px; color: var(--error); margin-top: 4px; display: none; }
+  .field-error.show { display: block; }
+  .hint { font-size: 12px; color: var(--ink-soft); margin-top: 5px; line-height: 1.4; }
+  .terms-field {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .terms-field input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
+  .terms-field label {
+    margin: 0;
+    font-size: 13.5px;
+    color: var(--ink);
+    line-height: 1.45;
+    cursor: pointer;
+  }
+
+  .terms-field a {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 35, 31, 0.55);
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 50;
+    padding: 0;
+  }
+  .overlay.show { display: flex; }
+
+  .terms-modal {
+    background: var(--card);
+    width: 100%;
+    max-width: 480px;
+    max-height: 82vh;
+    border-radius: 18px 18px 0 0;
+    padding: 22px 22px 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 -12px 40px rgba(0,0,0,0.25);
+  }
+  @media (min-width: 520px) {
+    .overlay { align-items: center; }
+    .terms-modal { border-radius: 16px; max-height: 78vh; }
+  }
+
+  .terms-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+  }
+  .terms-modal-header h2 { font-size: 17px; margin: 0; font-weight: 700; }
+  .terms-modal-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--ink-soft);
+    cursor: pointer;
+    padding: 4px 6px;
+  }
+
+  .terms-modal-body {
+    overflow-y: auto;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .terms-modal-body h3 {
+    font-size: 13.5px;
+    color: var(--ink);
+    margin: 16px 0 4px;
+  }
+  .terms-modal-body h3:first-child { margin-top: 0; }
+  .terms-modal-body p { margin: 0 0 8px; }
+
+  .terms-modal-footer {
+    flex-shrink: 0;
+    margin-top: 16px;
+  }
+  .terms-modal-footer button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 14.5px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* Buscador de restaurante */
+  .combo { position: relative; }
+  .combo-list { position: absolute; left: 0; right: 0; top: calc(100% - 2px); z-index: 20; background: #fff; border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 14px 34px rgba(10,21,48,.18); max-height: 240px; overflow-y: auto; padding: 4px; }
+  .combo-item { display: block; width: 100%; text-align: left; background: none; border: 0; padding: 10px 12px; border-radius: 8px; font: inherit; font-size: 14.5px; color: var(--ink); cursor: pointer; }
+  .combo-item:hover, .combo-item.on { background: #EEF4FF; }
+  .combo-item mark { background: none; color: var(--accent); font-weight: 700; }
+  .combo-empty { padding: 12px; font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+  .combo-empty a { color: var(--accent); font-weight: 600; }
+  .combo-ok { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: #12804A; margin-top: 6px; font-weight: 600; }
+  .terms-field { margin-top: 4px; }
   .success p { font-size: 13.5px; color: var(--ink-soft); text-align: center; line-height: 1.5; margin: 0 0 18px; }
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -167,8 +286,14 @@
         </div>
 
         <div class="field">
-          <label for="crearRestaurante">Restaurante que administra</label>
-          <select id="crearRestaurante"><option value="">Cargando…</option></select>
+          <label for="restBuscar">Restaurante que administra</label>
+          <div class="combo">
+            <input type="text" id="restBuscar" placeholder="Escribe para buscar tu restaurante…" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="restLista" />
+            <input type="hidden" id="crearRestaurante" />
+            <div class="combo-list hidden" id="restLista" role="listbox"></div>
+          </div>
+          <div class="combo-ok hidden" id="restOk"></div>
+          <div class="hint" id="restAyuda">Solo aparecen restaurantes que todavía no tienen gerente.</div>
         </div>
         <div class="field">
           <label for="crearNombre">Nombre completo</label>
@@ -192,7 +317,33 @@
           <label for="crearEmail">Correo del gerente</label>
           <input type="email" id="crearEmail" placeholder="tucorreo@restaurante.com" />
         </div>
-        <button type="button" class="btn-primary" id="enviarCodigoBtn">Enviar código de verificación</button>
+        <div class="field">
+          <label for="nuevaPassword">Contraseña</label>
+          <div class="password-field">
+            <input type="password" id="nuevaPassword" autocomplete="new-password" placeholder="Mínimo 6 caracteres" />
+            <button type="button" class="toggle-password" data-target="nuevaPassword" aria-label="Mostrar contraseña">
+              <svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10.6 10.6 0 0 1 12 19c-7 0-11-7-11-7a18.6 18.6 0 0 1 4.2-5.1M9.9 4.2A9.9 9.9 0 0 1 12 4c7 0 11 7 11 7a18.6 18.6 0 0 1-2.2 3.1M14.1 14.1a3 3 0 1 1-4.2-4.2"/><path d="M1 1l22 22"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="confirmaPassword">Repite la contraseña</label>
+          <div class="password-field">
+            <input type="password" id="confirmaPassword" autocomplete="new-password" placeholder="Vuelve a escribirla" />
+            <button type="button" class="toggle-password" data-target="confirmaPassword" aria-label="Mostrar contraseña">
+              <svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10.6 10.6 0 0 1 12 19c-7 0-11-7-11-7a18.6 18.6 0 0 1 4.2-5.1M9.9 4.2A9.9 9.9 0 0 1 12 4c7 0 11 7 11 7a18.6 18.6 0 0 1-2.2 3.1M14.1 14.1a3 3 0 1 1-4.2-4.2"/><path d="M1 1l22 22"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="terms-field">
+          <input type="checkbox" id="aceptaTerminos" />
+          <label for="aceptaTerminos">Acepto los <a href="#" id="verTerminosLink">Términos y Condiciones</a> y la política de datos personales de Tapport</label>
+        </div>
+        <div class="field-error" id="terminosError">Debes leer y aceptar los Términos y Condiciones para crear la cuenta.</div>
+
+        <button type="button" class="btn-primary" id="enviarCodigoBtn" style="margin-top:14px">Enviar código de verificación</button>
         <div class="msg" id="crearMsg1"></div>
       </div>
 
@@ -206,16 +357,6 @@
       </div>
 
       <div id="crearPaso3" class="hidden" style="margin-top:16px;">
-        <div class="field">
-          <label for="nuevaPassword">Contraseña (mínimo 6 caracteres)</label>
-          <div class="password-field">
-            <input type="password" id="nuevaPassword" />
-            <button type="button" class="toggle-password" data-target="nuevaPassword" aria-label="Mostrar contraseña">
-              <svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-              <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.9 17.9A10.6 10.6 0 0 1 12 19c-7 0-11-7-11-7a18.6 18.6 0 0 1 4.2-5.1M9.9 4.2A9.9 9.9 0 0 1 12 4c7 0 11 7 11 7a18.6 18.6 0 0 1-2.2 3.1M14.1 14.1a3 3 0 1 1-4.2-4.2"/><path d="M1 1l22 22"/></svg>
-            </button>
-          </div>
-        </div>
         <button type="button" class="btn-primary" id="crearCuentaBtn">Crear cuenta</button>
         <div class="msg" id="crearMsg3"></div>
       </div>
@@ -230,6 +371,53 @@
       <h2>¡Cuenta creada!</h2>
       <p>Ya puede iniciar sesión en el panel de gerente con el correo y la contraseña que acaba de crear.</p>
       <a class="btn-primary" href="admin.html" style="display:block; text-align:center; text-decoration:none; box-sizing:border-box;">Ir a iniciar sesión</a>
+    </div>
+  </div>
+
+  <!-- Modal: Términos y Condiciones (gerentes) -->
+  <div class="overlay" id="overlayTerminos">
+    <div class="terms-modal">
+      <div class="terms-modal-header">
+        <h2>Términos y Condiciones</h2>
+        <button type="button" class="terms-modal-close" id="cerrarTerminosBtn" aria-label="Cerrar">×</button>
+      </div>
+      <div class="terms-modal-body">
+        <p><strong>Última actualización: octubre de 2026.</strong> Al crear una cuenta de gerente en Tapport aceptas lo siguiente:</p>
+
+        <h3>1. Qué es Tapport</h3>
+        <p>Tapport es una plataforma para restaurantes que conecta una pulsera NFC individual de cada mesero con una experiencia de calificación del servicio por parte de los clientes, y un panel de administración donde el restaurante consulta esa información.</p>
+
+        <h3>2. Tu cuenta de gerente</h3>
+        <p>Declaras que eres la persona autorizada para administrar el restaurante que eliges, y que los datos que ingresas (nombre, DNI, teléfono, fecha de nacimiento, correo y foto) son tuyos, reales y correctos. Tú eres responsable de guardar tu contraseña y de lo que se haga con tu cuenta. Cada restaurante tiene una sola cuenta de gerente.</p>
+
+        <h3>3. Datos que recopilamos y para qué</h3>
+        <p>Usamos tus datos para verificar tu identidad, evitar cuentas duplicadas o fraudulentas, permitirte iniciar sesión y operar el servicio. También tratamos los datos de tu equipo: nombre, foto, teléfono, edad, correo y las reseñas asociadas a cada mesero. No vendemos tus datos a terceros.</p>
+
+        <h3>4. Reseñas y datos de los meseros</h3>
+        <p>Las reseñas las dejan los clientes y pueden ser positivas o negativas. Tapport no las modifica ni elimina a pedido, salvo contenido ofensivo, falso o que incumpla la ley, evaluado caso por caso. Te comprometes a usar la información de los meseros solo para gestionar y mejorar el servicio, a tratarlos con respeto y a no usar las reseñas para fines discriminatorios o ilegales.</p>
+
+        <h3>5. Planes, pagos y pulseras</h3>
+        <p>El servicio se ofrece por suscripción mensual en soles, en los planes Starter, Growth y Pro, que se diferencian por la cantidad de meseros y las funciones incluidas. La pulsera NFC de cada mesero está incluida en todos los planes. El precio, la vigencia y los límites de tu plan se te informan al contratarlo. Si el plan vence, algunas funciones pueden limitarse hasta que se renueve.</p>
+
+        <h3>6. Asistente de IA</h3>
+        <p>Algunos planes incluyen un asistente de inteligencia artificial. Para responder, envía un resumen de las reseñas y del rendimiento de tu equipo a proveedores de IA externos. Sus respuestas son orientativas: revísalas antes de tomar decisiones sobre personas.</p>
+
+        <h3>7. Directorio y vacantes</h3>
+        <p>Los perfiles de los meseros, sus calificaciones promedio y las vacantes que publiques son visibles en el directorio de Tapport. Eres responsable de que las vacantes sean reales y de que respeten la ley laboral. Tapport no garantiza contrataciones.</p>
+
+        <h3>8. Uso aceptable</h3>
+        <p>No puedes intentar manipular las calificaciones, acceder a cuentas ajenas, copiar masivamente los datos de la plataforma ni usarla para fines ilícitos. Podemos suspender cuentas que incumplan estas reglas.</p>
+
+        <h3>9. Tus derechos</h3>
+        <p>Puedes pedir el acceso, la corrección o la eliminación de tus datos escribiendo a <strong>tapport.pe@gmail.com</strong>. Las reseñas ya asociadas a un mesero pueden mantenerse de forma anónima para conservar la integridad del historial de calificaciones.</p>
+
+        <h3>10. Cambios a estos términos</h3>
+        <p>Podemos actualizar estos términos conforme la plataforma evolucione. Si los cambios son relevantes, te avisaremos por correo o dentro del panel.</p>
+        <!-- BORRADOR: conviene que lo revise un abogado (Ley N.º 29733 de Protección de Datos Personales del Perú) antes de un lanzamiento a mayor escala. -->
+      </div>
+      <div class="terms-modal-footer">
+        <button type="button" id="aceptarTerminosBtn">Entendido, aceptar</button>
+      </div>
     </div>
   </div>
 
@@ -275,20 +463,65 @@
     });
 
     // Solo restaurantes SIN gerente asignado todavía — así no se puede
-    // registrar dos veces el mismo restaurante.
+    // registrar dos veces el mismo restaurante. Se busca escribiendo.
+    let restaurantes = [], restElegido = "", restActivo = -1;
+    const restBuscar = document.getElementById("restBuscar");
+    const restLista = document.getElementById("restLista");
+    const restHidden = document.getElementById("crearRestaurante");
+    const restOk = document.getElementById("restOk");
+    const WA_ALTA = "https://wa.me/51992346227?text=" + encodeURIComponent("Hola, quiero dar de alta mi restaurante en Tapport.");
+    const norm = (t) => String(t || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+
+    function pintarLista() {
+      const q = norm(restBuscar.value);
+      const hits = restaurantes.filter(n => !q || norm(n).includes(q)).slice(0, 40);
+      restActivo = hits.length ? 0 : -1;
+      if (!restaurantes.length) {
+        restLista.innerHTML = '<div class="combo-empty">No hay restaurantes disponibles por ahora.</div>';
+      } else if (!hits.length) {
+        restLista.innerHTML = '<div class="combo-empty">No encontramos “' + escapeHtml(restBuscar.value) + '”. ¿Tu restaurante es nuevo? <a href="' + WA_ALTA + '" target="_blank" rel="noopener">Escríbenos y lo damos de alta</a>.</div>';
+      } else {
+        restLista.innerHTML = hits.map((n, i) => {
+          let nombre = escapeHtml(n);
+          if (q) { const k = norm(n).indexOf(q); if (k > -1) nombre = escapeHtml(n.slice(0, k)) + "<mark>" + escapeHtml(n.slice(k, k + q.length)) + "</mark>" + escapeHtml(n.slice(k + q.length)); }
+          return '<button type="button" class="combo-item' + (i === 0 ? " on" : "") + '" role="option" data-n="' + escapeHtml(n) + '">' + nombre + '</button>';
+        }).join("");
+      }
+      abrirLista(true);
+    }
+    function abrirLista(si) { restLista.classList.toggle("hidden", !si); restBuscar.setAttribute("aria-expanded", si ? "true" : "false"); }
+    function elegirRestaurante(n) {
+      restElegido = n; restHidden.value = n; restBuscar.value = n; abrirLista(false);
+      restOk.textContent = "✓ " + n; restOk.classList.remove("hidden");
+    }
+    restBuscar.addEventListener("focus", () => { if (restaurantes.length) pintarLista(); });
+    restBuscar.addEventListener("input", () => {
+      if (restElegido && restBuscar.value !== restElegido) { restElegido = ""; restHidden.value = ""; restOk.classList.add("hidden"); }
+      pintarLista();
+    });
+    restBuscar.addEventListener("keydown", (e) => {
+      const items = [...restLista.querySelectorAll(".combo-item")];
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault(); if (!items.length) return;
+        restActivo = (restActivo + (e.key === "ArrowDown" ? 1 : -1) + items.length) % items.length;
+        items.forEach((el, i) => el.classList.toggle("on", i === restActivo)); items[restActivo].scrollIntoView({ block: "nearest" });
+      } else if (e.key === "Enter") { if (items[restActivo]) { e.preventDefault(); elegirRestaurante(items[restActivo].dataset.n); } }
+      else if (e.key === "Escape") abrirLista(false);
+    });
+    restLista.addEventListener("mousedown", (e) => { const b = e.target.closest(".combo-item"); if (b) { e.preventDefault(); elegirRestaurante(b.dataset.n); } });
+    document.addEventListener("click", (e) => { if (!e.target.closest(".combo")) { abrirLista(false); if (!restElegido && restBuscar.value) { /* texto sin elegir */ } } });
+
     async function cargarRestaurantes() {
-      const select = document.getElementById("crearRestaurante");
+      restBuscar.disabled = true; restBuscar.placeholder = "Cargando restaurantes…";
       try {
         const res = await fetch(`${ENDPOINT}?accion=restaurantes_disponibles`);
         const data = await res.json();
-        const lista = (data.restaurantes || []).slice().sort();
-        select.innerHTML = lista.length
-          ? '<option value="">Selecciona un restaurante</option>' +
-            lista.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("")
-          : '<option value="">No hay restaurantes disponibles</option>';
+        restaurantes = (data.restaurantes || []).slice().sort((a, b) => a.localeCompare(b, "es"));
+        restBuscar.placeholder = restaurantes.length ? "Escribe para buscar tu restaurante…" : "No hay restaurantes disponibles";
       } catch (err) {
-        select.innerHTML = '<option value="">No se pudo cargar</option>';
+        restBuscar.placeholder = "No se pudo cargar la lista. Recarga la página.";
       }
+      restBuscar.disabled = false;
     }
     cargarRestaurantes();
 
@@ -304,12 +537,17 @@
       const btn = document.getElementById("enviarCodigoBtn");
 
       if (!fotoBase64) { msg.className = "msg error"; msg.textContent = "Sube una foto del gerente."; return; }
-      if (!restaurante) { msg.className = "msg error"; msg.textContent = "Elige el restaurante que administra."; return; }
+      if (!restaurante) { msg.className = "msg error"; msg.textContent = restBuscar.value ? "Elige tu restaurante de la lista que aparece al escribir." : "Elige el restaurante que administra."; return; }
       if (!nombre) { msg.className = "msg error"; msg.textContent = "Ingresa el nombre completo."; return; }
       if (!telefono) { msg.className = "msg error"; msg.textContent = "Ingresa un teléfono."; return; }
       if (!/^\d{8}$/.test(dni)) { msg.className = "msg error"; msg.textContent = "El DNI debe tener 8 dígitos."; return; }
       if (!fechaNacimiento) { msg.className = "msg error"; msg.textContent = "Ingresa la fecha de nacimiento."; return; }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.className = "msg error"; msg.textContent = "Ingresa un correo válido."; return; }
+      const pw = document.getElementById("nuevaPassword").value, pw2 = document.getElementById("confirmaPassword").value;
+      if (pw.length < 6) { msg.className = "msg error"; msg.textContent = "La contraseña debe tener al menos 6 caracteres."; return; }
+      if (pw !== pw2) { msg.className = "msg error"; msg.textContent = "Las contraseñas no coinciden."; return; }
+      if (!document.getElementById("aceptaTerminos").checked) { document.getElementById("terminosError").classList.add("show"); msg.textContent = ""; return; }
+      document.getElementById("terminosError").classList.remove("show");
 
       btn.disabled = true; btn.textContent = "Enviando…";
       try {
@@ -353,6 +591,7 @@
         if (data.ok) {
           msg.className = "msg ok"; msg.textContent = "✓ Correo verificado";
           document.getElementById("crearPaso3").classList.remove("hidden");
+          document.getElementById("crearCuentaBtn").click();
         } else {
           msg.className = "msg error"; msg.textContent = data.error || "Código incorrecto.";
         }
@@ -378,6 +617,9 @@
       if (password.length < 6) {
         msg.className = "msg error"; msg.textContent = "La contraseña debe tener al menos 6 caracteres."; return;
       }
+      if (!document.getElementById("aceptaTerminos").checked) {
+        msg.className = "msg error"; msg.textContent = "Debes aceptar los Términos y Condiciones."; return;
+      }
 
       btn.disabled = true; btn.textContent = "Creando…";
       try {
@@ -389,6 +631,7 @@
             email, restaurante, password,
             nombre, telefono, dni,
             fecha_nacimiento: fechaNacimiento,
+            acepta_terminos: true, terminos_version: "2026-10",
             foto_base64: fotoBase64
           })
         });
@@ -402,8 +645,19 @@
       } catch (err) {
         msg.className = "msg error"; msg.textContent = "Error de conexión.";
       } finally {
-        btn.disabled = false; btn.textContent = "Crear cuenta";
+        btn.disabled = false; btn.textContent = "Reintentar crear cuenta";
       }
+    });
+
+    // ---------- Términos y Condiciones ----------
+    const overlayTerminos = document.getElementById("overlayTerminos");
+    document.getElementById("verTerminosLink").addEventListener("click", (e) => { e.preventDefault(); overlayTerminos.classList.add("show"); });
+    document.getElementById("cerrarTerminosBtn").addEventListener("click", () => overlayTerminos.classList.remove("show"));
+    overlayTerminos.addEventListener("click", (e) => { if (e.target.id === "overlayTerminos") overlayTerminos.classList.remove("show"); });
+    document.getElementById("aceptarTerminosBtn").addEventListener("click", () => {
+      document.getElementById("aceptaTerminos").checked = true;
+      document.getElementById("terminosError").classList.remove("show");
+      overlayTerminos.classList.remove("show");
     });
   </script>
 </body>

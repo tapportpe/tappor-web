@@ -140,6 +140,20 @@
     text-decoration: none;
   }
 
+  /* Restaurantes recomendados */
+  .reco-row { display:flex; gap:12px; overflow-x:auto; padding:2px 2px 8px; margin-bottom:8px; scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch; }
+  .reco-row::-webkit-scrollbar { height:4px; }
+  .reco-row::-webkit-scrollbar-thumb { background:var(--line); border-radius:4px; }
+  .reco-card { flex:0 0 auto; width:210px; scroll-snap-align:start; text-align:left; font:inherit; cursor:pointer; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px; display:flex; flex-direction:column; gap:8px; position:relative; transition:transform .15s, box-shadow .15s, border-color .15s; }
+  .reco-card:hover { transform:translateY(-2px); border-color:#2E6CF6; box-shadow:0 8px 22px rgba(46,108,246,.14); }
+  .reco-top { display:flex; align-items:center; gap:10px; }
+  .reco-av { width:40px; height:40px; border-radius:12px; background:linear-gradient(135deg,#2E6CF6,#1E40AF); color:#fff; font-family:'Space Grotesk',sans-serif; font-weight:700; display:grid; place-items:center; flex:0 0 auto; }
+  .reco-name { font-weight:700; font-size:15px; line-height:1.2; margin:0; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+  .reco-rate { font-weight:700; font-size:20px; font-family:'Space Grotesk',sans-serif; color:#0B1220; }
+  .reco-rate small { font-size:12px; font-weight:500; color:#64748b; margin-left:4px; }
+  .reco-badge { position:absolute; top:10px; right:10px; background:#FEF3C7; color:#92400E; font-size:10.5px; font-weight:700; padding:3px 8px; border-radius:99px; }
+  .reco-go { font-size:12.5px; color:#2E6CF6; font-weight:600; }
+
   /* Carrusel horizontal de meseros destacados */
   .waiter-carousel {
     display: flex;
@@ -703,6 +717,11 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
       <div class="feed-section-title">Restaurantes buscando personal</div>
       <div class="vac-wrap"><button type="button" class="vac-nav prev" aria-label="Anterior">‹</button><div id="feedVacantes"><div class="sk-card" style="flex:0 0 min(340px,84%)"></div><div class="sk-card" style="flex:0 0 min(340px,84%)"></div></div><button type="button" class="vac-nav next" aria-label="Siguiente">›</button></div>
 
+      <div id="recoWrap" style="display:none">
+        <div class="feed-section-title">Restaurantes con mejor atención al cliente</div>
+        <div class="reco-row" id="feedReco"></div>
+      </div>
+
       <div class="feed-section-title">Meseros destacados <span class="count" id="destacadosCount"></span></div>
       <div id="feedDestacados" class="dir-grid"><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div><div class="sk-card"></div></div>
     </div>
@@ -1098,10 +1117,39 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
         const data = await res.json();
         destacadosTodos = data.resultados || [];
         fxFillRest();
+        pintarRecomendados();
         pintarDestacados();
       } catch (err) {
         cont.innerHTML = '<div class="empty-state">No se pudo cargar el feed.</div>';
       }
+    }
+
+    function pintarRecomendados() {
+      const wrap = document.getElementById("recoWrap"), cont = document.getElementById("feedReco");
+      const g = {};
+      destacadosTodos.forEach(r => {
+        if (!r.restaurante || !(r.totalReviews > 0) || !(r.promedio > 0)) return;
+        const o = g[r.restaurante] || (g[r.restaurante] = { n: r.restaurante, suma: 0, rev: 0 });
+        o.suma += r.promedio * r.totalReviews; o.rev += r.totalReviews;
+      });
+      // promedio ponderado con suavizado (3 reseñas "neutras" de 4.0) para no premiar muestras mínimas
+      const lista = Object.values(g).map(o => ({ n: o.n, prom: o.suma / o.rev, score: (o.suma + 4 * 3) / (o.rev + 3) }))
+        .filter(o => o.prom >= 4).sort((a, b) => b.score - a.score).slice(0, 6);
+      if (!lista.length) { wrap.style.display = "none"; return; }
+      wrap.style.display = "";
+      cont.innerHTML = lista.map((o, i) => `
+        <button type="button" class="reco-card" data-rest="${escapeHtml(o.n)}">
+          ${i === 0 ? '<span class="reco-badge">★ Top</span>' : ""}
+          <div class="reco-top"><div class="reco-av">${escapeHtml(o.n.trim().charAt(0).toUpperCase())}</div><p class="reco-name">${escapeHtml(o.n)}</p></div>
+          <div class="reco-rate">★ ${o.prom.toFixed(1)}</div>
+          <span class="reco-go">Ver su equipo →</span>
+        </button>`).join("");
+      cont.querySelectorAll(".reco-card").forEach(b => b.addEventListener("click", () => {
+        FX.rest = b.dataset.rest;
+        const s = document.getElementById("fxRest"); if (s) s.value = FX.rest;
+        pintarDestacados();
+        document.getElementById("feedDestacados").scrollIntoView({ behavior: "smooth", block: "start" });
+      }));
     }
 
     function pintarDestacados() {
