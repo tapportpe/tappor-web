@@ -856,6 +856,16 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
 .ia-head b{display:block;font-size:14.5px}.ia-head small{font-size:11.5px;opacity:.75}
 .ia-head .x{margin-left:auto;background:none;border:0;color:#fff;font-size:22px;cursor:pointer;line-height:1}
 .ia-win .ia-msgs{padding:14px 14px 4px}.ia-win .ia-chips{margin:0;padding:8px 14px}.ia-win .ia-form{padding:10px 14px 14px}
+.ia-ch{margin:4px 0 10px;padding:12px 12px 8px;background:#fff;border:1px solid var(--line);border-radius:14px;box-sizing:border-box;white-space:normal}
+.ia-msg:has(.ia-ch){width:92%}
+.ia-ch h5{margin:0 0 10px;font-size:12.5px;color:var(--ink);font-weight:700}
+.ia-br{display:grid;grid-template-columns:84px minmax(0,1fr) 76px;gap:8px;align-items:center;margin:6px 0;font-size:12px}
+.ia-br .n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink)}
+.ia-br .t{height:14px;background:#EEF2FA;border-radius:8px;overflow:hidden}.ia-br .t i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#2E6CF6,#5B8CFF)}
+.ia-br .t i.lo{background:linear-gradient(90deg,#F59E0B,#FBBF24)}.ia-br .t i.bad{background:linear-gradient(90deg,#DC2626,#F87171)}
+.ia-br .v{text-align:right;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.ia-ch .ia-note{font-size:11px;color:var(--ink-soft);margin-top:6px}
+.ia-ch table,.ia-msg table{border-collapse:collapse;font-size:12px;margin:6px 0}.ia-msg th,.ia-msg td{border:1px solid var(--line);padding:3px 8px}
 .ia-hbtns{margin-left:auto;display:flex;gap:4px}
 .ia-hb{background:rgba(255,255,255,.12);border:0;color:#fff;width:32px;height:32px;border-radius:10px;font-size:16px;cursor:pointer;line-height:1}.ia-hb:hover{background:rgba(255,255,255,.24)}.ia-hb.x{font-size:22px;background:none}
 .ia-head .x{margin-left:0}
@@ -947,6 +957,31 @@ body:has(#editNegocioCard:not(.hidden)),body:has(#misVacantesCard:not(.hidden)),
 .login-brand:hover{opacity:.85}
 body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
 @media(max-width:520px){.login-brand{top:14px;left:16px;font-size:20px}}
+</style>
+<style id="soporte-ia-css">
+.sp-ov{position:fixed;inset:0;z-index:300;background:rgba(10,21,48,.45);display:none;align-items:flex-end;justify-content:flex-end;padding:22px}
+.sp-ov.open{display:flex}
+.sp-win{width:400px;max-width:100%;height:600px;max-height:calc(100vh - 44px);background:#fff;border-radius:20px;box-shadow:0 24px 60px rgba(10,21,48,.35);display:flex;flex-direction:column;overflow:hidden;font-family:'Inter',sans-serif}
+.sp-head{display:flex;align-items:center;gap:10px;padding:14px 16px;background:linear-gradient(135deg,#0A1530,#14327F);color:#fff}
+.sp-head b{display:block;font-size:15px;font-family:'Space Grotesk',sans-serif}.sp-head small{font-size:11.5px;opacity:.75}
+.sp-head .sp-x{margin-left:auto;background:none;border:0;color:#fff;font-size:24px;cursor:pointer;line-height:1}
+.sp-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;background:#fff}
+.sp-m{max-width:90%;padding:10px 13px;border-radius:14px;font-size:13.5px;line-height:1.55;color:#0B1220}
+.sp-m.u{align-self:flex-end;background:#2E6CF6;color:#fff;border-bottom-right-radius:4px}
+.sp-m.a{align-self:flex-start;background:#F1F4FB;border-bottom-left-radius:4px}
+.sp-m ul{margin:6px 0;padding-left:18px}
+.sp-chips{display:flex;flex-wrap:wrap;gap:7px;padding:0 14px 8px}
+.sp-chips button{border:1px solid #E2E8F2;background:#fff;border-radius:999px;padding:6px 11px;font-size:12px;cursor:pointer;color:#0B1220;font-family:inherit}
+.sp-chips button:hover{border-color:#2E6CF6;color:#1E40AF}
+.sp-form{display:flex;gap:8px;padding:10px 14px 8px}
+.sp-form input{flex:1;border:1px solid #E2E8F2;border-radius:12px;padding:11px 13px;font-size:14px;outline:none;font-family:inherit;min-width:0}
+.sp-form input:focus{border-color:#2E6CF6}
+.sp-form button{background:#2E6CF6;color:#fff;border:0;border-radius:12px;padding:0 16px;font-weight:700;cursor:pointer;min-height:40px}
+.sp-form button:disabled{opacity:.6;cursor:wait}
+.sp-foot{padding:0 14px 12px;font-size:12px;color:#64748b;text-align:center}
+.sp-foot a,.sp-wsp{color:#128C4A;font-weight:700;text-decoration:none}
+.sp-wsp{display:inline-flex;margin-top:8px;background:#E6F6EE;padding:8px 12px;border-radius:10px}
+@media(max-width:520px){.sp-ov{padding:0}.sp-win{height:100vh;max-height:100vh;border-radius:0}}
 </style>
 </head>
 <body>
@@ -1315,7 +1350,7 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
             <div class="card help-card">
               <div class="ico" data-ic="help"></div>
               <div class="ch-t"><h3>¿Necesitas ayuda?</h3><p>Nuestro equipo está para ayudarte.</p></div>
-              <a class="btn-ghost" href="https://wa.me/51992346227?text=Hola%2C%20necesito%20ayuda%20con%20mi%20cuenta%20de%20Tapport." target="_blank" rel="noopener"><i data-ic="headset"></i> Contactar soporte</a>
+              <a class="btn-ghost" data-soporte href="https://wa.me/51992346227?text=Hola%2C%20necesito%20ayuda%20con%20mi%20cuenta%20de%20Tapport." target="_blank" rel="noopener"><i data-ic="headset"></i> Contactar soporte</a>
             </div>
           </div>
         </div>
@@ -2156,7 +2191,7 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
     function iaRenderChat() {
       const box = document.getElementById("iaMsgs"); box.innerHTML = "";
       if (!IA.historial.length) iaMsg("a", "Hola 👋 Soy tu asistente de Tapport. Pregúntame sobre las reseñas y el rendimiento de tu equipo.");
-      IA.historial.forEach(m => iaMsg(m.rol === "u" ? "u" : "a", m.rol === "u" ? escapeHtml(m.texto) : iaMd(m.texto)));
+      IA.historial.forEach(m => iaMsg(m.rol === "u" ? "u" : "a", m.rol === "u" ? escapeHtml(m.texto) : (m.grafico ? iaGraficoHtml() : "") + iaMd(m.texto)));
       const l = document.getElementById("iaChatList");
       l.innerHTML = IA.chats.map(c => `<div class="ia-ci ${c.id === IA.act ? "on" : ""}" data-id="${c.id}"><span>${escapeHtml(c.t)}</span><button type="button" data-del="${c.id}" aria-label="Borrar chat" title="Borrar">🗑</button></div>`).join("") || '<div class="ia-vacio">Sin chats todavía.</div>';
       l.querySelectorAll(".ia-ci").forEach(el => el.addEventListener("click", e => { const d = e.target.closest("[data-del]"); if (d) { if (confirm("¿Borrar este chat?")) iaBorrarChat(d.dataset.del); } else iaAbrirChat(el.dataset.id); }));
@@ -2244,9 +2279,11 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
       return L.join("\n").slice(0, 28000);
     }
     function iaMd(t) {
+      t = String(t).replace(/((?:^|\n)\|.*\|[ \t]*(?:\n\|.*\|[ \t]*)+)/g, blk => "\n@@T" + btoa(unescape(encodeURIComponent(blk))) + "@@\n");
       let h = escapeHtml(t).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
       h = h.replace(/(?:^|\n)((?:[-*•] .+(?:\n|$))+)/g, (_, b) => "<ul>" + b.trim().split("\n").map(l => "<li>" + l.replace(/^[-*•] /, "") + "</li>").join("") + "</ul>");
-      return h.replace(/\n/g, "<br>").replace(/<br><ul>/g, "<ul>").replace(/<\/ul><br>/g, "</ul>");
+      h = h.replace(/@@T([A-Za-z0-9+\/=]+)@@/g, (_, b) => { const rows = decodeURIComponent(escape(atob(b))).trim().split("\n").filter(l => !/^\|[\s:|-]+\|?$/.test(l.trim())); return "<table>" + rows.map((l, i) => "<tr>" + l.trim().replace(/^\||\|$/g, "").split("|").map(c => (i ? "<td>" : "<th>") + escapeHtml(c.trim()) + (i ? "</td>" : "</th>")).join("") + "</tr>").join("") + "</table>"; });
+      return h.replace(/\n/g, "<br>").replace(/<br><ul>/g, "<ul>").replace(/<\/ul><br>/g, "</ul>").replace(/<br><table>/g, "<table>").replace(/<\/table><br>/g, "</table>");
     }
     async function iaLlamar(modo, pregunta) {
       try {
@@ -2307,6 +2344,16 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
       if (/negativ|mala|1 estrella|2 estrella|comentario/.test(t)) { const n = S.flatMap(x => x.negTxt).slice(0, 5); return n.length ? "Comentarios más críticos recientes:\n" + n.map(r => `- ${r.estrellas}★: “${(r.comentario || "").slice(0, 110)}”`).join("\n") : "No hay comentarios críticos en los últimos 30 días."; }
       return "Ahora mismo respondo en **modo básico** (reglas simples). Para análisis con razonamiento (causas, comparaciones y planes de acción) hay que activar la conexión de IA del asistente. Mientras tanto puedo decirte: mejor mesero, quién debe mejorar, promedio, tendencia, comentarios críticos o el detalle de un mesero.";
     }
+    function iaGraficoHtml() {
+      const S = meserosRendimiento.map(iaStats).filter(x => x.m30.length);
+      if (!S.length) return '<div class="ia-ch"><h5>Sin reseñas en los últimos 30 días</h5><div class="ia-note">Cuando lleguen reseñas verás aquí tus gráficos.</div></div>';
+      const col = p => p >= 4.5 ? "" : p >= 4 ? "lo" : "bad";
+      const filas = S.slice().sort((a, b) => b.p30 - a.p30).slice(0, 12).map(x => `<div class="ia-br"><span class="n" title="${escapeHtml(x.m.nombre)}">${escapeHtml(x.m.nombre)}</span><span class="t"><i class="${col(x.p30)}" style="width:${(x.p30 / 5 * 100).toFixed(0)}%"></i></span><span class="v">${x.p30.toFixed(1)}★ · ${x.m30.length}</span></div>`).join("");
+      const todas = S.flatMap(x => x.m30), sem = [0, 1, 2, 3].map(k => todas.filter(r => { const d = diasDesde(r.fecha); return d > k * 7 && d <= (k + 1) * 7; })).reverse();
+      const maxN = Math.max(1, ...sem.map(a => a.length));
+      const semanas = sem.map((a, k) => { const p = a.length ? a.reduce((t, r) => t + r.estrellas, 0) / a.length : null; return `<div class="ia-br"><span class="n">${k === 3 ? "Esta semana" : "Hace " + (3 - k) + (3 - k === 1 ? " semana" : " semanas")}</span><span class="t"><i style="width:${(a.length / maxN * 100).toFixed(0)}%"></i></span><span class="v">${a.length} · ${p != null ? p.toFixed(1) + "★" : "—"}</span></div>`; }).join("");
+      return `<div class="ia-ch"><h5>Promedio por mesero · últimos 30 días</h5>${filas}<div class="ia-note">★ promedio · n.º de reseñas</div></div><div class="ia-ch"><h5>Reseñas por semana (barra) y promedio</h5>${semanas}</div>`;
+    }
     function iaMsg(rol, html) { const c = document.getElementById("iaMsgs"); const d = document.createElement("div"); d.className = "ia-msg " + (rol === "u" ? "u" : "a"); d.innerHTML = html; c.appendChild(d); c.scrollTop = c.scrollHeight; return d; }
     async function iaPreguntar(q, label) {
       q = (q || "").trim(); if (!q) return;
@@ -2314,9 +2361,11 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
       iaMsg("u", escapeHtml(label || q)); IA.historial.push({ rol: "u", texto: label || q });
       const pend = iaMsg("a", "Pensando…"); const btn = document.getElementById("iaSend"); btn.disabled = true;
       const bloqueada = sesion && sesion.funciones && sesion.funciones.ia === false;
-      let txt = bloqueada ? null : await iaLlamar(resumen ? "resumen" : "chat", q); if (txt == null) txt = resumen ? iaResumenLocal(meserosRendimiento) : iaRespuestaLocal(q, meserosRendimiento);
+      const grafico = /gr[aá]fic|diagrama|\bchart\b|visualiz/i.test(q);
+      const qIA = grafico ? q + "\n\n(Nota: el panel ya dibuja el gráfico de promedio por mesero y la evolución semanal de los últimos 30 días. NO hagas tablas ni listes todas las reseñas. Comenta en 3-4 viñetas qué muestra el gráfico, qué destaca y qué hacer.)" : q;
+      let txt = bloqueada ? null : await iaLlamar(resumen ? "resumen" : "chat", qIA); if (txt == null) txt = resumen ? iaResumenLocal(meserosRendimiento) : iaRespuestaLocal(q, meserosRendimiento);
       if (bloqueada) txt += "\n\n🔒 Respondo en modo básico porque tu plan " + (sesion.planNombre || "actual") + " no incluye el razonamiento con IA (causas, comparaciones y plan de acción). Está disponible desde el plan **Growth**. Escríbenos para mejorar tu plan.";
-      pend.innerHTML = iaMd(txt); IA.historial.push({ rol: "ia", texto: txt }); btn.disabled = false;
+      pend.innerHTML = (grafico ? iaGraficoHtml() : "") + iaMd(txt); IA.historial.push({ rol: "ia", texto: txt, grafico: grafico }); btn.disabled = false;
       const ch = IA.chats.find(c => c.id === IA.act); if (ch) { if (ch.t === "Chat nuevo") ch.t = (label || q).slice(0, 38); ch.ts = Date.now(); if (ch.m.length > 60) ch.m.splice(0, ch.m.length - 60); IA.chats.sort((a, b) => b.ts - a.ts); iaGuardar(); iaRenderChat(); }
       document.getElementById("iaMsgs").scrollTop = 1e9;
     }
@@ -2822,5 +2871,43 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
       refrescarPlan();
     }
   </script>
+<div class="sp-ov" id="spOv"><section class="sp-win" role="dialog" aria-label="Soporte Tapport">
+<div class="sp-head"><div><b>Soporte Tapport</b><small>Respuestas al instante con IA</small></div><button type="button" class="sp-x" id="spX" aria-label="Cerrar">×</button></div>
+<div class="sp-msgs" id="spMsgs"></div>
+<div class="sp-chips" id="spChips"></div>
+<form class="sp-form" id="spForm"><input id="spInput" type="text" maxlength="400" placeholder="Cuéntanos tu problema…" autocomplete="off"><button type="submit" id="spSend">Enviar</button></form>
+<div class="sp-foot">¿Prefieres una persona? <a href="https://wa.me/51992346227?text=Hola%2C%20necesito%20ayuda%20con%20mi%20cuenta%20de%20Tapport." target="_blank" rel="noopener">Escríbenos por WhatsApp</a></div>
+</section></div>
+<script id="soporte-ia-js">
+(function(){
+  const TIPO="gerente", chips=["No veo mi plan","No puedo registrar un mesero","Un mesero no puede entrar","Cambiar mi foto o logo","No me aparecen reseñas"];
+  const ov=document.getElementById("spOv"), box=document.getElementById("spMsgs"), hist=[];
+  const esc=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const md=t=>{let h=esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>");h=h.replace(/(?:^|\n)((?:[-*•] .+(?:\n|$))+)/g,(_,b)=>"<ul>"+b.trim().split("\n").map(l=>"<li>"+l.replace(/^[-*•] /,"")+"</li>").join("")+"</ul>");return h.replace(/\n/g,"<br>").replace(/<br><ul>/g,"<ul>").replace(/<\/ul><br>/g,"</ul>");};
+  function add(r,h){const d=document.createElement("div");d.className="sp-m "+r;d.innerHTML=h;box.appendChild(d);box.scrollTop=box.scrollHeight;return d;}
+  function ses(){try{return typeof sesion!=="undefined"?sesion:null;}catch(e){return null;}}
+  function bienvenida(){box.innerHTML="";add("a","Hola 👋 Soy el asistente de soporte de Tapport. Reviso los datos de tu cuenta para ayudarte. ¿Qué problema tienes?");}
+  async function preguntar(q){
+    q=(q||"").trim();if(!q)return;const s=ses();
+    add("u",esc(q));hist.push({rol:"u",texto:q});const p=add("a","Revisando tu cuenta…");const b=document.getElementById("spSend");b.disabled=true;
+    let txt="No pude conectarme. Inténtalo otra vez o escríbenos por WhatsApp.",esc2=true;
+    try{
+      if(!s||!s.email)throw 0;
+      const r=await fetch("https://script.google.com/macros/s/AKfycbx9nTiQEr_2AvK0bc3hIyJPao5PqtADFeRQKuhR6_XFV_rR0FG0UsZ5sexFrkyJIdJW/exec",{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"soporte_ia",tipo:TIPO,email:s.email,password:s.password,pregunta:q,historial:hist.slice(-8)})});
+      const j=await r.json();
+      if(j&&j.ok){txt=j.texto;esc2=!!j.escalar;}else{txt=(j&&j.error)||txt;}
+    }catch(e){}
+    p.innerHTML=md(txt);hist.push({rol:"ia",texto:txt});b.disabled=false;
+    if(esc2){const a=document.createElement("a");a.className="sp-wsp";a.target="_blank";a.rel="noopener";a.href="https://wa.me/51992346227?text="+encodeURIComponent("Hola, necesito ayuda con Tapport: "+q);a.textContent="Hablar con una persona por WhatsApp →";p.appendChild(document.createElement("br"));p.appendChild(a);}
+    box.scrollTop=box.scrollHeight;
+  }
+  window.abrirSoporte=function(){ov.classList.add("open");if(!box.children.length)bienvenida();setTimeout(()=>document.getElementById("spInput").focus(),50);};
+  const c=document.getElementById("spChips");chips.forEach(t=>{const b=document.createElement("button");b.type="button";b.textContent=t;b.addEventListener("click",()=>preguntar(t));c.appendChild(b);});
+  document.getElementById("spX").addEventListener("click",()=>ov.classList.remove("open"));
+  ov.addEventListener("click",e=>{if(e.target===ov)ov.classList.remove("open");});
+  document.getElementById("spForm").addEventListener("submit",e=>{e.preventDefault();const i=document.getElementById("spInput");const q=i.value;i.value="";preguntar(q);});
+  document.querySelectorAll(".sidebar-support,[data-soporte]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();window.abrirSoporte();}));
+})();
+</script>
 </body>
 </html>

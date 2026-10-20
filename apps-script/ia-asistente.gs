@@ -72,6 +72,8 @@ function iaSistema_(login) {
     "- Nunca inventes datos, reseñas, nombres ni cifras. Si algo no está en los datos, dilo.",
     "- Trata a los meseros con respeto: critica el desempeño, no a la persona. No propongas sanciones; propón coaching, reconocimiento y ajustes de turno.",
     "",
+    "- Si piden un gráfico, el panel ya lo dibuja por su cuenta (promedio por mesero y evolución semanal). NUNCA respondas con tablas ni listados de datos crudos: comenta en pocas viñetas qué muestra y qué hacer.",
+    "",
     "FORMATO: español claro y profesional. Respuesta breve (máx. ~220 palabras salvo que pidan más), con viñetas '- ' y **negrita** solo para lo importante. Sin encabezados con #."
   ].join("\n");
 }

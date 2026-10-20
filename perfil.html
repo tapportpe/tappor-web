@@ -631,6 +631,31 @@ body:not(.app-mode) #authCard{width:100%}
 body:not(.app-mode) .login-brand{display:inline-flex}
 @media(max-width:520px){.login-brand{top:14px;left:16px;font-size:20px}}
 </style>
+<style id="soporte-ia-css">
+.sp-ov{position:fixed;inset:0;z-index:300;background:rgba(10,21,48,.45);display:none;align-items:flex-end;justify-content:flex-end;padding:22px}
+.sp-ov.open{display:flex}
+.sp-win{width:400px;max-width:100%;height:600px;max-height:calc(100vh - 44px);background:#fff;border-radius:20px;box-shadow:0 24px 60px rgba(10,21,48,.35);display:flex;flex-direction:column;overflow:hidden;font-family:'Inter',sans-serif}
+.sp-head{display:flex;align-items:center;gap:10px;padding:14px 16px;background:linear-gradient(135deg,#0A1530,#14327F);color:#fff}
+.sp-head b{display:block;font-size:15px;font-family:'Space Grotesk',sans-serif}.sp-head small{font-size:11.5px;opacity:.75}
+.sp-head .sp-x{margin-left:auto;background:none;border:0;color:#fff;font-size:24px;cursor:pointer;line-height:1}
+.sp-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;background:#fff}
+.sp-m{max-width:90%;padding:10px 13px;border-radius:14px;font-size:13.5px;line-height:1.55;color:#0B1220}
+.sp-m.u{align-self:flex-end;background:#2E6CF6;color:#fff;border-bottom-right-radius:4px}
+.sp-m.a{align-self:flex-start;background:#F1F4FB;border-bottom-left-radius:4px}
+.sp-m ul{margin:6px 0;padding-left:18px}
+.sp-chips{display:flex;flex-wrap:wrap;gap:7px;padding:0 14px 8px}
+.sp-chips button{border:1px solid #E2E8F2;background:#fff;border-radius:999px;padding:6px 11px;font-size:12px;cursor:pointer;color:#0B1220;font-family:inherit}
+.sp-chips button:hover{border-color:#2E6CF6;color:#1E40AF}
+.sp-form{display:flex;gap:8px;padding:10px 14px 8px}
+.sp-form input{flex:1;border:1px solid #E2E8F2;border-radius:12px;padding:11px 13px;font-size:14px;outline:none;font-family:inherit;min-width:0}
+.sp-form input:focus{border-color:#2E6CF6}
+.sp-form button{background:#2E6CF6;color:#fff;border:0;border-radius:12px;padding:0 16px;font-weight:700;cursor:pointer;min-height:40px}
+.sp-form button:disabled{opacity:.6;cursor:wait}
+.sp-foot{padding:0 14px 12px;font-size:12px;color:#64748b;text-align:center}
+.sp-foot a,.sp-wsp{color:#128C4A;font-weight:700;text-decoration:none}
+.sp-wsp{display:inline-flex;margin-top:8px;background:#E6F6EE;padding:8px 12px;border-radius:10px}
+@media(max-width:520px){.sp-ov{padding:0}.sp-win{height:100vh;max-height:100vh;border-radius:0}}
+</style>
 </head>
 <body>
 <a class="login-brand" href="inicio.html" aria-label="Ir al inicio de Tapport"><svg width="26" height="26" viewBox="0 0 32 32"><path d="M6 4h20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-7v16a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V10H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="#fff"/></svg><span>Tapport<sup>®</sup></span></a>
@@ -2053,5 +2078,43 @@ body:not(.app-mode) .login-brand{display:inline-flex}
       }
     }
   </script>
+<div class="sp-ov" id="spOv"><section class="sp-win" role="dialog" aria-label="Soporte Tapport">
+<div class="sp-head"><div><b>Soporte Tapport</b><small>Respuestas al instante con IA</small></div><button type="button" class="sp-x" id="spX" aria-label="Cerrar">×</button></div>
+<div class="sp-msgs" id="spMsgs"></div>
+<div class="sp-chips" id="spChips"></div>
+<form class="sp-form" id="spForm"><input id="spInput" type="text" maxlength="400" placeholder="Cuéntanos tu problema…" autocomplete="off"><button type="submit" id="spSend">Enviar</button></form>
+<div class="sp-foot">¿Prefieres una persona? <a href="https://wa.me/51992346227?text=Hola%2C%20necesito%20ayuda%20con%20mi%20cuenta%20de%20Tapport." target="_blank" rel="noopener">Escríbenos por WhatsApp</a></div>
+</section></div>
+<script id="soporte-ia-js">
+(function(){
+  const TIPO="mesero", chips=["No puedo iniciar sesión","Cambiar mi foto","No veo mis reseñas","Cambiar de restaurante","Cómo postulo a una vacante"];
+  const ov=document.getElementById("spOv"), box=document.getElementById("spMsgs"), hist=[];
+  const esc=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const md=t=>{let h=esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>");h=h.replace(/(?:^|\n)((?:[-*•] .+(?:\n|$))+)/g,(_,b)=>"<ul>"+b.trim().split("\n").map(l=>"<li>"+l.replace(/^[-*•] /,"")+"</li>").join("")+"</ul>");return h.replace(/\n/g,"<br>").replace(/<br><ul>/g,"<ul>").replace(/<\/ul><br>/g,"</ul>");};
+  function add(r,h){const d=document.createElement("div");d.className="sp-m "+r;d.innerHTML=h;box.appendChild(d);box.scrollTop=box.scrollHeight;return d;}
+  function ses(){try{return typeof sesion!=="undefined"?sesion:null;}catch(e){return null;}}
+  function bienvenida(){box.innerHTML="";add("a","Hola 👋 Soy el asistente de soporte de Tapport. Reviso los datos de tu cuenta para ayudarte. ¿Qué problema tienes?");}
+  async function preguntar(q){
+    q=(q||"").trim();if(!q)return;const s=ses();
+    add("u",esc(q));hist.push({rol:"u",texto:q});const p=add("a","Revisando tu cuenta…");const b=document.getElementById("spSend");b.disabled=true;
+    let txt="No pude conectarme. Inténtalo otra vez o escríbenos por WhatsApp.",esc2=true;
+    try{
+      if(!s||!s.email)throw 0;
+      const r=await fetch("https://script.google.com/macros/s/AKfycbx9nTiQEr_2AvK0bc3hIyJPao5PqtADFeRQKuhR6_XFV_rR0FG0UsZ5sexFrkyJIdJW/exec",{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"soporte_ia",tipo:TIPO,email:s.email,password:s.password,pregunta:q,historial:hist.slice(-8)})});
+      const j=await r.json();
+      if(j&&j.ok){txt=j.texto;esc2=!!j.escalar;}else{txt=(j&&j.error)||txt;}
+    }catch(e){}
+    p.innerHTML=md(txt);hist.push({rol:"ia",texto:txt});b.disabled=false;
+    if(esc2){const a=document.createElement("a");a.className="sp-wsp";a.target="_blank";a.rel="noopener";a.href="https://wa.me/51992346227?text="+encodeURIComponent("Hola, necesito ayuda con Tapport: "+q);a.textContent="Hablar con una persona por WhatsApp →";p.appendChild(document.createElement("br"));p.appendChild(a);}
+    box.scrollTop=box.scrollHeight;
+  }
+  window.abrirSoporte=function(){ov.classList.add("open");if(!box.children.length)bienvenida();setTimeout(()=>document.getElementById("spInput").focus(),50);};
+  const c=document.getElementById("spChips");chips.forEach(t=>{const b=document.createElement("button");b.type="button";b.textContent=t;b.addEventListener("click",()=>preguntar(t));c.appendChild(b);});
+  document.getElementById("spX").addEventListener("click",()=>ov.classList.remove("open"));
+  ov.addEventListener("click",e=>{if(e.target===ov)ov.classList.remove("open");});
+  document.getElementById("spForm").addEventListener("submit",e=>{e.preventDefault();const i=document.getElementById("spInput");const q=i.value;i.value="";preguntar(q);});
+  document.querySelectorAll(".sidebar-support,[data-soporte]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();window.abrirSoporte();}));
+})();
+</script>
 </body>
 </html>
