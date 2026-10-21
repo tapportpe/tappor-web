@@ -2127,7 +2127,7 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
     });
 
     // ---------- Gráfico por hora con zoom, arrastre y detalle al pasar el cursor ----------
-    let histZoom = null;
+    let histZoom = null, clusters = [];
     function renderGraficoHora(cont, series, key) {
       const W = 640, H = 270, PL = 40, PR = 14, PT = 14, PB = 30, PW = W - PL - PR, PH = H - PT - PB;
       const todos = series.flatMap(s => s.puntos.map(p => p.min));
@@ -2155,10 +2155,29 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
         const lineas = series.map((s, i) => {
           const c = PALETA_LINEAS[i % PALETA_LINEAS.length];
           const pts = s.puntos.map(p => `${xs(p.min).toFixed(1)},${ys(p.valor).toFixed(1)}`).join(" ");
-          const dots = s.puntos.map(p => `<circle cx="${xs(p.min).toFixed(1)}" cy="${ys(p.valor).toFixed(1)}" r="4.5" fill="${c}" stroke="#fff" stroke-width="1.5"/>`).join("");
-          return `<polyline points="${pts}" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" opacity=".85"/>${dots}`;
+          return `<polyline points="${pts}" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" opacity=".55"/>`;
         }).join("");
-        svg.innerHTML = `<defs><clipPath id="hzClip"><rect x="${PL}" y="${PT - 6}" width="${PW}" height="${PH + 12}"/></clipPath></defs>${grid}<g>${ejeX}</g><line x1="${PL}" y1="${H - PB}" x2="${W - PR}" y2="${H - PB}" stroke="var(--line)"/><g clip-path="url(#hzClip)">${lineas}</g>`;
+        // Un punto por servicio; los que caen en el mismo sitio se agrupan con un contador (se separan al acercar)
+        const items = [];
+        series.forEach((s, i) => s.puntos.forEach(p => items.push({ s, i, p, x: xs(p.min), y: ys(p.valor), c: PALETA_LINEAS[i % PALETA_LINEAS.length] })));
+        items.sort((u, v) => u.x - v.x);
+        clusters = [];
+        items.forEach(it => {
+          const k = clusters.find(c => Math.abs(c.x - it.x) <= 7 && Math.abs(c.y - it.y) <= 7);
+          if (k) k.items.push(it); else clusters.push({ x: it.x, y: it.y, c: it.c, items: [it] });
+        });
+        let rug = "", dots = "", labels = "", finLabel = -1e9;
+        clusters.forEach(k => {
+          k.items.forEach(it => { rug += `<line x1="${it.x.toFixed(1)}" y1="${H - PB - 8}" x2="${it.x.toFixed(1)}" y2="${H - PB}" stroke="${it.c}" stroke-width="2" opacity=".8"/>`; });
+          dots += `<circle cx="${k.x.toFixed(1)}" cy="${k.y.toFixed(1)}" r="6" fill="${k.c}" stroke="#fff" stroke-width="2"/>`;
+          if (k.items.length > 1) dots += `<circle cx="${(k.x + 8).toFixed(1)}" cy="${(k.y - 8).toFixed(1)}" r="7.5" fill="#0B1220"/><text x="${(k.x + 8).toFixed(1)}" y="${(k.y - 4.6).toFixed(1)}" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">${k.items.length}</text>`;
+          const txt = hhmm(k.items[0].p.min), w = txt.length * 7 + 6;
+          if (k.x - w / 2 > finLabel + 4 && k.x > PL && k.x < W - PR) {
+            labels += `<text x="${k.x.toFixed(1)}" y="${(k.y + 20).toFixed(1)}" font-size="11.5" font-weight="600" fill="#334155" text-anchor="middle">${txt}</text>`;
+            finLabel = k.x + w / 2;
+          }
+        });
+        svg.innerHTML = `<defs><clipPath id="hzClip"><rect x="${PL}" y="${PT - 6}" width="${PW}" height="${PH + 12}"/></clipPath></defs>${grid}<g>${ejeX}</g><line x1="${PL}" y1="${H - PB}" x2="${W - PR}" y2="${H - PB}" stroke="var(--line)"/><g clip-path="url(#hzClip)">${lineas}${rug}${dots}${labels}</g>`;
         rango.textContent = `Mostrando ${hhmm(Z.min)} – ${hhmm(Z.max)} (${Math.round(span)} min)`;
       }
       function aMin(clientX) { const r = svg.getBoundingClientRect(); const xv = (clientX - r.left) / r.width * W; return Z.min + (xv - PL) / PW * (Z.max - Z.min); }
@@ -2194,12 +2213,13 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
         if (e.pointerType === "mouse" && !ptrs.size) mostrarTip(e);
       });
       function mostrarTip(e) {
-        const r = svg.getBoundingClientRect(); let mejor = null, md = 18;
-        series.forEach((s, i) => s.puntos.forEach(p => { const px = (xs(p.min) / W) * r.width + r.left, py = (ys(p.valor) / H) * r.height + r.top, d = Math.hypot(px - e.clientX, py - e.clientY); if (d < md) { md = d; mejor = { s, i, p, px, py }; } }));
+        const r = svg.getBoundingClientRect(); let mejor = null, md = 20;
+        clusters.forEach(k => { const px = (k.x / W) * r.width + r.left, py = (k.y / H) * r.height + r.top, d = Math.hypot(px - e.clientX, py - e.clientY); if (d < md) { md = d; mejor = { k, px, py }; } });
         if (!mejor) { tip.style.display = "none"; return; }
         const w = cont.querySelector(".hz-wrap").getBoundingClientRect();
-        tip.innerHTML = `<b>${escapeHtml(mejor.s.nombre)}</b><br>${hora12(mejor.p.f)} · ${mejor.p.valor}★${mejor.p.comentario ? `<br><i>“${escapeHtml(mejor.p.comentario.slice(0, 90))}”</i>` : ""}`;
-        tip.style.display = "block"; tip.style.left = Math.min(Math.max(mejor.px - w.left, 70), w.width - 70) + "px"; tip.style.top = (mejor.py - w.top - 10) + "px";
+        const lista = mejor.k.items.slice(0, 6).map(it => `<b>${escapeHtml(it.s.nombre)}</b> · ${hora12(it.p.f)} · ${it.p.valor}★${it.p.comentario ? `<br><i>“${escapeHtml(it.p.comentario.slice(0, 70))}”</i>` : ""}`).join("<br>");
+        tip.innerHTML = lista + (mejor.k.items.length > 6 ? `<br>+${mejor.k.items.length - 6} más (acerca para verlos)` : "");
+        tip.style.display = "block"; tip.style.left = Math.min(Math.max(mejor.px - w.left, 90), w.width - 90) + "px"; tip.style.top = (mejor.py - w.top - 12) + "px";
       }
       const fin = e => { if (!movido && e.pointerType !== "mouse") mostrarTip(e); ptrs.delete(e.pointerId); if (ptrs.size < 2) pinch = null; if (!ptrs.size) pan = null; svg.style.cursor = ""; };
       svg.addEventListener("pointerup", fin); svg.addEventListener("pointercancel", fin);

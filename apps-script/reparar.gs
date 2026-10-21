@@ -69,33 +69,40 @@ function repararMeseros() {
       arreglados++;
     }
   }
+  // Celdas sueltas a la derecha de K (por ejemplo un salt duplicado en L): la hoja solo usa A–K
+  if (hoja.getLastColumn() > REP_ENCABEZADOS.length && hoja.getLastRow() > 0) {
+    hoja.getRange(1, REP_ENCABEZADOS.length + 1, hoja.getLastRow(), hoja.getLastColumn() - REP_ENCABEZADOS.length).clearContent();
+    Logger.log("Se limpiaron celdas sueltas a la derecha de la columna K.");
+  }
   Logger.log("Revisión terminada. Correcciones: " + arreglados);
 }
 
-/** 3) Formato, orden por restaurante y columnas técnicas (Hash/Salt) ocultas. */
+/** 3) Deja la hoja Meseros con el mismo estilo que Administradores y ordenada por restaurante. */
 function ordenarHojaMeseros() {
   const hoja = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(HOJA_TRABAJADORES);
   const n = REP_ENCABEZADOS.length, filas = hoja.getLastRow();
 
-  const enc = hoja.getRange(1, 1, 1, n);
-  enc.setValues([REP_ENCABEZADOS]).setBackground("#0A1530").setFontColor("#FFFFFF").setFontWeight("bold").setHorizontalAlignment("left").setVerticalAlignment("middle");
-  hoja.setRowHeight(1, 30);
+  // Quita ajustes de la versión anterior (columnas ocultas / congeladas)
+  hoja.showColumns(1, n);
+  hoja.setFrozenColumns(0);
+
+  // Encabezado igual al de Administradores: fondo azul oscuro, texto blanco centrado
+  hoja.getRange(1, 1, 1, n).setValues([REP_ENCABEZADOS])
+    .setBackground("#0A1530").setFontColor("#FFFFFF").setFontWeight("normal")
+    .setHorizontalAlignment("center").setVerticalAlignment("middle");
   hoja.setFrozenRows(1);
-  hoja.setFrozenColumns(3);
 
   if (filas > 1) {
     const cuerpo = hoja.getRange(2, 1, filas - 1, n);
-    cuerpo.setVerticalAlignment("middle").setHorizontalAlignment("left").setFontColor("#0B1220").setFontSize(10);
+    cuerpo.setHorizontalAlignment("left").setVerticalAlignment("middle").setFontColor("#000000").setFontSize(10).setFontWeight("normal");
     hoja.getRange(2, 4, filas - 1, 3).setNumberFormat("@"); // Telefono, Edad, DNI como texto
-    hoja.getRange(2, 8, filas - 1, 2).setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP).setFontColor("#1A56DB"); // FotoUrl, Link
-    hoja.getRange(2, 10, filas - 1, 2).setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP).setFontColor("#8A90A0"); // Hash, Salt
+    hoja.getRange(2, 8, filas - 1, 4).setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP); // FotoUrl, Link, Hash, Salt
     cuerpo.sort([{ column: 2, ascending: true }, { column: 1, ascending: true }]);
   }
 
-  const anchos = [90, 150, 170, 100, 55, 90, 230, 90, 90, 90, 90];
+  const anchos = [95, 150, 170, 100, 55, 95, 230, 150, 150, 170, 150];
   anchos.forEach(function (w, i) { hoja.setColumnWidth(i + 1, w); });
-  hoja.hideColumns(10, 2); // J y K: datos técnicos de la contraseña (no tocar)
 
   try { colorearFilasExistentes(); } catch (e) { Logger.log("No se pudo recolorear: " + e); }
-  Logger.log("Hoja Meseros ordenada. Las columnas J y K (contraseña) quedaron ocultas; para verlas: seleccionar I y L > clic derecho > Mostrar columnas.");
+  Logger.log("Hoja Meseros ordenada con el estilo de Administradores.");
 }
