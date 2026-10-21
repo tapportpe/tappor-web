@@ -631,6 +631,166 @@ body:not(.app-mode) #authCard{width:100%}
 body:not(.app-mode) .login-brand{display:inline-flex}
 @media(max-width:520px){.login-brand{top:14px;left:16px;font-size:20px}}
 </style>
+<style id="tp-v2">
+/* ===== Panel mesero · rediseño ===== */
+.shell .main .shell-wrap{max-width:1180px}
+.view>*+*{margin-top:18px}
+.dash-card{border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 1px 2px rgba(11,18,32,.04),0 10px 28px rgba(11,18,32,.05)}
+.dash-card+.dash-card{margin-top:18px}
+.col-stack{display:flex;flex-direction:column;gap:18px;min-width:0}
+.col-stack>.dash-card{margin:0}
+.view-title{font:700 16px 'Space Grotesk','Inter',sans-serif;color:var(--ink);margin:0;letter-spacing:-.01em}
+.card-sub{font-size:12.5px;color:var(--ink-soft);margin:3px 0 16px;line-height:1.45}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:6px}
+.card-head .card-sub{margin-bottom:10px}
+.btn-link{font-weight:600;color:var(--accent);text-decoration:none;background:none;border:0;cursor:pointer;font-family:inherit}
+.btn-link:hover{text-decoration:underline}
+.row-2col{margin-bottom:0}
+/* grids */
+.rend-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+@media(min-width:1000px){.rend-grid{grid-template-columns:minmax(0,1fr) 340px;align-items:start}}
+.row-2col>*{min-width:0}
+.row-2col>.dash-card{margin:0}
+.row-2col.even{align-items:stretch}
+@media(min-width:900px){.row-2col{grid-template-columns:1.55fr 1fr}.row-2col.even{grid-template-columns:1fr 1fr}}
+.legacy{display:none!important}
+
+/* avatares */
+.av{position:relative;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2E6CF6,#1E40AF);color:#fff;overflow:hidden;flex-shrink:0;font:700 13px 'Space Grotesk',sans-serif}
+.av .av-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;background:#fff}
+.av-lg{width:60px;height:60px;font-size:21px;border:2px solid rgba(255,255,255,.25)}
+.topbar-user .av{width:34px;height:34px}
+.rc-logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#2E6CF6,#1E40AF);color:#fff;display:flex;align-items:center;justify-content:center;font:700 17px 'Space Grotesk',sans-serif;flex-shrink:0}
+
+/* banner */
+.p-banner{border-radius:20px}
+.pb-who{display:flex;align-items:center;gap:16px}
+.p-banner-inner{padding:26px 28px}
+.p-banner-hola{font:700 26px 'Space Grotesk',sans-serif;letter-spacing:-.02em}
+.p-banner-sub{font-size:13.5px}
+.p-banner-rating{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:12px 18px}
+.p-banner-rating .pbr-icon{background:rgba(46,108,246,.5);color:#fff}
+.p-banner-rating .pbr-icon svg{width:18px;height:18px;fill:currentColor;stroke:none}
+.p-banner-rating .pbr-num{font:700 28px 'Space Grotesk',sans-serif;line-height:1}
+
+/* KPIs */
+.kpi-row{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:860px){.kpi-row{grid-template-columns:repeat(4,1fr)}}
+.kpi{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 1px 2px rgba(11,18,32,.04),0 10px 28px rgba(11,18,32,.05);min-width:0}
+.kpi-ic{width:44px;height:44px;border-radius:13px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.kpi-ic svg{width:21px;height:21px}
+.kpi span{display:block;font:700 26px 'Space Grotesk',sans-serif;color:var(--ink);line-height:1.05;letter-spacing:-.02em}
+.kpi label{display:block;font-size:12px;color:var(--ink-soft);margin:3px 0 0}
+.kpi .star-row{font-size:12px;letter-spacing:1px;margin-top:3px}
+
+/* reseñas */
+.rv{display:flex;gap:14px;padding:16px;border:1px solid var(--line);border-radius:16px;background:#fff;transition:border-color .2s,box-shadow .2s}
+.rv:hover{border-color:#BFD0FA;box-shadow:0 8px 22px rgba(46,108,246,.08)}
+.rv+.rv{margin-top:10px}
+.rv-score{width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,#2E6CF6,#1E40AF);color:#fff;display:flex;align-items:center;justify-content:center;gap:2px;font:700 17px 'Space Grotesk',sans-serif;flex-shrink:0}
+.rv-score svg{width:12px;height:12px;fill:currentColor;stroke:none}
+.rv-score.low{background:linear-gradient(135deg,#94A3B8,#64748B)}
+.rv-body{flex:1;min-width:0}
+.rv-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.rv-stars{font-size:15px;letter-spacing:2px;color:#D5DCEA;white-space:nowrap}
+.rv-stars i{font-style:normal;color:#F5B301}
+.rv-date{display:flex;align-items:center;gap:10px;font-size:11.5px;color:var(--ink-soft)}
+.rv-date span{display:inline-flex;align-items:center;gap:4px}
+.rv-date svg{width:13px;height:13px}
+.rv-text{font-size:13.5px;line-height:1.5;color:var(--ink);margin:8px 0 0}
+.rv-text.clamp-3{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.rv-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.rv-tags span{font-size:11.5px;font-weight:600;color:var(--accent);background:var(--accent-soft);padding:4px 10px;border-radius:999px}
+.rv.compact{padding:13px;gap:12px}
+.rv.compact .rv-score{width:40px;height:40px;font-size:15px;border-radius:11px}
+.rv-grid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:900px){.rv-grid{grid-template-columns:1fr 1fr}}
+.rv-grid .rv+.rv{margin-top:0}
+.rv-grid .btn-secondary,.rv-grid #verMasHistBtn{grid-column:1/-1;margin:4px auto 0;width:auto;padding:10px 26px}
+.li-vermas{padding:0;margin-top:4px;font-size:12px}
+.empty-state{padding:30px 10px;border:1px dashed var(--line);border-radius:14px;background:#FAFBFE}
+
+/* gráficos y tarjetas */
+.weekday-chart{height:120px;margin-top:14px;gap:8px}
+.weekday-bar{border-radius:8px 8px 0 0;max-width:34px;background:linear-gradient(180deg,#5B8DF8,#2E6CF6)}
+.weekday-labels{gap:8px}.weekday-labels span{font-size:11px}
+.progress-item{margin-top:14px}.pi-top{font-size:12.5px}
+.pi-track{height:8px;border-radius:6px}.pi-fill{background:linear-gradient(90deg,#5B8DF8,#2E6CF6);border-radius:6px}
+.donut-wrap{height:130px;margin:6px 0 10px}.kpi-ring{width:124px;height:124px}
+.ring-bg{stroke:#EAF0FD!important}
+.donut-num span{font:700 26px 'Space Grotesk',sans-serif}.donut-num label{font-size:11px}
+.tag-cloud{display:flex;flex-wrap:wrap;gap:8px}
+.habilidad-tag{background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:600;padding:6px 13px;border-radius:999px}
+.reconocimiento-item{padding:12px 0;gap:12px}
+.reconocimiento-item .rec-icon{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#FFF4D1,#FFE7A3);color:#B7791F}
+.reconocimiento-item .rec-icon svg{width:19px;height:19px}
+.reconocimiento-item .rec-title{font-size:13.5px}.reconocimiento-item .rec-desc{font-size:12px;margin-top:2px}
+.rs-item{gap:12px;padding:12px 0;align-items:flex-start}
+.rs-item .rs-avatar{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#2E6CF6,#1E40AF);color:#fff;font-size:13px;font-weight:700;font-family:'Space Grotesk',sans-serif}
+.rs-item .rs-stars{color:#F5B301;letter-spacing:1px}
+.rs-item .rs-name{font-size:13px}.rs-item .rs-text{font-size:12.5px;margin-top:2px}
+
+.motivational-card{background:linear-gradient(135deg,#2E6CF6,#1E40AF)!important;color:#fff;border:0!important;display:flex;align-items:center;gap:14px;box-shadow:0 14px 30px rgba(46,108,246,.28)}
+.mot-icon{width:40px;height:40px}.mot-icon svg{width:20px;height:20px}
+.mot-title{font:700 16px 'Space Grotesk',sans-serif}
+
+/* vacantes para ti */
+.vacante-para-ti{border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:10px}
+.vacante-para-ti h3{margin:0;font-size:15px}.vpt-rest{font-size:12.5px;color:var(--ink-soft)}
+.vacante-para-ti a{display:inline-block;margin-top:8px;font-weight:600;font-size:12.5px;color:#fff;background:var(--accent);border-radius:9px;padding:7px 14px;text-decoration:none}
+
+/* historial */
+.page-head{align-items:center;margin-bottom:0}
+.page-head h1{font:700 26px 'Space Grotesk',sans-serif;letter-spacing:-.02em}
+.page-back{background:#fff;border:1px solid var(--line);color:var(--ink);width:38px;height:38px;border-radius:12px}
+.page-back svg{width:17px;height:17px}
+.filter-row{margin-bottom:16px;gap:10px}
+.fr-search{flex:1;min-width:200px;display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:12px;padding:0 12px;background:#fff;margin:0;color:var(--ink-soft)}
+.fr-search svg{width:16px;height:16px;flex-shrink:0}
+.fr-search input{border:0!important;box-shadow:none!important;padding:11px 0;background:transparent;flex:1;min-width:0;font-size:14px;color:var(--ink)}
+.fr-search:focus-within{border-color:#2E6CF6;box-shadow:0 0 0 3px rgba(46,108,246,.15)}
+.filter-row select{width:auto;min-width:190px;border-radius:12px;padding:11px 12px}
+
+/* cuenta */
+.cuenta-grid{display:grid;grid-template-columns:1fr;gap:18px}
+@media(min-width:900px){.cuenta-grid{grid-template-columns:340px 1fr;align-items:start}}
+.cuenta-perfil{text-align:center;padding:30px 22px}
+.cuenta-perfil .profile-photo{width:104px!important;height:104px!important;margin:0 auto 14px;border:4px solid #fff;box-shadow:0 0 0 2px #BFD0FA,0 10px 24px rgba(46,108,246,.2);font:700 32px 'Space Grotesk',sans-serif}
+.ca-name{font:700 21px 'Space Grotesk',sans-serif;margin:0;letter-spacing:-.01em}
+.ca-role{font-size:13px;color:var(--ink-soft);margin:4px 0 0}
+.ca-status{display:inline-flex;align-items:center;gap:6px;margin:10px 0 0;font-size:12px;font-weight:700;color:#12875B;background:#E7F8F0;padding:5px 12px;border-radius:999px}
+.ca-status::before{content:"";width:7px;height:7px;border-radius:50%;background:#1FA971}
+.cuenta-perfil .stat-trio{margin-top:22px}
+.mini-stat{background:var(--bg);border-radius:14px;padding:12px 8px}
+.mini-stat span{font:700 21px 'Space Grotesk',sans-serif;color:var(--accent)}.mini-stat label{font-size:11px;margin:2px 0 0}
+.seguro-box{display:flex;align-items:flex-start;gap:10px;margin-top:18px;text-align:left;font-size:12px;line-height:1.45;color:#1E40AF;background:var(--accent-soft);padding:12px 14px;border-radius:12px}
+.seguro-box svg{width:18px;height:18px;flex-shrink:0;color:var(--accent)}
+.account-row{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line);width:100%;background:none;border-left:0;border-right:0;border-top:0;text-align:left;font-family:inherit}
+.account-row:last-child{border-bottom:0}
+.account-row .info-icon,.info-icon{width:40px;height:40px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.info-icon svg{width:18px;height:18px}
+.ar-main{flex:1;min-width:0}
+.account-row .ar-label{font-size:12px;color:var(--ink-soft)}
+.account-row .ar-value{font-size:14.5px;font-weight:600;color:var(--ink);margin-top:1px;word-break:break-word}
+.account-row .ar-main .ar-label+.ar-value,.account-row .ar-main .ar-value+.ar-label{margin-top:2px}
+.account-row>.btn-link{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--bg)}
+.account-row>.btn-link:hover{background:var(--accent-soft);text-decoration:none}
+.account-row>.btn-link svg{width:15px;height:15px}
+.btn-edit{display:inline-flex;align-items:center;gap:6px;font:600 12.5px 'Inter',sans-serif;color:var(--accent);background:var(--accent-soft);border:0;border-radius:10px;padding:8px 13px;cursor:pointer}
+.btn-edit svg{width:14px;height:14px}.btn-edit:hover{background:#D5E3FD}
+.sec-row{cursor:pointer;padding:12px;margin-top:2px;border:1px solid var(--line)!important;border-radius:14px;transition:border-color .2s,background .2s}
+.sec-row:hover{border-color:#BFD0FA!important;background:#F7FAFF}
+.sec-go{color:var(--accent);display:flex}.sec-go svg{width:18px;height:18px}
+.btn-out{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border-radius:14px;border:1px solid #F3C9C2;background:#FFF6F4;color:#B4432E;font:600 14px 'Inter',sans-serif;cursor:pointer;transition:background .2s}
+.btn-out:hover{background:#FDEAE6}.btn-out svg{width:17px;height:17px}
+
+@media(max-width:600px){
+ .p-banner-inner{padding:20px}.p-banner-hola{font-size:21px}.av-lg{width:50px;height:50px}
+ .kpi{padding:14px;gap:10px}.kpi-ic{width:38px;height:38px}.kpi span{font-size:22px}
+ .rv{padding:13px;gap:11px}.filter-row select{width:100%}
+}
+</style>
+
 <style id="soporte-ia-css">
 .sp-ov{position:fixed;inset:0;z-index:300;background:rgba(10,21,48,.45);display:none;align-items:flex-end;justify-content:flex-end;padding:22px}
 .sp-ov.open{display:flex}
@@ -674,7 +834,7 @@ body:not(.app-mode) .login-brand{display:inline-flex}
 .rp-msg{font-size:13px;margin:0 0 12px;min-height:0}.rp-msg.err{color:#C62828}.rp-msg.ok{color:#0E7A47}
 .rp-steps{display:flex;gap:6px;margin-bottom:16px}.rp-steps i{flex:1;height:4px;border-radius:4px;background:#E2E8F2}.rp-steps i.on{background:#2E6CF6}
 </style>
-<style>#loginWrap .tabs{display:none}#loginWrap.modo-crear .tabs{display:flex}.reg-link{text-align:center;font-size:13.5px;color:#64748b;margin:14px 0 0}.reg-link a{color:#2E6CF6;font-weight:700;text-decoration:none}.reg-link a:hover{text-decoration:underline}</style>
+<style>#loginWrap .tabs{display:none}.reg-link{text-align:center;font-size:13.5px;color:#64748b;margin:14px 0 0}.reg-link a{color:#2E6CF6;font-weight:700;text-decoration:none}.reg-link a:hover{text-decoration:underline}</style>
 </head>
 <body>
 <a class="login-brand" href="inicio.html" aria-label="Ir al inicio de Tapport"><svg width="26" height="26" viewBox="0 0 32 32"><path d="M6 4h20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-7v16a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2V10H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="#fff"/></svg><span>Tapport<sup>®</sup></span></a>
@@ -707,7 +867,7 @@ body:not(.app-mode) .login-brand{display:inline-flex}
     </nav>
 
     <div class="sidebar-restcard">
-      <img id="sidebarLogo" src="" alt="" />
+      <div class="rc-logo" id="sidebarLogo">T</div>
       <div style="min-width:0;">
         <div class="rc-name" id="sidebarRestaurante">Mi restaurante</div>
         <div class="rc-tag">Restaurante</div>
@@ -815,7 +975,7 @@ body:not(.app-mode) .login-brand{display:inline-flex}
         </div>
       </div>
       <div class="topbar-user">
-        <img id="topbarAvatar" src="" alt="" onerror="this.style.visibility='hidden'" />
+        <span class="av"><img class="av-img" id="topbarAvatar" src="" alt="" onerror="this.style.visibility='hidden'" /><b class="av-i"></b></span>
         <div>
           <div class="tu-name" id="topbarNombre">—</div>
           <div class="tu-role">Mesero</div>
@@ -830,130 +990,105 @@ body:not(.app-mode) .login-brand{display:inline-flex}
       <div class="view" id="view-inicio">
         <div class="p-banner" id="pBanner">
           <div class="p-banner-inner">
-            <div>
-              <p class="p-banner-hola">¡Hola, <span id="bannerNombre">—</span>!</p>
-              <p class="p-banner-sub">Tu esfuerzo también se nota. 💪</p>
+            <div class="pb-who">
+              <span class="av av-lg"><img class="av-img" data-foto alt="" onerror="this.style.visibility='hidden'" /><b class="av-i"></b></span>
+              <div>
+                <p class="p-banner-hola">¡Hola, <span id="bannerNombre">—</span>!</p>
+                <p class="p-banner-sub">Tu esfuerzo también se nota.</p>
+              </div>
             </div>
             <div class="p-banner-rating">
-              <div class="pbr-icon">★</div>
+              <div class="pbr-icon"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2.8 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.6l-5.8 3.1 1.1-6.5L2.6 9.6l6.5-.9z"/></svg></div>
               <div><div class="pbr-label">Tu rating actual</div><div class="pbr-num" id="bannerPromedio">—</div></div>
             </div>
           </div>
         </div>
 
+        <div class="kpi-row">
+          <div class="kpi"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2.8 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.6l-5.8 3.1 1.1-6.5L2.6 9.6l6.5-.9z"/></svg></div><div><span id="statRatingProm">—</span><label>Rating promedio</label><div class="star-row" id="starRowInicio">☆☆☆☆☆</div></div></div>
+          <div class="kpi"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></div><div><span id="statReseñasTotal">—</span><label>Reseñas totales</label></div></div>
+          <div class="kpi"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></div><div><span id="statReseñasMes">—</span><label>Reseñas este mes</label></div></div>
+          <div class="kpi"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3"/></svg></div><div><span id="statMejorDia">—</span><label>Mejor día</label></div></div>
+        </div>
+
         <div class="row-2col">
           <div class="dash-card">
-            <div style="display:flex; align-items:center; justify-content:space-between;">
-              <p class="view-title" style="margin:0;">Reseñas recientes</p>
+            <div class="card-head">
+              <div><p class="view-title">Reseñas recientes</p><p class="card-sub">Lo que tus clientes dijeron de ti.</p></div>
               <button type="button" class="btn-link" data-goto-view="historial">Ver todas →</button>
             </div>
-            <p style="font-size:12px; color:var(--ink-soft); margin:2px 0 14px;">Lo que tus clientes dijeron de ti.</p>
             <div id="reseñasRecientesInicio"></div>
           </div>
-          <div>
-            <div class="dash-card">
-              <p class="view-title" style="margin-top:0;">Tu rating promedio</p>
-              <div style="font-size:26px; font-weight:800;" id="ratingPromedioGrande">—</div>
-              <div class="star-row" id="starRowInicio">☆☆☆☆☆</div>
-            </div>
-            <div class="dash-card">
-              <p class="view-title" style="margin-top:0;">Tu rendimiento</p>
-              <div class="stat-grid-2x2">
-                <div class="mini-stat"><span id="statReseñasTotal">—</span><label>Reseñas totales</label></div>
-                <div class="mini-stat"><span id="statReseñasMes">—</span><label>Reseñas este mes</label></div>
-                <div class="mini-stat"><span id="statRatingProm">—</span><label>Rating promedio</label></div>
-                <div class="mini-stat"><span id="statMejorDia">—</span><label>Mejor día</label></div>
-              </div>
-            </div>
+          <div class="col-stack">
             <div class="dash-card motivational-card">
-              <div class="mot-icon">✓</div>
+              <div class="mot-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
               <div>
                 <p class="mot-title" id="motTitulo">¡Sigue así!</p>
                 <p class="mot-text" id="motTexto">Tu desempeño se nota y hace la diferencia.</p>
               </div>
             </div>
+            <div class="dash-card hidden" id="vacantesParaTiCard">
+              <p class="view-title">Vacantes para ti</p>
+              <p class="card-sub">Solo se muestran las que calzan con tu rating actual.</p>
+              <div id="vacantesParaTiList"></div>
+            </div>
           </div>
         </div>
-
-        <div class="dash-card hidden" id="vacantesParaTiCard">
-          <p class="view-title" style="margin-top:0;">Vacantes para ti</p>
-          <p style="font-size:12.5px; color:var(--ink-soft); margin:-6px 0 12px;">Solo se muestran las que calzan con tu rating actual.</p>
-          <div id="vacantesParaTiList"></div>
-        </div>
+        <div class="legacy" hidden><span id="ratingPromedioGrande"></span></div>
       </div>
 
       <!-- ============ VISTA: MI RENDIMIENTO ============ -->
       <div class="view hidden" id="view-rendimiento">
         <div class="p-banner" id="pBanner2">
           <div class="p-banner-inner">
-            <div>
-              <p class="p-banner-hola">¡Hola, <span id="bannerNombre2">—</span>!</p>
-              <p class="p-banner-sub">Así va tu desempeño en Tapport.</p>
+            <div class="pb-who">
+              <span class="av av-lg"><img class="av-img" data-foto alt="" onerror="this.style.visibility='hidden'" /><b class="av-i"></b></span>
+              <div>
+                <p class="p-banner-hola">¡Hola, <span id="bannerNombre2">—</span>!</p>
+                <p class="p-banner-sub">Así va tu desempeño en <span id="rendRestauranteBanner">Tapport</span>.</p>
+              </div>
             </div>
             <div class="p-banner-rating">
-              <div class="pbr-icon">★</div>
+              <div class="pbr-icon"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2.8 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.6l-5.8 3.1 1.1-6.5L2.6 9.6l6.5-.9z"/></svg></div>
               <div><div class="pbr-label">Tu rating actual</div><div class="pbr-num" id="bannerPromedio2">—</div></div>
             </div>
           </div>
         </div>
 
+        <div class="kpi-row">
+          <div class="kpi"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2.8 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.6l-5.8 3.1 1.1-6.5L2.6 9.6l6.5-.9z"/></svg></div><div><span id="statRatingProm2">—</span><label>Rating promedio</label></div></div>
+          <div class="kpi"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></div><div><span id="statReseñasTotal2">—</span><label>Reseñas totales</label></div></div>
+          <div class="kpi"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></div><div><span id="statReseñasMes2">—</span><label>Reseñas este mes</label></div></div>
+          <div class="kpi"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3"/></svg></div><div><span id="statMejorDia2">—</span><label>Mejor día</label></div></div>
+        </div>
+
         <div class="rend-grid">
-
-          <!-- Columna izquierda: información personal -->
-          <div class="dash-card">
-            <p class="view-title" style="margin-top:0;">Información personal</p>
-            <div class="kpi-person" style="margin-bottom:14px;">
-              <img id="rendFoto" src="" alt="" onerror="this.style.visibility='hidden'" style="width:52px; height:52px; border-radius:50%; object-fit:cover; background:var(--accent-soft);" />
-              <div><div class="kp-name" id="rendNombre" style="font-size:15px;">—</div><div class="kp-role">Mesero Tapport</div></div>
-            </div>
-            <div class="info-list">
-              <div class="info-row"><span class="info-icon">👤</span><div><label>Rol</label><span>Mesero</span></div></div>
-              <div class="info-row"><span class="info-icon">🍽</span><div><label>Restaurante</label><span id="rendRestaurante">—</span></div></div>
-              <div class="info-row"><span class="info-icon">📞</span><div><label>Teléfono</label><span id="rendTelefono">—</span></div></div>
-              <div class="info-row"><span class="info-icon">✉️</span><div><label>Correo</label><span id="rendCorreo">—</span></div></div>
-            </div>
-            <div class="activo-box">Activo</div>
-
-            <p class="view-title" style="margin:18px 0 10px;">Etiquetas de tus reseñas</p>
-            <div id="habilidadesTags" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
-          </div>
-
-          <!-- Columna central: rendimiento -->
-          <div>
-            <div class="stat-row-4">
-              <div class="dash-card stat-4"><div class="s4-icon">★</div><span id="statRatingProm2">—</span><label>Rating promedio</label></div>
-              <div class="dash-card stat-4"><div class="s4-icon">💬</div><span id="statReseñasTotal2">—</span><label>Reseñas totales</label></div>
-              <div class="dash-card stat-4"><div class="s4-icon">📅</div><span id="statReseñasMes2">—</span><label>Reseñas este mes</label></div>
-              <div class="dash-card stat-4"><div class="s4-icon">🏆</div><span id="statMejorDia2">—</span><label>Mejor día</label></div>
-            </div>
-
+          <div class="col-stack">
             <div class="dash-card">
-              <p class="view-title" style="margin-top:0;">Evolución de tu rating</p>
-              <p style="font-size:11.5px; color:var(--ink-soft); margin:-8px 0 8px;">Promedio acumulado, de tu reseña más antigua a la más reciente.</p>
+              <p class="view-title">Evolución de tu rating</p>
+              <p class="card-sub">Promedio acumulado, de tu reseña más antigua a la más reciente.</p>
               <div id="evolChartSvg"></div>
             </div>
-
             <div class="row-2col even">
               <div class="dash-card">
-                <div style="display:flex; align-items:center; justify-content:space-between;">
-                  <p class="view-title" style="margin:0;">Reseñas recientes</p>
+                <div class="card-head">
+                  <p class="view-title">Reseñas recientes</p>
                   <button type="button" class="btn-link" data-goto-view="historial">Ver todas →</button>
                 </div>
-                <div id="reseñasRecientesRend" style="margin-top:10px;"></div>
+                <div id="reseñasRecientesRend"></div>
               </div>
               <div class="dash-card">
-                <p class="view-title" style="margin-top:0;">Comparativa semanal</p>
-                <p style="font-size:11.5px; color:var(--ink-soft); margin:-8px 0 0;">Rating promedio por día de la semana.</p>
+                <p class="view-title">Comparativa semanal</p>
+                <p class="card-sub">Rating promedio por día de la semana.</p>
                 <div class="weekday-chart" id="weekdayChart"></div>
                 <div class="weekday-labels"><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span></div>
               </div>
             </div>
           </div>
 
-          <!-- Columna derecha: desempeño y reconocimientos -->
-          <div>
+          <div class="col-stack">
             <div class="dash-card">
-              <p class="view-title" style="margin-top:0;">Tu desempeño</p>
+              <p class="view-title">Tu desempeño</p>
               <div class="donut-wrap">
                 <svg viewBox="0 0 80 80" class="kpi-ring"><circle cx="40" cy="40" r="34" class="ring-bg"/><circle cx="40" cy="40" r="34" class="ring-fg" id="desempeñoRingFg"/></svg>
                 <div class="donut-num"><span id="desempeñoPct">—</span><label>Reseñas 5★</label></div>
@@ -962,134 +1097,107 @@ body:not(.app-mode) .login-brand{display:inline-flex}
               <div class="progress-item"><div class="pi-top"><span>4 estrellas</span><span id="pctLabel4">—</span></div><div class="pi-track"><div class="pi-fill" id="pctBar4"></div></div></div>
               <div class="progress-item"><div class="pi-top"><span>3 o menos</span><span id="pctLabel3">—</span></div><div class="pi-track"><div class="pi-fill" id="pctBar3"></div></div></div>
             </div>
-
             <div class="dash-card">
-              <p class="view-title" style="margin-top:0;">Tus logros</p>
+              <p class="view-title">Etiquetas de tus reseñas</p>
+              <p class="card-sub">Lo que más destacan tus clientes.</p>
+              <div id="habilidadesTags" class="tag-cloud"></div>
+            </div>
+            <div class="dash-card">
+              <p class="view-title">Tus logros</p>
               <div id="reconocimientosList"></div>
             </div>
-
-            <div class="dash-card motivational-card">
-              <div class="mot-icon">✓</div>
-              <div><p class="mot-title">¡Sigue así!</p><p class="mot-text">Tu desempeño se nota y hace la diferencia.</p></div>
-            </div>
           </div>
-
+        </div>
+        <div class="legacy" hidden>
+          <span id="rendNombre"></span><img id="rendFoto" alt="" /><span id="rendRestaurante"></span><span id="rendTelefono"></span><span id="rendCorreo"></span>
         </div>
       </div>
 
       <!-- ============ VISTA: HISTORIAL ============ -->
       <div class="view hidden" id="view-historial">
         <div class="page-head">
-          <button type="button" class="page-back" data-goto-view="inicio">←</button>
+          <button type="button" class="page-back" data-goto-view="inicio" aria-label="Volver"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
           <div><h1>Historial</h1><p>Revisa todas tus reseñas en el tiempo.</p></div>
         </div>
 
-        <div class="row-2col">
-          <div class="dash-card">
-            <div class="mini-profile">
-              <img id="histFoto" src="" alt="" onerror="this.style.visibility='hidden'" />
-              <div><div class="mp-name" id="histNombre">—</div><div class="mp-role">Mesero</div></div>
-            </div>
-            <div class="stat-trio">
-              <div class="mini-stat"><span id="statReseñasTotal3">—</span><label>Reseñas</label></div>
-              <div class="mini-stat"><span id="statReseñasMes3">—</span><label>Este mes</label></div>
-              <div class="mini-stat"><span id="statRatingProm3">—</span><label>Rating</label></div>
-            </div>
+        <div class="kpi-row">
+          <div class="kpi"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg></div><div><span id="statReseñasTotal4">—</span><label>Reseñas totales</label></div></div>
+          <div class="kpi"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2.8 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.6l-5.8 3.1 1.1-6.5L2.6 9.6l6.5-.9z"/></svg></div><div><span id="statRatingProm4">—</span><label>Calificación promedio</label></div></div>
+          <div class="kpi"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="m8.5 14-1.5 7 5-3 5 3-1.5-7"/></svg></div><div><span id="stat5Estrellas">—</span><label>Reseñas 5★</label></div></div>
+          <div class="kpi"><div class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3"/></svg></div><div><span id="statMejorDia3">—</span><label>Mejor día</label></div></div>
+        </div>
 
-            <p class="view-title" style="margin:18px 0 10px;">Resumen del historial</p>
-            <div class="stat-grid-2x2">
-              <div class="mini-stat"><span id="statReseñasTotal4">—</span><label>Reseñas totales</label></div>
-              <div class="mini-stat"><span id="statRatingProm4">—</span><label>Calificación promedio</label></div>
-              <div class="mini-stat"><span id="statMejorDia3">—</span><label>Mejor día</label></div>
-              <div class="mini-stat"><span id="stat5Estrellas">—</span><label>Reseñas 5★</label></div>
-            </div>
-
-            <div class="dash-card motivational-card" style="margin-top:16px;">
-              <div class="mot-icon">✓</div>
-              <div><p class="mot-title" id="motTituloHist">¡Buen trabajo!</p><p class="mot-text" id="motTextoHist">Tu constancia se refleja en tus resultados.</p></div>
-            </div>
+        <div class="dash-card">
+          <div class="filter-row">
+            <label class="fr-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input type="text" id="buscarHistorial" placeholder="Buscar en tu historial…" autocomplete="off" /></label>
+            <select id="filtroEstrellas">
+              <option value="0">Todas las estrellas</option>
+              <option value="5">5 estrellas</option>
+              <option value="4">4 estrellas</option>
+              <option value="3">3 estrellas</option>
+              <option value="2">2 estrellas</option>
+              <option value="1">1 estrella</option>
+            </select>
           </div>
+          <div id="reviewsList" class="rv-grid"></div>
+        </div>
 
-          <div class="dash-card">
-            <div class="filter-row">
-              <select id="filtroEstrellas">
-                <option value="0">Todas las estrellas</option>
-                <option value="5">5 estrellas</option>
-                <option value="4">4 estrellas</option>
-                <option value="3">3 estrellas</option>
-                <option value="2">2 estrellas</option>
-                <option value="1">1 estrella</option>
-              </select>
-              <input type="text" id="buscarHistorial" placeholder="Buscar en tu historial…" />
-            </div>
-            <div id="reviewsList"></div>
-          </div>
+        <div class="dash-card motivational-card">
+          <div class="mot-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+          <div><p class="mot-title" id="motTituloHist">¡Buen trabajo!</p><p class="mot-text" id="motTextoHist">Tu constancia se refleja en tus resultados.</p></div>
+        </div>
+        <div class="legacy" hidden>
+          <img id="histFoto" alt="" /><span id="histNombre"></span><span id="statReseñasTotal3"></span><span id="statReseñasMes3"></span><span id="statRatingProm3"></span>
         </div>
       </div>
 
       <!-- ============ VISTA: CUENTA ============ -->
       <div class="view hidden" id="view-cuenta">
         <div class="page-head">
-          <button type="button" class="page-back" data-goto-view="inicio">←</button>
+          <button type="button" class="page-back" data-goto-view="inicio" aria-label="Volver"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
           <div><h1>Cuenta</h1><p>Gestiona tu información y seguridad.</p></div>
         </div>
 
         <div class="cuenta-grid">
-
-          <div class="dash-card">
-            <div class="cuenta-avatar-row">
-              <div class="profile-photo" id="dashFotoWrap" style="width:84px; height:84px;"><img id="dashFoto" style="display:none; width:100%; height:100%; border-radius:50%; object-fit:cover;" /><span id="dashFotoIniciales"></span></div>
-              <div>
-                <p class="ca-name" id="dashNombre">—</p>
-                <p class="ca-role">Mesero Tapport</p>
-                <p class="ca-status">Activo</p>
-              </div>
-            </div>
+          <div class="dash-card cuenta-perfil">
+            <div class="profile-photo" id="dashFotoWrap"><img id="dashFoto" style="display:none; width:100%; height:100%; border-radius:50%; object-fit:cover;" /><span id="dashFotoIniciales"></span></div>
+            <p class="ca-name" id="dashNombre">—</p>
+            <p class="ca-role">Mesero · <span id="cuentaRestaurante">—</span></p>
+            <p class="ca-status">Activo</p>
             <div class="stat-trio">
-              <div class="mini-stat"><span id="dashPromedio">—</span><label>Rating promedio</label></div>
-              <div class="mini-stat"><span id="dashTotal">—</span><label>Reseñas totales</label></div>
+              <div class="mini-stat"><span id="dashPromedio">—</span><label>Rating</label></div>
+              <div class="mini-stat"><span id="dashTotal">—</span><label>Reseñas</label></div>
               <div class="mini-stat"><span id="statReseñasMes5">—</span><label>Este mes</label></div>
             </div>
-
-            <div style="display:flex; align-items:center; justify-content:space-between; margin:18px 0 10px;">
-              <p class="view-title" style="margin:0;">Información personal</p>
-              <button type="button" class="btn-link" id="toggleEditarBtn">✎ Editar</button>
-            </div>
-            <div class="info-list">
-              <div class="info-row"><span class="info-icon">👤</span><div><label>Nombre completo</label><span id="cuentaNombre">—</span></div></div>
-              <div class="info-row"><span class="info-icon">👥</span><div><label>Rol</label><span>Mesero</span></div></div>
-              <div class="info-row"><span class="info-icon">🍽</span><div><label>Restaurante</label><span id="cuentaRestaurante">—</span></div></div>
-              <div class="info-row"><span class="info-icon">📞</span><div><label>Teléfono</label><span id="cuentaTelefono">—</span></div></div>
-              <div class="info-row"><span class="info-icon">✉️</span><div><label>Correo</label><span id="cuentaCorreo">—</span></div></div>
-            </div>
-            <div class="activo-box" style="background:var(--accent-soft); color:var(--accent); text-align:left;">🛡 Tu cuenta está segura — tu contraseña se guarda cifrada.</div>
+            <div class="seguro-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.4 8 8 9 4.6-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg><span>Tu cuenta está segura: tu contraseña se guarda cifrada.</span></div>
           </div>
 
-          <div>
+          <div class="col-stack">
             <div class="dash-card">
-              <p class="view-title" style="margin-top:0;">Datos de la cuenta</p>
-              <p style="font-size:12px; color:var(--ink-soft); margin:-6px 0 8px;">Actualiza tu información personal y de contacto.</p>
-              <div class="account-row"><div><div class="ar-label">Nombre completo</div><div class="ar-value" id="cuentaNombre2">—</div></div></div>
-              <div class="account-row"><div><div class="ar-label">Teléfono</div><div class="ar-value" id="cuentaTelefono2">—</div></div><button type="button" class="btn-link" id="editarTelefonoBtn">✎</button></div>
-              <div class="account-row"><div><div class="ar-label">Correo</div><div class="ar-value" id="cuentaCorreo2">—</div></div></div>
-            </div>
-
-            <div class="dash-card">
-              <p class="view-title" style="margin-top:0;">Seguridad</p>
-              <p style="font-size:12px; color:var(--ink-soft); margin:-6px 0 8px;">Protege tu cuenta con una contraseña segura.</p>
-              <div class="account-row">
-                <div class="ar-icon-wrap">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                  <div><div class="ar-value" style="font-size:13px;">Cambiar contraseña</div><div class="ar-label">Usa una contraseña fuerte y única.</div></div>
-                </div>
-                <button type="button" class="btn-link" id="irCambiarPasswordBtn">→</button>
+              <div class="card-head">
+                <div><p class="view-title">Datos de la cuenta</p><p class="card-sub">Tu información personal y de contacto.</p></div>
+                <button type="button" class="btn-edit" id="toggleEditarBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg> Editar</button>
               </div>
+              <div class="account-row"><div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></div><div class="ar-main"><div class="ar-label">Nombre completo</div><div class="ar-value" id="cuentaNombre">—</div></div></div>
+              <div class="account-row"><div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16l-1 10H5zM3 10l2-6h14l2 6"/></svg></div><div class="ar-main"><div class="ar-label">Rol</div><div class="ar-value">Mesero</div></div></div>
+              <div class="account-row"><div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg></div><div class="ar-main"><div class="ar-label">Teléfono</div><div class="ar-value" id="cuentaTelefono">—</div></div><button type="button" class="btn-link" id="editarTelefonoBtn" aria-label="Editar teléfono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button></div>
+              <div class="account-row"><div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div><div class="ar-main"><div class="ar-label">Correo</div><div class="ar-value" id="cuentaCorreo">—</div></div></div>
             </div>
 
-            <button type="button" class="btn-link" id="cerrarSesionBtn2" style="display:block; margin:14px auto 0;">Cerrar sesión</button>
-          </div>
+            <div class="dash-card">
+              <p class="view-title">Seguridad</p>
+              <p class="card-sub">Protege tu cuenta con una contraseña segura.</p>
+              <button type="button" class="account-row sec-row" id="irCambiarPasswordBtn">
+                <div class="info-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+                <div class="ar-main"><div class="ar-value">Cambiar contraseña</div><div class="ar-label">Usa una contraseña fuerte y única.</div></div>
+                <span class="sec-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+              </button>
+            </div>
 
+            <button type="button" class="btn-out" id="cerrarSesionBtn2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg> Cerrar sesión</button>
+          </div>
         </div>
+        <div class="legacy" hidden><span id="cuentaNombre2"></span><span id="cuentaTelefono2"></span><span id="cuentaCorreo2"></span></div>
       </div>
 
     </div>
@@ -1558,6 +1666,11 @@ body:not(.app-mode) .login-brand{display:inline-flex}
 
       document.getElementById("sidebarRestaurante").textContent = sesion.restaurante || "Mi restaurante";
       document.getElementById("topbarAvatar").src = sesion.fotoUrl || "";
+      document.querySelectorAll("img[data-foto]").forEach(im => { im.src = sesion.fotoUrl || ""; im.style.visibility = sesion.fotoUrl ? "visible" : "hidden"; });
+      document.getElementById("topbarAvatar").style.visibility = sesion.fotoUrl ? "visible" : "hidden";
+      document.querySelectorAll(".av-i").forEach(el => { el.textContent = iniciales(sesion.nombre || ""); });
+      document.getElementById("sidebarLogo").textContent = ((sesion.restaurante || "T").trim()[0] || "T").toUpperCase();
+      const rb = document.getElementById("rendRestauranteBanner"); if (rb) rb.textContent = sesion.restaurante || "Tapport";
       document.getElementById("topbarNombre").textContent = primerNombre || "—";
 
       ["bannerNombre", "bannerNombre2"].forEach(id => document.getElementById(id).textContent = primerNombre || "—");
@@ -1645,32 +1758,50 @@ body:not(.app-mode) .login-brand{display:inline-flex}
       if (evolucion.length < 2) {
         evolCont.innerHTML = '<div class="empty-state">Todavía no hay suficientes reseñas para ver tu evolución.</div>';
       } else {
-        const W = 560, H = 190, PAD = 16, PAD_BOTTOM = 34;
+        const W = 620, H = 230, PL = 34, PR = 14, PT = 14, PB = 34;
         const n = evolucion.length;
-        const xs = evolucion.map((_, i) => PAD + (i / (n - 1)) * (W - PAD * 2));
-        const ys = evolucion.map(e => (H - PAD_BOTTOM) - ((Math.max(1, Math.min(5, e.valor)) - 1) / 4) * (H - PAD_BOTTOM - PAD));
+        let lo = Math.min(...evolucion.map(e => e.valor)), hi = Math.max(...evolucion.map(e => e.valor));
+        lo = Math.max(1, Math.floor((lo - 0.2) * 2) / 2); hi = Math.min(5, Math.ceil((hi + 0.2) * 2) / 2);
+        if (hi - lo < 1) { lo = Math.max(1, hi - 1); if (hi - lo < 1) hi = lo + 1; }
+        const xs = evolucion.map((_, i) => PL + (i / (n - 1)) * (W - PL - PR));
+        const yv = v => PT + (1 - (Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo)) * (H - PT - PB);
+        const ys = evolucion.map(e => yv(e.valor));
         const pts = xs.map((x, i) => `${x.toFixed(1)},${ys[i].toFixed(1)}`).join(" ");
-        const area = `${PAD},${H - PAD_BOTTOM} ${pts} ${W - PAD},${H - PAD_BOTTOM}`;
+        const area = `${PL},${H - PB} ${pts} ${W - PR},${H - PB}`;
+        const fecha = (f) => { const d = new Date(f); return isNaN(d) ? "" : d.toLocaleDateString("es-PE", { day: "numeric", month: "short" }).replace(".", ""); };
+        const hora = (f) => { const d = new Date(f); return isNaN(d) ? "" : d.toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" }); };
+        const mismoDia = fecha(evolucion[0].fecha) === fecha(evolucion[n - 1].fecha);
+        const etq = (i) => mismoDia ? hora(evolucion[i].fecha) : fecha(evolucion[i].fecha);
 
-        const fmt = (f) => { const d = new Date(f); return isNaN(d) ? "" : d.toLocaleDateString("es-PE", { day: "numeric", month: "short" }); };
-
-        // Muestra hasta 5 fechas en el eje X (primer, último y repartidos en medio) para no amontonarlas.
         const idxEtiquetas = n <= 5 ? evolucion.map((_, i) => i) : [0, Math.round((n - 1) * 0.25), Math.round((n - 1) * 0.5), Math.round((n - 1) * 0.75), n - 1];
-        const etiquetasX = [...new Set(idxEtiquetas)].map(i =>
-          `<text x="${xs[i].toFixed(1)}" y="${H - 10}" font-size="10" fill="#8A90A0" text-anchor="middle">${fmt(evolucion[i].fecha)}</text>`
-        ).join("");
+        let ultTxt = "";
+        const etiquetasX = [...new Set(idxEtiquetas)].map(i => {
+          let t = etq(i);
+          if (t === ultTxt) t = fecha(evolucion[i].fecha) + " " + hora(evolucion[i].fecha);
+          ultTxt = etq(i);
+          const ancla = i === 0 ? "start" : (i === n - 1 ? "end" : "middle");
+          return `<text x="${xs[i].toFixed(1)}" y="${H - 10}" font-size="11" fill="#8A90A0" text-anchor="${ancla}">${t}</text>`;
+        }).join("");
+
+        const paso = (hi - lo) <= 2 ? 0.5 : 1;
+        const ticks = []; for (let t = lo; t <= hi + 1e-9; t += paso) ticks.push(t);
+        const grid = ticks.map((val, k) => {
+          const y = yv(val).toFixed(1);
+          return `<line x1="${PL}" y1="${y}" x2="${W - PR}" y2="${y}" stroke="#E6ECF7" stroke-width="1" ${k ? 'stroke-dasharray="3 4"' : ""}/><text x="${PL - 8}" y="${(+y + 4).toFixed(1)}" font-size="11" fill="#8A90A0" text-anchor="end">${val.toFixed(1).replace(".0", "")}</text>`;
+        }).join("");
 
         const puntos = evolucion.map((e, i) =>
-          `<circle cx="${xs[i].toFixed(1)}" cy="${ys[i].toFixed(1)}" r="3" fill="var(--accent)"><title>Servicio #${e.servicio} · ${fmt(e.fecha)} · promedio ${e.valor.toFixed(1)}★</title></circle>`
+          `<circle cx="${xs[i].toFixed(1)}" cy="${ys[i].toFixed(1)}" r="${i === n - 1 ? 5 : 3.5}" fill="#fff" stroke="#2E6CF6" stroke-width="2"><title>Servicio #${e.servicio} · ${fecha(e.fecha)} ${hora(e.fecha)} · promedio ${e.valor.toFixed(1)}★</title></circle>`
         ).join("");
 
         evolCont.innerHTML = `
-          <p style="font-size:11.5px; color:var(--ink-soft); margin:0 0 6px;">${n} servicio${n === 1 ? "" : "s"} registrados, del ${fmt(evolucion[0].fecha)} al ${fmt(evolucion[n - 1].fecha)}.</p>
-          <svg viewBox="0 0 ${W} ${H}" style="width:100%; height:auto;">
-            <polygon points="${area}" fill="var(--accent-soft)"/>
-            <polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+          <p style="font-size:12px; color:var(--ink-soft); margin:0 0 8px;">${n} servicio${n === 1 ? "" : "s"} registrados · ${mismoDia ? fecha(evolucion[0].fecha) : "del " + fecha(evolucion[0].fecha) + " al " + fecha(evolucion[n - 1].fecha)}</p>
+          <svg viewBox="0 0 ${W} ${H}" style="width:100%; height:auto; display:block;">
+            <defs><linearGradient id="evG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E6CF6" stop-opacity=".22"/><stop offset="1" stop-color="#2E6CF6" stop-opacity="0"/></linearGradient></defs>
+            ${grid}
+            <polygon points="${area}" fill="url(#evG)"/>
+            <polyline points="${pts}" fill="none" stroke="#2E6CF6" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
             ${puntos}
-            <line x1="${PAD}" y1="${H - PAD_BOTTOM}" x2="${W - PAD}" y2="${H - PAD_BOTTOM}" stroke="var(--line)" stroke-width="1"/>
             ${etiquetasX}
           </svg>`;
       }
@@ -1679,11 +1810,7 @@ body:not(.app-mode) .login-brand{display:inline-flex}
       const reseñasRendCont = document.getElementById("reseñasRecientesRend");
       const recientes3 = reviews.slice(0, 3);
       reseñasRendCont.innerHTML = recientes3.length
-        ? recientes3.map(r => {
-            const f = new Date(r.fecha);
-            const hace = isNaN(f) ? "" : f.toLocaleDateString("es-PE", { day: "numeric", month: "short" });
-            return `<div class="rs-item"><div class="rs-avatar">★</div><div><div class="rs-name">${r.estrellas} estrellas <span class="rs-stars">${"★".repeat(r.estrellas)}</span></div><div class="rs-text">${r.comentario ? escapeHtml(r.comentario) : "Sin comentario"} · ${hace}</div></div></div>`;
-          }).join("")
+        ? recientes3.map(r => tarjetaResena(r, { compact: true })).join("")
         : '<div class="empty-state">Todavía no tienes reseñas.</div>';
 
       // "Tu desempeño": % de reseñas 5★ (anillo) + desglose 5 / 4 / ≤3 estrellas.
@@ -1705,11 +1832,11 @@ body:not(.app-mode) .login-brand{display:inline-flex}
 
       // "Tus logros": reconocimientos calculados de verdad a partir de tus reseñas.
       const logros = [];
-      if (total >= 50) logros.push({ icono: "🏅", titulo: "50+ reseñas", desc: "Ya acumulas más de 50 reseñas de clientes." });
-      if (promedio >= 4.5 && total >= 5) logros.push({ icono: "⭐", titulo: "Rating sobresaliente", desc: "Tu promedio se mantiene sobre 4.5." });
+      if (total >= 50) logros.push({ icono: ICO_MEDAL, titulo: "50+ reseñas", desc: "Ya acumulas más de 50 reseñas de clientes." });
+      if (promedio >= 4.5 && total >= 5) logros.push({ icono: ICO_STAR, titulo: "Rating sobresaliente", desc: "Tu promedio se mantiene sobre 4.5." });
       let rachaActual = 0, mejorRacha = 0;
       cronologico.forEach(r => { if (r.estrellas === 5) { rachaActual++; mejorRacha = Math.max(mejorRacha, rachaActual); } else { rachaActual = 0; } });
-      if (mejorRacha >= 3) logros.push({ icono: "🔥", titulo: `Racha de ${mejorRacha} reseñas 5★`, desc: "Tu mejor racha seguida de 5 estrellas." });
+      if (mejorRacha >= 3) logros.push({ icono: ICO_FLAME, titulo: `Racha de ${mejorRacha} reseñas 5★`, desc: "Tu mejor racha seguida de 5 estrellas." });
       document.getElementById("reconocimientosList").innerHTML = logros.length
         ? logros.map(l => `<div class="reconocimiento-item"><div class="rec-icon">${l.icono}</div><div><div class="rec-title">${l.titulo}</div><div class="rec-desc">${l.desc}</div></div></div>`).join("")
         : '<div class="empty-state">Sigue sumando reseñas para desbloquear logros.</div>';
@@ -1720,28 +1847,42 @@ body:not(.app-mode) .login-brand{display:inline-flex}
       cambiarVista(vistaGuardada());
     }
 
+
+    const ICO_MEDAL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="m8.5 14-1.5 7 5-3 5 3-1.5-7"/></svg>';
+    const ICO_FLAME = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c4 0 7-2.7 7-7 0-3-2-5-3-7-1 1-2 2-2 2 0-4-2-7-5-9 0 4-4 6-4 12 0 4.3 3 9 7 9z"/></svg>';
+    const ICO_STAR = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2.8 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.6l-5.8 3.1 1.1-6.5L2.6 9.6l6.5-.9z"/></svg>';
+    const ICO_CAL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>';
+    const ICO_CLK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+    function tarjetaResena(r, o) {
+      o = o || {};
+      const n = Math.max(0, Math.min(5, Number(r.estrellas) || 0));
+      const f = new Date(r.fecha);
+      const dia = isNaN(f) ? "" : f.toLocaleDateString("es-PE", o.anio ? { day: "numeric", month: "short", year: "numeric" } : { day: "numeric", month: "short" });
+      const hora = isNaN(f) ? "" : f.toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" });
+      const tags = (r.tags || "").split(",").map(t => t.trim()).filter(Boolean);
+      const com = r.comentario ? escapeHtml(r.comentario) : "";
+      const largo = o.vermas && com.length > 140;
+      return `<article class="rv${o.compact ? " compact" : ""}">
+        <div class="rv-score${n <= 3 ? " low" : ""}">${n}${ICO_STAR}</div>
+        <div class="rv-body">
+          <div class="rv-top">
+            <span class="rv-stars" aria-label="${n} de 5 estrellas"><i>${"★".repeat(n)}</i>${"★".repeat(5 - n)}</span>
+            <span class="rv-date"><span>${ICO_CAL}${dia}</span>${o.hora && hora ? `<span>${ICO_CLK}${hora}</span>` : ""}</span>
+          </div>
+          ${com ? `<p class="rv-text${largo ? " clamp-3" : ""}"${o.id ? ` id="${o.id}"` : ""}>${com}</p>` : ""}
+          ${largo ? `<button type="button" class="btn-link li-vermas" data-target="${o.id}">Ver más</button>` : ""}
+          ${tags.length ? `<div class="rv-tags">${tags.map(t => `<span>${escapeHtml(t)}</span>`).join("")}</div>` : ""}
+        </div>
+      </article>`;
+    }
+
     function renderReseñasRecientes(reviews) {
       const cont = document.getElementById("reseñasRecientesInicio");
       if (!reviews.length) {
         cont.innerHTML = '<div class="empty-state">Todavía no tienes reseñas.</div>';
         return;
       }
-      cont.innerHTML = reviews.map(r => {
-        const fecha = new Date(r.fecha);
-        const fechaTexto = isNaN(fecha) ? "" : fecha.toLocaleDateString("es-PE", { day: "numeric", month: "short" });
-        return `
-          <div class="list-item">
-            <div class="li-icon">★</div>
-            <div class="li-body">
-              <span class="li-badge">${r.estrellas} estrellas</span>
-              <p class="li-title">${"★".repeat(r.estrellas)}${"☆".repeat(5 - r.estrellas)}</p>
-              <p class="li-desc">${r.comentario ? escapeHtml(r.comentario) : (r.tags ? escapeHtml(r.tags) : "Sin comentario.")}</p>
-              <div class="li-meta"><span>📅 ${fechaTexto}</span></div>
-            </div>
-            <div class="li-chevron">›</div>
-          </div>
-        `;
-      }).join("");
+      cont.innerHTML = reviews.map(r => tarjetaResena(r)).join("");
     }
 
     // Solo muestra vacantes cuyo rating mínimo (si tienen uno) es igual o
@@ -1807,34 +1948,14 @@ body:not(.app-mode) .login-brand{display:inline-flex}
       }
       const PAGE = 8;
       const visibles = esFiltro ? reviews : reviews;
-      cont.innerHTML = visibles.slice(0, window.__histLimite || PAGE).map((r, i) => {
-        const estrellas = "★".repeat(r.estrellas) + "☆".repeat(5 - r.estrellas);
-        const fecha = new Date(r.fecha);
-        const dia = isNaN(fecha) ? "" : fecha.toLocaleDateString("es-PE", { day: "numeric", month: "short", year: "numeric" });
-        const hora = isNaN(fecha) ? "" : fecha.toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" });
-        const textoCompleto = `${r.comentario ? escapeHtml(r.comentario) : "Sin comentario."}${r.tags ? " · " + escapeHtml(r.tags) : ""}`;
-        const esLargo = textoCompleto.length > 140;
-        const descId = `liDesc${i}`;
-        return `
-          <div class="list-item">
-            <div class="li-icon">★</div>
-            <div class="li-body">
-              <span class="li-badge">Reseña recibida</span>
-              <p class="li-title">${estrellas}</p>
-              <p class="li-desc${esLargo ? " clamp-3" : ""}" id="${descId}">${textoCompleto}</p>
-              ${esLargo ? `<button type="button" class="btn-link li-vermas" data-target="${descId}">Ver más</button>` : ""}
-              <div class="li-meta"><span>📅 ${dia}</span><span>🕒 ${hora}</span></div>
-            </div>
-            <div class="li-chevron">›</div>
-          </div>
-        `;
-      }).join("") + (visibles.length > (window.__histLimite || PAGE)
+      cont.innerHTML = visibles.slice(0, window.__histLimite || PAGE).map((r, i) => tarjetaResena(r, { anio: true, hora: true, vermas: true, id: `liDesc${i}` })).join("") + (visibles.length > (window.__histLimite || PAGE)
         ? '<button type="button" class="btn-secondary" id="verMasHistBtn" style="margin-top:12px;">Ver más</button>' : "");
       const masBtn = document.getElementById("verMasHistBtn");
       if (masBtn) masBtn.addEventListener("click", () => { window.__histLimite = (window.__histLimite || PAGE) + PAGE; renderReviews(reviews, true); });
       cont.querySelectorAll(".li-vermas").forEach(btn => {
         btn.addEventListener("click", () => {
           const desc = document.getElementById(btn.dataset.target);
+          if (!desc) return;
           const expandiendo = desc.classList.contains("clamp-3");
           desc.classList.toggle("clamp-3", !expandiendo);
           btn.textContent = expandiendo ? "Ver menos" : "Ver más";
