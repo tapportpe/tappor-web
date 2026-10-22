@@ -39,7 +39,8 @@ const SOPORTE_GUIA = [
   "- Reseñas: aparecen cuando el cliente completa la calificación. Si un mesero no ve reseñas: confirmar que su pulsera esté asignada a su código y que haya habido calificaciones reales.",
   "- Vacantes: los restaurantes publican vacantes desde el panel de gerente; los meseros postulan desde su perfil. Se editan o eliminan desde la sección Administrar.",
   "- Asistente IA del panel (gerente): disponible en planes Growth y Pro, con límite diario de consultas.",
-  "- El Feed/Directorio es público: muestra meseros, restaurantes con mejor atención y vacantes."
+  "- El Feed/Directorio es público: muestra meseros, restaurantes con mejor atención y vacantes.",
+  "- CONTACTO DE SOPORTE: WhatsApp +51 992 346 227 (Santiago, equipo Tapport). Cuando debas derivar a una persona, escribe ESTE número exacto. NUNCA uses marcadores como XXXX ni inventes otro número, correo o dato de contacto."
 ].join("\n");
 
 function soporteIA_(d) {

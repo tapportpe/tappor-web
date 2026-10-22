@@ -791,6 +791,17 @@ body:not(.app-mode) .login-brand{display:inline-flex}
 }
 </style>
 
+<style id="tp-notif">
+.topbar-bell::after{display:none!important}
+.topbar-bell.has-new::after{display:block!important}
+.notif-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.notif-all{border:0;background:none;color:#2E6CF6;font:600 11.5px 'Inter',sans-serif;cursor:pointer;padding:0}.notif-all:hover{text-decoration:underline}
+.notif-item{position:relative}.notif-item.seen{opacity:.5}
+.notif-item:not(.seen)::before{content:"";position:absolute;left:5px;top:50%;width:6px;height:6px;margin-top:-3px;border-radius:50%;background:#2E6CF6}
+.notif-item .nv{margin-left:auto;align-self:center;border:0;background:#E8F0FE;color:#1E40AF;width:26px;height:26px;border-radius:8px;cursor:pointer;font-size:13px;flex-shrink:0}
+.notif-item.seen .nv{display:none}
+.info-edit{margin-left:auto;border:0;background:#F1F4F9;color:#2E6CF6;width:30px;height:30px;border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}.info-edit:hover{background:#E8F0FE}.info-edit svg{width:14px;height:14px}
+</style>
 <style id="soporte-ia-css">
 .sp-ov{position:fixed;inset:0;z-index:300;background:rgba(10,21,48,.45);display:none;align-items:flex-end;justify-content:flex-end;padding:22px}
 .sp-ov.open{display:flex}
@@ -916,7 +927,7 @@ body:not(.app-mode) .login-brand{display:inline-flex}
         <button type="button" class="rp-link" id="olvideBtn">¿Olvidaste tu contraseña?</button>
         <button type="button" class="btn-primary" id="loginBtn">Iniciar sesión</button>
         <div class="msg" id="loginMsg"></div>
-        <p class="reg-link">¿Aún no tienes cuenta? <a href="registro.html">Regístrate</a></p>
+        
       </div>
 
       <!-- Crear cuenta: verificar correo -> crear password -->
@@ -970,7 +981,7 @@ body:not(.app-mode) .login-brand{display:inline-flex}
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
         </button>
         <div class="notif-panel hidden" id="notifPanel">
-          <div class="notif-head">Notificaciones</div>
+          <div class="notif-head"><span>Notificaciones</span><button type="button" class="notif-all">Marcar todas como vistas</button></div>
           <div id="notifList"></div>
         </div>
       </div>
@@ -1628,21 +1639,40 @@ body:not(.app-mode) .login-brand{display:inline-flex}
     const NOMBRES_DIA = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 
     // ---------- Dashboard ----------
+    const NOTIF_FUENTE = () => (sesion && sesion.reviews) || [];
+    const NOTIF_ITEM = (r, id, vista) => { const f = new Date(r.fecha); const txt = isNaN(f) ? "" : f.toLocaleDateString("es-PE", { day: "numeric", month: "short" }); return `<div class="notif-item${vista ? " seen" : ""}" data-nid="${escapeHtml(id)}" style="padding-left:20px"><span>⭐</span><div><b>Recibiste ${r.estrellas}★</b><small>${r.comentario ? escapeHtml(r.comentario) + " · " : ""}${txt}</small></div><button type="button" class="nv" title="Marcar como vista">✓</button></div>`; };
+
+    // ---------- Notificaciones: marcar como vistas ----------
+    const NOTIF_KEY = () => "tp_notif_" + String((sesion && sesion.email) || "x").toLowerCase();
+    function notifVistas() { try { return new Set(JSON.parse(localStorage.getItem(NOTIF_KEY()) || "[]")); } catch (e) { return new Set(); } }
+    function notifGuardar(set) { try { localStorage.setItem(NOTIF_KEY(), JSON.stringify([...set].slice(-400))); } catch (e) { } }
+    function notifLista() { return NOTIF_FUENTE().slice(0, 8).map(r => ({ id: String(r.mesero || "") + "|" + r.fecha + "|" + r.estrellas, r })); }
+    function notifPunto() {
+      if (!sesion) return;
+      const v = notifVistas(), hay = notifLista().some(n => !v.has(n.id));
+      const b = document.getElementById("bellBtn"); if (b) b.classList.toggle("has-new", hay);
+    }
+    function notifPintar() {
+      const v = notifVistas(), lista = notifLista(), cont = document.getElementById("notifList");
+      const head = document.querySelector("#notifPanel .notif-head");
+      if (head && !head.querySelector(".notif-all")) { head.innerHTML = '<span>Notificaciones</span><button type="button" class="notif-all">Marcar todas como vistas</button>'; }
+      const all = head && head.querySelector(".notif-all"); if (all) all.onclick = (e) => { e.stopPropagation(); lista.forEach(n => v.add(n.id)); notifGuardar(v); notifPintar(); notifPunto(); };
+      cont.innerHTML = lista.length ? lista.map(n => NOTIF_ITEM(n.r, n.id, v.has(n.id))).join("") : '<div class="notif-empty">Sin notificaciones por ahora.</div>';
+      cont.querySelectorAll(".notif-item").forEach(el => {
+        const marcar = () => { const s = notifVistas(); s.add(el.dataset.nid); notifGuardar(s); el.classList.add("seen"); notifPunto(); };
+        el.addEventListener("click", () => marcar());
+        const nv = el.querySelector(".nv"); if (nv) nv.addEventListener("click", (e) => { e.stopPropagation(); marcar(); });
+      });
+    }
+    setInterval(notifPunto, 15000);
+
     document.getElementById("bellBtn").addEventListener("click", (e) => {
       e.stopPropagation();
       const panel = document.getElementById("notifPanel");
       panel.classList.toggle("hidden");
-      if (!panel.classList.contains("hidden")) {
-        const recientes = (sesion.reviews || []).slice(0, 6);
-        document.getElementById("notifList").innerHTML = recientes.length
-          ? recientes.map(r => {
-              const f = new Date(r.fecha);
-              const txt = isNaN(f) ? "" : f.toLocaleDateString("es-PE", { day: "numeric", month: "short" });
-              return `<div class="notif-item"><span>⭐</span><div><b>Recibiste ${r.estrellas}★</b><small>${r.comentario ? escapeHtml(r.comentario) + " · " : ""}${txt}</small></div></div>`;
-            }).join("")
-          : '<div class="notif-empty">Sin notificaciones por ahora.</div>';
-      }
+      if (!panel.classList.contains("hidden")) notifPintar();
     });
+    document.getElementById("notifPanel").addEventListener("click", e => e.stopPropagation());
     document.addEventListener("click", () => document.getElementById("notifPanel").classList.add("hidden"));
 
     function mostrarDashboard() {
@@ -1854,6 +1884,7 @@ body:not(.app-mode) .login-brand{display:inline-flex}
       renderReseñasRecientes(reviews.slice(0, 3));
       cargarVacantesParaTi();
       cambiarVista(vistaGuardada());
+      notifPunto();
     }
 
 
