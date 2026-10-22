@@ -1670,6 +1670,15 @@ body:not(.app-mode) .login-brand{display:inline-flex}
       document.getElementById("topbarAvatar").style.visibility = sesion.fotoUrl ? "visible" : "hidden";
       document.querySelectorAll(".av-i").forEach(el => { el.textContent = iniciales(sesion.nombre || ""); });
       document.getElementById("sidebarLogo").textContent = ((sesion.restaurante || "T").trim()[0] || "T").toUpperCase();
+      if (sesion.restaurante && !window.__logoRest) {
+        window.__logoRest = true;
+        fetch(`${ENDPOINT}?accion=negocio&restaurante=${encodeURIComponent(sesion.restaurante)}`).then(r => r.json()).then(j => {
+          const u = j && j.negocio && j.negocio.logoUrl; if (!u) return;
+          const im = new Image(); im.referrerPolicy = "no-referrer";
+          im.onload = () => { const el = document.getElementById("sidebarLogo"); el.textContent = ""; el.style.background = "#fff"; el.style.backgroundImage = `url('${u}')`; el.style.backgroundSize = "cover"; el.style.backgroundPosition = "center"; };
+          im.src = u;
+        }).catch(() => { });
+      }
       const rb = document.getElementById("rendRestauranteBanner"); if (rb) rb.textContent = sesion.restaurante || "Tapport";
       document.getElementById("topbarNombre").textContent = primerNombre || "—";
 

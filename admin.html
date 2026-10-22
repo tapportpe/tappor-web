@@ -958,6 +958,35 @@ body:has(#editNegocioCard:not(.hidden)),body:has(#misVacantesCard:not(.hidden)),
 body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
 @media(max-width:520px){.login-brand{top:14px;left:16px;font-size:20px}}
 </style>
+<style id="tp-mini">
+body:has(.mini-card:not(.hidden))::before,body.mini-on::before{content:"";position:fixed;inset:0;background:rgba(10,21,48,.5);backdrop-filter:blur(2px);z-index:240}
+body:has(.mini-card:not(.hidden)) #panel.hidden{display:block!important}
+.mini-card:not(.hidden){position:fixed!important;z-index:250;top:50%;left:50%;transform:translate(-50%,-50%);width:min(640px,94vw);max-height:90vh;overflow:auto;margin:0!important;box-shadow:0 30px 80px rgba(10,21,48,.4)}
+.view.mini-open{position:fixed!important;z-index:250;top:50%;left:50%;transform:translate(-50%,-50%);width:min(1100px,95vw);max-height:90vh;overflow:auto;background:var(--bg);border-radius:20px;padding:26px;box-shadow:0 30px 80px rgba(10,21,48,.4);display:block!important}
+.mini-x{position:absolute;top:12px;right:14px;width:34px;height:34px;border-radius:10px;border:0;background:#EEF2FA;color:#0B1220;font-size:22px;line-height:1;cursor:pointer;z-index:3}
+.mini-x:hover{background:#DDE6F7}
+.view.mini-open>.mini-x{position:sticky;display:block;top:0;margin:-12px 0 10px auto}
+.mini-card .mini-x{position:absolute}
+.pc-x{border:0;background:#EEF2FA;width:28px;height:28px;border-radius:8px;font-size:18px;line-height:1;cursor:pointer;color:#5B6270;flex-shrink:0}.pc-x:hover{background:#DDE6F7}
+.pc-chip{align-self:flex-start;border:1px solid #BFD0FA;background:#E8F0FE;color:#1E40AF;font:600 13px 'Inter',sans-serif;padding:9px 16px;border-radius:999px;cursor:pointer}
+.ec-head{display:flex;align-items:center;gap:14px;margin-bottom:18px;padding-right:40px}.ec-head h2{margin:0;font:700 20px 'Space Grotesk',sans-serif}.ec-head p{margin:2px 0 0;font-size:13px;color:#5B6270}
+.ec-av{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#2E6CF6,#1E40AF);color:#fff;display:flex;align-items:center;justify-content:center;font:700 18px 'Space Grotesk',sans-serif}
+.ec-fijos{display:grid;gap:8px;margin:4px 0 8px}.ec-fijos div{display:flex;justify-content:space-between;gap:10px;background:#F1F4F9;border-radius:10px;padding:10px 12px;font-size:13px}.ec-fijos span{color:#5B6270}.ec-fijos b{font-weight:600;word-break:break-all;text-align:right}
+.rsm-ov{position:fixed;inset:0;z-index:300;background:rgba(10,21,48,.5);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:16px}
+.rsm-win{position:relative;width:min(720px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:20px;padding:26px;box-shadow:0 30px 80px rgba(10,21,48,.4)}
+.rsm-h small{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#5B6270;font-weight:700}.rsm-h h2{margin:2px 0 16px;font:700 24px 'Space Grotesk',sans-serif;}
+.rsm-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}@media(min-width:600px){.rsm-kpis{grid-template-columns:repeat(4,1fr)}}
+.rsm-kpi{background:#F1F4F9;border-radius:14px;padding:12px}.rsm-kpi b{display:block;font:700 22px 'Space Grotesk',sans-serif}.rsm-kpi span{font-size:11.5px;color:#5B6270}.rsm-kpi em{font-style:normal;font-size:11px;font-weight:700}
+.rsm-sec{font-weight:700;font-size:14px;margin:18px 0 8px}
+.rsm-bar{display:grid;grid-template-columns:110px 1fr 74px;gap:10px;align-items:center;margin:7px 0;font-size:12.5px}.rsm-bar>span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rsm-track{height:12px;background:#EAF0FD;border-radius:7px;overflow:hidden}.rsm-track i{display:block;height:100%;border-radius:7px}
+.rsm-bar b{text-align:right;font-weight:600}
+.rsm-ia{margin-top:18px;border:1px solid #D5E3FD;background:linear-gradient(180deg,#F5F9FF,#fff);border-radius:16px;padding:16px}
+.rsm-ia-h{font-weight:700;font-size:13px;color:#1E40AF;margin-bottom:8px}.rsm-ia-h i{font-style:normal}
+.rsm-ia-b{font-size:13.5px;line-height:1.6;color:#0B1220}.rsm-ia-b ul{margin:6px 0 0 18px;padding:0}
+.rsm-act{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;flex-wrap:wrap}
+@media(max-width:560px){.rsm-bar{grid-template-columns:80px 1fr 62px}.mini-card:not(.hidden){width:96vw}}
+</style>
 <style id="soporte-ia-css">
 .sp-ov{position:fixed;inset:0;z-index:300;background:rgba(10,21,48,.45);display:none;align-items:flex-end;justify-content:flex-end;padding:22px}
 .sp-ov.open{display:flex}
@@ -1092,7 +1121,7 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
     </nav>
 
     <div class="sidebar-restcard">
-      <img id="sidebarLogo" src="" alt="" />
+      <img id="sidebarLogo" src="" alt="" referrerpolicy="no-referrer" />
       <div style="min-width:0;">
         <div class="rc-name" id="sidebarRestaurante">Mi restaurante</div>
         <div class="rc-tag">Restaurante</div>
@@ -1125,7 +1154,7 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
         </div>
       </div>
       <div class="topbar-user">
-        <img id="topbarAvatar" src="" alt="" />
+        <img id="topbarAvatar" src="" alt="" referrerpolicy="no-referrer" />
         <div>
           <div class="tu-name" id="topbarNombre">—</div>
           <div class="tu-role">Administrador</div>
@@ -1238,8 +1267,8 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
             <div class="card">
               <div class="card-head"><div class="ico" data-ic="bolt"></div><div class="ch-t"><h3>Acciones rápidas</h3></div></div>
               <div class="qa-grid">
-                <button type="button" class="qa" data-goto-view="historial"><div class="ico" data-ic="chart"></div><div class="qa-t"><b>Ver reporte</b><small>Rendimiento y estadísticas</small></div><i data-ic="chevron"></i></button>
-                <button type="button" class="qa" data-goto-view="personal"><div class="ico" data-ic="users"></div><div class="qa-t"><b>Gestionar equipo</b><small>Personal y ratings</small></div><i data-ic="chevron"></i></button>
+                <button type="button" class="qa" data-mini="historial"><div class="ico" data-ic="chart"></div><div class="qa-t"><b>Ver reporte</b><small>Rendimiento y estadísticas</small></div><i data-ic="chevron"></i></button>
+                <button type="button" class="qa" data-mini="personal"><div class="ico" data-ic="users"></div><div class="qa-t"><b>Gestionar equipo</b><small>Personal y ratings</small></div><i data-ic="chevron"></i></button>
                 <button type="button" class="qa" data-action="publicar-vacante"><div class="ico" data-ic="briefcase"></div><div class="qa-t"><b>Publicar vacante</b><small>Encuentra talento</small></div><i data-ic="chevron"></i></button>
                 <button type="button" class="qa" data-action="editar-negocio"><div class="ico" data-ic="store"></div><div class="qa-t"><b>Perfil del negocio</b><small>Logo, portada y dirección</small></div><i data-ic="chevron"></i></button>
               </div>
@@ -1267,7 +1296,7 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
               <label class="ctl sm"><i data-ic="calendar"></i><input type="month" id="repMesInput" /></label>
               <button type="button" class="btn-ghost sm" id="repEnviarBtn">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
-                Enviar por correo
+                Resumen y enviar
               </button>
             </div>
           </div>
@@ -1396,7 +1425,7 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
         <div class="main-side">
           <div class="stack">
             <div class="card">
-              <div class="card-head"><div class="ico" data-ic="user"></div><div class="ch-t"><h3>Información de la cuenta</h3><p>Datos del restaurante y del administrador.</p></div><button type="button" class="link" data-action="editar-negocio"><i data-ic="edit"></i> Editar</button></div>
+              <div class="card-head"><div class="ico" data-ic="user"></div><div class="ch-t"><h3>Información de la cuenta</h3><p>Datos del restaurante y del administrador.</p></div><button type="button" class="link" data-action="editar-cuenta"><i data-ic="edit"></i> Editar</button></div>
               <div class="info-grid" id="cuentaInfo"></div>
             </div>
             <div class="card">
@@ -1435,7 +1464,7 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
             <p class="pg-sub">Todo lo que necesitas en un solo lugar: personal, tarjetas, vacantes y más.</p>
           </div>
           <div class="card rest-mini">
-            <img id="admLogo" src="" alt="" />
+            <img id="admLogo" src="" alt="" referrerpolicy="no-referrer" />
             <div class="rm-main"><b id="admNombre">—</b><small>RESTAURANTE</small><span class="ok-txt">Activo</span><span class="addr"><i data-ic="pin"></i><span id="admDir"></span></span></div>
             <button type="button" class="btn-ghost sm" data-action="editar-negocio"><i data-ic="edit"></i> Editar perfil</button>
           </div>
@@ -1453,18 +1482,19 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
             <h3 class="ct">Herramientas de administración</h3>
             <p class="cs">Accede y gestiona todas las funciones de tu restaurante.</p>
             <div class="tool-grid2">
-              <a class="tool2" href="admin.html?view=personal" target="_blank" rel="noopener"><div class="ico lg" data-ic="users"></div><div class="t2-t"><b>Personal</b><small>Gestiona tu equipo y revisa su rating.</small><span class="t2-meta"><i data-ic="users"></i><span id="toolPersonal">—</span></span></div><i class="arr" data-ic="arrow"></i></a>
-              <button type="button" class="tool2" data-goto-view="personal"><div class="ico lg" data-ic="card"></div><div class="t2-t"><b>Tarjetas Tapport</b><small>Cada mesero tiene su código y su tarjeta NFC.</small><span class="t2-meta"><i data-ic="card"></i><span id="toolTarjetas">—</span></span></div><i class="arr" data-ic="arrow"></i></button>
+              <button type="button" class="tool2" data-mini="personal"><div class="ico lg" data-ic="users"></div><div class="t2-t"><b>Personal</b><small>Gestiona tu equipo y revisa su rating.</small><span class="t2-meta"><i data-ic="users"></i><span id="toolPersonal">—</span></span></div><i class="arr" data-ic="arrow"></i></button>
+              <button type="button" class="tool2" data-mini="personal"><div class="ico lg" data-ic="card"></div><div class="t2-t"><b>Tarjetas Tapport</b><small>Cada mesero tiene su código y su tarjeta NFC.</small><span class="t2-meta"><i data-ic="card"></i><span id="toolTarjetas">—</span></span></div><i class="arr" data-ic="arrow"></i></button>
               <button type="button" class="tool2" data-action="mis-vacantes"><div class="ico lg" data-ic="megaphone"></div><div class="t2-t"><b>Vacantes</b><small>Publica y gestiona oportunidades de trabajo.</small><span class="t2-meta"><i data-ic="briefcase"></i><span id="toolVacantes">—</span></span></div><i class="arr" data-ic="arrow"></i></button>
               <button type="button" class="tool2" data-action="editar-negocio"><div class="ico lg" data-ic="store"></div><div class="t2-t"><b>Perfil del negocio</b><small>Actualiza la información de tu restaurante.</small><span class="t2-meta"><i data-ic="check"></i><span id="toolNegocio">—</span></span></div><i class="arr" data-ic="arrow"></i></button>
-              <button type="button" class="tool2" data-goto-view="historial"><div class="ico lg" data-ic="chart"></div><div class="t2-t"><b>Historial</b><small>Rendimiento de tu equipo día por día.</small><span class="t2-meta"><i data-ic="file"></i><span id="toolHistorial">—</span></span></div><i class="arr" data-ic="arrow"></i></button>
-              <button type="button" class="tool2" data-goto-view="cuenta"><div class="ico lg" data-ic="gear"></div><div class="t2-t"><b>Cuenta</b><small>Tus datos, los del restaurante y tu seguridad.</small><span class="t2-meta"><i data-ic="user"></i><span>Ver detalle</span></span></div><i class="arr" data-ic="arrow"></i></button>
+              <button type="button" class="tool2" data-mini="historial"><div class="ico lg" data-ic="chart"></div><div class="t2-t"><b>Historial</b><small>Rendimiento de tu equipo día por día.</small><span class="t2-meta"><i data-ic="file"></i><span id="toolHistorial">—</span></span></div><i class="arr" data-ic="arrow"></i></button>
+              <button type="button" class="tool2" data-mini="cuenta"><div class="ico lg" data-ic="gear"></div><div class="t2-t"><b>Cuenta</b><small>Tus datos, los del restaurante y tu seguridad.</small><span class="t2-meta"><i data-ic="user"></i><span>Ver detalle</span></span></div><i class="arr" data-ic="arrow"></i></button>
             </div>
           </div>
 
           <div class="stack">
+            <button type="button" class="pc-chip hidden" id="pcAbrir">Ver mi plan</button>
             <div class="card plan-card" id="planCard">
-              <div class="pc-top"><div><small>Tu plan</small><h3 id="pcNombre">—</h3></div><span class="pc-badge" id="pcEstado">Activo</span></div>
+              <div class="pc-top"><div><small>Tu plan</small><h3 id="pcNombre">—</h3></div><span class="pc-badge" id="pcEstado">Activo</span><button type="button" class="pc-x" id="pcCerrar" aria-label="Cerrar plan">×</button></div>
               <div class="pc-meter" id="pcMeter"><div class="pc-meter-top"><span>Meseros registrados</span><b id="pcUso">—</b></div><div class="pc-bar"><i id="pcBar"></i></div></div>
               <ul class="pc-feats" id="pcFeats"></ul>
               <div class="pc-sub" id="pcSub"></div>
@@ -1475,7 +1505,7 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
               <div class="card-head"><div class="ico" data-ic="bolt"></div><div class="ch-t"><h3>Acciones rápidas</h3></div></div>
               <a class="qrow" href="registro.html" target="_blank" rel="noopener"><div class="ico" data-ic="userplus"></div><div class="qa-t"><b>Agregar trabajador</b><small>Nuevo miembro del equipo</small></div><i data-ic="chevron"></i></a>
               <button type="button" class="qrow" data-action="publicar-vacante"><div class="ico" data-ic="briefcase"></div><div class="qa-t"><b>Publicar vacante</b><small>Encuentra talento</small></div><i data-ic="chevron"></i></button>
-              <button type="button" class="qrow" data-goto-view="historial"><div class="ico" data-ic="chart"></div><div class="qa-t"><b>Ver rendimiento</b><small>Historial por día</small></div><i data-ic="chevron"></i></button>
+              <button type="button" class="qrow" data-mini="historial"><div class="ico" data-ic="chart"></div><div class="qa-t"><b>Ver rendimiento</b><small>Historial por día</small></div><i data-ic="chevron"></i></button>
             </div>
           </div>
         </div>
@@ -1484,14 +1514,14 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
     </div>
 
     <!-- ============ MIS VACANTES (vistas, interesados, editar/eliminar) ============ -->
-    <div class="card hidden" id="misVacantesCard">
+    <div class="card hidden mini-card" id="misVacantesCard"><button type="button" class="mini-x" data-close-mini aria-label="Cerrar">×</button>
       <div class="vc-head"><span class="vc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v13H3zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span><div><h2>Mis vacantes</h2><p>Mira cuántas personas vieron y se interesaron en cada anuncio.</p></div><button type="button" class="vc-new" data-action="publicar-vacante">＋ Nueva vacante</button></div>
       <div id="listaVacantes"></div>
       <button type="button" class="btn-secondary" id="cerrarMisVacantesBtn" style="margin-top:14px;">Volver</button>
     </div>
 
     <!-- ============ EDITAR VACANTE ============ -->
-    <div class="card hidden" id="editarVacanteCard">
+    <div class="card hidden mini-card" id="editarVacanteCard"><button type="button" class="mini-x" data-close-mini aria-label="Cerrar">×</button>
       <div class="vc-head"><span class="vc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></span><div><h2>Editar vacante</h2><p>Actualiza los datos del anuncio. Los cambios se ven al instante en el Feed.</p></div></div>
       <input type="hidden" id="evId" />
       <div class="field">
@@ -1523,7 +1553,7 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
     </div>
 
     <!-- ============ PUBLICAR VACANTE (solo gerente logueado) ============ -->
-    <div class="card hidden" id="publicarVacanteCard">
+    <div class="card hidden mini-card" id="publicarVacanteCard"><button type="button" class="mini-x" data-close-mini aria-label="Cerrar">×</button>
       <div class="vc-head"><span class="vc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v13H3zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span><div><h2>Publicar vacante</h2><p>Se publicará a nombre de <strong id="vacanteRestauranteLabel"></strong> y aparecerá en el Feed para los meseros.</p></div></div>
 
       <div class="field">
@@ -1556,7 +1586,7 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
     </div>
 
     <!-- ============ EDITAR PERFIL DEL NEGOCIO ============ -->
-    <div class="card hidden" id="editNegocioCard">
+    <div class="card hidden mini-card" id="editNegocioCard"><button type="button" class="mini-x" data-close-mini aria-label="Cerrar">×</button>
       <div class="neg-intro"><h2>Editar perfil del negocio</h2><p>Así verán tu restaurante los meseros y el directorio.</p></div>
 
       <span class="neg-sec">Foto de portada</span>
@@ -1587,6 +1617,30 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
       </div>
       <div class="msg" id="editNegocioMsg"></div>
     </div>
+
+    <!-- ============ EDITAR DATOS DE LA CUENTA ============ -->
+    <div class="card hidden mini-card" id="editCuentaCard" style="max-width:480px">
+      <button type="button" class="mini-x" data-close-mini aria-label="Cerrar">×</button>
+      <div class="ec-head"><span class="ec-av" id="ecAv">—</span><div><h2>Tus datos</h2><p>Actualiza cómo apareces en Tapport.</p></div></div>
+      <div class="field"><label for="ecNombre">Nombre completo</label><input type="text" id="ecNombre" maxlength="60" autocomplete="off" /></div>
+      <div class="field"><label for="ecTelefono">Teléfono</label><input type="tel" id="ecTelefono" maxlength="15" autocomplete="off" /></div>
+      <div class="ec-fijos" id="ecFijos"></div>
+      <p class="neg-hint">El correo, el DNI y el restaurante no se cambian desde aquí. Si necesitas modificarlos, escríbenos a soporte.</p>
+      <div class="neg-actions"><button type="button" class="btn-secondary" id="cancelarEditarCuentaBtn" data-close-mini>Cancelar</button><button type="button" class="btn-primary" id="guardarCuentaBtn">Guardar</button></div>
+      <div class="msg" id="ecMsg"></div>
+    </div>
+
+    <!-- ============ RESUMEN MENSUAL ============ -->
+    <div class="rsm-ov hidden" id="repOv"><section class="rsm-win" role="dialog" aria-label="Resumen mensual">
+      <button type="button" class="mini-x" id="repX" aria-label="Cerrar">×</button>
+      <div class="rsm-h"><small>Resumen mensual</small><h2 id="repTitulo">—</h2></div>
+      <div class="rsm-kpis" id="repKpis"></div>
+      <div class="rsm-sec">Reseñas por mesero</div>
+      <div id="repChart"></div>
+      <div class="rsm-ia"><div class="rsm-ia-h"><i>✦</i> Análisis con IA</div><div class="rsm-ia-b" id="repIA">Analizando el desempeño…</div></div>
+      <div class="rsm-act"><button type="button" class="btn-secondary" id="repCerrar2">Cerrar</button><button type="button" class="btn-primary" id="repEnviarOk">Enviar a mi correo</button></div>
+      <div class="msg" id="repMsg"></div>
+    </section></div>
   </div>
   </div>
 </div>
@@ -1797,8 +1851,7 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
     function pintarCabeceraNegocio() {
       document.getElementById("sidebarRestaurante").textContent = sesion.restaurante || "Panel de gerente";
       const sidebarLogoEl = document.getElementById("sidebarLogo");
-      sidebarLogoEl.src = sesion.logoUrl || "";
-      sidebarLogoEl.style.visibility = sesion.logoUrl ? "visible" : "hidden";
+      logoSeguro(sidebarLogoEl, sesion.logoUrl, sesion.restaurante);
 
       const avatarUrl = sesion.fotoUrl || sesion.logoUrl || "";
       document.getElementById("topbarAvatar").src = avatarUrl;
@@ -1811,7 +1864,7 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
       document.getElementById("heroUbicacion").textContent = [sesion.restaurante, sesion.direccion].filter(Boolean).join(" - ") || sesion.restaurante || "—";
       document.getElementById("heroFecha").textContent = "Hoy, " + new Date().toLocaleDateString("es-PE", { day: "numeric", month: "short", year: "numeric" });
 
-      document.getElementById("admLogo").src = sesion.logoUrl || sesion.portadaUrl || "";
+      logoSeguro(document.getElementById("admLogo"), sesion.logoUrl || sesion.portadaUrl, sesion.restaurante);
       document.getElementById("admNombre").textContent = sesion.restaurante || "—";
       document.getElementById("admDir").textContent = sesion.direccion || "Sin dirección registrada";
     }
@@ -1856,6 +1909,7 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
         const a = btn.dataset.action;
         if (a === "editar-negocio") document.getElementById("toggleEditarNegocioBtn").click();
         if (a === "publicar-vacante") document.getElementById("togglePublicarVacanteBtn").click();
+        if (a === "editar-cuenta") abrirEditarCuenta();
         if (a === "mis-vacantes") document.getElementById("toggleMisVacantesBtn").click();
       });
     });
@@ -2091,22 +2145,161 @@ body:has(#authCard:not(.hidden)) .login-brand{display:inline-flex}
       pintarIconos();
     }
 
-    document.getElementById("repEnviarBtn").addEventListener("click", () => {
+
+    // ---------- Resumen mensual: gráfico + análisis con IA + envío por correo ----------
+    const REP = { d: null, ia: "", html: "" };
+    function calcMes(anio, mes) {
+      const porMesero = meserosRendimiento.map(m => {
+        const rs = (m.reviews || []).filter(r => { const f = new Date(r.fecha); return !isNaN(f) && f.getFullYear() === anio && f.getMonth() + 1 === mes; });
+        return { nombre: m.nombre, total: rs.length, promedio: rs.length ? rs.reduce((x, r) => x + r.estrellas, 0) / rs.length : 0 };
+      });
+      const total = porMesero.reduce((x, m) => x + m.total, 0);
+      const prom = total ? porMesero.reduce((x, m) => x + m.promedio * m.total, 0) / total : 0;
+      return { porMesero, total, prom };
+    }
+    function colorRating(p) { return p >= 4.5 ? "#2E6CF6" : p >= 3.5 ? "#F5A623" : "#E5484D"; }
+    function veredictoRep(prom, total) { return !total ? "Sin datos" : prom >= 4.6 ? "Excelente" : prom >= 4.2 ? "Muy bueno" : prom >= 3.8 ? "Bueno" : prom >= 3.2 ? "Regular" : "Por mejorar"; }
+    function analisisLocalRep(d, ant) {
+      if (!d.total) return "No hubo reseñas este mes, así que todavía no hay desempeño que evaluar. Comparte los códigos de tu equipo para empezar a recibir calificaciones.";
+      const act = d.porMesero.filter(m => m.total > 0).sort((a, b) => b.promedio - a.promedio || b.total - a.total);
+      const mejor = act[0], bajo = act.slice().reverse().find(m => m.promedio < 4.2);
+      let t = `**Desempeño: ${veredictoRep(d.prom, d.total)}.** El equipo recibió ${d.total} reseña${d.total === 1 ? "" : "s"} con un promedio de ${d.prom.toFixed(1)}★.`;
+      if (ant.total) { const dif = d.prom - ant.prom; t += ` Frente al mes anterior (${ant.prom.toFixed(1)}★) ${Math.abs(dif) < 0.05 ? "se mantuvo estable" : dif > 0 ? "subió " + dif.toFixed(1) : "bajó " + Math.abs(dif).toFixed(1)}.`; }
+      t += `\n- **Mejor mesero:** ${mejor.nombre} (${mejor.promedio.toFixed(1)}★ en ${mejor.total} reseña${mejor.total === 1 ? "" : "s"}).`;
+      t += bajo ? `\n- **Para reforzar:** ${bajo.nombre} (${bajo.promedio.toFixed(1)}★). Conviene acompañarlo y revisar sus comentarios.` : "\n- Todo el equipo se mantiene en un buen nivel.";
+      if (act.length < d.porMesero.length) t += `\n- ${d.porMesero.length - act.length} integrante(s) sin reseñas este mes: recuérdales entregar su tarjeta NFC.`;
+      return t;
+    }
+    async function iaReporte(prompt) {
+      try {
+        const res = await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "ia_asistente", email: sesion.email, password: sesion.password, modo: "chat", pregunta: prompt, historial: [], datos: iaDigest(meserosRendimiento) }) });
+        const j = await res.json();
+        if (j && j.ok && j.texto) return j.texto;
+      } catch (e) { }
+      return null;
+    }
+    function barrasHtmlEmail(d) {
+      const max = Math.max(1, ...d.porMesero.map(m => m.total));
+      return d.porMesero.slice().sort((a, b) => b.total - a.total).slice(0, 10).map(m => `<tr><td style="padding:4px 8px 4px 0;font-size:13px;width:130px">${escapeHtml(m.nombre)}</td><td style="width:260px"><div style="background:#EAF0FD;border-radius:6px;height:12px"><div style="background:${colorRating(m.promedio)};border-radius:6px;height:12px;width:${Math.round(m.total / max * 100)}%"></div></div></td><td style="padding-left:8px;font-size:13px">${m.total} · ${m.total ? m.promedio.toFixed(1) + "★" : "—"}</td></tr>`).join("");
+    }
+    async function abrirResumen() {
       const d = datosReporteMensual();
-      const asunto = `Reporte mensual Tapport — ${sesion.restaurante || ""} — ${d.nombreMes}`;
-      const lineas = [
-        `Reporte mensual de ${sesion.restaurante || "tu restaurante"} — ${d.nombreMes}`,
-        "",
-        `Reseñas del mes: ${d.totalResenas}`,
-        `Rating promedio: ${d.totalResenas ? d.promGeneral.toFixed(1) : "—"}`,
-        `Mejor mesero: ${d.mejor ? d.mejor.nombre : "—"}`,
-        "",
-        "Desglose por mesero:",
-        ...d.porMesero.slice().sort((a, b) => b.total - a.total).map(m => `- ${m.nombre}: ${m.total} reseña${m.total === 1 ? "" : "s"}, promedio ${m.total ? m.promedio.toFixed(1) : "—"}`),
-      ];
-      const cuerpo = lineas.join("\n");
-      window.location.href = `mailto:${encodeURIComponent(sesion.email || "")}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
+      const mesAnt = d.mes === 1 ? [d.anio - 1, 12] : [d.anio, d.mes - 1];
+      const ant = calcMes(mesAnt[0], mesAnt[1]);
+      REP.d = d; REP.ia = "";
+      document.getElementById("repOv").classList.remove("hidden");
+      document.getElementById("repMsg").textContent = "";
+      document.getElementById("repTitulo").textContent = `${sesion.restaurante || "Tu restaurante"} · ${d.nombreMes}`;
+      const dif = ant.total && d.totalResenas ? d.promGeneral - ant.prom : null;
+      document.getElementById("repKpis").innerHTML = `
+        <div class="rsm-kpi"><b>${d.totalResenas ? d.promGeneral.toFixed(1) : "—"}</b><span>Rating promedio</span>${dif === null ? "" : `<br><em style="color:${dif >= 0 ? "#12875B" : "#B4432E"}">${dif >= 0 ? "▲" : "▼"} ${Math.abs(dif).toFixed(1)} vs mes anterior</em>`}</div>
+        <div class="rsm-kpi"><b>${d.totalResenas}</b><span>Reseñas del mes</span></div>
+        <div class="rsm-kpi"><b style="font-size:15px;padding:4px 0;display:block">${d.mejor ? escapeHtml(d.mejor.nombre) : "—"}</b><span>Mejor mesero</span></div>
+        <div class="rsm-kpi"><b>${veredictoRep(d.promGeneral, d.totalResenas)}</b><span>Desempeño</span></div>`;
+      const max = Math.max(1, ...d.porMesero.map(m => m.total));
+      document.getElementById("repChart").innerHTML = d.porMesero.length ? d.porMesero.slice().sort((a, b) => b.total - a.total).slice(0, 10).map(m => `<div class="rsm-bar"><span title="${escapeHtml(m.nombre)}">${escapeHtml(m.nombre)}</span><div class="rsm-track"><i style="width:${Math.round(m.total / max * 100)}%;background:${colorRating(m.promedio)}"></i></div><b>${m.total} · ${m.total ? m.promedio.toFixed(1) + "★" : "—"}</b></div>`).join("") + '<p style="font-size:11.5px;color:#5B6270;margin:8px 0 0">Largo de la barra = reseñas; color = rating (azul ≥ 4.5, ámbar ≥ 3.5, rojo menor).</p>' : '<div class="empty">Todavía no hay personal registrado.</div>';
+      const iaBox = document.getElementById("repIA"); iaBox.textContent = "Analizando el desempeño…";
+      const local = analisisLocalRep({ total: d.totalResenas, prom: d.promGeneral, porMesero: d.porMesero }, ant);
+      const prompt = `Escribe un resumen ejecutivo del desempeño de ${sesion.restaurante || "mi restaurante"} en ${d.nombreMes}. Datos del mes: ${d.totalResenas} reseñas, rating promedio ${d.totalResenas ? d.promGeneral.toFixed(1) : "sin datos"}; mes anterior: ${ant.total} reseñas, promedio ${ant.total ? ant.prom.toFixed(1) : "sin datos"}. Por mesero: ${d.porMesero.map(m => `${m.nombre} ${m.total} reseñas ${m.total ? m.promedio.toFixed(1) + "★" : ""}`).join("; ")}. Empieza con "**Desempeño: X.**" (Excelente, Muy bueno, Bueno, Regular o Por mejorar) y explica en 1-2 frases por qué, compara con el mes anterior, nombra al mejor mesero y a quién necesita apoyo, y cierra con 2 recomendaciones concretas en viñetas. Máximo 120 palabras, sin tablas.`;
+      let txt = d.totalResenas ? await iaReporte(prompt) : null;
+      if (!document.getElementById("repOv") || document.getElementById("repOv").classList.contains("hidden")) return;
+      REP.ia = txt || local;
+      iaBox.innerHTML = iaMd(REP.ia) + (txt ? "" : '<div style="font-size:11px;color:#5B6270;margin-top:8px">Análisis automático (la IA no estuvo disponible).</div>');
+      REP.html = `<div style="font-family:Arial,sans-serif;max-width:620px;margin:auto;color:#0B1220"><h2 style="margin:0 0 4px">Resumen mensual — ${escapeHtml(sesion.restaurante || "")}</h2><p style="margin:0 0 16px;color:#5B6270;text-transform:capitalize">${escapeHtml(d.nombreMes)}</p><table style="width:100%;border-collapse:separate;border-spacing:8px 0;margin:0 -8px 16px"><tr><td style="background:#F1F4F9;border-radius:10px;padding:12px"><b style="font-size:22px">${d.totalResenas ? d.promGeneral.toFixed(1) : "—"}</b><br><small>Rating promedio</small></td><td style="background:#F1F4F9;border-radius:10px;padding:12px"><b style="font-size:22px">${d.totalResenas}</b><br><small>Reseñas</small></td><td style="background:#F1F4F9;border-radius:10px;padding:12px"><b style="font-size:16px">${veredictoRep(d.promGeneral, d.totalResenas)}</b><br><small>Desempeño</small></td></tr></table><h3 style="margin:0 0 6px">Reseñas por mesero</h3><table style="width:100%">${barrasHtmlEmail(d)}</table><h3 style="margin:18px 0 6px">Análisis</h3><div style="background:#F5F9FF;border:1px solid #D5E3FD;border-radius:10px;padding:14px;font-size:14px;line-height:1.6">${iaMd(REP.ia)}</div><p style="margin-top:20px;color:#8A90A0;font-size:12px">Enviado desde tu panel de Tapport.</p></div>`;
+    }
+    function cerrarResumen() { document.getElementById("repOv").classList.add("hidden"); }
+    document.getElementById("repEnviarBtn").addEventListener("click", abrirResumen);
+    ["repX", "repCerrar2"].forEach(id => document.getElementById(id).addEventListener("click", cerrarResumen));
+    document.getElementById("repOv").addEventListener("mousedown", e => { if (e.target.id === "repOv") cerrarResumen(); });
+    document.getElementById("repEnviarOk").addEventListener("click", async () => {
+      const msg = document.getElementById("repMsg"), btn = document.getElementById("repEnviarOk"), d = REP.d;
+      if (!REP.html) { msg.className = "msg err"; msg.textContent = "Espera a que termine el análisis."; return; }
+      btn.disabled = true; msg.className = "msg"; msg.textContent = "Enviando…";
+      try {
+        const res = await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "enviar_reporte", email: sesion.email, password: sesion.password, asunto: `Resumen mensual Tapport — ${sesion.restaurante || ""} — ${d.nombreMes}`, html: REP.html }) });
+        const j = await res.json();
+        if (j && j.ok) { msg.className = "msg ok"; msg.textContent = "¡Listo! Te lo enviamos a " + sesion.email + "."; }
+        else throw new Error(j && j.error || "sin respuesta");
+      } catch (e) {
+        msg.className = "msg err"; msg.textContent = "No se pudo enviar desde Tapport todavía. Abrimos tu correo con el resumen listo.";
+        const cuerpo = `Resumen mensual de ${sesion.restaurante || ""} — ${d.nombreMes}\n\nRating promedio: ${d.totalResenas ? d.promGeneral.toFixed(1) : "—"}\nReseñas: ${d.totalResenas}\n\n${REP.ia.replace(/\*\*/g, "")}`;
+        window.location.href = `mailto:${sesion.email || ""}?subject=${encodeURIComponent("Resumen mensual Tapport — " + d.nombreMes)}&body=${encodeURIComponent(cuerpo)}`;
+      }
+      btn.disabled = false;
     });
+
+    // ---------- Miniaturas: abrir vistas y tarjetas sin cambiar de página ----------
+    function cerrarMini() {
+      const v = document.querySelector(".view.mini-open");
+      if (v) { v.classList.add("hidden"); v.classList.remove("mini-open"); document.body.classList.remove("mini-on"); return true; }
+      const c = document.querySelector(".mini-card:not(.hidden)");
+      if (c) { const b = c.querySelector("#cancelarEditarNegocioBtn,#cancelarPublicarVacanteBtn,#cancelarEditarVacanteBtn,#cerrarMisVacantesBtn,#cancelarEditarCuentaBtn"); if (b) b.click(); else c.classList.add("hidden"); return true; }
+      return false;
+    }
+    function abrirMini(nombre) {
+      cerrarMini();
+      const v = document.getElementById("view-" + nombre); if (!v) return;
+      if (nombre === "historial") renderHistorial();
+      if (nombre === "cuenta") renderCuenta();
+      if (!v.querySelector(":scope > .mini-x")) { const x = document.createElement("button"); x.type = "button"; x.className = "mini-x"; x.setAttribute("aria-label", "Cerrar"); x.textContent = "×"; x.addEventListener("click", cerrarMini); v.prepend(x); }
+      v.classList.remove("hidden"); v.classList.add("mini-open"); document.body.classList.add("mini-on");
+      v.scrollTop = 0;
+    }
+    document.querySelectorAll("[data-mini]").forEach(b => b.addEventListener("click", () => abrirMini(b.dataset.mini)));
+    document.querySelectorAll("[data-close-mini]").forEach(b => b.addEventListener("click", cerrarMini));
+    document.addEventListener("keydown", e => { if (e.key === "Escape" && !document.getElementById("repOv").classList.contains("hidden")) cerrarResumen(); else if (e.key === "Escape") cerrarMini(); });
+    document.addEventListener("mousedown", e => {
+      if (!document.querySelector(".view.mini-open,.mini-card:not(.hidden)")) return;
+      if (e.target.closest(".mini-open,.mini-card,#repOv,.sp-ov,#iaWin,#iaFab")) return;
+      cerrarMini();
+    });
+    const _cv = cambiarVista;
+    cambiarVista = function (n) { const v = document.querySelector(".view.mini-open"); if (v) { v.classList.remove("mini-open"); document.body.classList.remove("mini-on"); const x = v.querySelector(":scope > .mini-x"); if (x) x.remove(); } return _cv(n); };
+
+    // ---------- Plan: cuadro que se puede cerrar ----------
+    (function () {
+      const card = document.getElementById("planCard"), chip = document.getElementById("pcAbrir");
+      const aplicar = (cerrado) => { card.classList.toggle("hidden", cerrado); chip.classList.toggle("hidden", !cerrado); };
+      try { aplicar(localStorage.getItem("tp_plan_cerrado") === "1"); } catch (e) { }
+      document.getElementById("pcCerrar").addEventListener("click", () => { aplicar(true); try { localStorage.setItem("tp_plan_cerrado", "1"); } catch (e) { } });
+      chip.addEventListener("click", () => { aplicar(false); try { localStorage.setItem("tp_plan_cerrado", "0"); } catch (e) { } });
+    })();
+
+    // ---------- Editar datos de la cuenta (propio, distinto al perfil del negocio) ----------
+    function abrirEditarCuenta() {
+      document.getElementById("ecNombre").value = sesion.nombre || "";
+      document.getElementById("ecTelefono").value = sesion.telefono || "";
+      document.getElementById("ecAv").textContent = (sesion.nombre || "?").split(" ").map(p => p[0]).slice(0, 2).join("").toUpperCase();
+      document.getElementById("ecFijos").innerHTML = [["Correo", sesion.email], ["DNI", sesion.dni], ["Restaurante", sesion.restaurante]].map(([k, v]) => `<div><span>${k}</span><b>${escapeHtml(String(v || "—"))}</b></div>`).join("");
+      document.getElementById("ecMsg").textContent = "";
+      cerrarMini();
+      document.getElementById("editCuentaCard").classList.remove("hidden");
+    }
+    document.getElementById("guardarCuentaBtn").addEventListener("click", async () => {
+      const msg = document.getElementById("ecMsg"), btn = document.getElementById("guardarCuentaBtn");
+      const nombre = document.getElementById("ecNombre").value.trim().replace(/\s+/g, " "), tel = document.getElementById("ecTelefono").value.replace(/[^\d+]/g, "");
+      if (nombre.length < 3) { msg.className = "msg err"; msg.textContent = "Escribe tu nombre completo."; return; }
+      if (tel.replace(/\D/g, "").length < 6) { msg.className = "msg err"; msg.textContent = "Escribe un teléfono válido."; return; }
+      btn.disabled = true; msg.className = "msg"; msg.textContent = "Guardando…";
+      try {
+        const res = await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "actualizar_cuenta_gerente", email: sesion.email, password: sesion.password, nombre, telefono: tel }) });
+        const j = await res.json();
+        if (!j.ok) throw new Error(j.error || "No se pudo guardar");
+        sesion.nombre = nombre; sesion.telefono = tel; guardarSesion(sesion);
+        pintarCabeceraNegocio(); renderCuenta();
+        msg.className = "msg ok"; msg.textContent = "¡Datos actualizados!";
+        setTimeout(() => { document.getElementById("editCuentaCard").classList.add("hidden"); msg.textContent = ""; }, 800);
+      } catch (e) { msg.className = "msg err"; msg.textContent = /acci/i.test(String(e.message)) ? "Falta actualizar el Apps Script (Cuenta.gs)." : e.message; }
+      btn.disabled = false;
+    });
+
+    // ---------- Logos con respaldo (si la imagen no carga, muestra la inicial) ----------
+    function logoSeguro(img, url, texto) {
+      const svg = "data:image/svg+xml;utf8," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2E6CF6"/><stop offset="1" stop-color="#1E40AF"/></linearGradient></defs><rect width="64" height="64" rx="14" fill="url(#g)"/><text x="32" y="43" font-family="Arial" font-weight="700" font-size="30" text-anchor="middle" fill="#fff">${(String(texto || "T").trim()[0] || "T").toUpperCase().replace(/[<&]/g, "T")}</text></svg>`);
+      img.referrerPolicy = "no-referrer"; img.style.visibility = "visible";
+      img.onerror = () => { img.onerror = null; img.src = svg; };
+      img.src = url || svg;
+    }
     ["histFecha", "histMesero", "histBuscar"].forEach(id => {
       const evt = id === "histBuscar" ? "input" : "change";
       document.getElementById(id).addEventListener(evt, renderHistorial);
