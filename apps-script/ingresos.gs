@@ -17,7 +17,16 @@
  * CONEXIÓN CON LA APP: la hoja "Config" sigue siendo la que usa Tapport. Si en "Ingresos" cambias
  *  el Plan, el Estado o la fecha Vence de un cliente, se copia solo a Config (columnas J y K):
  *   - Inactivo  → PlanVence = ayer (el panel del restaurante muestra el plan como vencido)
- *   - Activo    → si estaba vencido, PlanVence = hoy + 30 días
+ *                 Y se DA DE BAJA a los administradores de ese restaurante: no pueden iniciar sesión
+ *                 (ni recuperar su contraseña) hasta que vuelvas a ponerlo Activo.
+ *   - Activo    → si estaba vencido, PlanVence = hoy + 30 días, y se REACTIVAN sus administradores
+ *                 (recuperan su misma contraseña de antes).
+ *
+ * CÓMO SE DA DE BAJA: en la hoja "Administradores", columna H (hash de la contraseña), se antepone
+ *  "SUSPENDIDO|" al valor. Así el login nunca coincide. Al reactivar se quita el prefijo y todo
+ *  vuelve a como estaba. No hace falta tocar Code.gs.
+ * Además, cada noche (junto al registro automático) y desde el menú "5. Aplicar estados a
+ *  administradores" se revisa toda la tabla, por si alguien creó una cuenta nueva en un restaurante inactivo.
  */
 const ING_HOJA = "Ingresos";
 const ING_REG = "Registro mensual";
@@ -33,6 +42,7 @@ function onOpen() {
     .addItem("2. Sincronizar clientes desde Config", "sincronizarIngresos")
     .addItem("3. Registrar ingreso de este mes ahora", "registrarIngresoMes")
     .addItem("4. Activar registro automático diario", "activarRegistroAutomatico")
+    .addItem("5. Aplicar estados a administradores (baja / alta)", "ingAplicarEstadosAdmins")
     .addItem("Reiniciar pagos del mes (todos a Pendiente)", "reiniciarPagosMes")
     .addToUi();
 }
@@ -142,6 +152,59 @@ function crearHojaIngresos() {
 function ingNorm_(s) { return String(s || "").trim().toLowerCase(); }
 function ingFecha_(v) { if (v instanceof Date) return v; const d = v ? new Date(v) : null; return d && !isNaN(d) ? d : null; }
 
+const ING_SUSP = "SUSPENDIDO|";   // prefijo que se antepone al hash de la contraseña (columna H de Administradores)
+
+/**
+ * Da de baja (activo = false) o reactiva (activo = true) a los administradores de un restaurante.
+ * Baja: antepone "SUSPENDIDO|" al hash → el login falla. Alta: quita el prefijo → misma contraseña de antes.
+ * Devuelve cuántas cuentas cambió.
+ */
+function ingAplicarEstadoAdmins_(restaurante, activo) {
+  const hoja = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(HOJA_GERENTES);
+  if (!hoja || hoja.getLastRow() < 2) return 0;
+  const datos = hoja.getDataRange().getValues();
+  let ir = -1;
+  for (let c = 0; c < datos[0].length; c++) if (/restaurante|negocio/i.test(String(datos[0][c] || ""))) { ir = c; break; }
+  if (ir < 0) ir = 1; // si no hay encabezado reconocible, el restaurante está en la columna B
+  const norm = ingNorm_(restaurante);
+  if (!norm) return 0;
+  let n = 0;
+  for (let i = 1; i < datos.length; i++) {
+    if (ingNorm_(datos[i][ir]) !== norm) continue;
+    const hash = String(datos[i][7] || "");   // columna H = hash (igual que en recuperar.gs)
+    if (!activo && hash && hash.indexOf(ING_SUSP) !== 0) { hoja.getRange(i + 1, 8).setValue(ING_SUSP + hash); n++; }
+    else if (activo && hash.indexOf(ING_SUSP) === 0) { hoja.getRange(i + 1, 8).setValue(hash.slice(ING_SUSP.length)); n++; }
+  }
+  return n;
+}
+
+/** Aplica baja/alta a un restaurante y avisa con un mensaje en el Sheet. */
+function ingAvisoAdmins_(restaurante, activo) {
+  try {
+    const n = ingAplicarEstadoAdmins_(restaurante, activo);
+    const t = activo
+      ? (n ? `Se reactivaron ${n} administrador(es) de ${restaurante}.` : `Administradores de ${restaurante}: ya estaban activos.`)
+      : (n ? `Se dio de baja a ${n} administrador(es) de ${restaurante}: ya no pueden iniciar sesión.` : `${restaurante}: no hay administradores activos que dar de baja.`);
+    SpreadsheetApp.getActive().toast(t, "Tapport", 6);
+  } catch (e) { SpreadsheetApp.getActive().toast("No se pudo actualizar a los administradores: " + e, "Tapport", 8); }
+}
+
+/**
+ * Recorre la tabla de Ingresos y deja a los administradores de cada restaurante según su Estado
+ * (Inactivo = de baja, Activo = habilitados). Menú "5." y también corre cada noche.
+ */
+function ingAplicarEstadosAdmins(silencioso) {
+  const h = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ING_HOJA); if (!h) return;
+  const filas = h.getRange(ING_PRIMERA, 1, ING_ULTIMA - ING_PRIMERA + 1, 6).getValues();
+  let bajas = 0, altas = 0;
+  filas.forEach(r => {
+    if (!r[0] || (r[5] !== "Activo" && r[5] !== "Inactivo")) return;
+    const activo = r[5] === "Activo", n = ingAplicarEstadoAdmins_(r[0], activo);
+    if (activo) altas += n; else bajas += n;
+  });
+  if (silencioso !== true) SpreadsheetApp.getActive().toast(`Listo: ${bajas} administrador(es) dados de baja, ${altas} reactivados.`, "Tapport", 6);
+}
+
 /** Trae a "Ingresos" los restaurantes de Config que todavía no estén (con su plan y vencimiento). */
 function sincronizarIngresos() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -166,6 +229,7 @@ function sincronizarIngresos() {
     h.getRange(r, 10).setValue("Pendiente");
     existentes.push(ingNorm_(nombre)); nuevos++;
   }
+  try { ingAplicarEstadosAdmins(true); } catch (e) { }
   SpreadsheetApp.getActive().toast(nuevos ? `Se agregaron ${nuevos} cliente(s). Revisa Plan e "Inicio del plan".` : "Todos los clientes de Config ya están en Ingresos.", "Tapport", 5);
 }
 
@@ -190,6 +254,7 @@ function ingresosOnEdit_(e) {
       const nuevo = new Date(base.getTime() + 30 * 24 * 3600 * 1000);
       cfg.getRange(rf, COL_PLAN_VENCE).setValue(nuevo);
       h.getRange(fila, 5).setValue(nuevo); h.getRange(fila, 6).setValue("Activo"); h.getRange(fila, 11).setValue(ahora);
+      ingAvisoAdmins_(h.getRange(fila, 1).getValue(), true);   // pagó → sus administradores vuelven a poder entrar
     }
     if (col === 6) {
       const est = h.getRange(fila, 6).getValue(), ahora = new Date();
@@ -203,6 +268,8 @@ function ingresosOnEdit_(e) {
           cfg.getRange(rf, COL_PLAN_VENCE).setValue(nuevo); h.getRange(fila, 5).setValue(nuevo);
         }
       }
+      // Baja / alta de los administradores del restaurante según el Estado elegido
+      if (est === "Inactivo" || est === "Activo") ingAvisoAdmins_(h.getRange(fila, 1).getValue(), est === "Activo");
     }
     break;
   }
@@ -211,6 +278,7 @@ function ingresosOnEdit_(e) {
 
 /** Guarda (o actualiza) la fila del mes actual en "Registro mensual". */
 function registrarIngresoMes() {
+  try { ingAplicarEstadosAdmins(true); } catch (e) { }   // revisión nocturna de bajas/altas de administradores
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const h = ss.getSheetByName(ING_HOJA); if (!h) { crearHojaIngresos(); return; }
   const filas = h.getRange(ING_PRIMERA, 1, ING_ULTIMA - ING_PRIMERA + 1, 6).getValues();
