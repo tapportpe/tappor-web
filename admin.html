@@ -899,6 +899,17 @@ body:has(#authCard:not(.hidden)) #loginHeader .eyebrow{color:#8FB0FF}
 body:has(#authCard:not(.hidden)) #loginHeader .sub{color:rgba(255,255,255,.7)}
 body:has(#authCard:not(.hidden)) #authCard{width:100%}
 #sesionExpiradaMsg{margin-bottom:14px;text-align:center}
+/* cuenta inactiva */
+.susp{text-align:center;padding:6px 4px 2px}
+.susp-ic{width:64px;height:64px;margin:0 auto 14px;border-radius:50%;background:#FFF3D6;color:#B7791F;display:flex;align-items:center;justify-content:center}
+.susp-ic svg{width:30px;height:30px}
+.susp h2{margin:0;font-size:21px;color:var(--ink)}
+.susp-t{margin:10px 0 0;font-size:15px;font-weight:600;color:var(--ink);line-height:1.5}
+.susp-s{margin:10px 0 0;font-size:13.5px;color:var(--ink-soft);line-height:1.55}
+.susp-wa{display:block;margin-top:20px;background:#1FA855;color:#fff;font-weight:700;font-size:14.5px;padding:14px 18px;border-radius:12px;text-decoration:none}
+.susp-wa:hover{background:#178a45}
+.susp-back{margin-top:12px;background:none;border:0;color:var(--accent-dark,#1E40AF);font-weight:600;font-size:13.5px;cursor:pointer;padding:8px}
+
 </style><style id="tp-mejoras">
 /* Acciones rápidas y ayuda: las palabras nunca se parten */
 .qa-grid{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))!important}
@@ -1184,6 +1195,16 @@ body:has(.mini-card:not(.hidden)) #panel.hidden{display:block!important}
     <!-- ============ LOGIN ============ -->
     <div class="card" id="authCard">
       <div class="msg notice hidden" id="sesionExpiradaMsg">Tu sesión expiró por inactividad. Vuelve a iniciar sesión.</div>
+
+      <!-- Pantalla "cuenta inactiva por falta de pago" -->
+      <div id="suspCard" class="susp hidden" role="alert">
+        <div class="susp-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/><path d="M12 14.5v2.2"/></svg></div>
+        <h2>Tu cuenta está inactiva</h2>
+        <p class="susp-t" id="suspTexto">Falta pagar la mensualidad. Mientras tanto no puedes iniciar sesión.</p>
+        <p class="susp-s">Tus datos, reseñas y equipo siguen guardados. Apenas confirmemos tu pago, tu cuenta se reactiva y vuelves a entrar con la misma contraseña.</p>
+        <a class="susp-wa" id="suspWa" target="_blank" rel="noopener" href="#">Escribir por WhatsApp para regularizar</a>
+        <button type="button" class="susp-back" id="suspBack">Volver al inicio de sesión</button>
+      </div>
 
       <div id="loginForm">
         <div class="field">
@@ -1765,6 +1786,28 @@ body:has(.mini-card:not(.hidden)) #panel.hidden{display:block!important}
       document.getElementById("sesionExpiradaMsg").classList.remove("hidden");
     }
 
+    // ---------- Cuenta inactiva por falta de pago ----------
+    const WSP_NUM = "51992346227";
+    function mostrarCuentaSuspendida(email, restaurante) {
+      if (sesion) cerrarSesionPorExpiracion();           // si había sesión abierta, la cierra
+      document.getElementById("sesionExpiradaMsg").classList.add("hidden");
+      document.getElementById("loginForm").classList.add("hidden");
+      document.getElementById("headerSub").textContent = "Acceso suspendido";
+      document.getElementById("suspTexto").textContent = restaurante
+        ? "Falta pagar la mensualidad de " + restaurante + ". Mientras tanto no puedes iniciar sesión."
+        : "Falta pagar la mensualidad. Mientras tanto no puedes iniciar sesión.";
+      const msg = "Hola, mi cuenta de Tapport está inactiva" + (restaurante ? " (" + restaurante + ")" : "") + " y quiero regularizar el pago de la mensualidad. Mi correo: " + (email || "");
+      document.getElementById("suspWa").href = "https://wa.me/" + WSP_NUM + "?text=" + encodeURIComponent(msg);
+      document.getElementById("suspCard").classList.remove("hidden");
+    }
+    document.getElementById("suspBack").addEventListener("click", () => {
+      document.getElementById("suspCard").classList.add("hidden");
+      document.getElementById("loginForm").classList.remove("hidden");
+      document.getElementById("headerSub").textContent = "Inicia sesión para ver las reseñas y el rating de tu equipo.";
+      document.getElementById("loginPassword").value = "";
+      document.getElementById("loginMsg").textContent = "";
+    });
+
     // ---------- Login ----------
     document.getElementById("loginBtn").addEventListener("click", async () => {
       const email = document.getElementById("loginEmail").value.trim();
@@ -1792,6 +1835,9 @@ body:has(.mini-card:not(.hidden)) #panel.hidden{display:block!important}
           document.getElementById("sesionExpiradaMsg").classList.add("hidden");
           mostrarPanel();
           iniciarVigilanciaSesion();
+        } else if (data.suspendida) {
+          msg.textContent = "";
+          mostrarCuentaSuspendida(email, data.restaurante);
         } else {
           msg.className = "msg error";
           msg.textContent = data.error || "No se pudo iniciar sesión.";
@@ -3256,6 +3302,7 @@ body:has(.mini-card:not(.hidden)) #panel.hidden{display:block!important}
       try {
         const res = await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "panel_gerente", email: sesion.email, password: sesion.password }) });
         const d = await res.json();
+        if (d && d.suspendida) { mostrarCuentaSuspendida(sesion && sesion.email, d.restaurante); return; }
         if (!d || !d.ok) return;
         ["plan", "planNombre", "planVence", "planActivo", "maxMeseros", "funciones"].forEach(k => { if (d[k] !== undefined) sesion[k] = d[k]; });
         guardarSesion(sesion);
@@ -3275,6 +3322,7 @@ body:has(.mini-card:not(.hidden)) #panel.hidden{display:block!important}
       try {
         const res = await fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "panel_gerente", email: sesion.email, password: sesion.password }) });
         const d = await res.json();
+        if (d && d.suspendida && sesion) { mostrarCuentaSuspendida(sesion.email, d.restaurante); return; }
         if (!d || !d.ok || !sesion) return;
         if (huellaPanel(d) === huellaPanel(sesion)) return;
         const cambioEquipo = (d.meseros || []).length !== (sesion.meseros || []).length;

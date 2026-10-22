@@ -347,3 +347,23 @@ function reiniciarPagosMes() {
   h.getRange(ING_PRIMERA, 10, n, 1).setValues(pago);
   h.getRange(ING_PRIMERA, 11, n, 1).setValues(fecha);
 }
+
+
+/**
+ * DIAGNÓSTICO de las bajas: ejecútala desde el editor de Apps Script y mira el "Registro de ejecución".
+ * Te dice (1) si el Code.gs pegado ya trae la pantalla de "cuenta inactiva" y (2) qué administradores
+ * están hoy de baja o activos. Si (1) dice NO, falta pegar el Code.gs nuevo y publicar una Nueva versión.
+ */
+function probarBaja() {
+  const lg = loginGerente.toString();
+  Logger.log("1) ¿loginGerente ya reconoce cuentas de baja? " + (lg.indexOf("ING_SUSP") > -1 ? "SÍ" : "NO → pega el Code.gs nuevo"));
+  Logger.log("2) ¿y manda la marca para la pantalla? " + (lg.indexOf("suspendida") > -1 ? "SÍ" : "NO → pega el Code.gs nuevo"));
+  const hoja = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(HOJA_GERENTES);
+  if (!hoja) { Logger.log("No existe la hoja " + HOJA_GERENTES); return; }
+  const d = hoja.getDataRange().getValues();
+  for (let i = 1; i < d.length; i++) {
+    const baja = String(d[i][7] || "").indexOf(ING_SUSP) === 0;
+    Logger.log("   " + d[i][0] + " (" + d[i][1] + "): " + (baja ? "DE BAJA" : "activo"));
+  }
+  Logger.log("3) Recuerda: tras pegar el código, Implementar > Administrar implementaciones > ✏️ > Nueva versión > Implementar.");
+}
