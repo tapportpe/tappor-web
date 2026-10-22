@@ -178,29 +178,8 @@ function ingAplicarEstadoAdmins_(restaurante, activo) {
   return n;
 }
 
+// Mensaje que ve el administrador de baja al iniciar sesión (lo usa loginGerente en Code.gs)
 const ING_MSG_BAJA = "Tu cuenta no está activa porque falta pagar la mensualidad. Escríbenos por WhatsApp al +51 992 346 227 para reactivarla.";
-
-/**
- * Acción "estado_cuenta_gerente": el panel la llama SOLO cuando el login falla, para saber si el motivo es
- * que la cuenta está de baja por falta de pago. Solo responde suspendida:true si la contraseña es la correcta
- * (así nadie puede averiguar qué correos existen). Requiere esta línea en doPost de Code.gs:
- *    if (body.action === "estado_cuenta_gerente") return estadoCuentaGerente_(body);
- */
-function estadoCuentaGerente_(body) {
-  const hoja = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(HOJA_GERENTES);
-  const email = String(body.email || "").trim().toLowerCase(), password = String(body.password || "");
-  if (!hoja || !email || !password) return respuesta({ ok: true, suspendida: false });
-  const datos = hoja.getDataRange().getValues();
-  for (let i = 1; i < datos.length; i++) {
-    if (String(datos[i][0] || "").trim().toLowerCase() !== email) continue;
-    const hash = String(datos[i][7] || "");
-    if (hash.indexOf(ING_SUSP) !== 0) break;
-    const original = hash.slice(ING_SUSP.length);
-    if (hashPassword(password, String(datos[i][8] || "")) === original) return respuesta({ ok: true, suspendida: true, mensaje: ING_MSG_BAJA });
-    break;
-  }
-  return respuesta({ ok: true, suspendida: false });
-}
 
 /** Aplica baja/alta a un restaurante y avisa con un mensaje en el Sheet. */
 function ingAvisoAdmins_(restaurante, activo) {

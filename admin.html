@@ -1795,16 +1795,6 @@ body:has(.mini-card:not(.hidden)) #panel.hidden{display:block!important}
         } else {
           msg.className = "msg error";
           msg.textContent = data.error || "No se pudo iniciar sesión.";
-          // ¿Falló porque la cuenta está de baja por falta de pago? (solo responde sí si la contraseña es correcta)
-          try {
-            const r2 = await fetch(ENDPOINT, {
-              method: "POST",
-              headers: { "Content-Type": "text/plain;charset=utf-8" },
-              body: JSON.stringify({ action: "estado_cuenta_gerente", email, password })
-            });
-            const d2 = await r2.json();
-            if (d2 && d2.suspendida) msg.textContent = d2.mensaje || "Tu cuenta no está activa porque falta pagar la mensualidad.";
-          } catch (e2) { /* se queda el mensaje genérico */ }
         }
       } catch (err) {
         msg.className = "msg error";
