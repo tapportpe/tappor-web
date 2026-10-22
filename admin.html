@@ -2343,7 +2343,7 @@ body:has(.mini-card:not(.hidden)) #panel.hidden{display:block!important}
     // ---------- Gráfico por hora con zoom, arrastre y detalle al pasar el cursor ----------
     let histZoom = null, clusters = [];
     function renderGraficoHora(cont, series, key) {
-      const W = 640, H = 430, PL = 52, PR = 22, PT = 16, PB = 34, PW = W - PL - PR, PH = H - PT - PB;
+      const W = 640, H = 270, PL = 40, PR = 14, PT = 14, PB = 30, PW = W - PL - PR, PH = H - PT - PB;
       const todos = series.flatMap(s => s.puntos.map(p => p.min));
       let fMin = Math.max(0, Math.min(...todos) - 30), fMax = Math.min(1440, Math.max(...todos) + 30);
       if (fMax - fMin < 60) { const c = (fMin + fMax) / 2; fMin = Math.max(0, c - 30); fMax = Math.min(1440, c + 30); }
@@ -2351,54 +2351,55 @@ body:has(.mini-card:not(.hidden)) #panel.hidden{display:block!important}
       const Z = histZoom, MINSPAN = 5;
       const hhmm = m => String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(Math.floor(m % 60)).padStart(2, "0");
       const hora12 = f => f.toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" });
-      const aMinutos = v => { const [h, m] = String(v || "").split(":").map(Number); return isNaN(h) ? null : h * 60 + (m || 0); };
-      // Estrellas en horizontal (1★ a 5★) y la hora en vertical (arriba = más temprano)
-      const xs = v => PL + (v - 0.5) / 5 * PW;
-      const ys = m => PT + (m - Z.min) / (Z.max - Z.min) * PH;
+      const xs = m => PL + (m - Z.min) / (Z.max - Z.min) * PW;
+      const ys = v => PT + (5.5 - v) / 5 * PH;
       cont.innerHTML = `<div class="hz-bar"><span class="hz-range"></span><div class="hz-btns"><button type="button" data-z="out" aria-label="Alejar">−</button><button type="button" data-z="in" aria-label="Acercar">+</button><button type="button" data-z="reset">Restablecer</button></div></div>
         <div class="hz-rng"><label>Desde <input type="time" class="hz-d" /></label><label>Hasta <input type="time" class="hz-h" /></label><span>Ajusta el rango de horas para ver más cerca o más lejos.</span></div>
         <div class="hz-wrap"><svg viewBox="0 0 ${W} ${H}" class="hz-svg"></svg><div class="hz-tip"></div></div>
-        <p class="hz-hint">Rueda del mouse o botones para acercar · arrastra hacia arriba o abajo para mover · doble clic para acercar</p>`;
+        <p class="hz-hint">Rueda del mouse o botones para acercar · arrastra para mover · doble clic para acercar</p>`;
       const svg = cont.querySelector("svg"), tip = cont.querySelector(".hz-tip"), rango = cont.querySelector(".hz-range");
       const inD = cont.querySelector(".hz-d"), inH = cont.querySelector(".hz-h");
+      const aMinutos = v => { const [h, m] = String(v || "").split(":").map(Number); return isNaN(h) ? null : h * 60 + (m || 0); };
       function dibujar() {
         const span = Z.max - Z.min;
         const pasos = [1, 2, 5, 10, 15, 30, 60, 120, 180, 240];
-        const paso = pasos.find(p => span / p <= 9) || 240;
-        let ejeY = "", grid = "";
+        const paso = pasos.find(p => span / p <= 8) || 240;
+        let ejeX = "", grid = "";
         for (let t = Math.ceil(Z.min / paso) * paso; t <= Z.max; t += paso) {
-          ejeY += `<line x1="${PL}" y1="${ys(t).toFixed(1)}" x2="${W - PR}" y2="${ys(t).toFixed(1)}" stroke="#EEF1F7"/><text x="${PL - 8}" y="${(ys(t) + 4).toFixed(1)}" font-size="12.5" fill="#8A90A0" text-anchor="end">${hhmm(t)}</text>`;
+          ejeX += `<line x1="${xs(t).toFixed(1)}" y1="${PT}" x2="${xs(t).toFixed(1)}" y2="${H - PB}" stroke="#EEF1F7"/><text x="${xs(t).toFixed(1)}" y="${H - 9}" font-size="12.5" fill="#8A90A0" text-anchor="middle">${hhmm(t)}</text>`;
         }
-        for (let v = 1; v <= 5; v++) grid += `<line x1="${xs(v).toFixed(1)}" y1="${PT}" x2="${xs(v).toFixed(1)}" y2="${H - PB}" stroke="#EEF1F7"/><text x="${xs(v).toFixed(1)}" y="${H - 11}" font-size="12.5" fill="#8A90A0" text-anchor="middle">${v}★</text>`;
+        for (let v = 1; v <= 5; v++) grid += `<line x1="${PL}" y1="${ys(v).toFixed(1)}" x2="${W - PR}" y2="${ys(v).toFixed(1)}" stroke="#EEF1F7"/><text x="${PL - 8}" y="${(ys(v) + 4).toFixed(1)}" font-size="12.5" fill="#8A90A0" text-anchor="end">${v}★</text>`;
         const lineas = series.map((s, i) => {
           const c = PALETA_LINEAS[i % PALETA_LINEAS.length];
-          const pts = s.puntos.map(p => `${xs(p.valor).toFixed(1)},${ys(p.min).toFixed(1)}`).join(" ");
-          return `<polyline points="${pts}" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" opacity=".35"/>`;
+          const pts = s.puntos.map(p => `${xs(p.min).toFixed(1)},${ys(p.valor).toFixed(1)}`).join(" ");
+          return `<polyline points="${pts}" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" opacity=".3"/>`;
         }).join("");
+        // Un punto por servicio; los que caen en el mismo sitio se agrupan con un contador (se separan al acercar)
         const items = [];
-        series.forEach((s, i) => s.puntos.forEach(p => items.push({ s, i, p, x: xs(p.valor), y: ys(p.min), c: PALETA_LINEAS[i % PALETA_LINEAS.length] })));
-        items.sort((u, v) => u.y - v.y);
+        series.forEach((s, i) => s.puntos.forEach(p => items.push({ s, i, p, x: xs(p.min), y: ys(p.valor), c: PALETA_LINEAS[i % PALETA_LINEAS.length] })));
+        items.sort((u, v) => u.x - v.x);
+        // Un punto por cada servicio (sin agrupar); si dos caen en el mismo sitio se separan un poco
         clusters = [];
         items.forEach(it => {
-          const k = clusters.find(c => Math.abs(c.x - it.x) <= 7 && Math.abs(c.y - it.y) <= 7);
-          if (k) k.items.push(it); else clusters.push({ x: it.x, y: it.y, c: it.c, items: [it] });
+          const cerca = clusters.filter(c => Math.abs(c.x0 - it.x) <= 8 && Math.abs(c.y - it.y) <= 6).length;
+          clusters.push({ x: it.x + cerca * 10, x0: it.x, y: it.y, c: it.c, items: [it] });
         });
         let rug = "", dots = "", labels = "", finLabel = -1e9;
         clusters.forEach(k => {
-          rug += `<line x1="${PL}" y1="${k.y.toFixed(1)}" x2="${k.x.toFixed(1)}" y2="${k.y.toFixed(1)}" stroke="${k.c}" stroke-width="3" stroke-linecap="round" opacity=".22"/>`;
+          rug += `<line x1="${k.x.toFixed(1)}" y1="${k.y.toFixed(1)}" x2="${k.x.toFixed(1)}" y2="${H - PB}" stroke="${k.c}" stroke-width="4" stroke-linecap="round" opacity=".28"/>`;
           dots += `<circle cx="${k.x.toFixed(1)}" cy="${k.y.toFixed(1)}" r="6" fill="${k.c}" stroke="#fff" stroke-width="2"/>`;
-          if (k.items.length > 1) dots += `<circle cx="${(k.x + 9).toFixed(1)}" cy="${(k.y - 8).toFixed(1)}" r="7.5" fill="#0B1220"/><text x="${(k.x + 9).toFixed(1)}" y="${(k.y - 4.6).toFixed(1)}" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">${k.items.length}</text>`;
-          if (k.y - 7 > finLabel && k.y > PT && k.y < H - PB) {
-            const der = k.x < W - PR - 60;
-            labels += `<text x="${(der ? k.x + 12 : k.x - 12).toFixed(1)}" y="${(k.y + 4).toFixed(1)}" font-size="11.5" font-weight="600" fill="#334155" stroke="#fff" stroke-width="4" paint-order="stroke" text-anchor="${der ? "start" : "end"}">${hhmm(k.items[0].p.min)}</text>`;
-            finLabel = k.y + 7;
+          if (k.items.length > 1) dots += `<circle cx="${(k.x + 8).toFixed(1)}" cy="${(k.y - 8).toFixed(1)}" r="7.5" fill="#0B1220"/><text x="${(k.x + 8).toFixed(1)}" y="${(k.y - 4.6).toFixed(1)}" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">${k.items.length}</text>`;
+          const txt = hhmm(k.items[0].p.min), w = txt.length * 7 + 6;
+          if (k.x - w / 2 > finLabel + 4 && k.x > PL && k.x < W - PR) {
+            labels += `<text x="${k.x.toFixed(1)}" y="${(k.y + 20).toFixed(1)}" font-size="11.5" font-weight="600" fill="#334155" stroke="#fff" stroke-width="4" paint-order="stroke" text-anchor="middle">${txt}</text>`;
+            finLabel = k.x + w / 2;
           }
         });
-        svg.innerHTML = `<defs><clipPath id="hzClip"><rect x="${PL - 4}" y="${PT - 2}" width="${PW + 8}" height="${PH + 4}"/></clipPath></defs>${grid}<g clip-path="url(#hzClip)">${ejeY}</g><line x1="${PL}" y1="${PT}" x2="${PL}" y2="${H - PB}" stroke="var(--line)"/><g clip-path="url(#hzClip)">${lineas}${rug}${dots}${labels}</g>`;
+        svg.innerHTML = `<defs><clipPath id="hzClip"><rect x="${PL}" y="${PT - 6}" width="${PW}" height="${PH + 12}"/></clipPath></defs>${grid}<g>${ejeX}</g><line x1="${PL}" y1="${H - PB}" x2="${W - PR}" y2="${H - PB}" stroke="var(--line)"/><g clip-path="url(#hzClip)">${lineas}${rug}${dots}${labels}</g>`;
         rango.textContent = `Mostrando ${hhmm(Z.min)} – ${hhmm(Z.max)} (${Math.round(span)} min)`;
         inD.value = hhmm(Z.min); inH.value = hhmm(Z.max);
       }
-      function aMin(clientY) { const r = svg.getBoundingClientRect(); const yv = (clientY - r.top) / r.height * H; return Z.min + (yv - PT) / PH * (Z.max - Z.min); }
+      function aMin(clientX) { const r = svg.getBoundingClientRect(); const xv = (clientX - r.left) / r.width * W; return Z.min + (xv - PL) / PW * (Z.max - Z.min); }
       function fijar(mn, mx) {
         let span = Math.min(1440, Math.max(MINSPAN, mx - mn));
         if (mn < 0) { mn = 0; } if (mn + span > 1440) mn = 1440 - span;
@@ -2411,13 +2412,13 @@ body:has(.mini-card:not(.hidden)) #panel.hidden{display:block!important}
         const c = (Z.min + Z.max) / 2;
         if (b.dataset.z === "in") zoom(0.5, c); else if (b.dataset.z === "out") zoom(2, c); else fijar(Z.fMin, Z.fMax);
       }));
-      svg.addEventListener("wheel", e => { e.preventDefault(); zoom(e.deltaY > 0 ? 1.25 : 0.8, aMin(e.clientY)); }, { passive: false });
-      svg.addEventListener("dblclick", e => zoom(0.5, aMin(e.clientY)));
+      svg.addEventListener("wheel", e => { e.preventDefault(); zoom(e.deltaY > 0 ? 1.25 : 0.8, aMin(e.clientX)); }, { passive: false });
+      svg.addEventListener("dblclick", e => zoom(0.5, aMin(e.clientX)));
       const ptrs = new Map(); let pan = null, pinch = null, movido = false;
       svg.addEventListener("pointerdown", e => {
         svg.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, e); movido = false;
-        if (ptrs.size === 1) pan = { y: e.clientY, min: Z.min, max: Z.max };
-        if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch = { d: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY), min: Z.min, max: Z.max, c: aMin((a.clientY + b.clientY) / 2) }; pan = null; }
+        if (ptrs.size === 1) pan = { x: e.clientX, min: Z.min, max: Z.max };
+        if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch = { d: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY), min: Z.min, max: Z.max, c: aMin((a.clientX + b.clientX) / 2) }; pan = null; }
         tip.style.display = "none";
       });
       svg.addEventListener("pointermove", e => {
@@ -2427,8 +2428,8 @@ body:has(.mini-card:not(.hidden)) #panel.hidden{display:block!important}
           fijar(pinch.c - r * span, pinch.c - r * span + span); movido = true; return;
         }
         if (pan && ptrs.size === 1) {
-          const r = svg.getBoundingClientRect(), dm = -(e.clientY - pan.y) / r.height * H / PH * (pan.max - pan.min);
-          if (Math.abs(e.clientY - pan.y) > 3) { movido = true; fijar(pan.min + dm, pan.max + dm); svg.style.cursor = "grabbing"; return; }
+          const r = svg.getBoundingClientRect(), dm = -(e.clientX - pan.x) / r.width * W / PW * (pan.max - pan.min);
+          if (Math.abs(e.clientX - pan.x) > 3) { movido = true; fijar(pan.min + dm, pan.max + dm); svg.style.cursor = "grabbing"; return; }
         }
         if (e.pointerType === "mouse" && !ptrs.size) mostrarTip(e);
       });
