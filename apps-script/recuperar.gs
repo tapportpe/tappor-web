@@ -28,7 +28,7 @@ function restablecerPasswordGerente_(body) {
     if (String(datos[i][0] || "").trim().toLowerCase() === email) {
       // Cuenta dada de baja desde la hoja Ingresos (restaurante Inactivo): no se puede recuperar ni entrar.
       if (String(datos[i][7] || "").indexOf("SUSPENDIDO|") === 0) {
-        return respuesta({ ok: false, error: "Tu cuenta está inactiva. Escríbenos por WhatsApp al +51 992 346 227 para reactivarla." });
+        return respuesta({ ok: false, error: "Tu cuenta no está activa porque falta pagar la mensualidad. Escríbenos por WhatsApp al +51 992 346 227 para reactivarla." });
       }
       const salt = generarSalt();
       hoja.getRange(i + 1, 8).setValue(hashPassword(password, salt)); // columna H: hash
