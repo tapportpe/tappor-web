@@ -213,6 +213,29 @@ nav.solid{background:rgba(5,8,15,.94);backdrop-filter:blur(10px);box-shadow:0 1p
 .faq-i[open] summary::after{transform:rotate(45deg)}
 .faq-i p{padding:0 20px 18px;color:var(--slate);font-size:14.5px}
 @media(max-width:800px){.faq-grid{grid-template-columns:1fr}}
+/* faq ia */
+.faq-ai{margin-top:28px;border:1px solid var(--line);border-radius:16px;background:var(--paper);padding:26px 28px}
+.faq-ai h3{font-size:19px;line-height:1.25;letter-spacing:-.01em}
+.faq-ai .fa-sub{margin-top:6px;color:var(--slate);font-size:14.5px}
+.fa-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.fa-chips button{font:inherit;font-size:13px;font-weight:500;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:100px;padding:8px 14px;cursor:pointer;transition:border-color .15s,color .15s}
+.fa-chips button:hover{border-color:var(--blue);color:var(--blue)}
+.fa-form{display:flex;gap:10px;margin-top:14px}
+.fa-form input{flex:1;min-width:0;font:inherit;font-size:15px;padding:13px 16px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+.fa-form input:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+.fa-form button{font:inherit;font-size:14.5px;font-weight:600;color:#fff;background:var(--blue);border:0;border-radius:12px;padding:0 22px;cursor:pointer;white-space:nowrap}
+.fa-form button:hover{background:var(--blue-d)}
+.fa-form button:disabled,.fa-form input:disabled{opacity:.6;cursor:default}
+.fa-out{margin-top:16px}
+.fa-q{font-size:13px;font-weight:600;color:var(--soft)}
+.fa-a{margin-top:6px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;color:var(--ink);font-size:14.5px;line-height:1.6}
+.fa-a.wait{color:var(--slate)}
+.fa-a ul{margin:6px 0 0 18px}
+.fa-wa{display:inline-block;margin-top:12px;font-size:13.5px;font-weight:600;color:#fff;background:#1FA855;border-radius:100px;padding:9px 18px;text-decoration:none}
+.fa-wa:hover{background:#178a45}
+.fa-note{margin-top:12px;font-size:12px;color:var(--soft)}
+@media(max-width:560px){.faq-ai{padding:20px 18px}.fa-form{flex-direction:column}.fa-form button{padding:13px 22px}}
+
 /* feed */
 .feed{background:linear-gradient(135deg,#05080F,#0A1329);color:#fff;padding:150px 0 100px}
 .feed h2{color:#fff;font-size:clamp(30px,4vw,46px);max-width:18ch}
@@ -341,7 +364,7 @@ footer{background:#05080F;color:#fff;padding:52px 0 26px}
 function go(){var v=Math.max(1,Math.min(99,parseInt(n.value,10)||1)),p=P[v<=5?0:v<=10?1:2];document.querySelectorAll(".plan").forEach(function(c){c.classList.toggle("rec",c.getAttribute("data-plan")===p[0])});
 o.innerHTML="Te conviene <b>"+p[0]+"</b> · S/ "+p[2]+" al mes · ≈ S/ "+(p[2]/v).toFixed(2).replace(/\.00$/,"")+" por mesero"}
 document.getElementById("cMenos").onclick=function(){n.value=Math.max(1,(parseInt(n.value,10)||1)-1);go()};document.getElementById("cMas").onclick=function(){n.value=Math.min(99,(parseInt(n.value,10)||1)+1);go()};n.oninput=go;go()})();</script><p class="plan-note">¿Dudas sobre qué plan te conviene? <a href="https://wa.me/51992346227?text=Hola%2C%20estoy%20interesado%20en%20Tapport%20para%20mi%20restaurante%20y%20quisiera%20recibir%20m%C3%A1s%20informaci%C3%B3n%20sobre%20sus%20planes%20y%20c%C3%B3mo%20funciona%20el%20servicio." target="_blank" rel="noopener">Escríbenos por WhatsApp</a> o revisa las <a href="#faq">preguntas frecuentes</a>.</p></div></section>
-<section class="sec" id="faq"><div class="wrap"><div class="rv"><div class="eyebrow">Preguntas frecuentes</div><h2>Resolvemos tus dudas</h2></div><div class="faq-grid"><details class="faq-i"><summary>¿Qué es Tapport?</summary><p>Es una plataforma para restaurantes que conecta pulseras NFC individuales de cada mesero con una experiencia de calificación del servicio por parte de los clientes, y un panel de administración donde el restaurante consulta esa información.</p></details><details class="faq-i"><summary>¿Cómo funcionan las pulseras NFC?</summary><p>Cada mesero lleva su propia pulsera. El cliente acerca su teléfono compatible a la pulsera para acceder a la experiencia digital de Tapport y calificar el servicio.</p></details><details class="faq-i"><summary>¿Necesitan los clientes instalar una aplicación?</summary><p>No. El cliente accede desde el navegador de su propio teléfono, sin descargar ni instalar nada.</p></details><details class="faq-i"><summary>¿Qué recibe el restaurante con su suscripción?</summary><p>Pulseras NFC para su equipo y acceso a la plataforma de administración, con el resumen de rendimiento, el historial de calificaciones y la gestión del personal.</p></details><details class="faq-i"><summary>¿Cuántos meseros puedo registrar?</summary><p>Depende del plan: Starter admite de 1 a 5 meseros, Growth de 6 a 10, y Pro desde 11 meseros en adelante.</p></details><details class="faq-i"><summary>¿Las pulseras están incluidas?</summary><p>Sí, las pulseras NFC están incluidas en los tres planes de suscripción.</p></details><details class="faq-i"><summary>¿Cómo puedo contratar Tapport?</summary><p>Escríbenos a tapport.pe@gmail.com o usa el botón «Consultar este plan» en la sección de planes, contándonos el tamaño de tu equipo.</p></details><details class="faq-i"><summary>¿Cómo se gestionan las opiniones y los datos?</summary><p>Cada calificación queda asociada al mesero que atendió y es visible para el restaurante en su panel de administración. Los detalles sobre manejo y retención de datos se están documentando: escríbenos si necesitas más información.</p></details></div></div></section>
+<section class="sec" id="faq"><div class="wrap"><div class="rv"><div class="eyebrow">Preguntas frecuentes</div><h2>Resolvemos tus dudas</h2></div><div class="faq-grid"><details class="faq-i"><summary>¿Qué es Tapport?</summary><p>Es una plataforma para restaurantes que conecta pulseras NFC individuales de cada mesero con una experiencia de calificación del servicio por parte de los clientes, y un panel de administración donde el restaurante consulta esa información.</p></details><details class="faq-i"><summary>¿Cómo funcionan las pulseras NFC?</summary><p>Cada mesero lleva su propia pulsera. El cliente acerca su teléfono compatible a la pulsera para acceder a la experiencia digital de Tapport y calificar el servicio.</p></details><details class="faq-i"><summary>¿Necesitan los clientes instalar una aplicación?</summary><p>No. El cliente accede desde el navegador de su propio teléfono, sin descargar ni instalar nada.</p></details><details class="faq-i"><summary>¿Qué recibe el restaurante con su suscripción?</summary><p>Pulseras NFC para su equipo y acceso a la plataforma de administración, con el resumen de rendimiento, el historial de calificaciones y la gestión del personal.</p></details><details class="faq-i"><summary>¿Cuántos meseros puedo registrar?</summary><p>Depende del plan: Starter admite de 1 a 5 meseros, Growth de 6 a 10, y Pro desde 11 meseros en adelante.</p></details><details class="faq-i"><summary>¿Las pulseras están incluidas?</summary><p>Sí, las pulseras NFC están incluidas en los tres planes de suscripción.</p></details><details class="faq-i"><summary>¿Cómo puedo contratar Tapport?</summary><p>Escríbenos a tapport.pe@gmail.com o usa el botón «Consultar este plan» en la sección de planes, contándonos el tamaño de tu equipo.</p></details><details class="faq-i"><summary>¿Cómo se gestionan las opiniones y los datos?</summary><p>Cada calificación queda asociada al mesero que atendió y es visible para el restaurante en su panel de administración. Los detalles sobre manejo y retención de datos se están documentando: escríbenos si necesitas más información.</p></details></div><div class="faq-ai" id="faqAi"><h3>¿No encuentras tu respuesta?</h3><p class="fa-sub">Pregúntale a la IA de Tapport. Responde con la información de esta página y, si no puede ayudarte, te lleva con el equipo.</p><div class="fa-chips" id="faChips"><button type="button">¿Qué plan me conviene si tengo 8 meseros?</button><button type="button">¿Mi teléfono es compatible con NFC?</button><button type="button">¿Cómo se registran los meseros?</button></div><form class="fa-form" id="faForm" autocomplete="off"><input id="faInput" type="text" maxlength="300" placeholder="Escribe tu pregunta…" aria-label="Escribe tu pregunta sobre Tapport" required><button type="submit" id="faBtn">Preguntar</button></form><div class="fa-out" id="faOut" aria-live="polite"></div><p class="fa-note">Respuesta generada por IA; puede equivocarse. Para confirmar algo importante, escríbenos.</p></div></div></section>
 </div>
 
 <div class="view" id="view-feed" hidden>
@@ -400,4 +423,38 @@ function goP(){clearTimeout(pt);if(reduce||!pvis)return;pt=setTimeout(function()
 tabs.forEach(function(b){b.addEventListener("click",function(){pi=Number(b.dataset.i);showP();goP();});});
 if(pv)new IntersectionObserver(function(es){pvis=es[0].isIntersecting;goP();},{threshold:.4}).observe(pv);
 })();
-</script></body></html>
+</script><script>
+/* IA de preguntas frecuentes */
+(function(){
+var EP="https://script.google.com/macros/s/AKfycbx9nTiQEr_2AvK0bc3hIyJPao5PqtADFeRQKuhR6_XFV_rR0FG0UsZ5sexFrkyJIdJW/exec",WA="51992346227";
+var f=document.getElementById("faForm");if(!f)return;
+var inp=document.getElementById("faInput"),btn=document.getElementById("faBtn"),out=document.getElementById("faOut"),hist=[],busy=false;
+function vid(){try{var v=localStorage.getItem("tp_vid");if(!v){v=(self.crypto&&crypto.randomUUID?crypto.randomUUID():String(Math.random()).slice(2)+Date.now().toString(36));localStorage.setItem("tp_vid",v);}return v;}catch(e){return "anon";}}
+function esc(t){var d=document.createElement("div");d.textContent=t;return d.innerHTML;}
+function fmt(t){var h=esc(t).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").split("\n"),o="",ul=false;
+h.forEach(function(l){var m=l.match(/^\s*[-•]\s+(.*)$/);if(m){if(!ul){o+="<ul>";ul=true;}o+="<li>"+m[1]+"</li>";}else{if(ul){o+="</ul>";ul=false;}if(l.trim())o+="<p>"+l+"</p>";}});
+return o+(ul?"</ul>":"");}
+function wa(q){return '<a class="fa-wa" target="_blank" rel="noopener" href="https://wa.me/'+WA+'?text='+encodeURIComponent("Hola, tengo una duda sobre Tapport: "+q)+'">Escribir por WhatsApp</a>';}
+function ask(q){
+  q=q.replace(/\s+/g," ").trim();if(q.length<3||busy)return;
+  busy=true;btn.disabled=inp.disabled=true;
+  out.innerHTML='<div class="fa-q">'+esc(q)+'</div><div class="fa-a wait">Pensando…</div>';
+  var done=function(html,esca,texto){
+    out.innerHTML='<div class="fa-q">'+esc(q)+'</div><div class="fa-a">'+html+(esca?wa(q):"")+'</div>';
+    if(texto){hist.push({rol:"user",texto:q},{rol:"ia",texto:texto});hist=hist.slice(-4);}
+    busy=false;btn.disabled=inp.disabled=false;inp.value="";
+  };
+  var ctl=("AbortController" in self)?new AbortController():null,to=setTimeout(function(){if(ctl)ctl.abort();},30000);
+  fetch(EP,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},signal:ctl?ctl.signal:undefined,
+    body:JSON.stringify({action:"faq_ia",pregunta:q,visitante:vid(),historial:hist})})
+  .then(function(r){return r.json();})
+  .then(function(d){clearTimeout(to);
+    if(d&&d.ok&&d.texto)done(fmt(d.texto),!!d.escalar,d.texto);
+    else done("<p>"+esc((d&&d.error)||"No pude responder ahora mismo.")+"</p>",true,"");})
+  .catch(function(){clearTimeout(to);done("<p>No pude conectarme. Inténtalo de nuevo o escríbenos por WhatsApp.</p>",true,"");});
+}
+f.addEventListener("submit",function(e){e.preventDefault();ask(inp.value);});
+document.querySelectorAll("#faChips button").forEach(function(b){b.addEventListener("click",function(){inp.value=b.textContent;ask(b.textContent);});});
+})();
+</script>
+</body></html>
