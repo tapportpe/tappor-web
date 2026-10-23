@@ -242,6 +242,17 @@ function ingresosOnEdit_(e) {
   const fila = e.range.getRow(), col = e.range.getColumn();
   if (fila < ING_PRIMERA || (col !== 2 && col !== 5 && col !== 6 && col !== 10)) return true;
   const nombre = ingNorm_(h.getRange(fila, 1).getValue()); if (!nombre) return true;
+  // Baja / alta de los administradores según el Estado (o al marcar "Pagado"). Va ANTES de buscar en Config:
+  // funciona aunque el restaurante todavía no esté en la hoja Config.
+  try {
+    const nombreOriginal = h.getRange(fila, 1).getValue();
+    if (col === 6) {
+      const est0 = h.getRange(fila, 6).getValue();
+      if (est0 === "Inactivo" || est0 === "Activo") ingAvisoAdmins_(nombreOriginal, est0 === "Activo");
+    } else if (col === 10 && h.getRange(fila, 10).getValue() === "Pagado") {
+      ingAvisoAdmins_(nombreOriginal, true);   // pagó → sus administradores vuelven a poder entrar
+    }
+  } catch (x) { SpreadsheetApp.getActive().toast("No se pudo actualizar a los administradores: " + x, "Tapport", 8); }
   const cfg = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(HOJA_CONFIG); if (!cfg) return true;
   const datos = cfg.getDataRange().getValues();
   for (let i = 1; i < datos.length; i++) {
@@ -257,7 +268,6 @@ function ingresosOnEdit_(e) {
       const nuevo = new Date(base.getTime() + 30 * 24 * 3600 * 1000);
       cfg.getRange(rf, COL_PLAN_VENCE).setValue(nuevo);
       h.getRange(fila, 5).setValue(nuevo); h.getRange(fila, 6).setValue("Activo"); h.getRange(fila, 11).setValue(ahora);
-      ingAvisoAdmins_(h.getRange(fila, 1).getValue(), true);   // pagó → sus administradores vuelven a poder entrar
     }
     if (col === 6) {
       const est = h.getRange(fila, 6).getValue(), ahora = new Date();
@@ -271,8 +281,6 @@ function ingresosOnEdit_(e) {
           cfg.getRange(rf, COL_PLAN_VENCE).setValue(nuevo); h.getRange(fila, 5).setValue(nuevo);
         }
       }
-      // Baja / alta de los administradores del restaurante según el Estado elegido
-      if (est === "Inactivo" || est === "Activo") ingAvisoAdmins_(h.getRange(fila, 1).getValue(), est === "Activo");
     }
     break;
   }
@@ -358,12 +366,21 @@ function probarBaja() {
   const lg = loginGerente.toString();
   Logger.log("1) ¿loginGerente ya reconoce cuentas de baja? " + (lg.indexOf("ING_SUSP") > -1 ? "SÍ" : "NO → pega el Code.gs nuevo"));
   Logger.log("2) ¿y manda la marca para la pantalla? " + (lg.indexOf("suspendida") > -1 ? "SÍ" : "NO → pega el Code.gs nuevo"));
-  const hoja = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(HOJA_GERENTES);
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  // Estado de cada restaurante según la hoja Ingresos
+  const estado = {};
+  const hi = ss.getSheetByName(ING_HOJA);
+  if (hi) hi.getRange(ING_PRIMERA, 1, ING_ULTIMA - ING_PRIMERA + 1, 6).getValues().forEach(function (r) { if (r[0]) estado[ingNorm_(r[0])] = r[5]; });
+  const hoja = ss.getSheetByName(HOJA_GERENTES);
   if (!hoja) { Logger.log("No existe la hoja " + HOJA_GERENTES); return; }
   const d = hoja.getDataRange().getValues();
+  Logger.log("3) Administradores (lo que importa: 'Ingresos dice' y 'hoy' deben coincidir):");
   for (let i = 1; i < d.length; i++) {
     const baja = String(d[i][7] || "").indexOf(ING_SUSP) === 0;
-    Logger.log("   " + d[i][0] + " (" + d[i][1] + "): " + (baja ? "DE BAJA" : "activo"));
+    const dice = estado[ingNorm_(d[i][1])];
+    Logger.log("   " + d[i][0] + " | restaurante: " + d[i][1] + " | Ingresos dice: " + (dice || "(no está en Ingresos)") + " | hoy: " + (baja ? "DE BAJA" : "activo") +
+      ((dice === "Inactivo" && !baja) ? "   ← debería estar de baja: corre el menú '5. Aplicar estados a administradores'" : "") +
+      ((dice === "Activo" && baja) ? "   ← debería estar activo: corre el menú '5. Aplicar estados a administradores'" : ""));
   }
-  Logger.log("3) Recuerda: tras pegar el código, Implementar > Administrar implementaciones > ✏️ > Nueva versión > Implementar.");
+  Logger.log("4) Tras pegar el código: Implementar > Administrar implementaciones > ✏️ > Nueva versión > Implementar.");
 }
