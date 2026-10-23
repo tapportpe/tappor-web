@@ -1703,7 +1703,7 @@ body:not(.app-mode) .login-brand{display:inline-flex}
       if (sesion.restaurante && !window.__logoRest) {
         window.__logoRest = true;
         fetch(`${ENDPOINT}?accion=negocio&restaurante=${encodeURIComponent(sesion.restaurante)}`).then(r => r.json()).then(j => {
-          const u = j && j.negocio && j.negocio.logoUrl; if (!u) return;
+          const u = safeUrl(j && j.negocio && j.negocio.logoUrl); if (!u) return;
           const im = new Image(); im.referrerPolicy = "no-referrer";
           im.onload = () => { const el = document.getElementById("sidebarLogo"); el.textContent = ""; el.style.background = "#fff"; el.style.backgroundImage = `url('${u}')`; el.style.backgroundSize = "cover"; el.style.backgroundPosition = "center"; };
           im.src = u;
@@ -1945,14 +1945,15 @@ body:not(.app-mode) .login-brand{display:inline-flex}
         card.classList.remove("hidden");
 
         cont.innerHTML = vacantes.map(v => {
-          const esCorreo = /@/.test(v.contacto);
-          const href = esCorreo ? `mailto:${v.contacto}` : `tel:${v.contacto}`;
+          const contacto = String(v.contacto || "").trim();
+          const esCorreo = /@/.test(contacto);
+          const href = (esCorreo ? "mailto:" : "tel:") + encodeURIComponent(contacto).replace(/%40/g, "@").replace(/%2B/g, "+");
           return `
             <div class="vacante-para-ti">
               <h3>${escapeHtml(v.puesto)}</h3>
               <div class="vpt-rest">${escapeHtml(v.restaurante)}</div>
               ${v.descripcion ? `<p>${escapeHtml(v.descripcion)}</p>` : ""}
-              <a href="${href}">Contactar</a>
+              <a href="${escapeHtml(href)}">Contactar</a>
             </div>
           `;
         }).join("");
@@ -2003,10 +2004,17 @@ body:not(.app-mode) .login-brand{display:inline-flex}
       });
     }
 
+    // Escapa texto para HTML y para atributos (incluye comillas): nunca insertes
+    // texto de usuarios en innerHTML sin pasar por aquí.
     function escapeHtml(str) {
-      const div = document.createElement("div");
-      div.textContent = str;
-      return div.innerHTML;
+      return String(str == null ? "" : str).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+    // Solo deja pasar URLs http(s) (o data:image de fotos); cualquier otra cosa
+    // (javascript:, etc.) se descarta. Úsala antes de poner una URL en src/href/url().
+    function safeUrl(u) {
+      const s = String(u == null ? "" : u).trim();
+      if (/^https:\/\//i.test(s) || /^http:\/\//i.test(s) || /^data:image\/(png|jpe?g|webp|gif);base64,[a-z0-9+\/=]+$/i.test(s)) return s.replace(/[\s"'()<>\\]/g, ch => "%" + ch.charCodeAt(0).toString(16).toUpperCase().padStart(2, "0"));
+      return "";
     }
 
     function cerrarSesion() {

@@ -512,10 +512,13 @@
   // vuelta a las iniciales para que nunca quede un círculo vacío o roto.
   function renderWaiter(data) {
     els.name.textContent = data.mesero;
-    els.role.innerHTML = `Mesero en <b>${data.restaurante}</b>`;
+    els.role.textContent = "Mesero en ";
+    const bRest = document.createElement("b");
+    bRest.textContent = data.restaurante || "";
+    els.role.appendChild(bRest);
     els.avatarIniciales.textContent = initials(data.mesero);
 
-    if (data.fotoUrl) {
+    if (/^https?:\/\//i.test(String(data.fotoUrl || ""))) {
       els.avatarImg.src = data.fotoUrl;
       els.avatarImg.style.display = "block";
       els.avatarIniciales.style.display = "none";

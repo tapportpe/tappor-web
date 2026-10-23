@@ -877,10 +877,17 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
     const ENDPOINT = "https://script.google.com/macros/s/AKfycbx9nTiQEr_2AvK0bc3hIyJPao5PqtADFeRQKuhR6_XFV_rR0FG0UsZ5sexFrkyJIdJW/exec";
     const PERFIL_URL = "perfil.html";
 
+    // Escapa texto para HTML y para atributos (incluye comillas): nunca insertes
+    // texto de usuarios en innerHTML sin pasar por aquí.
     function escapeHtml(str) {
-      const div = document.createElement("div");
-      div.textContent = str;
-      return div.innerHTML;
+      return String(str == null ? "" : str).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+    // Solo deja pasar URLs http(s) (o data:image de fotos); cualquier otra cosa
+    // (javascript:, etc.) se descarta. Úsala antes de poner una URL en src/href/url().
+    function safeUrl(u) {
+      const s = String(u == null ? "" : u).trim();
+      if (/^https:\/\//i.test(s) || /^http:\/\//i.test(s) || /^data:image\/(png|jpe?g|webp|gif);base64,[a-z0-9+\/=]+$/i.test(s)) return s.replace(/[\s"'()<>\\]/g, ch => "%" + ch.charCodeAt(0).toString(16).toUpperCase().padStart(2, "0"));
+      return "";
     }
 
     function iniciales(nombre) {
@@ -891,8 +898,8 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
     // imagen no carga (evita círculos rotos cuando Drive falla o tarda).
     function fotoConRespaldoHtml(fotoUrl, nombre, claseImg) {
       const ini = escapeHtml(iniciales(nombre));
-      if (!fotoUrl) return `<span>${ini}</span>`;
-      return `<img class="${claseImg}" src="${escapeHtml(fotoUrl)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" /><span style="display:none;">${ini}</span>`;
+      if (!safeUrl(fotoUrl)) return `<span>${ini}</span>`;
+      return `<img class="${claseImg}" src="${escapeHtml(safeUrl(fotoUrl))}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" /><span style="display:none;">${ini}</span>`;
     }
 
     // ---------- Navegación inferior ----------
@@ -1006,20 +1013,23 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
         }
 
         cont.innerHTML = vacantes.map(v => {
-          const esCorreo = /@/.test(v.contacto);
-          const href = esCorreo ? `mailto:${v.contacto}` : `tel:${v.contacto}`;
-          const tieneCover = !!v.portadaUrl;
-          const estiloCover = tieneCover ? ` style="--cover-img: url('${escapeHtml(v.portadaUrl)}')"` : "";
-          const logoHtml = v.logoUrl ? `<img src="${escapeHtml(v.logoUrl)}" onerror="this.style.display='none';" />` : "";
+          const contacto = String(v.contacto || "").trim();
+          const esCorreo = /@/.test(contacto);
+          const href = (esCorreo ? "mailto:" : "tel:") + encodeURIComponent(contacto).replace(/%40/g, "@").replace(/%2B/g, "+");
+          const portada = safeUrl(v.portadaUrl);
+          const tieneCover = !!portada;
+          const estiloCover = tieneCover ? ` style="--cover-img: url('${escapeHtml(portada)}')"` : "";
+          const logo = safeUrl(v.logoUrl);
+          const logoHtml = logo ? `<img src="${escapeHtml(logo)}" onerror="this.style.display='none';" />` : "";
           return `
             <div class="job-card${tieneCover ? " has-cover" : ""}" data-vacante-id="${escapeHtml(v.id || "")}"${estiloCover}>
               <span class="tag">Buscan personal</span>
               <h3>${escapeHtml(v.puesto)}</h3>
               <div class="job-rest">${logoHtml}${escapeHtml(v.restaurante)}</div>
               ${v.descripcion ? `<p>${escapeHtml(v.descripcion)}</p>` : ""}
-              ${v.ratingMinimo > 0 ? `<span class="tag rating-req">Requiere ${v.ratingMinimo}★ o más</span>` : ""}
+              ${Number(v.ratingMinimo) > 0 ? `<span class="tag rating-req">Requiere ${escapeHtml(Number(v.ratingMinimo))}★ o más</span>` : ""}
               <div class="contact-row">
-                <a class="contact-btn" href="${href}">Contactar</a>
+                <a class="contact-btn" href="${escapeHtml(href)}">Contactar</a>
                 <button type="button" class="contact-btn primary btn-interesado" data-vacante-id="${escapeHtml(v.id || "")}">Me interesa</button>
               </div>
             </div>
@@ -1226,7 +1236,7 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
               <p class="waiter-rest">${escapeHtml(r.restaurante)}</p>
             </div>
           </div>
-          <div class="wc-meta">${tiene ? `<b>${r.promedio.toFixed(1)}</b><span class="wc-stars" style="--p:${pct}%">★★★★★</span>` : "<b>—</b>"}<small>${r.totalReviews} reseña${r.totalReviews === 1 ? "" : "s"}</small></div>
+          <div class="wc-meta">${tiene ? `<b>${Number(r.promedio).toFixed(1)}</b><span class="wc-stars" style="--p:${pct}%">★★★★★</span>` : "<b>—</b>"}<small>${Number(r.totalReviews) || 0} reseña${Number(r.totalReviews) === 1 ? "" : "s"}</small></div>
         </div>
       `;
     }
@@ -1295,7 +1305,8 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
         document.getElementById("modalFotoWrap").innerHTML = fotoConRespaldoHtml(data.fotoUrl, data.nombre, "");
         document.getElementById("modalNombre").textContent = data.nombre || "";
 
-        const logoHtml = data.negocioLogoUrl ? `<img src="${escapeHtml(data.negocioLogoUrl)}" onerror="this.remove();" />` : "";
+        const logoModal = safeUrl(data.negocioLogoUrl);
+        const logoHtml = logoModal ? `<img src="${escapeHtml(logoModal)}" onerror="this.remove();" />` : "";
         document.getElementById("modalRest").innerHTML = logoHtml + escapeHtml(data.restaurante || "");
 
         const direccionEl = document.getElementById("modalDireccion");
@@ -1322,7 +1333,8 @@ input:focus,select:focus,textarea:focus{outline:none!important;border-color:#2E6
 
         function pintarReseñas(lista) {
           reviewsCont.innerHTML = lista.map(r => {
-            const estrellas = "★".repeat(r.estrellas) + "☆".repeat(5 - r.estrellas);
+            const nEst = Math.max(0, Math.min(5, Number(r.estrellas) || 0));
+            const estrellas = "★".repeat(nEst) + "☆".repeat(5 - nEst);
             const fecha = new Date(r.fecha);
             const fechaTexto = isNaN(fecha) ? "" : fecha.toLocaleDateString("es-PE", { day: "numeric", month: "short", year: "numeric" });
             const primerTag = (r.tags || "").split(",")[0].trim();
